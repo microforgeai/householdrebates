@@ -1,0 +1,144 @@
+---
+import { getEntry } from 'astro:content';
+import { SITE } from '../data/site';
+import { assertFigureNotStale, formatAuDate } from '../lib/dates';
+import sizeGuideData from '../data/tools/hw-size-guide.json';
+import postcodesJson from '../data/vic-veu-postcodes.json';
+
+assertFigureNotStale('hw-size-guide.json', sizeGuideData.checkedOn, SITE.flags.maxFigureAgeDays);
+const factsheetSource = await getEntry('sources', sizeGuideData.sourceId);
+const existingHomesSource = await getEntry('sources', 'energyvic-existing-homes');
+const cerSource = await getEntry('sources', 'cer-heat-pumps');
+
+if (!factsheetSource || !factsheetSource.data.official) {
+  throw new Error('hw-size-guide.json must reference an official source.');
+}
+
+const compactPostcodes: Record<string, string> = {};
+for (const [pc, row] of Object.entries(postcodesJson.rows)) {
+  const areaChar = row.area === 'Metropolitan' ? 'M' : 'R';
+  const gasChar = row.reticulatedGas ? '1' : '0';
+  const climChar = row.climaticRegion === 'Mild' ? 'M' : row.climaticRegion === 'Cold' ? 'C' : 'H';
+  compactPostcodes[pc] = `${areaChar}${gasChar}${climChar}${row.hpZone}`;
+}
+const checkedStr = formatAuDate(sizeGuideData.checkedOn);
+---
+
+<section
+  class="checker-card"
+  id="hw-size-guide"
+  aria-labelledby="size-guide-heading"
+  data-size-guide-root
+>
+  <h2 id="size-guide-heading">Look up Energy Victoria’s heat pump tank size guide</h2>
+  <p>
+    Filter the tank storage table by bedrooms and optionally check your Victorian postcode’s VEU heat pump climatic zone. Nothing leaves your browser.
+  </p>
+
+  <noscript>
+    <p class="callout callout--info" data-size-guide-noscript>
+      JavaScript is turned off, so the complete Energy Victoria bedroom-to-litres table and sizing checklist are shown below.
+    </p>
+  </noscript>
+
+  <script type="application/json" id="veu-postcodes" set:html={JSON.stringify(compactPostcodes)} />
+
+  <form data-size-guide-form novalidate>
+    <div class="field-group">
+      <label class="field-label" for="hw-bedrooms">1. Number of bedrooms in your home</label>
+      <select id="hw-bedrooms" name="bedrooms" data-hw-bedrooms>
+        <option value="all">Show all bedroom sizes</option>
+        {sizeGuideData.rows.map((r) => (
+          <option value={r.bedrooms}>{r.bedrooms} bedrooms</option>
+        ))}
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="hw-postcode">
+        2. Victorian postcode (optional — checks VEU heat pump climatic zone)
+      </label>
+      <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <input
+          type="text"
+          id="hw-postcode"
+          name="postcode"
+          inputmode="numeric"
+          maxlength="4"
+          placeholder="e.g. 3350"
+          data-hw-postcode
+          style="max-width: 10rem;"
+        />
+        <button type="submit" class="btn">Check tank size &amp; zone</button>
+      </div>
+      <p
+        id="hw-postcode-error"
+        class="field-error"
+        role="alert"
+        hidden
+        style="color: #b91c1c; font-size: var(--text-sm); margin-top: 0.35rem;"
+      ></p>
+    </div>
+  </form>
+
+  <div class="figure-table-wrap" style="margin-top: 1rem;">
+    <table class="figure-table" data-hw-table>
+      <caption>
+        Typical storage tank capacity by bedrooms · Checked on {checkedStr} against{' '}
+        <a href={factsheetSource.data.url} target="_blank" rel="noopener noreferrer">
+          {factsheetSource.data.title} ({factsheetSource.data.publisher}) ↗
+        </a>
+        . Confirm exact sizing with your plumber or accredited provider.
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Household bedrooms</th>
+          <th scope="col">Recommended tank size (litres)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sizeGuideData.rows.map((r) => (
+          <tr data-hw-row={r.bedrooms}>
+            <td>{r.bedrooms} bedrooms</td>
+            <td>{r.litres} L</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="callout callout--info"
+    data-hw-zone-output
+    hidden
+    aria-live="polite"
+    style="margin-top: 1rem;"
+  ></div>
+
+  <div style="margin-top: 1rem;">
+    <h3>Consider sizing up if your household has:</h3>
+    <ul>
+      {sizeGuideData.sizeUpIf.map((reason) => (
+        <li>{reason}</li>
+      ))}
+    </ul>
+    <p style="font-size: var(--text-sm); color: var(--text-secondary);">
+      <strong>Cold-area note:</strong> In cooler climates, Energy Victoria advises choosing a system with frost protection{existingHomesSource && (
+        <>
+          {' '}(<a href={existingHomesSource.data.url} target="_blank" rel="noopener noreferrer">
+            {existingHomesSource.data.publisher} ↗
+          </a>)
+        </>
+      )}.{' '}
+      <strong>STC cap:</strong> Federal Small-scale Technology Certificates (STCs) apply only to air-source heat pumps with a volumetric capacity under 425 L{cerSource && (
+        <>
+          {' '}(<a href={cerSource.data.url} target="_blank" rel="noopener noreferrer">
+            {cerSource.data.publisher} ↗
+          </a>)
+        </>
+      )}.
+    </p>
+  </div>
+</section>
+
+<script src="./size-guide.client.ts"></script>

@@ -1,0 +1,93 @@
+---
+import { getCollection } from 'astro:content';
+import Money from './Money.astro';
+import { formatAuDate } from '../lib/dates';
+import { RUNNING_COST_SCENARIOS } from '../lib/tools';
+
+const allFigures = await getCollection('figures');
+const allSources = await getCollection('sources');
+const sourceById = new Map(allSources.map((s) => [s.id, s.data]));
+
+const pickerFigureIds = new Set(RUNNING_COST_SCENARIOS.flatMap((s) => s.figureIds));
+const serializedFigures = allFigures
+  .filter((f) => pickerFigureIds.has(f.data.id))
+  .map((f) => {
+    const srcId = typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id;
+    const src = sourceById.get(srcId);
+    return {
+      id: f.data.id,
+      scenario: f.data.scenario,
+      qualifier: f.data.qualifier,
+      amountMin: f.data.amountMin,
+      amountMax: f.data.amountMax,
+      unit: f.data.unit,
+      checkedOn: formatAuDate(f.data.checkedOn),
+      sourceUrl: src?.url,
+      sourcePublisher: src?.publisher,
+    };
+  });
+---
+
+<section
+  class="checker-card"
+  id="running-costs-picker"
+  aria-labelledby="picker-heading"
+  data-running-costs-root
+>
+  <h2 id="picker-heading">Compare Energy Victoria’s published annual bill savings</h2>
+  <p>
+    Choose an upgrade scenario below to view Energy Victoria’s published annual bill-saving estimate. Nothing leaves your browser.
+  </p>
+
+  <noscript>
+    <p class="callout callout--info" data-picker-noscript>
+      JavaScript is turned off, so all four published Energy Victoria scenarios are displayed below without filtering.
+    </p>
+  </noscript>
+
+  <script type="application/json" id="figures" set:html={JSON.stringify(serializedFigures)} />
+
+  <fieldset class="field-group">
+    <legend class="field-label">Select a gas-to-electric scenario</legend>
+    <div style="display: grid; gap: 0.5rem; margin-top: 0.35rem;">
+      {RUNNING_COST_SCENARIOS.map((sc, idx) => (
+        <label style="display: flex; align-items: flex-start; gap: 0.5rem;">
+          <input
+            type="radio"
+            name="runningCostScenario"
+            value={sc.key}
+            checked={idx === 0}
+            data-picker-radio
+          />
+          <span>{sc.label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <div data-picker-results aria-live="polite">
+    {RUNNING_COST_SCENARIOS.map((sc) => (
+      <div
+        class="callout callout--info"
+        data-scenario-panel={sc.key}
+        style="margin-top: 1rem;"
+      >
+        <h3 style="margin-top: 0;">{sc.label}</h3>
+        {sc.figureIds.map((fid) => (
+          <div style="margin-bottom: 0.75rem;">
+            <Money id={fid} variant="block" />
+          </div>
+        ))}
+        <p style="margin-bottom: 0;">
+          Read full eligibility and co-payment details in our <a href={sc.guideHref}>{sc.guideLabel}</a>.
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: 0.85rem; margin-bottom: 0;">
+    These are Energy Victoria’s estimates, not a calculation for your home. Your saving depends on your tariffs, usage and the product.
+  </p>
+</section>
+
+<script src="./running-costs.client.ts"></script>

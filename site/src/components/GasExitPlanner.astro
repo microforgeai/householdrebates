@@ -1,0 +1,126 @@
+---
+import { getCollection } from 'astro:content';
+import Money from './Money.astro';
+import { formatAuDate } from '../lib/dates';
+import { GAS_PLANNER_STEPS } from '../lib/tools';
+
+const allFigures = await getCollection('figures');
+const allSources = await getCollection('sources');
+const sourceById = new Map(allSources.map((s) => [s.id, s.data]));
+
+const plannerFigureIds = new Set([
+  ...GAS_PLANNER_STEPS.map((s) => s.figureId),
+  'vic-gas-supply-saving',
+]);
+const serializedFigures = allFigures
+  .filter((f) => plannerFigureIds.has(f.data.id))
+  .map((f) => {
+    const srcId = typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id;
+    const src = sourceById.get(srcId);
+    return {
+      id: f.data.id,
+      scenario: f.data.scenario,
+      qualifier: f.data.qualifier,
+      amountMin: f.data.amountMin,
+      amountMax: f.data.amountMax,
+      unit: f.data.unit,
+      checkedOn: formatAuDate(f.data.checkedOn),
+      sourceUrl: src?.url,
+      sourcePublisher: src?.publisher,
+    };
+  });
+---
+
+<section
+  class="checker-card"
+  id="gas-exit-planner"
+  aria-labelledby="planner-heading"
+  data-gas-planner-root
+>
+  <h2 id="planner-heading">Plan your gas-to-electric steps</h2>
+  <p>
+    Tick the gas appliances in your home below to see each step’s indicative VEU discount, swap guide, and how abolishing your gas meter works once your last gas appliance is removed. There is no single official order—choose the sequence that suits your appliances and budget.
+  </p>
+
+  <noscript>
+    <p class="callout callout--info" data-planner-noscript>
+      JavaScript is turned off, so every gas appliance upgrade step and the gas meter abolishment summary are displayed below.
+    </p>
+  </noscript>
+
+  <script type="application/json" id="figures" set:html={JSON.stringify(serializedFigures)} />
+
+  <fieldset class="field-group">
+    <legend class="field-label">Tick the gas appliances you have</legend>
+    <div style="display: grid; gap: 0.5rem; margin-top: 0.35rem;">
+      {GAS_PLANNER_STEPS.map((step) => (
+        <label style="display: flex; align-items: center; gap: 0.5rem;">
+          <input
+            type="checkbox"
+            name="gasAppliances"
+            value={step.key}
+            checked
+            data-planner-checkbox
+          />
+          <span>{step.label}</span>
+        </label>
+      ))}
+    </div>
+  </fieldset>
+
+  <p
+    data-planner-empty
+    hidden
+    class="callout callout--caution"
+    role="status"
+    style="margin-top: 1rem;"
+  >
+    Tick at least one gas appliance above to view its indicative VEU discount and gas abolishment steps.
+  </p>
+
+  <div data-planner-steps aria-live="polite">
+    {GAS_PLANNER_STEPS.map((step) => (
+      <div
+        class="callout callout--info"
+        data-planner-step={step.key}
+        style="margin-top: 1rem;"
+      >
+        <h3 style="margin-top: 0;">{step.label}</h3>
+        <div style="margin-bottom: 0.65rem;">
+          <Money id={step.figureId} variant="block" />
+        </div>
+        <p style="margin-bottom: 0.5rem;">{step.detail}</p>
+        <p style="margin-bottom: 0;">
+          See full rules: <a href={step.guideHref}>{step.guideLabel}</a>.
+        </p>
+      </div>
+    ))}
+  </div>
+
+  <div
+    class="callout callout--info"
+    data-planner-abolishment
+    style="margin-top: 1.25rem;"
+  >
+    <h3 style="margin-top: 0;">Once your last gas appliance goes: supply-charge saving and abolishment</h3>
+    <div style="margin-bottom: 0.75rem;">
+      <Money id="vic-gas-supply-saving" variant="block" />
+    </div>
+    <p>
+      Once every gas appliance at your property is disconnected, you can request permanent gas meter abolishment so daily gas supply charges stop:
+    </p>
+    <ul>
+      <li>
+        <strong>Request through your gas retailer:</strong> Contact your gas retailer (who coordinates with your local gas distributor).
+      </li>
+      <li>
+        <strong>Example distributor timeframes (AusNet):</strong> AusNet lists <strong>2 business days</strong> for gas meter removal and <strong>up to 15 business days</strong> for a permanent service cut-and-cap abolishment; Victoria’s other gas distributors may differ.
+      </li>
+      <li>
+        <strong>Paperwork &amp; timing:</strong> Read our step-by-step guide on <a href="/victoria/how-long-does-an-upgrade-take/">how long a VEU upgrade and gas abolishment take</a>, and check your distributor’s published tariff schedule for current abolishment charges.
+      </li>
+    </ul>
+  </div>
+</section>
+
+<script src="./gas-planner.client.ts"></script>

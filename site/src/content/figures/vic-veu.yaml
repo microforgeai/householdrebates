@@ -949,3 +949,32 @@
   currency: AUD
   sourceId: casey-home-energy-rebates
   checkedOn: 2026-11-13
+
+
+- id: vic-existing-home-electric-saving
+  group: vic-electrify-savings
+  state: vic
+  program: Energy Victoria
+  activity: rcac
+  audience: household
+  scenario: "Existing home going all-electric, Energy Victoria's estimated yearly saving"
+  qualifier: about
+  unit: AUD
+  amountMax: 1900
+  currency: AUD
+  sourceId: energyvic-electrification
+  checkedOn: 2026-11-13
+
+- id: vic-existing-home-electric-solar-saving
+  group: vic-electrify-savings
+  state: vic
+  program: Energy Victoria
+  activity: solar
+  audience: household
+  scenario: "Existing home going all-electric with solar, estimated yearly saving"
+  qualifier: about
+  unit: AUD
+  amountMax: 2230
+  currency: AUD
+  sourceId: energyvic-electrification
+  checkedOn: 2026-11-13

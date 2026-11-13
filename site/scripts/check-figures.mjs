@@ -94,6 +94,42 @@ if (fs.existsSync(postcodesPath)) {
   }
 }
 
+// 2b. Check src/data/tools/*.json freshness and official sourceId
+const toolsDataDir = path.join(srcDir, 'data/tools');
+let toolFileCount = 0;
+let toolStaleCount = 0;
+if (fs.existsSync(toolsDataDir)) {
+  const toolFiles = fs.readdirSync(toolsDataDir).filter((f) => f.endsWith('.json'));
+  toolFileCount = toolFiles.length;
+  for (const tf of toolFiles) {
+    const toolPath = path.join(toolsDataDir, tf);
+    const toolJson = JSON.parse(fs.readFileSync(toolPath, 'utf8'));
+    if (!toolJson.sourceId) {
+      throw new Error(`data/tools/${tf} is missing sourceId`);
+    }
+    const toolSrc = sourcesMap.get(toolJson.sourceId);
+    if (!toolSrc) {
+      throw new Error(`data/tools/${tf} references missing source "${toolJson.sourceId}"`);
+    }
+    if (!toolSrc.official) {
+      throw new Error(`data/tools/${tf} references non-official source "${toolJson.sourceId}"`);
+    }
+    if (!toolJson.checkedOn) {
+      throw new Error(`data/tools/${tf} is missing checkedOn`);
+    }
+    const toolAgeDays = Math.floor(
+      (now.getTime() - new Date(toolJson.checkedOn).getTime()) / (1000 * 60 * 60 * 24),
+    );
+    if (toolAgeDays > maxAgeDays) {
+      toolStaleCount++;
+      throw new Error(`data/tools/${tf} is stale (${toolAgeDays} days old > ${maxAgeDays} days)`);
+    }
+    if (toolAgeDays < -1) {
+      throw new Error(`data/tools/${tf} has future checkedOn date (${toolJson.checkedOn})`);
+    }
+  }
+}
+
 // 3. Scan all files in site/src for raw $ amounts (e.g. $560, $5,530) and stale URLs
 function walkFiles(dir, extRegex) {
   if (!fs.existsSync(dir)) return [];
@@ -271,4 +307,7 @@ if (fs.existsSync(distDir)) {
 
 console.log(
   `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts`,
+);
+console.log(
+  `tool data: ${toolFileCount} ${toolFileCount === 1 ? 'file' : 'files'}, ${toolStaleCount} stale`,
 );

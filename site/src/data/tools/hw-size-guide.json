@@ -1,0 +1,16 @@
+{
+  "sourceId": "energyvic-hw-factsheet",
+  "checkedOn": "2026-11-13",
+  "rows": [
+    { "bedrooms": "1–2", "litres": "150–225" },
+    { "bedrooms": "3", "litres": "225–300" },
+    { "bedrooms": "4 or more", "litres": "more than 300" }
+  ],
+  "sizeUpIf": [
+    "long or frequent showers",
+    "baths",
+    "showers at the same time",
+    "no low-flow showerheads",
+    "appliances plumbed to hot water"
+  ]
+}

@@ -5,6 +5,9 @@ import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
 import Money from '../components/Money.astro';
 import EligibilityChecker from '../components/EligibilityChecker.astro';
+import RunningCostsPicker from '../components/RunningCostsPicker.astro';
+import HwSizeGuide from '../components/HwSizeGuide.astro';
+import GasExitPlanner from '../components/GasExitPlanner.astro';
 import LeadForm from '../components/LeadForm.astro';
 import Faq from '../components/Faq.astro';
 import SourceList from '../components/SourceList.astro';
@@ -73,6 +76,9 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
     </div>
 
     {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
+    {d.slug === 'gas-vs-heat-pump-running-costs' && <RunningCostsPicker />}
+    {d.slug === 'heat-pump-hot-water-size-guide' && <HwSizeGuide />}
+    {d.slug === 'get-off-gas-planner' && <GasExitPlanner />}
 
     <div class="page-body" data-body>
       <slot />

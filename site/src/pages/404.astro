@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Page Not Found (404) | Household Rebates"
+  description="The page you requested could not be found on Household Rebates."
+  pathname="/404.html"
+  noindex={true}
+>
+  <article class="prose-container">
+    <h1>Page not found</h1>
+    <p>
+      The page you were looking for doesn't exist or has moved. Choose one of our Victoria guides below:
+    </p>
+    <ul>
+      <li><a href="/">Victoria VEU Rebates Overview</a></li>
+      <li><a href="/victoria/air-conditioner-rebate/">Air Conditioner Rebate Victoria</a></li>
+      <li><a href="/victoria/heat-pump-rebate/">Heat Pump Rebate Victoria</a></li>
+      <li><a href="/victoria/gas-to-electric-hot-water-2027/">1 March 2027 Gas to Electric Hot Water Rule</a></li>
+      <li><a href="/victoria/eligibility-checker/">Victoria VEU Eligibility Checker</a></li>
+    </ul>
+  </article>
+</BaseLayout>

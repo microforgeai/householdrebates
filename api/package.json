@@ -1,0 +1,35 @@
+{
+  "name": "@householdrebates/api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc -p tsconfig.json && cp -r src/migrations dist/migrations",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "deliver": "tsx src/cli/deliver.ts",
+    "withdraw": "tsx src/cli/withdraw.ts",
+    "export": "tsx src/cli/export.ts",
+    "erase": "tsx src/cli/erase.ts",
+    "purge": "tsx src/cli/purge.ts",
+    "status": "tsx src/cli/status.ts",
+    "mail-test": "tsx src/cli/mail-test.ts"
+  },
+  "dependencies": {
+    "@fastify/formbody": "^8.0.2",
+    "better-sqlite3": "^13.1.1",
+    "fastify": "^5.12.8",
+    "nodemailer": "^10.5.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.12",
+    "@types/node": "^22.10.0",
+    "@types/nodemailer": "^6.4.17",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
+    "vitest": "^5.1.0"
+  }
+}

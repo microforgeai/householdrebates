@@ -1,0 +1,38 @@
+---
+import { getEntry } from 'astro:content';
+import { formatAuDate } from '../lib/dates';
+
+export interface Props {
+  ids: (string | { id: string })[];
+}
+
+const { ids } = Astro.props;
+const sources = await Promise.all(
+  ids.map(async (item) => {
+    const id = typeof item === 'string' ? item : item.id;
+    const entry = await getEntry('sources', id);
+    if (!entry) {
+      throw new Error(`<SourceList /> references missing source "${id}".`);
+    }
+    return entry;
+  }),
+);
+---
+
+<section class="source-list" aria-labelledby="sources-heading">
+  <h2 id="sources-heading">Sources and verification dates</h2>
+  <ul>
+    {sources.map((s) => (
+      <li>
+        <strong>{s.data.publisher}:</strong>{' '}
+        <a href={s.data.url} target="_blank" rel="noopener noreferrer">
+          {s.data.title}
+        </a>
+        {' · '}Checked on {formatAuDate(s.data.checkedOn)}
+        {s.data.pageLastUpdated && (
+          <> (Official page updated {formatAuDate(s.data.pageLastUpdated)})</>
+        )}
+      </li>
+    ))}
+  </ul>
+</section>

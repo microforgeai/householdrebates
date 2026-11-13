@@ -1,0 +1,57 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import SourceList from '../components/SourceList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import { formatAuDate } from '../lib/dates';
+import type { BreadcrumbItem } from '../lib/schema';
+
+export interface Props {
+  entry: {
+    data: {
+      title: string;
+      description: string;
+      slug: string;
+      answer: string;
+      author: string;
+      publishedOn: Date;
+      updatedOn: Date;
+      checkedOn: Date;
+      sources: (string | { id: string })[];
+      noindex: boolean;
+      related: string[];
+      legalReviewed: boolean;
+    };
+  };
+  pathname: string;
+  breadcrumbs: BreadcrumbItem[];
+}
+
+const { entry, pathname, breadcrumbs } = Astro.props;
+const d = entry.data;
+---
+
+<BaseLayout
+  title={`${d.title} | Household Rebates`}
+  description={d.description}
+  pathname={pathname}
+  noindex={d.noindex}
+  breadcrumbs={breadcrumbs}
+>
+  <Breadcrumbs items={breadcrumbs} />
+  <article class="prose-container">
+    <h1>{d.title}</h1>
+    <AnswerBlock>
+      <p>{d.answer}</p>
+    </AnswerBlock>
+    <div class="byline">
+      By {d.author}, Agenor · Checked on {formatAuDate(d.checkedOn)} · Updated {formatAuDate(d.updatedOn)}
+    </div>
+
+    <slot />
+
+    <SourceList ids={d.sources} />
+    <RelatedLinks slugs={d.related} />
+  </article>
+</BaseLayout>

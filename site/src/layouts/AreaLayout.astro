@@ -1,0 +1,161 @@
+---
+import { getEntry, getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import Money from '../components/Money.astro';
+import Toc, { type HeadingItem } from '../components/Toc.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import SourceList from '../components/SourceList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import { formatAuDate } from '../lib/dates';
+import type { BreadcrumbItem } from '../lib/schema';
+
+export interface Props {
+  entry: {
+    data: {
+      title: string;
+      description: string;
+      slug: string;
+      answer: string;
+      author: string;
+      publishedOn: Date;
+      updatedOn: Date;
+      checkedOn: Date;
+      sources: (string | { id: string })[];
+      figures: string[];
+      faq: (string | { id: string })[];
+      leadForm: false | 'rcac' | 'hotwater' | 'either';
+      noindex: boolean;
+      related: string[];
+      areaName: string;
+      councils: string[];
+      postcodes: string[];
+      localFacts: { text: string; sourceId: string | { id: string } }[];
+    };
+  };
+  pathname: string;
+  breadcrumbs: BreadcrumbItem[];
+  headings?: HeadingItem[];
+}
+
+const { entry, pathname, breadcrumbs, headings = [] } = Astro.props;
+const d = entry.data;
+
+const faqEntries = await Promise.all(
+  (d.faq ?? []).map(async (ref) => {
+    const id = typeof ref === 'string' ? ref : ref.id;
+    const f = await getEntry('faqs', id);
+    return f ? { question: f.data.question, answer: f.data.answer } : null;
+  }),
+);
+const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+
+const resolvedFacts = await Promise.all(
+  d.localFacts.map(async (lf) => {
+    const sId = typeof lf.sourceId === 'string' ? lf.sourceId : lf.sourceId.id;
+    const s = await getEntry('sources', sId);
+    return {
+      text: lf.text,
+      sourceTitle: s?.data.title ?? sId,
+      sourcePublisher: s?.data.publisher ?? 'Official source',
+      sourceUrl: s?.data.url ?? '#',
+    };
+  }),
+);
+
+const allInstallers = await getCollection('installers');
+const coveringInstallers = allInstallers
+  .map((i) => i.data)
+  .filter(
+    (i) =>
+      i.active &&
+      i.agreementSignedOn &&
+      i.postcodes.some((pc) => d.postcodes.includes(pc)),
+  );
+
+const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
+const primaryHeroFigure = d.figures[0];
+---
+
+<BaseLayout
+  title={`${d.title} | Household Rebates`}
+  description={d.description}
+  pathname={pathname}
+  noindex={d.noindex}
+  breadcrumbs={breadcrumbs}
+  faqs={validFaqs}
+>
+  <Breadcrumbs items={breadcrumbs} />
+  <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
+    <article class="prose-container">
+      <h1>{d.title}</h1>
+      <AnswerBlock>
+        <p>{d.answer}</p>
+        {primaryHeroFigure && (
+          <div>
+            <Money id={primaryHeroFigure} variant="block" />
+          </div>
+        )}
+      </AnswerBlock>
+      <div class="byline">
+        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+        {formatAuDate(d.updatedOn)}
+      </div>
+
+      <section class="callout callout--info" aria-labelledby="local-facts-heading">
+        <strong class="callout__title" id="local-facts-heading">
+          Local context for {d.areaName} ({d.councils.join(', ')})
+        </strong>
+        <p style="font-size:var(--text-sm);">
+          <strong>Sample postcodes covered:</strong> {d.postcodes.join(', ')}
+        </p>
+        <ul>
+          {resolvedFacts.map((fact) => (
+            <li>
+              {fact.text}{' '}
+              <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer">
+                [{fact.sourcePublisher}]
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <slot />
+
+      <section aria-labelledby="area-installers-heading">
+        <h2 id="area-installers-heading">Participating installers covering {d.areaName}</h2>
+        {coveringInstallers.length > 0 ? (
+          <ul>
+            {coveringInstallers.map((inst) => (
+              <li>
+                <strong>{inst.tradingName}</strong> (ABN {inst.abn}) — works with VEU accredited provider{' '}
+                <strong>{inst.accreditedProvider}</strong>. {inst.publicBlurb}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>
+            We do not yet have a signed partner installer covering {d.areaName} postcodes. Until our partner agreements for this area are finalised, you can search Energy Victoria's official accredited provider directory directly or check your upgrade scenario with our{' '}
+            <a href="/victoria/eligibility-checker/">Victoria Eligibility Checker</a>.
+          </p>
+        )}
+      </section>
+
+      <Faq items={validFaqs} />
+
+      {d.leadForm !== false && coveringInstallers.length > 0 ? (
+        <LeadForm activity={d.leadForm} areaSlug={d.slug} />
+      ) : (
+        <LeadForm activity="either" areaSlug={d.slug} />
+      )}
+
+      <SourceList ids={d.sources} />
+      <RelatedLinks slugs={d.related} />
+    </article>
+
+    {hasToc && <Toc headings={headings} />}
+  </div>
+</BaseLayout>

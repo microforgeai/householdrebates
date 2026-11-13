@@ -1,0 +1,54 @@
+---
+import { getEntry } from 'astro:content';
+import { SITE } from '../data/site';
+import { assertFigureNotStale, formatAuDate } from '../lib/dates';
+import { formatFigureAmount } from '../lib/figures';
+
+export interface Props {
+  id: string;
+  variant?: 'inline' | 'block';
+}
+
+const { id, variant = 'inline' } = Astro.props;
+const entry = await getEntry('figures', id);
+if (!entry) {
+  throw new Error(`<Money id="${id}" /> references a figure ID that does not exist in figures collection.`);
+}
+
+const fig = entry.data;
+assertFigureNotStale(fig.id, fig.checkedOn, SITE.flags.maxFigureAgeDays);
+
+const sourceEntry = await getEntry(fig.sourceId);
+if (!sourceEntry || !sourceEntry.data.official) {
+  throw new Error(`Figure "${fig.id}" must reference an official source.`);
+}
+
+const formattedAmount = formatFigureAmount(fig);
+const checkedStr = formatAuDate(fig.checkedOn);
+---
+
+{variant === 'block' ? (
+  <span class="money-block" data-figure-id={fig.id}>
+    <span class="money-block__amount">{formattedAmount}</span>
+    <span class="money-block__meta">
+      Checked on {checkedStr} ·{' '}
+      <a href={sourceEntry.data.url} target="_blank" rel="noopener noreferrer">
+        {sourceEntry.data.publisher} ↗
+      </a>
+    </span>
+  </span>
+) : (
+  <span class="money-inline" data-figure-id={fig.id}>
+    {formattedAmount}
+    <sup class="money-inline__sup">
+      <a
+        href={sourceEntry.data.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={`Source: ${sourceEntry.data.title} (${sourceEntry.data.publisher}, checked ${checkedStr})`}
+      >
+        [source]
+      </a>
+    </sup>
+  </span>
+)}

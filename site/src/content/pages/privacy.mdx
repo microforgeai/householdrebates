@@ -1,0 +1,77 @@
+---
+title: "Privacy Policy and APP 5 Collection Notice"
+description: "How Agenor Services Pty Ltd (Household Rebates) collects, uses, discloses, and deletes your personal information under the Australian Privacy Principles."
+state: national
+section: trust
+slug: privacy
+answer: "Because Household Rebates discloses enquiry details to named participating installers for a lead fee when our quote form is open, Agenor Services Pty Ltd (ABN 29 644 447 263) treats the Australian Privacy Principles (APPs) under the Privacy Act 1988 (Cth) as applying in full, and only discloses your personal information with your express prior consent. We do not use tracking cookies or third-party advertising pixels on this website."
+author: "Gurinder Singh"
+publishedOn: 2026-11-13
+updatedOn: 2026-11-13
+checkedOn: 2026-11-13
+sources:
+  - oaic-trading-personal-info
+  - oaic-small-business
+  - esc-telemarketing-bans-faq
+  - esc-lead-gen-factsheet
+  - acma-avoid-spam
+figures: []
+faq: []
+leadForm: false
+noindex: false
+related:
+  - about
+  - how-quotes-work
+  - terms
+legalReviewed: false
+---
+
+<Callout type="caution" title="Draft pending legal review before quote form activation">
+  This Privacy Policy and APP 5 Collection Notice is our complete operational draft (`version: 2026-11-13-v1`). Our quote request form remains switched off until a qualified Australian privacy and consumer law practitioner reviews and signs off on this wording.
+</Callout>
+
+## 1. Who we are
+
+This website (`householdrebates.com.au`, **Household Rebates**) is operated by **Agenor Services Pty Ltd** (ABN `29 644 447 263`), located in Melbourne, Victoria, Australia (**we**, **us**, **our**).
+
+Under the *Privacy Act 1988* (Cth), disclosing personal information to another organisation for a commercial benefit (such as a lead generation fee) is classified as "trading in personal information" (<SourceLink id="oaic-trading-personal-info" label="OAIC — Trading in personal information" />). Accordingly, we comply with the Australian Privacy Principles (APPs) and obtain your express consent before passing any enquiry to a participating installer.
+
+## 2. APP 5 Collection Notice (when you submit a quote form)
+
+When our quote enquiry form is active and you choose to submit it:
+
+- **What we collect:** Your first name, optional last name, email address, phone number, Victorian postcode, property tenure (owner, renter, or landlord), whether the building is over 2 years old, current heating/hot water system, upgrade interest, preferred contact channels (phone, email, and/or home visit), optional notes, how you heard about us, and the exact wording and timestamp of your consent.
+- **What we do not collect:** We do not ask for your street address, date of birth, income, concession card numbers, or government identifiers on our form.
+- **Why we collect it:** To pass your quote enquiry to the **named participating installer(s)** shown on the form (who work with the named Victorian Energy Upgrades accredited provider) so they can contact you via your selected channel(s) about a quote, and to maintain an auditable record of your express prior consent under the VEU code of conduct.
+- **Commercial benefit disclosure:** The participating installer pays Agenor Services Pty Ltd a fee for each valid enquiry we send them.
+- **If you do not provide this information:** We cannot pass a quote enquiry to a participating installer. You can still browse all guides, use the Eligibility Checker anonymously, or contact an accredited provider directly from Energy Victoria's website.
+
+## 3. Express prior consent and how to withdraw it (3-month limit)
+
+In accordance with the Essential Services Commission's rules under the VEU code of conduct (<SourceLink id="esc-telemarketing-bans-faq" label="ESC Telemarketing and Doorknocking Bans FAQ v1.1" />):
+
+- Your express prior consent to be contacted by the named installer lasts for **3 months** from the date you submit the form, unless you withdraw it earlier.
+- **How to withdraw consent:** You can withdraw your consent at any time by replying to your confirmation email or emailing `privacy@householdrebates.com.au` with your email address or reference number (`HR-XXXXXX`). When you withdraw consent, we record your withdrawal timestamp and notify each installer who received your enquiry to cease contact immediately.
+
+## 4. Cookies, analytics, and server logs
+
+- **No tracking cookies:** We do not set analytics or advertising cookies in your browser, and we do not load third-party tracking scripts.
+- **Eligibility Checker:** Your answers in the Eligibility Checker stay in your browser (`sessionStorage` only if you proceed to the form on the same visit).
+- **Server logs and rate limiting:** Our web server records standard access logs (kept for 30 days) and a separate AI-referrer log that excludes IP addresses (kept for 180 days). When you submit a form, we store a one-way cryptographic hash (`HMAC-SHA256`) of your IP address solely to enforce anti-spam rate limits; your raw IP address is never stored in our database.
+
+## 5. Data storage, security, and retention periods
+
+All enquiry and consent records are stored in an access-restricted SQLite database on our Australian-managed server environment with encrypted daily backups (`age` encryption).
+
+| Record category | Retention period | Action at end of period |
+|---|---|---|
+| Personal contact details (name, email, phone, message) | 12 months from creation | Permanently nulled by our automated nightly purge job (`status = purged`) |
+| `ip_hash` and `user_agent` on enquiries | 30 days from creation | Nulled by our automated nightly purge job |
+| Consent audit record (version, SHA-256 hash, snapshot, scopes, timestamps) | 24 months after expiry or withdrawal | Deleted after the VEU audit window closes |
+| Delivery and invoicing metadata (installer ID, timestamp, fee) | 7 years | Retained for Australian taxation compliance (contains no personal contact details after purge) |
+
+## 6. Access, correction, deletion, and complaints
+
+You may request access to, correction of, or erasure of your personal information held by us at any time by emailing `privacy@householdrebates.com.au`. We respond to all privacy requests within 30 days.
+
+If you have a complaint about how we have handled your personal information, please contact `privacy@householdrebates.com.au` first. If you are not satisfied with our response, you may contact the **Office of the Australian Information Commissioner (OAIC)** at `www.oaic.gov.au` or on `1300 363 992`.

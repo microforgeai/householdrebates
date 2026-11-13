@@ -1,0 +1,234 @@
+---
+import { getCollection } from 'astro:content';
+import { SITE } from '../data/site';
+import { CONSENT_VERSIONS } from '../data/consent/vic-v1';
+import FormClosedNotice from './FormClosedNotice.astro';
+
+export interface Props {
+  activity: 'rcac' | 'hotwater' | 'either';
+  areaSlug?: string;
+}
+
+const { activity } = Astro.props;
+const allInstallers = await getCollection('installers');
+const activeInstallers = allInstallers
+  .map((i) => i.data)
+  .filter((i) => {
+    if (!i.active || !i.agreementSignedOn || !i.accreditedProvider) return false;
+    if (activity === 'either') {
+      return i.activities.includes('rcac') || i.activities.includes('hotwater');
+    }
+    return i.activities.includes(activity);
+  });
+
+const showLiveForm = SITE.flags.leadsEnabled && activeInstallers.length > 0;
+const defaultActivity = activity === 'either' ? 'rcac' : activity;
+const defaultConsentVersion = CONSENT_VERSIONS[defaultActivity];
+const recipientIdsValue = activeInstallers.map((i) => i.id).join(',');
+const installerSummary = activeInstallers
+  .map(
+    (i) =>
+      `${i.tradingName} (works with VEU accredited provider ${i.accreditedProvider})`,
+  )
+  .join('; ');
+const installerNames = activeInstallers.map((i) => i.tradingName).join(' and ');
+---
+
+{!showLiveForm ? (
+  <FormClosedNotice />
+) : (
+  <section class="form-card" id="quote-form" aria-labelledby="lead-form-heading">
+    <h2 id="lead-form-heading">Request a VEU quote from a named installer</h2>
+    <p>
+      Complete this form to request a quote. Every field marked with * is required.
+    </p>
+    <form
+      action="/api/leads"
+      method="POST"
+      data-lead-form
+      novalidate
+    >
+      <input type="hidden" name="consentVersion" value={defaultConsentVersion} data-consent-version />
+      <input type="hidden" name="recipientIds" value={recipientIdsValue} data-recipient-ids />
+      <input type="hidden" name="formToken" value="" data-form-token />
+      <input type="hidden" name="pageUrl" value={Astro.url.pathname} />
+      <input type="hidden" name="productBought" value="0" data-product-bought />
+
+      <div style="position:absolute;left:-9999px;" aria-hidden="true">
+        <label for="hr-website-hp">Website (leave blank)</label>
+        <input type="text" id="hr-website-hp" name="website" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-activity">What upgrade are you quoting? *</label>
+        <select id="lf-activity" name="activity" required data-lf-activity>
+          {(activity === 'rcac' || activity === 'either') && (
+            <option value="rcac">Heating and cooling (reverse-cycle air conditioning)</option>
+          )}
+          {(activity === 'hotwater' || activity === 'either') && (
+            <option value="hotwater">Hot water (heat pump or solar-boosted)</option>
+          )}
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-current-system">What system is installed right now? *</label>
+        <select id="lf-current-system" name="currentSystem" required>
+          <option value="">Select current system…</option>
+          <option value="ducted-gas">Ducted gas heater</option>
+          <option value="room-gas">Room (non-ducted) gas heater</option>
+          <option value="central-electric">Central electric ducted heater</option>
+          <option value="hardwired-electric">Hard-wired electric room heater</option>
+          <option value="ducted-rcac">Existing ducted reverse-cycle air conditioner</option>
+          <option value="split-rcac">Existing split-system air conditioner</option>
+          <option value="mains-gas">Mains gas hot water (storage or instantaneous)</option>
+          <option value="electric">Electric storage hot water</option>
+          <option value="lpg">Bottled LPG hot water</option>
+          <option value="broken-solar">Solar hot water that no longer works</option>
+          <option value="none">No existing system / other</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-first-name">First name *</label>
+        <input id="lf-first-name" name="firstName" type="text" maxlength="60" autocomplete="given-name" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-last-name">Last name (optional)</label>
+        <input id="lf-last-name" name="lastName" type="text" maxlength="60" autocomplete="family-name" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-email">Email address *</label>
+        <input id="lf-email" name="email" type="email" maxlength="254" autocomplete="email" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-phone">Phone number (Australian mobile or landline) *</label>
+        <span class="field-hint" id="lf-phone-hint">Format: 04XX XXX XXX or 03 XXXX XXXX</span>
+        <input
+          id="lf-phone"
+          name="phone"
+          type="tel"
+          autocomplete="tel"
+          aria-describedby="lf-phone-hint"
+          required
+        />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-postcode">Victorian postcode *</label>
+        <input
+          id="lf-postcode"
+          name="postcode"
+          type="text"
+          inputmode="numeric"
+          pattern="^3[0-9]{3}$"
+          maxlength="4"
+          autocomplete="postal-code"
+          required
+          data-lf-postcode
+        />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-ownership">Do you own or rent this property? *</label>
+        <select id="lf-ownership" name="ownership" required data-lf-ownership>
+          <option value="own">Own and live there</option>
+          <option value="landlord">Landlord (rental property I own)</option>
+          <option value="rent">Tenant / renting</option>
+        </select>
+      </div>
+
+      <div class="field-group" data-landlord-ok-wrap hidden>
+        <label class="option-row" for="lf-landlord-ok">
+          <input type="checkbox" id="lf-landlord-ok" name="landlordOk" value="yes" />
+          <span>I have, or will get, the landlord's approval before any installation work begins.</span>
+        </label>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-building-age">Is the building more than 2 years old? *</label>
+        <select id="lf-building-age" name="buildingOver2Years" required>
+          <option value="yes">Yes</option>
+          <option value="not_sure">Not sure</option>
+          <option value="no">No (under 2 years old)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-work-started">Has installation work started? *</label>
+        <select id="lf-work-started" name="workStarted" required>
+          <option value="no">No — I have not bought or installed a system yet</option>
+          <option value="bought_not_installed">Bought the unit, but installation has not started</option>
+        </select>
+      </div>
+
+      <fieldset class="field-group">
+        <legend class="field-label">How may the installer contact you? (Tick at least one) *</legend>
+        <label class="option-row" for="lf-cp-phone">
+          <input type="checkbox" id="lf-cp-phone" name="contactPrefs" value="phone" />
+          <span>By phone</span>
+        </label>
+        <label class="option-row" for="lf-cp-email">
+          <input type="checkbox" id="lf-cp-email" name="contactPrefs" value="email" />
+          <span>By email</span>
+        </label>
+        <label class="option-row" for="lf-cp-visit">
+          <input type="checkbox" id="lf-cp-visit" name="contactPrefs" value="site_visit" />
+          <span>A visit to my home to measure and quote</span>
+        </label>
+      </fieldset>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-how-heard">How did you find Household Rebates? (optional)</label>
+        <select id="lf-how-heard" name="howHeard">
+          <option value="">Prefer not to say</option>
+          <option value="Google">Google Search</option>
+          <option value="Bing">Bing Search</option>
+          <option value="ChatGPT">ChatGPT</option>
+          <option value="Perplexity">Perplexity</option>
+          <option value="Gemini">Google Gemini</option>
+          <option value="Other AI">Other AI assistant</option>
+          <option value="Friend">Friend or family</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="lf-message">Notes for the quote (optional, max 1,000 characters)</label>
+        <textarea id="lf-message" name="message" rows="3" maxlength="1000"></textarea>
+      </div>
+
+      <div class="consent-box">
+        <p>
+          <strong>Who gets your details.</strong> If you tick the box and send this form, {SITE.name} (run by{' '}
+          {SITE.publisher.legalName}, ABN {SITE.publisher.abn}) will send your name, phone, email, postcode and answers to{' '}
+          <strong data-installer-list>{installerSummary}</strong>. The installer pays us a fee for each enquiry. We're not a
+          government website and we don't work for the Victorian Energy Upgrades program, the Essential Services Commission or
+          the Victorian Government.
+        </p>
+        <label class="option-row" for="lf-consent">
+          <input type="checkbox" id="lf-consent" name="consent" value="true" required />
+          <span>
+            I agree to {SITE.name} sending my details to <strong data-installer-names>{installerNames}</strong>, and to{' '}
+            <strong data-installer-names>{installerNames}</strong> contacting me about a quote under the Victorian Energy Upgrades
+            program by the channel(s) I ticked above. This consent lasts 3 months unless I withdraw it sooner by replying to any
+            email from {SITE.name} or emailing <a href={`mailto:${SITE.publisher.privacyEmail}`}>{SITE.publisher.privacyEmail}</a>.
+            I've read the <a href="/privacy/">collection notice and privacy policy</a>.
+          </span>
+        </label>
+        <p style="margin-bottom:0;font-size:var(--text-xs);color:var(--text-secondary);">
+          A quote doesn't guarantee a discount. The accredited provider checks eligibility and confirms any discount in your
+          quote. Read your rights under the VEU code of conduct and the VEET scheme consumer factsheet{' '}
+          <a href="/how-quotes-work/#your-rights">here</a>.
+        </p>
+      </div>
+
+      <button type="submit" class="btn">Send quote enquiry</button>
+    </form>
+  </section>
+)}
+
+<script src="./lead-form.client.ts"></script>

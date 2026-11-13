@@ -1,0 +1,152 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { formatAuDate } from '../lib/dates';
+
+export interface Props {
+  state?: 'vic';
+}
+
+const allFigures = await getCollection('figures');
+const hcSource = await getEntry('sources', 'energyvic-heating-cooling');
+const hwSource = await getEntry('sources', 'energyvic-hot-water');
+
+const serializedFigures = allFigures.map((f) => ({
+  ...f.data,
+  sourceId: typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id,
+  checkedOn: formatAuDate(f.data.checkedOn),
+  sourceUrl:
+    (typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id) ===
+    'energyvic-heating-cooling'
+      ? hcSource?.data.url
+      : hwSource?.data.url,
+  sourceTitle:
+    (typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id) ===
+    'energyvic-heating-cooling'
+      ? hcSource?.data.title
+      : hwSource?.data.title,
+}));
+---
+
+<section
+  class="checker-card"
+  id="eligibility-checker"
+  aria-labelledby="checker-heading"
+  data-checker-root
+  data-figures={JSON.stringify(serializedFigures)}
+>
+  <h2 id="checker-heading">Check your VEU upgrade scenario</h2>
+  <p>
+    Answer the questions below to see which Victorian Energy Upgrades (VEU) scenario fits your property. Your answers stay in your browser.
+  </p>
+
+  <form data-checker-form novalidate>
+    <div class="field-group">
+      <label class="field-label" for="chk-q1">1. Where is the property located?</label>
+      <select id="chk-q1" name="q1State" required>
+        <option value="vic">Victoria</option>
+        <option value="other">Another state or territory</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="chk-q2">2. What do you want to upgrade?</label>
+      <select id="chk-q2" name="q2Upgrade" required data-chk-upgrade>
+        <option value="rcac">Heating and cooling (reverse-cycle air conditioning)</option>
+        <option value="hotwater">Hot water (heat pump or solar-boosted)</option>
+        <option value="both">Both heating/cooling and hot water</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="chk-q3">
+        3. Have you already bought or installed the new system, or has work started?
+      </label>
+      <select id="chk-q3" name="q3WorkStage" required>
+        <option value="no">No — not bought or installed yet</option>
+        <option value="bought_not_installed">Bought the unit, not installed yet</option>
+        <option value="installed_or_started">Already installed or installation work has started</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="chk-q4">4. Is the property a home or a business?</label>
+      <select id="chk-q4" name="q4PropertyType" required>
+        <option value="home">Home (residential property)</option>
+        <option value="business">Business or commercial premises</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="chk-q5">5. Do you own or rent?</label>
+      <select id="chk-q5" name="q5Tenure" required>
+        <option value="own">Own and live there</option>
+        <option value="rent">Rent (tenant)</option>
+        <option value="landlord">Landlord (rental property owner)</option>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="chk-q6">6. Is the building more than 2 years old?</label>
+      <select id="chk-q6" name="q6BuildingOver2Years" required>
+        <option value="yes">Yes — more than 2 years old</option>
+        <option value="no">No — built within the last 2 years</option>
+        <option value="not_sure">Not sure</option>
+      </select>
+    </div>
+
+    <div data-chk-hc-group>
+      <div class="field-group">
+        <label class="field-label" for="chk-q7a">7a. What heats the home now?</label>
+        <select id="chk-q7a" name="q7aCurrentHeating">
+          <option value="room-gas">Room (non-ducted) gas heater</option>
+          <option value="ducted-gas">Ducted gas heater</option>
+          <option value="central-electric">Central electric resistance ducted heater</option>
+          <option value="hardwired-electric">Hard-wired electric room heater</option>
+          <option value="ducted-rcac">Ducted reverse-cycle air conditioner</option>
+          <option value="split-rcac">Split-system reverse-cycle air conditioner</option>
+          <option value="none">Nothing or other (e.g. wood heater or plug-in portable)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="chk-q7b">7b. What heating and cooling system would you like?</label>
+        <select id="chk-q7b" name="q7bTargetHeating">
+          <option value="split">Split system(s) (single or multi-split)</option>
+          <option value="ducted">Ducted reverse-cycle system</option>
+          <option value="not_sure">Not sure yet</option>
+        </select>
+      </div>
+    </div>
+
+    <div data-chk-hw-group hidden>
+      <div class="field-group">
+        <label class="field-label" for="chk-q8a">8a. What is your current hot water system?</label>
+        <select id="chk-q8a" name="q8aCurrentHotWater">
+          <option value="mains-gas">Mains gas (storage or instantaneous)</option>
+          <option value="electric">Electric storage water heater</option>
+          <option value="lpg">Bottled LPG gas water heater</option>
+          <option value="broken-solar">Solar water heater that no longer works</option>
+          <option value="none">None (new connection without an existing heater)</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="chk-q8b">
+          8b. How many hot water systems have already been upgraded through VEU at this address?
+        </label>
+        <select id="chk-q8b" name="q8bPreviousHotWaterUpgrades">
+          <option value="0">0 (none upgraded yet)</option>
+          <option value="1">1 system</option>
+          <option value="2_plus">2 or more systems</option>
+          <option value="not_sure">Not sure</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn">Check indicative VEU discount</button>
+  </form>
+
+  <div data-checker-output class="callout callout--info" hidden aria-live="polite"></div>
+</section>
+
+<script src="./eligibility.client.ts"></script>

@@ -1,0 +1,10 @@
+[Unit]
+Description=Household Rebates nightly data retention purge
+
+[Service]
+Type=oneshot
+User=hrapi
+Group=hrapi
+WorkingDirectory=/opt/householdrebates-api/current
+EnvironmentFile=/etc/householdrebates/api.env
+ExecStart=/usr/bin/node dist/cli/purge.js

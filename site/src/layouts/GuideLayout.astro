@@ -1,0 +1,112 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import Money from '../components/Money.astro';
+import Toc, { type HeadingItem } from '../components/Toc.astro';
+import Steps from '../components/Steps.astro';
+import Faq from '../components/Faq.astro';
+import LeadForm from '../components/LeadForm.astro';
+import SourceList from '../components/SourceList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import { formatAuDate } from '../lib/dates';
+import type { BreadcrumbItem } from '../lib/schema';
+
+export interface Props {
+  entry: {
+    data: {
+      title: string;
+      description: string;
+      slug: string;
+      answer: string;
+      author: string;
+      publishedOn: Date;
+      updatedOn: Date;
+      checkedOn: Date;
+      sources: (string | { id: string })[];
+      figures: string[];
+      faq: (string | { id: string })[];
+      howTo?: { name: string; steps: { name: string; text: string }[] };
+      leadForm: false | 'rcac' | 'hotwater' | 'either';
+      noindex: boolean;
+      related: string[];
+    };
+  };
+  pathname: string;
+  breadcrumbs: BreadcrumbItem[];
+  headings?: HeadingItem[];
+  leadFigureId?: string;
+}
+
+const { entry, pathname, breadcrumbs, headings = [], leadFigureId } = Astro.props;
+const d = entry.data;
+
+const faqEntries = await Promise.all(
+  (d.faq ?? []).map(async (ref) => {
+    const id = typeof ref === 'string' ? ref : ref.id;
+    const f = await getEntry('faqs', id);
+    return f ? { question: f.data.question, answer: f.data.answer } : null;
+  }),
+);
+const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
+const primaryHeroFigure = leadFigureId ?? d.figures[0];
+---
+
+<BaseLayout
+  title={`${d.title} | Household Rebates`}
+  description={d.description}
+  pathname={pathname}
+  noindex={d.noindex}
+  breadcrumbs={breadcrumbs}
+  faqs={validFaqs}
+  howTo={d.howTo}
+>
+  <Breadcrumbs items={breadcrumbs} />
+  <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
+    <article class="prose-container">
+      <h1>{d.title}</h1>
+      <AnswerBlock>
+        <p>{d.answer}</p>
+        {primaryHeroFigure && (
+          <div>
+            <Money id={primaryHeroFigure} variant="block" />
+          </div>
+        )}
+      </AnswerBlock>
+      <div class="byline">
+        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+        {formatAuDate(d.updatedOn)}
+      </div>
+
+      {d.howTo && (
+        <section aria-labelledby="howto-heading">
+          <h2 id="howto-heading">{d.howTo.name}</h2>
+          <Steps steps={d.howTo.steps} />
+        </section>
+      )}
+
+      <slot />
+
+      <Faq items={validFaqs} />
+
+      {d.leadForm !== false ? (
+        <LeadForm activity={d.leadForm} />
+      ) : (
+        <section class="form-card" aria-labelledby="checker-cta-heading">
+          <h2 id="checker-cta-heading">Check which VEU scenario fits your home</h2>
+          <p>
+            Answer 8 quick questions in our Victoria Eligibility Checker to see which Energy Victoria discount scenario applies to your heating, cooling, or hot water upgrade.
+          </p>
+          <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
+        </section>
+      )}
+
+      <SourceList ids={d.sources} />
+      <RelatedLinks slugs={d.related} />
+    </article>
+
+    {hasToc && <Toc headings={headings} />}
+  </div>
+</BaseLayout>

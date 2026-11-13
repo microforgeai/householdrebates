@@ -1,0 +1,316 @@
+- id: vic-veu-rcac-room-gas
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a non-ducted (room) gas heater with a single split system (3 to 9 kW)"
+  qualifier: range
+  amountMin: 630
+  amountMax: 1610
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+  conditions:
+    - "Property must be more than 2 years old when replacing an existing heater"
+    - "Must decommission the room gas heater"
+
+- id: vic-veu-rcac-ducted-gas-4splits
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a ducted gas heater with 4 single split systems"
+  qualifier: up-to
+  amountMax: 2520
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-ducted-gas-multisplit
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a ducted gas heater with a multi-split reverse-cycle system"
+  qualifier: up-to
+  amountMax: 2940
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-hardwired-electric
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a hard-wired electric room heater (such as slab or wall panel) with a split system"
+  qualifier: up-to
+  amountMax: 840
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-split-replaced
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace an existing non-ducted reverse-cycle air conditioner with a new high-efficiency split system"
+  qualifier: exact
+  amountMax: 210
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-room-no-decomm
+  group: vic-veu-rcac-room-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Install a room reverse-cycle split system without decommissioning an existing heater"
+  qualifier: range
+  amountMin: 70
+  amountMax: 140
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-ducted-gas-10kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a ducted gas heater with a 10 kW ducted reverse-cycle system"
+  qualifier: up-to
+  amountMax: 2520
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-ducted-gas-16kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a ducted gas heater with a 16 kW ducted reverse-cycle system"
+  qualifier: up-to
+  amountMax: 4200
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-ducted-gas-22kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a ducted gas heater with a 22.4 kW ducted reverse-cycle system"
+  qualifier: up-to
+  amountMax: 5530
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-central-electric-ducted
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace a central electric resistance ducted heater with a ducted reverse-cycle system"
+  qualifier: up-to
+  amountMax: 5460
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-replaced-10kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace an existing ducted reverse-cycle system with a new 10 kW ducted system"
+  qualifier: up-to
+  amountMax: 490
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-replaced-16kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace an existing ducted reverse-cycle system with a new 16 kW ducted system"
+  qualifier: up-to
+  amountMax: 770
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-replaced-22kw
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Replace an existing ducted reverse-cycle system with a new 22.4 kW ducted system"
+  qualifier: up-to
+  amountMax: 910
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-rcac-ducted-no-decomm
+  group: vic-veu-rcac-ducted-household
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Install a ducted reverse-cycle system without decommissioning an existing heater"
+  qualifier: up-to
+  amountMax: 410
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-hw-electric-to-heatpump
+  group: vic-veu-hotwater-household
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Replace an inefficient electric hot water system with a heat pump"
+  qualifier: exact
+  amountMax: 630
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-hw-gas-to-heatpump
+  group: vic-veu-hotwater-household
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Replace an inefficient gas hot water heater with a heat pump"
+  qualifier: exact
+  amountMax: 560
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-hw-electric-to-solar
+  group: vic-veu-hotwater-household
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Replace an inefficient electric hot water system with a solar-boosted hot water system"
+  qualifier: exact
+  amountMax: 910
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-hw-gas-to-solar
+  group: vic-veu-hotwater-household
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Replace an inefficient gas hot water heater with a solar-boosted hot water system"
+  qualifier: exact
+  amountMax: 700
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-hw-combined-solar-homes
+  group: vic-veu-hotwater-combined
+  state: vic
+  program: VEU + Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Combined VEU discount and Solar Homes hot water rebate (eligible standard product)"
+  qualifier: up-to
+  amountMax: 1560
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-hw-combined-solar-homes-local
+  group: vic-veu-hotwater-combined
+  state: vic
+  program: VEU + Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Combined VEU discount and Solar Homes hot water rebate (with eligible locally made product)"
+  qualifier: up-to
+  amountMax: 1960
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-hw-min-contribution
+  group: vic-veu-hotwater-combined
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Minimum customer co-contribution required for a VEU hot water upgrade"
+  qualifier: exact
+  amountMax: 200
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-running-room-gas-to-rcac
+  group: vic-veu-running-savings
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Estimated annual energy bill saving when replacing a room gas heater with a split-system air conditioner"
+  qualifier: up-to
+  amountMax: 460
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-running-ducted-gas-to-rcac
+  group: vic-veu-running-savings
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Estimated annual energy bill saving when replacing a ducted gas heater with a ducted reverse-cycle system"
+  qualifier: up-to
+  amountMax: 1140
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-running-gas-to-electric-hw
+  group: vic-veu-running-savings
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Estimated annual energy bill saving when switching from gas to an efficient electric hot water system"
+  qualifier: about
+  amountMax: 400
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13

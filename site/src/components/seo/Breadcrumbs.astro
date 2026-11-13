@@ -1,0 +1,29 @@
+---
+import type { BreadcrumbItem } from '../../lib/schema';
+import { ensureTrailingSlash } from '../../lib/urls';
+
+export interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+---
+
+{items.length > 0 && (
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <ol>
+      {items.map((item, idx) => {
+        const isLast = idx === items.length - 1;
+        return (
+          <li>
+            {isLast ? (
+              <span aria-current="page">{item.name}</span>
+            ) : (
+              <a href={ensureTrailingSlash(item.path)}>{item.name}</a>
+            )}
+          </li>
+        );
+      })}
+    </ol>
+  </nav>
+)}

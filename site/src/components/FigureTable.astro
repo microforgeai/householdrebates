@@ -1,0 +1,57 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import { SITE } from '../data/site';
+import { assertFigureNotStale, formatAuDate } from '../lib/dates';
+import { formatFigureAmount } from '../lib/figures';
+
+export interface Props {
+  group: string;
+  captionPrefix?: string;
+}
+
+const { group, captionPrefix } = Astro.props;
+const allFigures = await getCollection('figures');
+const rows = allFigures.filter((f) => f.data.group === group);
+
+if (rows.length === 0) {
+  throw new Error(`<FigureTable group="${group}" /> matched 0 figures.`);
+}
+
+for (const row of rows) {
+  assertFigureNotStale(row.data.id, row.data.checkedOn, SITE.flags.maxFigureAgeDays);
+}
+
+const primarySource = await getEntry(rows[0].data.sourceId);
+if (!primarySource || !primarySource.data.official) {
+  throw new Error(`FigureTable group "${group}" must reference an official source.`);
+}
+
+const checkedDateStr = formatAuDate(rows[0].data.checkedOn);
+---
+
+<div class="figure-table-wrap" data-figure-group={group}>
+  <table class="figure-table">
+    <caption>
+      {captionPrefix ? `${captionPrefix} · ` : ''}
+      Checked on {checkedDateStr} against{' '}
+      <a href={primarySource.data.url} target="_blank" rel="noopener noreferrer">
+        {primarySource.data.title} ({primarySource.data.publisher})
+      </a>
+      . Indicative. The accredited provider confirms the final amount in your quote.
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Upgrade scenario</th>
+        <th scope="col">Indicative VEU discount</th>
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr data-figure-id={row.data.id}>
+          <td>{row.data.scenario}</td>
+          <td class="amount-cell">{formatFigureAmount(row.data)}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>

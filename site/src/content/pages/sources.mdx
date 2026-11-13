@@ -1,0 +1,48 @@
+---
+title: "Official Sources and Editorial Verification Method"
+description: "Complete list of official Energy Victoria, Essential Services Commission, Victorian Government, OAIC, and ACMA sources used on Household Rebates."
+state: vic
+section: trust
+slug: sources
+answer: "Every discount figure, eligibility rule, and compliance statement on Household Rebates is verified against primary publications from Energy Victoria (DEECA), the Essential Services Commission (ESC), the Victoria Government Gazette, the Office of the Australian Information Commissioner (OAIC), and the ACMA. This page lists every source in our database alongside its verification date."
+author: "Gurinder Singh"
+publishedOn: 2026-11-13
+updatedOn: 2026-11-13
+checkedOn: 2026-11-13
+sources:
+  - energyvic-heating-cooling
+  - energyvic-hot-water
+  - energyvic-about
+  - energyvic-installers
+  - energyvic-electrification-standards
+  - vic-gas-substitution-roadmap
+  - vic-gazette-s654-2025
+  - esc-veu-code-of-conduct
+  - esc-lead-gen-factsheet
+  - esc-telemarketing-bans-faq
+  - esc-code-guideline
+  - esc-consumer-rights
+  - oaic-trading-personal-info
+  - oaic-small-business
+  - acma-avoid-spam
+  - city-of-melbourne-climate
+  - greater-geelong-sustainability
+  - frankston-climate-action
+  - mornington-peninsula-climate
+  - bom-climate-victoria
+figures: []
+faq: []
+leadForm: false
+noindex: false
+related:
+  - about
+  - how-quotes-work
+  - home
+---
+
+## How we verify figures and rules
+
+1. **Primary sources only for figures:** Our build pipeline enforces that every figure in `figures/vic-veu.yaml` links to a source marked `official: true`.
+2. **Scenario accuracy:** Where an official table shows a range or an "up to" maximum across multiple system sizes, we reproduce the full scenario table so readers can see how room gas replacements differ from whole-home ducted replacements.
+3. **45-day staleness gate:** If any figure's `checkedOn` date is older than 45 days, our automated build check fails until we re-read the official Energy Victoria page and confirm the numbers.
+4. **Explicitly marking unverified items:** Where a detail comes from a secondary summary rather than primary legislation (for example, certain exemptions under Plumbing Regulations regulation 45E beyond those listed in Victoria Government Gazette S654), we label it as unverified on the page until we read the primary regulation directly.

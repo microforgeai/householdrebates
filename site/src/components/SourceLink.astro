@@ -1,0 +1,25 @@
+---
+import { getEntry } from 'astro:content';
+import { formatAuDate } from '../lib/dates';
+
+export interface Props {
+  id: string;
+  label?: string;
+}
+
+const { id, label } = Astro.props;
+const entry = await getEntry('sources', id);
+if (!entry) {
+  throw new Error(`<SourceLink id="${id}" /> references an unknown source.`);
+}
+const s = entry.data;
+---
+
+<a
+  href={s.url}
+  target="_blank"
+  rel="noopener noreferrer"
+  title={`${s.title} (${s.publisher}, checked ${formatAuDate(s.checkedOn)})`}
+>
+  {label ?? s.title}
+</a>

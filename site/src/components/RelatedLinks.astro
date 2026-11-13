@@ -1,0 +1,23 @@
+---
+import { resolveSlugToPath } from '../lib/urls';
+
+export interface Props {
+  slugs: string[];
+}
+
+const { slugs } = Astro.props;
+const links = slugs.map((slug) => resolveSlugToPath(slug));
+---
+
+{links.length > 0 && (
+  <nav class="related-links" aria-labelledby="related-heading">
+    <h2 id="related-heading">Related Victoria guides and tools</h2>
+    <ul>
+      {links.map((item) => (
+        <li>
+          <a href={item.path}>{item.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+)}

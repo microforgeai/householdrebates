@@ -1,0 +1,24 @@
+---
+import { getEntry } from 'astro:content';
+import { formatAuDate } from '../lib/dates';
+
+export interface Props {
+  date: Date | string;
+  sourceId?: string;
+}
+
+const { date, sourceId } = Astro.props;
+const source = sourceId ? await getEntry('sources', sourceId) : undefined;
+---
+
+<span class="checked-on">
+  Checked on <time datetime={new Date(date).toISOString().slice(0, 10)}>{formatAuDate(date)}</time>
+  {source && (
+    <>
+      {' · '}
+      <a href={source.data.url} target="_blank" rel="noopener noreferrer">
+        {source.data.publisher}
+      </a>
+    </>
+  )}
+</span>

@@ -1,0 +1,48 @@
+export const VIC_ELIGIBILITY_RULES = {
+  state: 'vic',
+  minBuildingAgeYears: 2,
+  maxHouseholdHotWaterSystems: 2,
+  minHotWaterContributionFigureId: 'vic-veu-hw-min-contribution',
+  gasRuleEffectiveDate: '2027-03-01',
+  outOfAreaLink: 'https://www.energy.gov.au/rebates',
+  businessLink: 'https://www.energy.vic.gov.au/victorian-energy-upgrades',
+  providerListLink: 'https://www.energy.vic.gov.au/victorian-energy-upgrades/find-a-provider',
+  heatingCoolingFigureMap: {
+    'ducted-gas__ducted': [
+      'vic-veu-rcac-ducted-gas-10kw',
+      'vic-veu-rcac-ducted-gas-16kw',
+      'vic-veu-rcac-ducted-gas-22kw',
+    ],
+    'ducted-gas__split': [
+      'vic-veu-rcac-ducted-gas-4splits',
+      'vic-veu-rcac-ducted-gas-multisplit',
+    ],
+    'room-gas__split': ['vic-veu-rcac-room-gas'],
+    'room-gas__ducted': ['vic-veu-rcac-ducted-no-decomm'],
+    'central-electric__ducted': ['vic-veu-rcac-central-electric-ducted'],
+    'central-electric__split': ['vic-veu-rcac-room-no-decomm'],
+    'hardwired-electric__split': ['vic-veu-rcac-hardwired-electric'],
+    'hardwired-electric__ducted': ['vic-veu-rcac-ducted-no-decomm'],
+    'ducted-rcac__ducted': [
+      'vic-veu-rcac-replaced-10kw',
+      'vic-veu-rcac-replaced-16kw',
+      'vic-veu-rcac-replaced-22kw',
+    ],
+    'ducted-rcac__split': ['vic-veu-rcac-room-no-decomm'],
+    'split-rcac__split': ['vic-veu-rcac-split-replaced'],
+    'split-rcac__ducted': ['vic-veu-rcac-ducted-no-decomm'],
+    'none__split': ['vic-veu-rcac-room-no-decomm'],
+    'none__ducted': ['vic-veu-rcac-ducted-no-decomm'],
+  },
+  hotWaterFigureMap: {
+    'mains-gas': ['vic-veu-hw-gas-to-heatpump', 'vic-veu-hw-gas-to-solar'],
+    electric: ['vic-veu-hw-electric-to-heatpump', 'vic-veu-hw-electric-to-solar'],
+    'broken-solar': [
+      'vic-veu-hw-electric-to-heatpump',
+      'vic-veu-hw-gas-to-heatpump',
+      'vic-veu-hw-electric-to-solar',
+      'vic-veu-hw-gas-to-solar',
+    ],
+    lpg: ['vic-veu-hw-gas-to-heatpump', 'vic-veu-hw-electric-to-heatpump'],
+  },
+} as const;

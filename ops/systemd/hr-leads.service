@@ -1,0 +1,32 @@
+[Unit]
+Description=Household Rebates lead handler
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hrapi
+Group=hrapi
+WorkingDirectory=/opt/householdrebates-api/current
+EnvironmentFile=/etc/householdrebates/api.env
+ExecStart=/usr/bin/node dist/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictNamespaces=true
+LockPersonality=true
+MemoryMax=192M
+ReadWritePaths=/var/lib/householdrebates
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

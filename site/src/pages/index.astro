@@ -1,0 +1,25 @@
+---
+import { getEntry, render } from 'astro:content';
+import GuideLayout from '../layouts/GuideLayout.astro';
+import Money from '../components/Money.astro';
+import FigureTable from '../components/FigureTable.astro';
+import Callout from '../components/Callout.astro';
+import SourceLink from '../components/SourceLink.astro';
+
+const entry = await getEntry('pages', 'home');
+if (!entry) {
+  throw new Error('Missing content/pages/home.mdx');
+}
+
+const { Content, headings } = await render(entry);
+---
+
+<GuideLayout
+  entry={entry}
+  pathname="/"
+  breadcrumbs={[]}
+  headings={headings}
+  leadFigureId="vic-veu-rcac-room-gas"
+>
+  <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+</GuideLayout>

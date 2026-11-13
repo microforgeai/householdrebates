@@ -1,0 +1,85 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import GuideLayout from '../../layouts/GuideLayout.astro';
+import AreaLayout from '../../layouts/AreaLayout.astro';
+import ToolLayout from '../../layouts/ToolLayout.astro';
+import Money from '../../components/Money.astro';
+import FigureTable from '../../components/FigureTable.astro';
+import Callout from '../../components/Callout.astro';
+import SourceLink from '../../components/SourceLink.astro';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guides', (g) => g.data.state === 'vic');
+  const areas = await getCollection('areas', (a) => a.data.state === 'vic');
+  const checkerPage = await getEntry('pages', 'eligibility-checker');
+
+  const paths: {
+    params: { slug: string };
+    props: { kind: 'guide' | 'area' | 'tool'; id: string };
+  }[] = [];
+
+  for (const g of guides) {
+    paths.push({
+      params: { slug: g.data.slug },
+      props: { kind: 'guide', id: g.id },
+    });
+  }
+
+  for (const a of areas) {
+    paths.push({
+      params: { slug: a.data.slug },
+      props: { kind: 'area', id: a.id },
+    });
+  }
+
+  if (checkerPage) {
+    paths.push({
+      params: { slug: checkerPage.data.slug },
+      props: { kind: 'tool', id: checkerPage.id },
+    });
+  }
+
+  return paths;
+}
+
+const { slug } = Astro.params;
+const { kind, id } = Astro.props;
+const pathname = `/victoria/${slug}/`;
+
+let entry: any;
+if (kind === 'guide') {
+  entry = await getEntry('guides', id);
+} else if (kind === 'area') {
+  entry = await getEntry('areas', id);
+} else {
+  entry = await getEntry('pages', id);
+}
+
+if (!entry) {
+  throw new Error(`Missing entry for /victoria/${slug}/`);
+}
+
+const { Content, headings } = await render(entry);
+const breadcrumbs = [
+  { name: 'Home', path: '/' },
+  { name: entry.data.title, path: pathname },
+];
+---
+
+{kind === 'guide' && (
+  <GuideLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs} headings={headings}>
+    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+  </GuideLayout>
+)}
+
+{kind === 'area' && (
+  <AreaLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs} headings={headings}>
+    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+  </AreaLayout>
+)}
+
+{kind === 'tool' && (
+  <ToolLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs}>
+    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+  </ToolLayout>
+)}

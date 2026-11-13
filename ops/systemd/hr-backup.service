@@ -1,0 +1,9 @@
+[Unit]
+Description=Household Rebates encrypted SQLite backup
+
+[Service]
+Type=oneshot
+User=hrapi
+Group=hrapi
+EnvironmentFile=/etc/householdrebates/api.env
+ExecStart=/opt/householdrebates-api/current/ops/backup.sh

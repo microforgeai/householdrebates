@@ -1,0 +1,60 @@
+---
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/prose.css';
+import Seo from '../components/seo/Seo.astro';
+import JsonLd from '../components/seo/JsonLd.astro';
+import IndependenceNotice from '../components/IndependenceNotice.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { buildJsonLdGraph, type BreadcrumbItem, type FaqSchemaItem, type HowToSchemaInput } from '../lib/schema';
+
+export interface Props {
+  title: string;
+  description: string;
+  pathname: string;
+  noindex?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
+  faqs?: FaqSchemaItem[];
+  howTo?: HowToSchemaInput;
+}
+
+const {
+  title,
+  description,
+  pathname,
+  noindex = false,
+  breadcrumbs = [],
+  faqs = [],
+  howTo,
+} = Astro.props;
+
+const schemaGraph = buildJsonLdGraph({
+  pathname,
+  breadcrumbs,
+  faqs,
+  howTo,
+});
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <Seo
+      title={title}
+      description={description}
+      pathname={pathname}
+      noindex={noindex}
+    />
+    <JsonLd graph={schemaGraph} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <IndependenceNotice />
+    <Header />
+    <main id="main-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE } from '../data/site';
+---
+
+<BaseLayout
+  title="Enquiry Received | Household Rebates"
+  description="Your Victorian Energy Upgrades quote enquiry has been recorded."
+  pathname="/thanks/"
+  noindex={true}
+>
+  <article class="prose-container">
+    <h1>We've received your enquiry</h1>
+    <p>
+      We have recorded your quote enquiry and sent a confirmation email with your reference number, the name of the participating installer and their VEU accredited provider, and instructions on how to withdraw your consent at any time.
+    </p>
+    <p>
+      Remember: a quote does not guarantee a discount. The accredited provider checks your eligibility and confirms any point-of-sale discount in your written quote before work begins.
+    </p>
+    <p>
+      Need to withdraw consent or update your details? Reply to your confirmation email or write to{' '}
+      <a href={`mailto:${SITE.publisher.privacyEmail}`}>{SITE.publisher.privacyEmail}</a>.
+    </p>
+    <p>
+      <a class="btn" href="/">Return to Victoria Rebates Guide</a>
+    </p>
+  </article>
+</BaseLayout>

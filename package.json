@@ -1,0 +1,27 @@
+{
+  "name": "householdrebates",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "site",
+    "api"
+  ],
+  "scripts": {
+    "dev": "npm --workspace=site run dev",
+    "build": "npm --workspace=site run build && npm --workspace=api run build",
+    "check": "npm --workspace=site run check && npm --workspace=api run typecheck",
+    "test": "npm --workspace=site run test && npm --workspace=api run test",
+    "preview": "npm --workspace=site run preview",
+    "check:sources": "npm --workspace=site run check:sources"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "allowScripts": {
+    "better-sqlite3": true,
+    "esbuild": true,
+    "fsevents": true,
+    "sharp": true
+  }
+}

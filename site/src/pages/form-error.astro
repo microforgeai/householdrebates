@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Unable to Submit Enquiry | Household Rebates"
+  description="There was a problem processing your quote request."
+  pathname="/form-error/"
+  noindex={true}
+>
+  <article class="prose-container">
+    <h1>We couldn't process that form submission</h1>
+    <p>
+      Our quote form is either currently closed, missing required fields, or has no signed installer covering your postcode yet.
+    </p>
+    <p>
+      To find a Victorian Energy Upgrades accredited provider right now, visit Energy Victoria's official pages:
+    </p>
+    <ul>
+      <li>
+        <a
+          href="https://www.energy.vic.gov.au/victorian-energy-upgrades/products/heating-and-cooling-discounts"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Energy Victoria — Heating and cooling discounts ↗
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://www.energy.vic.gov.au/victorian-energy-upgrades/products/hot-water-system-discounts"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Energy Victoria — Hot water system discounts ↗
+        </a>
+      </li>
+    </ul>
+    <p>
+      <a class="btn" href="/">Back to Home</a>
+    </p>
+  </article>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { SITE } from '../data/site';
+
+const pathname = Astro.url.pathname;
+const navLinks = [
+  { href: '/victoria/air-conditioner-rebate/', label: 'Air Conditioner Rebate' },
+  { href: '/victoria/heat-pump-rebate/', label: 'Heat Pump Rebate' },
+  { href: '/victoria/gas-to-electric-hot-water-2027/', label: '2027 Gas Rule' },
+  { href: '/how-quotes-work/', label: 'How Quotes Work' },
+  { href: '/sources/', label: 'Sources' },
+];
+---
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a class="site-brand" href="/">{SITE.name}</a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      {navLinks.map((link) => (
+        <a
+          href={link.href}
+          aria-current={pathname === link.href ? 'page' : undefined}
+        >
+          {link.label}
+        </a>
+      ))}
+      <a
+        href="/victoria/eligibility-checker/"
+        class="nav-cta"
+        aria-current={pathname === '/victoria/eligibility-checker/' ? 'page' : undefined}
+      >
+        Check Eligibility
+      </a>
+    </nav>
+  </div>
+</header>

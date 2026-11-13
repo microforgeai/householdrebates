@@ -1,0 +1,12 @@
+---
+import { validateSchemaGraph } from '../../lib/schema';
+
+export interface Props {
+  graph: Record<string, unknown>;
+}
+
+const { graph } = Astro.props;
+validateSchemaGraph(graph);
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(graph)} />

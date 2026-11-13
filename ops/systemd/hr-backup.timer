@@ -1,0 +1,9 @@
+[Unit]
+Description=Daily encrypted backup of Household Rebates SQLite DB
+
+[Timer]
+OnCalendar=*-*-* 02:30:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

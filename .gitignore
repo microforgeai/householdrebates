@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Build output
+site/dist/
+site/.astro/
+api/dist/
+
+# Databases & local state
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+api.env
+
+# Logs & test artifacts
+*.log
+playwright-report/
+test-results/
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db

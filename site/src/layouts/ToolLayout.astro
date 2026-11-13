@@ -1,0 +1,83 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import Money from '../components/Money.astro';
+import EligibilityChecker from '../components/EligibilityChecker.astro';
+import LeadForm from '../components/LeadForm.astro';
+import Faq from '../components/Faq.astro';
+import SourceList from '../components/SourceList.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import { formatAuDate } from '../lib/dates';
+import type { BreadcrumbItem } from '../lib/schema';
+
+export interface Props {
+  entry: {
+    data: {
+      title: string;
+      description: string;
+      slug: string;
+      answer: string;
+      author: string;
+      publishedOn: Date;
+      updatedOn: Date;
+      checkedOn: Date;
+      sources: (string | { id: string })[];
+      figures: string[];
+      faq: (string | { id: string })[];
+      noindex: boolean;
+      related: string[];
+    };
+  };
+  pathname: string;
+  breadcrumbs: BreadcrumbItem[];
+}
+
+const { entry, pathname, breadcrumbs } = Astro.props;
+const d = entry.data;
+
+const faqEntries = await Promise.all(
+  (d.faq ?? []).map(async (ref) => {
+    const id = typeof ref === 'string' ? ref : ref.id;
+    const f = await getEntry('faqs', id);
+    return f ? { question: f.data.question, answer: f.data.answer } : null;
+  }),
+);
+const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+---
+
+<BaseLayout
+  title={`${d.title} | Household Rebates`}
+  description={d.description}
+  pathname={pathname}
+  noindex={d.noindex}
+  breadcrumbs={breadcrumbs}
+  faqs={validFaqs}
+>
+  <Breadcrumbs items={breadcrumbs} />
+  <article class="prose-container">
+    <h1>{d.title}</h1>
+    <AnswerBlock>
+      <p>{d.answer}</p>
+      {d.figures[0] && (
+        <div>
+          <Money id={d.figures[0]} variant="block" />
+        </div>
+      )}
+    </AnswerBlock>
+    <div class="byline">
+      By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+      {formatAuDate(d.updatedOn)}
+    </div>
+
+    <EligibilityChecker state="vic" />
+
+    <slot />
+
+    <LeadForm activity="either" />
+    <Faq items={validFaqs} />
+    <SourceList ids={d.sources} />
+    <RelatedLinks slugs={d.related} />
+  </article>
+</BaseLayout>

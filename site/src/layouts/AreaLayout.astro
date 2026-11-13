@@ -163,12 +163,15 @@ const contextSubLabel =
         </p>
         <ul>
           {resolvedFacts.map((fact) => (
-            <li data-local-fact>
-              {fact.text}{' '}
-              <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer">
-                [{fact.sourcePublisher}]
-              </a>
-            </li>
+            <>
+              {'\n'}
+              <li data-local-fact>
+                {fact.text}{' '}
+                <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer">
+                  [{fact.sourcePublisher}]
+                </a>
+              </li>
+            </>
           ))}
         </ul>
       </section>

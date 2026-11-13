@@ -1,0 +1,9 @@
+question: How are Bendigo postcodes classified in the VEU postcode table?
+answer: Bendigo urban postcodes 3550, 3551, 3555, and 3556 are listed in VEU
+  Specifications version 25 as Regional with reticulated gas and a Cold climatic
+  region, while Marong (3515) and Heathcote (3523) are listed as Regional
+  without reticulated mains gas.
+pages:
+  - bendigo
+state: vic
+checkedOn: 2026-11-13

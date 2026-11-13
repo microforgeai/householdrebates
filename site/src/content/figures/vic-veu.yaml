@@ -978,3 +978,70 @@
   currency: AUD
   sourceId: energyvic-electrification
   checkedOn: 2026-11-13
+
+
+- id: vic-veu-providers-grampians-hw
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Accredited providers listed for hot water, Grampians region"
+  qualifier: exact
+  unit: count
+  amountMax: 31
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-providers-grampians-hc
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Accredited providers listed for heating and cooling, Grampians region"
+  qualifier: exact
+  unit: count
+  amountMax: 46
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-providers-loddon-mallee-hw
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Accredited providers listed for hot water, Loddon Mallee region"
+  qualifier: exact
+  unit: count
+  amountMax: 26
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-providers-loddon-mallee-hc
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Accredited providers listed for heating and cooling, Loddon Mallee region"
+  qualifier: exact
+  unit: count
+  amountMax: 42
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-solstice-topup
+  group: vic-solstice-support
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Solar Victoria top-up for Solstice customers who do not meet the VEU criteria"
+  qualifier: exact
+  unit: AUD
+  amountMax: 600
+  currency: AUD
+  sourceId: solarvic-solstice
+  checkedOn: 2026-11-13

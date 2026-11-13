@@ -1,0 +1,10 @@
+question: Is Ballarat classified as regional and cold for VEU ceiling insulation
+  discounts?
+answer: Yes. In VEU Specifications version 25 Location Variable List (Table A),
+  Ballarat postcodes 3350, 3352, 3355, 3356, and 3357 are classified as Regional
+  with a Cold climatic region, matching Energy Victoria’s regional cold ceiling
+  insulation scenario.
+pages:
+  - ballarat
+state: vic
+checkedOn: 2026-11-13

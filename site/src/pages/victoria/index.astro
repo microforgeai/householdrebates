@@ -1,0 +1,34 @@
+---
+import { getEntry, render } from 'astro:content';
+import GuideLayout from '../../layouts/GuideLayout.astro';
+import Money from '../../components/Money.astro';
+import FigureTable from '../../components/FigureTable.astro';
+import Callout from '../../components/Callout.astro';
+import SourceLink from '../../components/SourceLink.astro';
+import HubIndex from '../../components/HubIndex.astro';
+import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
+import { assertEntryEnabled } from '../../lib/rollout';
+
+const entry = await getEntry('pages', 'victoria');
+if (!entry) {
+  throw new Error('Missing content/pages/victoria.mdx');
+}
+
+assertEntryEnabled(entry.data.mapRow, '/victoria/');
+
+const { Content, headings } = await render(entry);
+const breadcrumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'Victoria', path: '/victoria/' },
+];
+---
+
+<GuideLayout
+  entry={entry}
+  pathname="/victoria/"
+  breadcrumbs={breadcrumbs}
+  headings={headings}
+  variant="hub"
+>
+  <Content components={{ Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled }} />
+</GuideLayout>

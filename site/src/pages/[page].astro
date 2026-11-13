@@ -6,12 +6,21 @@ import Money from '../components/Money.astro';
 import FigureTable from '../components/FigureTable.astro';
 import Callout from '../components/Callout.astro';
 import SourceLink from '../components/SourceLink.astro';
+import HubIndex from '../components/HubIndex.astro';
+import LinkIfEnabled from '../components/LinkIfEnabled.astro';
+import { assertEntryEnabled } from '../lib/rollout';
 
 export async function getStaticPaths() {
   const allPages = await getCollection('pages');
   const rootPages = allPages.filter(
-    (p) => p.data.slug !== 'home' && p.data.slug !== 'eligibility-checker',
+    (p) =>
+      p.data.slug !== 'home' &&
+      p.data.slug !== 'victoria' &&
+      !(p.data.state === 'vic' && p.data.section === 'tools'),
   );
+  for (const p of rootPages) {
+    assertEntryEnabled(p.data.mapRow, `/${p.data.slug}/`);
+  }
   return rootPages.map((p) => ({
     params: { page: p.data.slug },
     props: { id: p.id },
@@ -37,14 +46,16 @@ const isLegalOrTrust =
   entry.data.slug === 'terms' ||
   entry.data.slug === 'about' ||
   entry.data.slug === 'sources';
+
+const mdxComponents = { Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
 ---
 
 {isLegalOrTrust ? (
   <LegalLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs}>
-    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+    <Content components={mdxComponents} />
   </LegalLayout>
 ) : (
   <GuideLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs} headings={headings}>
-    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+    <Content components={mdxComponents} />
   </GuideLayout>
 )}

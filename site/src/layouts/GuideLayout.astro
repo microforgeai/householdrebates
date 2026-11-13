@@ -37,9 +37,17 @@ export interface Props {
   breadcrumbs: BreadcrumbItem[];
   headings?: HeadingItem[];
   leadFigureId?: string;
+  variant?: 'default' | 'hub';
 }
 
-const { entry, pathname, breadcrumbs, headings = [], leadFigureId } = Astro.props;
+const {
+  entry,
+  pathname,
+  breadcrumbs,
+  headings = [],
+  leadFigureId,
+  variant = 'default',
+} = Astro.props;
 const d = entry.data;
 
 const faqEntries = await Promise.all(
@@ -50,8 +58,8 @@ const faqEntries = await Promise.all(
   }),
 );
 const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
-const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
-const primaryHeroFigure = leadFigureId ?? d.figures[0];
+const hasToc = variant !== 'hub' && headings.filter((h) => h.depth === 2).length >= 3;
+const primaryHeroFigure = variant === 'hub' ? undefined : (leadFigureId ?? d.figures[0]);
 ---
 
 <BaseLayout
@@ -76,7 +84,7 @@ const primaryHeroFigure = leadFigureId ?? d.figures[0];
         )}
       </AnswerBlock>
       <div class="byline">
-        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
         {formatAuDate(d.updatedOn)}
       </div>
 
@@ -87,7 +95,9 @@ const primaryHeroFigure = leadFigureId ?? d.figures[0];
         </section>
       )}
 
-      <slot />
+      <div class="page-body" data-body>
+        <slot />
+      </div>
 
       <Faq items={validFaqs} />
 
@@ -97,14 +107,14 @@ const primaryHeroFigure = leadFigureId ?? d.figures[0];
         <section class="form-card" aria-labelledby="checker-cta-heading">
           <h2 id="checker-cta-heading">Check which VEU scenario fits your home</h2>
           <p>
-            Answer 8 quick questions in our Victoria Eligibility Checker to see which Energy Victoria discount scenario applies to your heating, cooling, or hot water upgrade.
+            Use our Victoria Eligibility Checker to see whether heating and cooling, hot water, ceiling insulation, an induction cooktop, or draught proofing fits the current VEU household rules.
           </p>
           <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
         </section>
       )}
 
       <SourceList ids={d.sources} />
-      <RelatedLinks slugs={d.related} />
+      {variant !== 'hub' && <RelatedLinks pathname={pathname} slugs={d.related} />}
     </article>
 
     {hasToc && <Toc headings={headings} />}

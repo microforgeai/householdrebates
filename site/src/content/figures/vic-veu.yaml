@@ -670,3 +670,72 @@
   currency: AUD
   sourceId: energyvic-weather-sealing
   checkedOn: 2026-11-13
+
+- id: vic-gas-supply-saving
+  group: vic-electrify-savings
+  state: vic
+  program: VEU
+  activity: induction
+  audience: household
+  scenario: "Gas supply charges avoided once every gas appliance is removed, per year"
+  qualifier: about-range
+  unit: AUD
+  amountMin: 350
+  amountMax: 400
+  currency: AUD
+  sourceId: energyvic-induction
+  checkedOn: 2026-11-13
+
+- id: vic-veu-insulation-cost-cut
+  group: vic-veu-insulation-stats
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Expected cut to the installed cost"
+  qualifier: about-range
+  unit: percent
+  amountMin: 30
+  amountMax: 50
+  sourceId: energyvic-insulation
+  checkedOn: 2026-11-13
+
+- id: vic-veu-insulation-saving
+  group: vic-veu-insulation-stats
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Bill saving per year"
+  qualifier: more-than
+  unit: AUD
+  amountMax: 400
+  currency: AUD
+  sourceId: energyvic-insulation
+  checkedOn: 2026-11-13
+
+- id: vic-homes-insulation-gap
+  group: vic-veu-insulation-stats
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Victorian homes with no or too little ceiling insulation"
+  qualifier: almost
+  unit: percent
+  amountMax: 60
+  sourceId: energyvic-insulation
+  checkedOn: 2026-11-13
+
+- id: vic-hp-electricity-reduction
+  group: vic-veu-hotwater-efficiency
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Electricity use vs a standard electric storage system"
+  qualifier: up-to
+  unit: percent
+  amountMax: 75
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13

@@ -2,6 +2,7 @@ question: "Is Household Rebates a government website?"
 answer: "No. Household Rebates is an independent guide published by Agenor Services Pty Ltd in Melbourne. We do not work for the Victorian Energy Upgrades program, the Essential Services Commission, or the Victorian Government. When our quote form is open, participating installers pay us a fee for consented enquiries. See /about/ for how we operate."
 pages:
   - home
+  - victoria
   - how-quotes-work
   - faq
 state: vic

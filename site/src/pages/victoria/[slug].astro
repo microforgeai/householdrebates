@@ -7,11 +7,17 @@ import Money from '../../components/Money.astro';
 import FigureTable from '../../components/FigureTable.astro';
 import Callout from '../../components/Callout.astro';
 import SourceLink from '../../components/SourceLink.astro';
+import HubIndex from '../../components/HubIndex.astro';
+import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
+import { assertEntryEnabled, isUrlEnabled } from '../../lib/rollout';
 
 export async function getStaticPaths() {
   const guides = await getCollection('guides', (g) => g.data.state === 'vic');
   const areas = await getCollection('areas', (a) => a.data.state === 'vic');
-  const checkerPage = await getEntry('pages', 'eligibility-checker');
+  const toolPages = await getCollection(
+    'pages',
+    (p) => p.data.state === 'vic' && p.data.section === 'tools',
+  );
 
   const paths: {
     params: { slug: string };
@@ -19,6 +25,8 @@ export async function getStaticPaths() {
   }[] = [];
 
   for (const g of guides) {
+    const url = `/victoria/${g.data.slug}/`;
+    assertEntryEnabled(g.data.mapRow, url);
     paths.push({
       params: { slug: g.data.slug },
       props: { kind: 'guide', id: g.id },
@@ -26,16 +34,20 @@ export async function getStaticPaths() {
   }
 
   for (const a of areas) {
+    const url = `/victoria/${a.data.slug}/`;
+    assertEntryEnabled(a.data.mapRow, url);
     paths.push({
       params: { slug: a.data.slug },
       props: { kind: 'area', id: a.id },
     });
   }
 
-  if (checkerPage) {
+  for (const t of toolPages) {
+    const url = `/victoria/${t.data.slug}/`;
+    assertEntryEnabled(t.data.mapRow, url);
     paths.push({
-      params: { slug: checkerPage.data.slug },
-      props: { kind: 'tool', id: checkerPage.id },
+      params: { slug: t.data.slug },
+      props: { kind: 'tool', id: t.id },
     });
   }
 
@@ -60,26 +72,35 @@ if (!entry) {
 }
 
 const { Content, headings } = await render(entry);
-const breadcrumbs = [
-  { name: 'Home', path: '/' },
-  { name: entry.data.title, path: pathname },
-];
+const hubEnabled = isUrlEnabled('/victoria/');
+const breadcrumbs = hubEnabled
+  ? [
+      { name: 'Home', path: '/' },
+      { name: 'Victoria', path: '/victoria/' },
+      { name: entry.data.title, path: pathname },
+    ]
+  : [
+      { name: 'Home', path: '/' },
+      { name: entry.data.title, path: pathname },
+    ];
+
+const mdxComponents = { Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
 ---
 
 {kind === 'guide' && (
   <GuideLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs} headings={headings}>
-    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+    <Content components={mdxComponents} />
   </GuideLayout>
 )}
 
 {kind === 'area' && (
   <AreaLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs} headings={headings}>
-    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+    <Content components={mdxComponents} />
   </AreaLayout>
 )}
 
 {kind === 'tool' && (
   <ToolLayout entry={entry} pathname={pathname} breadcrumbs={breadcrumbs}>
-    <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+    <Content components={mdxComponents} />
   </ToolLayout>
 )}

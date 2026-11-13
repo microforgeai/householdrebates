@@ -44,4 +44,5 @@
 
 - Prompt 15: URL map imported (`53` rows), figure/source schemas extended, 65 sources and 40 figures loaded, and 5 existing pages updated (`2026-11-13`).
 - Prompt 16: Extracted 719-row SPEC25 postcode table (`vic-veu-postcodes.json`), added 8 induction/weather-sealing figures (`48` total), updated checker with 30 Sep 2026 co-payments, LPG wording, and ceiling insulation / induction cooktop / draught-proofing paths.
+- Prompt 17 (Wave 1a): Added rollout gating (`1-26`), `check-urlmap`, `check-schema`, `check-seo`, `check-links`, `build-redirects`, `/victoria/` hub, 5 new figures (`53` total), and 9 upgrade swap guides (`26` indexable URLs).
 

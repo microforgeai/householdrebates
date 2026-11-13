@@ -10,7 +10,10 @@ import LeadForm from '../components/LeadForm.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
+import { entryToPathname } from '../lib/urls';
+import { getEnabledUrls } from '../lib/rollout';
 import type { BreadcrumbItem } from '../lib/schema';
+import postcodesJson from '../data/vic-veu-postcodes.json';
 
 export interface Props {
   entry: {
@@ -30,8 +33,12 @@ export interface Props {
       noindex: boolean;
       related: string[];
       areaName: string;
-      councils: string[];
+      variant?: 'standard' | 'multi-town';
+      towns?: string[];
+      councils?: string[];
       postcodes: string[];
+      veuPostcodeTable?: boolean;
+      nccZone?: { zone: number; places: string[] };
       localFacts: { text: string; sourceId: string | { id: string } }[];
     };
   };
@@ -65,6 +72,32 @@ const resolvedFacts = await Promise.all(
   }),
 );
 
+const postcodeRowsMap = postcodesJson.rows as Record<
+  string,
+  {
+    area: string;
+    reticulatedGas: boolean;
+    climaticRegion: string;
+    hpZone: number;
+  }
+>;
+
+const showPostcodeTable = d.veuPostcodeTable ?? true;
+const postcodeTableRows = showPostcodeTable
+  ? d.postcodes.map((pc) => {
+      const row = postcodeRowsMap[pc];
+      if (!row) {
+        throw new Error(
+          `Area "${d.slug}" lists postcode "${pc}" which is missing from src/data/vic-veu-postcodes.json`,
+        );
+      }
+      return { postcode: pc, ...row };
+    })
+  : [];
+
+const abcbDataSource = d.nccZone ? await getEntry('sources', 'abcb-climate-zones-data') : null;
+const abcbMapSource = d.nccZone ? await getEntry('sources', 'abcb-climate-map') : null;
+
 const allInstallers = await getCollection('installers');
 const coveringInstallers = allInstallers
   .map((i) => i.data)
@@ -75,8 +108,25 @@ const coveringInstallers = allInstallers
       i.postcodes.some((pc) => d.postcodes.includes(pc)),
   );
 
+const enabledUrls = getEnabledUrls();
+const allAreas = await getCollection('areas', (a) => a.data.state === 'vic');
+const otherAreas = allAreas
+  .filter((a) => a.data.slug !== d.slug && enabledUrls.has(entryToPathname('areas', a.data)))
+  .sort((a, b) => a.data.mapRow - b.data.mapRow)
+  .map((a) => ({
+    url: entryToPathname('areas', a.data),
+    title: a.data.title,
+    areaName: a.data.areaName,
+  }));
+
 const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
 const primaryHeroFigure = d.figures[0];
+const contextSubLabel =
+  d.variant === 'multi-town' && d.towns && d.towns.length > 0
+    ? d.towns.join(', ')
+    : d.councils && d.councils.length > 0
+      ? d.councils.join(', ')
+      : '';
 ---
 
 <BaseLayout
@@ -100,20 +150,20 @@ const primaryHeroFigure = d.figures[0];
         )}
       </AnswerBlock>
       <div class="byline">
-        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
         {formatAuDate(d.updatedOn)}
       </div>
 
       <section class="callout callout--info" aria-labelledby="local-facts-heading">
         <strong class="callout__title" id="local-facts-heading">
-          Local context for {d.areaName} ({d.councils.join(', ')})
+          Local context for {d.areaName}{contextSubLabel ? ` (${contextSubLabel})` : ''}
         </strong>
         <p style="font-size:var(--text-sm);">
-          <strong>Sample postcodes covered:</strong> {d.postcodes.join(', ')}
+          <strong>Postcodes covered on this page:</strong> {d.postcodes.join(', ')}
         </p>
         <ul>
           {resolvedFacts.map((fact) => (
-            <li>
+            <li data-local-fact>
               {fact.text}{' '}
               <a href={fact.sourceUrl} target="_blank" rel="noopener noreferrer">
                 [{fact.sourcePublisher}]
@@ -123,7 +173,71 @@ const primaryHeroFigure = d.figures[0];
         </ul>
       </section>
 
-      <slot />
+      {showPostcodeTable && postcodeTableRows.length > 0 && (
+        <section aria-labelledby="veu-postcode-table-heading">
+          <h2 id="veu-postcode-table-heading">VEU postcode classification for {d.areaName}</h2>
+          <div class="figure-table-wrap">
+            <table class="figure-table">
+              <caption>
+                Source: VEU Specifications v{postcodesJson.specVersion}, Location Variable List (Table A). Checked{' '}
+                {formatAuDate(new Date(postcodesJson.checkedOn))}.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Postcode</th>
+                  <th scope="col">VEU area</th>
+                  <th scope="col">Reticulated gas</th>
+                  <th scope="col">Climatic region</th>
+                  <th scope="col">Heat pump zone</th>
+                </tr>
+              </thead>
+              <tbody>
+                {postcodeTableRows.map((r) => (
+                  <tr>
+                    <td>{r.postcode}</td>
+                    <td>{r.area}</td>
+                    <td>{r.reticulatedGas ? 'Yes' : 'No'}</td>
+                    <td>{r.climaticRegion}</td>
+                    <td>Zone {r.hpZone}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
+      {d.nccZone && (
+        <section class="callout callout--info" aria-labelledby="ncc-zone-heading">
+          <strong class="callout__title" id="ncc-zone-heading">
+            National Construction Code (NCC) climate zone {d.nccZone.zone}
+          </strong>
+          <p style="font-size: var(--text-sm); margin-bottom: 0.35rem;">
+            Point checks at {d.nccZone.places.join(', ')} fall in NCC climate zone {d.nccZone.zone}. Check your exact street or postcode on the{' '}
+            <a
+              href={abcbMapSource?.data.url ?? 'https://www.abcb.gov.au/resources/climate-zone-map'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ABCB Climate Zone Map ↗
+            </a>.
+          </p>
+          <p style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: 0;">
+            Attribution: {abcbDataSource?.data.attribution ?? 'Australian Building Codes Board (ABCB), CC BY 4.0.'}{' '}
+            <a
+              href={abcbDataSource?.data.url ?? 'https://data.gov.au/data/dataset/australian-climate-zone-map'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Dataset ↗
+            </a>
+          </p>
+        </section>
+      )}
+
+      <div class="page-body" data-body>
+        <slot />
+      </div>
 
       <section aria-labelledby="area-installers-heading">
         <h2 id="area-installers-heading">Participating installers covering {d.areaName}</h2>
@@ -138,7 +252,7 @@ const primaryHeroFigure = d.figures[0];
           </ul>
         ) : (
           <p>
-            We do not yet have a signed partner installer covering {d.areaName} postcodes. Until our partner agreements for this area are finalised, you can search Energy Victoria's official accredited provider directory directly or check your upgrade scenario with our{' '}
+            We do not yet have a signed partner installer covering {d.areaName} postcodes. Until partner agreements for this area are finalised, you can search Energy Victoria's official accredited provider directory directly or check your upgrade scenario with our{' '}
             <a href="/victoria/eligibility-checker/">Victoria Eligibility Checker</a>.
           </p>
         )}
@@ -148,12 +262,33 @@ const primaryHeroFigure = d.figures[0];
 
       {d.leadForm !== false && coveringInstallers.length > 0 ? (
         <LeadForm activity={d.leadForm} areaSlug={d.slug} />
-      ) : (
+      ) : d.leadForm !== false ? (
         <LeadForm activity="either" areaSlug={d.slug} />
+      ) : (
+        <section class="form-card" aria-labelledby="area-checker-cta">
+          <h2 id="area-checker-cta">Check your {d.areaName} upgrade scenario</h2>
+          <p>
+            Enter your postcode and existing appliances in our Victoria Eligibility Checker to see which VEU scenarios and co-payments apply.
+          </p>
+          <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
+        </section>
       )}
 
       <SourceList ids={d.sources} />
-      <RelatedLinks slugs={d.related} />
+      <RelatedLinks pathname={pathname} slugs={d.related} />
+
+      {otherAreas.length > 0 && (
+        <nav class="related-links" aria-labelledby="other-areas-heading">
+          <h2 id="other-areas-heading">Other areas in Victoria</h2>
+          <ul>
+            {otherAreas.map((area) => (
+              <li>
+                <a href={area.url}>{area.title}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </article>
 
     {hasToc && <Toc headings={headings} />}

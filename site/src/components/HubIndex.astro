@@ -1,0 +1,153 @@
+---
+import { getCollection } from 'astro:content';
+import { entryToPathname } from '../lib/urls';
+import { getEnabledUrls } from '../lib/rollout';
+
+type GroupKey =
+  | 'rebate-guides'
+  | 'upgrade-guides'
+  | 'question-pages'
+  | 'audience'
+  | 'tools'
+  | 'support-guides'
+  | 'areas';
+
+export interface Props {
+  variant?: 'full' | 'compact';
+  groups?: GroupKey[];
+}
+
+const { variant = 'full', groups } = Astro.props;
+const enabledUrls = getEnabledUrls();
+
+const GROUP_ORDER: { key: GroupKey; heading: string }[] = [
+  { key: 'rebate-guides', heading: 'Core Victoria rebate guides' },
+  { key: 'upgrade-guides', heading: 'Upgrade guides by appliance' },
+  { key: 'question-pages', heading: 'Common VEU and 2027 rule questions' },
+  { key: 'audience', heading: 'Guides by household situation' },
+  { key: 'tools', heading: 'Interactive calculators and planners' },
+  { key: 'support-guides', heading: 'Practical guides and finding a provider' },
+  { key: 'areas', heading: 'Local guides across Victoria' },
+];
+
+const [guides, areas, pages] = await Promise.all([
+  getCollection('guides'),
+  getCollection('areas'),
+  getCollection('pages'),
+]);
+
+interface HubItem {
+  url: string;
+  title: string;
+  description: string;
+  navGroup: string;
+  mapRow: number;
+}
+
+const allItems: HubItem[] = [];
+
+for (const g of guides) {
+  const url = entryToPathname('guides', g.data);
+  if (enabledUrls.has(url) && !g.data.noindex) {
+    allItems.push({
+      url,
+      title: g.data.title,
+      description: g.data.description,
+      navGroup: g.data.navGroup,
+      mapRow: g.data.mapRow,
+    });
+  }
+}
+
+for (const a of areas) {
+  const url = entryToPathname('areas', a.data);
+  if (enabledUrls.has(url) && !a.data.noindex) {
+    allItems.push({
+      url,
+      title: a.data.title,
+      description: a.data.description,
+      navGroup: a.data.navGroup,
+      mapRow: a.data.mapRow,
+    });
+  }
+}
+
+for (const p of pages) {
+  const url = entryToPathname('pages', p.data);
+  if (url.startsWith('/victoria/') && url !== '/victoria/' && enabledUrls.has(url) && !p.data.noindex) {
+    allItems.push({
+      url,
+      title: p.data.title,
+      description: p.data.description,
+      navGroup: p.data.navGroup,
+      mapRow: p.data.mapRow,
+    });
+  }
+}
+
+allItems.sort((a, b) => a.mapRow - b.mapRow);
+
+const checkerItem = allItems.find((i) => i.url === '/victoria/eligibility-checker/');
+const activeGroups = groups
+  ? GROUP_ORDER.filter((g) => groups.includes(g.key))
+  : GROUP_ORDER;
+
+const renderedGroups = activeGroups
+  .map((grp) => ({
+    ...grp,
+    items: allItems.filter(
+      (i) =>
+        i.navGroup === grp.key &&
+        (variant === 'compact' || i.url !== '/victoria/eligibility-checker/'),
+    ),
+  }))
+  .filter((grp) => grp.items.length > 0);
+---
+
+{variant === 'full' ? (
+  <div class="hub-index" data-hub-index>
+    {checkerItem && (
+      <section class="callout callout--info" aria-labelledby="hub-checker-heading" style="margin-bottom: 1.5rem;">
+        <h2 id="hub-checker-heading" style="margin-top: 0;">Start with the Victoria Eligibility Checker</h2>
+        <p>{checkerItem.description}</p>
+        <p style="margin-bottom: 0;">
+          <a class="btn" href={checkerItem.url}>{checkerItem.title}</a>
+        </p>
+      </section>
+    )}
+
+    {renderedGroups.map((grp) => (
+      <section aria-labelledby={`hub-group-${grp.key}`} style="margin-bottom: 1.5rem;">
+        <h2 id={`hub-group-${grp.key}`}>{grp.heading}</h2>
+        <ul>
+          {grp.items.map((item) => (
+            <li>
+              <a href={item.url}>{item.title}</a> — {item.description}
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))}
+  </div>
+) : (
+  <div class="hub-index hub-index--compact" data-hub-index="compact">
+    {enabledUrls.has('/victoria/') && (
+      <p>
+        Browse every Victorian rebate guide, upgrade comparison, and local council note on our{' '}
+        <a href="/victoria/">Victoria Home Energy Rebates hub</a>.
+      </p>
+    )}
+    {renderedGroups.map((grp) => (
+      <div>
+        <h3>{grp.heading}</h3>
+        <ul>
+          {grp.items.map((item) => (
+            <li>
+              <a href={item.url}>{item.title}</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+)}

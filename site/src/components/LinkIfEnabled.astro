@@ -1,0 +1,16 @@
+---
+import { isUrlEnabled } from '../lib/rollout';
+import { ensureTrailingSlash } from '../lib/urls';
+
+export interface Props {
+  href: string;
+}
+
+const { href } = Astro.props;
+const [basePath, hash] = href.split('#');
+const cleanBase = ensureTrailingSlash(basePath);
+const fullHref = hash ? `${cleanBase}#${hash}` : cleanBase;
+const enabled = isUrlEnabled(cleanBase);
+---
+
+{enabled ? <a href={fullHref}><slot /></a> : <slot />}

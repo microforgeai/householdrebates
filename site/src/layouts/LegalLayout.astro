@@ -54,9 +54,11 @@ const sourceIds =
       By {d.author}, Agenor · Checked on {formatAuDate(d.checkedOn)} · Updated {formatAuDate(d.updatedOn)}
     </div>
 
-    <slot />
+    <div class="page-body" data-body>
+      <slot />
+    </div>
 
     <SourceList ids={sourceIds} />
-    <RelatedLinks slugs={d.related} />
+    <RelatedLinks pathname={pathname} slugs={d.related} />
   </article>
 </BaseLayout>

@@ -26,6 +26,7 @@ export interface Props {
       sources: (string | { id: string })[];
       figures: string[];
       faq: (string | { id: string })[];
+      leadForm?: false | 'rcac' | 'hotwater' | 'either';
       noindex: boolean;
       related: string[];
     };
@@ -67,17 +68,32 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
       )}
     </AnswerBlock>
     <div class="byline">
-      By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against Energy Victoria · Updated{' '}
+      By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
       {formatAuDate(d.updatedOn)}
     </div>
 
-    <EligibilityChecker state="vic" />
+    {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
 
-    <slot />
+    <div class="page-body" data-body>
+      <slot />
+    </div>
 
-    <LeadForm activity="either" />
+    {typeof d.leadForm === 'string' ? (
+      <LeadForm activity={d.leadForm} />
+    ) : (
+      d.slug !== 'eligibility-checker' && (
+        <section class="form-card" aria-labelledby="tool-checker-cta">
+          <h2 id="tool-checker-cta">Check your household eligibility</h2>
+          <p>
+            Run our Victoria Eligibility Checker to see which VEU discount scenarios and minimum co-payments fit your property.
+          </p>
+          <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
+        </section>
+      )
+    )}
+
     <Faq items={validFaqs} />
     <SourceList ids={d.sources} />
-    <RelatedLinks slugs={d.related} />
+    <RelatedLinks pathname={pathname} slugs={d.related} />
   </article>
 </BaseLayout>

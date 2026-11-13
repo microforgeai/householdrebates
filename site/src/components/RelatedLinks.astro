@@ -1,12 +1,70 @@
 ---
-import { resolveSlugToPath } from '../lib/urls';
+import { getCollection } from 'astro:content';
+import { entryToPathname, resolveSlugToPath } from '../lib/urls';
+import { getEnabledUrls, getMapRowByUrl } from '../lib/rollout';
 
 export interface Props {
-  slugs: string[];
+  pathname?: string;
+  slugs?: string[];
 }
 
-const { slugs } = Astro.props;
-const links = slugs.map((slug) => resolveSlugToPath(slug));
+const { pathname, slugs = [] } = Astro.props;
+const enabledUrls = getEnabledUrls();
+
+const [guides, areas, pages] = await Promise.all([
+  getCollection('guides'),
+  getCollection('areas'),
+  getCollection('pages'),
+]);
+
+const titleByUrl = new Map<string, string>();
+const urlBySlug = new Map<string, string>();
+
+for (const g of guides) {
+  const u = entryToPathname('guides', g.data);
+  titleByUrl.set(u, g.data.title);
+  urlBySlug.set(g.data.slug, u);
+}
+for (const a of areas) {
+  const u = entryToPathname('areas', a.data);
+  titleByUrl.set(u, a.data.title);
+  urlBySlug.set(a.data.slug, u);
+}
+for (const p of pages) {
+  const u = entryToPathname('pages', p.data);
+  titleByUrl.set(u, p.data.title);
+  urlBySlug.set(p.data.slug, u);
+}
+
+const targetUrls: string[] = [];
+const seen = new Set<string>();
+
+const addUrl = (u: string) => {
+  if (!u || u === '*' || u === pathname) return;
+  if (!enabledUrls.has(u)) return;
+  if (seen.has(u)) return;
+  seen.add(u);
+  targetUrls.push(u);
+};
+
+if (pathname) {
+  const row = getMapRowByUrl(pathname);
+  if (row) {
+    for (const u of row.internalLinks) {
+      addUrl(u);
+    }
+  }
+}
+
+for (const slug of slugs) {
+  const u = urlBySlug.get(slug) ?? resolveSlugToPath(slug).path;
+  addUrl(u);
+}
+
+const links = targetUrls.map((u) => ({
+  path: u,
+  label: titleByUrl.get(u) ?? u,
+}));
 ---
 
 {links.length > 0 && (

@@ -27,9 +27,11 @@ export const RESULT_LINKS: Record<ResultLinkKey, ResultLinkEntry> = {
     external: { sourceId: 'energyvic-hot-water' },
   },
   insulation: {
+    internal: '/victoria/ceiling-insulation-rebate/',
     external: { sourceId: 'energyvic-insulation' },
   },
   induction: {
+    internal: '/victoria/gas-cooktop-to-induction/',
     external: { sourceId: 'energyvic-induction' },
   },
   sealing: {

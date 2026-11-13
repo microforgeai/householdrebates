@@ -15,9 +15,25 @@ export function canonicalUrl(pathname: string): string {
   return `${SITE.origin}${cleanPath}`;
 }
 
+export function entryToPathname(
+  collection: 'guides' | 'areas' | 'pages',
+  data: { slug: string; state: string; section: string },
+): string {
+  if (collection === 'guides' || collection === 'areas') {
+    return `/victoria/${data.slug}/`;
+  }
+  if (data.slug === 'home') return '/';
+  if (data.slug === 'victoria') return '/victoria/';
+  if (data.state === 'vic' && data.section === 'tools') {
+    return `/victoria/${data.slug}/`;
+  }
+  return `/${data.slug}/`;
+}
+
 export function resolveSlugToPath(slug: string): { path: string; label: string } {
   const map: Record<string, { path: string; label: string }> = {
-    home: { path: '/', label: 'Victorian Energy Upgrades (VEU) Rebate Guide' },
+    home: { path: '/', label: 'Victoria Home Energy Rebates: 2026 VEU Guide' },
+    victoria: { path: '/victoria/', label: 'Victoria Home Energy Rebates & VEU Discounts' },
     'air-conditioner-rebate': {
       path: '/victoria/air-conditioner-rebate/',
       label: 'Air Conditioner Rebate Victoria (2026 Guide)',
@@ -36,7 +52,7 @@ export function resolveSlugToPath(slug: string): { path: string; label: string }
     },
     'eligibility-checker': {
       path: '/victoria/eligibility-checker/',
-      label: 'Victoria Rebate Eligibility Checker',
+      label: 'Victoria Rebate Eligibility Checker (VEU 2026)',
     },
     melbourne: {
       path: '/victoria/melbourne/',
@@ -82,7 +98,7 @@ export function resolveSlugToPath(slug: string): { path: string; label: string }
 
   return (
     map[slug] ?? {
-      path: ensureTrailingSlash(slug),
+      path: `/victoria/${slug}/`,
       label: slug.replace(/-/g, ' '),
     }
   );

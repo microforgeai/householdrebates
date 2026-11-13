@@ -5,11 +5,16 @@ import Money from '../components/Money.astro';
 import FigureTable from '../components/FigureTable.astro';
 import Callout from '../components/Callout.astro';
 import SourceLink from '../components/SourceLink.astro';
+import HubIndex from '../components/HubIndex.astro';
+import LinkIfEnabled from '../components/LinkIfEnabled.astro';
+import { assertEntryEnabled } from '../lib/rollout';
 
 const entry = await getEntry('pages', 'home');
 if (!entry) {
   throw new Error('Missing content/pages/home.mdx');
 }
+
+assertEntryEnabled(entry.data.mapRow, '/');
 
 const { Content, headings } = await render(entry);
 ---
@@ -21,5 +26,5 @@ const { Content, headings } = await render(entry);
   headings={headings}
   leadFigureId="vic-veu-rcac-room-gas"
 >
-  <Content components={{ Money, FigureTable, Callout, SourceLink }} />
+  <Content components={{ Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled }} />
 </GuideLayout>

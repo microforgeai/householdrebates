@@ -36,6 +36,7 @@ export const RESULT_LINKS: Record<ResultLinkKey, ResultLinkEntry> = {
     external: { sourceId: 'energyvic-induction' },
   },
   sealing: {
+    internal: '/victoria/draught-proofing-rebate/',
     external: { sourceId: 'energyvic-weather-sealing' },
   },
   'gas-2027': {

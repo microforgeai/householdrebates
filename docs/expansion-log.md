@@ -46,4 +46,5 @@
 - Prompt 16: Extracted 719-row SPEC25 postcode table (`vic-veu-postcodes.json`), added 8 induction/weather-sealing figures (`48` total), updated checker with 30 Sep 2026 co-payments, LPG wording, and ceiling insulation / induction cooktop / draught-proofing paths.
 - Prompt 17 (Wave 1a): Added rollout gating (`1-26`), `check-urlmap`, `check-schema`, `check-seo`, `check-links`, `build-redirects`, `/victoria/` hub, 5 new figures (`53` total), and 9 upgrade swap guides (`26` indexable URLs).
 - Prompt 18 (Wave 1b): Enabled rows `1-35`, added 4 figures (`57` total), added 26 FAQs and 9 question pages (rows 27–35, including reg 45E plain-English guides and `HowTo` on row 35), and wired `RESULT_LINKS.retro.internal` (`35` indexable URLs).
+- Prompt 19 (Wave 2a): Enabled rows `1-40,44-45`, added 11 figures (`68` total), added 21 FAQs, 5 audience pages (rows 36–40), and 2 support guides (rows 44–45, including CO safety lead on draught proofing and open Easy Electric SEC coverage), and wired `RESULT_LINKS.sealing.internal` (`42` indexable URLs).
 

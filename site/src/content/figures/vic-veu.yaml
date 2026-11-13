@@ -794,3 +794,158 @@
   currency: AUD
   sourceId: bpc-plumbing-compliance
   checkedOn: 2026-11-13
+
+
+- id: vic-concession-electricity-rate
+  group: vic-concessions
+  state: vic
+  program: DFFH
+  activity: rcac
+  audience: household
+  scenario: "Annual electricity concession, share of usage and service costs"
+  qualifier: exact
+  unit: percent
+  amountMax: 17.5
+  sourceId: dffh-electricity-concession
+  checkedOn: 2026-11-13
+
+- id: vic-concession-electricity-excluded
+  group: vic-concessions
+  state: vic
+  program: DFFH
+  activity: rcac
+  audience: household
+  scenario: "First part of the yearly electricity bill the concession does not apply to"
+  qualifier: exact
+  unit: AUD
+  display: cents
+  amountMax: 171.60
+  currency: AUD
+  sourceId: dffh-electricity-concession
+  checkedOn: 2026-11-13
+
+- id: vic-concession-gas-rate
+  group: vic-concessions
+  state: vic
+  program: DFFH
+  activity: rcac
+  audience: household
+  scenario: "Winter gas concession (1 May to 31 Oct), share of costs"
+  qualifier: exact
+  unit: percent
+  amountMax: 17.5
+  sourceId: dffh-winter-gas-concession
+  checkedOn: 2026-11-13
+
+- id: vic-concession-gas-excluded
+  group: vic-concessions
+  state: vic
+  program: DFFH
+  activity: rcac
+  audience: household
+  scenario: "First part of the gas bill the winter concession does not apply to"
+  qualifier: exact
+  unit: AUD
+  display: cents
+  amountMax: 62.40
+  currency: AUD
+  sourceId: dffh-winter-gas-concession
+  checkedOn: 2026-11-13
+
+- id: vic-new-home-electric-saving
+  group: vic-electrify-savings
+  state: vic
+  program: Energy Victoria
+  activity: rcac
+  audience: household
+  scenario: "New all-electric home, Energy Victoria's estimated yearly saving"
+  qualifier: exact
+  unit: AUD
+  amountMax: 990
+  currency: AUD
+  sourceId: energyvic-new-buildings
+  checkedOn: 2026-11-13
+
+- id: vic-new-home-electric-solar-saving
+  group: vic-electrify-savings
+  state: vic
+  program: Energy Victoria
+  activity: solar
+  audience: household
+  scenario: "New all-electric home with solar, estimated yearly saving"
+  qualifier: exact
+  unit: AUD
+  amountMax: 1920
+  currency: AUD
+  sourceId: energyvic-new-buildings
+  checkedOn: 2026-11-13
+
+- id: vic-solar-apartments-per-apartment
+  group: vic-solar-apartments
+  state: vic
+  program: Solar Homes
+  activity: solar
+  audience: household
+  scenario: "Solar for Apartments, per apartment"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 2800
+  currency: AUD
+  sourceId: solarvic-apartments
+  checkedOn: 2026-11-13
+
+- id: vic-solar-apartments-per-property
+  group: vic-solar-apartments
+  state: vic
+  program: Solar Homes
+  activity: solar
+  audience: household
+  scenario: "Solar for Apartments, per property"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 140000
+  currency: AUD
+  sourceId: solarvic-apartments
+  checkedOn: 2026-11-13
+
+- id: vic-veu-glazing-double
+  group: vic-veu-glazing-household
+  state: vic
+  program: VEU
+  activity: glazing
+  audience: household
+  scenario: "Example: double glazing, per 10 m²"
+  qualifier: exact
+  unit: AUD
+  amountMax: 210
+  currency: AUD
+  sourceId: energyvic-window-glazing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-glazing-secondary
+  group: vic-veu-glazing-household
+  state: vic
+  program: VEU
+  activity: glazing
+  audience: household
+  scenario: "Example: secondary glazing, per 10 m²"
+  qualifier: exact
+  unit: AUD
+  amountMax: 140
+  currency: AUD
+  sourceId: energyvic-window-glazing
+  checkedOn: 2026-11-13
+
+- id: casey-diy-draught-rebate
+  group: casey-council
+  state: vic
+  program: City of Casey
+  activity: sealing
+  audience: household
+  scenario: "City of Casey rebate for DIY draught-proofing products, one per household"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 200
+  currency: AUD
+  sourceId: casey-home-energy-rebates
+  checkedOn: 2026-11-13

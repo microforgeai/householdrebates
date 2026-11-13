@@ -3,6 +3,7 @@
 Site: **householdrebates.com.au** · Brand: **Household Rebates** · Publisher: Agenor Services Pty Ltd (ABN: `<<AGENOR_ABN>>`)
 Prepared: 13 Nov 2026 (Melbourne time) for Guri, by Indie Builder. Source strategy: Venture Architect's Page, "Energy rebates" tab.
 Status: design only. No code written, nothing touched on the VPS, DNS or Hostinger.
+Updated 13 Nov 2026 (Melbourne time) for the approved expansion from 16 to 53 URLs. The source of truth is Venture Architect's `url-map.md` / `url-map.csv`, and prompts 15–23 build it. Changed sections: §0, §1 (verified 2027 exemptions, new facts), §4.1a–4.1d (53-URL map, hub, internal links, redirects), §5 (schemas), §6 (checker paths), §10.2–10.4, §13, §14 and §15.
 
 > **Not legal advice.** Everything below on the VEU code of conduct, privacy, spam and consumer law is a builder's reading of the official pages listed in §15. The consent wording, collection notice, privacy policy, terms and installer agreement need a lawyer's check before the form goes live.
 
@@ -14,6 +15,7 @@ Status: design only. No code written, nothing touched on the VPS, DNS or Hosting
 - **How:** an Astro static site, built in Antigravity, served by nginx from `/var/www/householdrebates/current` on the existing Hostinger VPS (72.61.117.132). One small Node service on `127.0.0.1:8787` takes form posts, stores them in SQLite and emails them. No paid services.
 - **Rules built into the code:** every dollar figure comes from one data file with a source URL and a checked-on date, and a build check fails if a raw `$` amount appears anywhere else. The form only switches on when a signed installer agreement is recorded. Consent is stored with its exact wording and version.
 - **Order:** fix the VPS first (certbot is broken), then build locally, then deploy with the form **off**, then switch the form on only after the installer agreement, privacy policy and lawyer check.
+- **Expansion (approved 13 Nov 2026):** 16 → 53 URLs in three waves: Wave 1 is 19 money and question pages plus the `/victoria/` hub; Wave 2 is 10 audience pages, tools and support guides; Wave 3 is 8 location pages, with Shepparton gated. Fixes to live pages come first: the 30 Sep 2026 co-payments, the Solar Homes caps and the verified 2027 exemptions. The checker gains insulation, induction and draught-proofing paths. The quote form stays off throughout. Prompts 15–23.
 
 ---
 
@@ -33,7 +35,7 @@ Every figure on the site has to come from these pages, re-checked at publish tim
 | Combined with Solar Homes hot water rebate | up to $1,560; up to $1,960 with an eligible locally made product (+$400) | same | 26 Oct 2026 |
 | Hot water eligibility | Existing system being replaced, in a building at least 2 years old; approved product with min 5-year warranty; households up to 2 systems; minimum customer contribution $200 | same | 26 Oct 2026 |
 | No retrospective discounts (generally) | "We strongly recommend contacting an accredited provider before purchasing or installing … Retrospective discounts are typically not possible." Own installer must work with an accredited provider "before any work starts". | both product pages; [About VEU](https://www.energy.vic.gov.au/victorian-energy-upgrades/about) | — |
-| Gas hot water rule, existing homes | From **1 March 2027**, a gas water heater (incl. gas pool heater) needing replacement in an existing home can't be replaced with another mains gas water heater; must be electric. Owner-occupiers: no requirement to change gas space heating or cooking. Exemptions exist. | [Energy Victoria — electrification standards](https://www.energy.vic.gov.au/households/electric-and-efficiency-standards-for-buildings); hot water page above | 9 Oct 2026 |
+| Gas hot water rule, existing homes | From **1 March 2027**, a gas water heater (incl. gas pool heater) needing replacement in an existing home can't be replaced with another mains gas water heater; must be electric. Owner-occupiers: no requirement to change gas space heating or cooking. Exemptions exist. | [Energy Victoria — electrification standards](https://www.energy.vic.gov.au/households/save-with-all-electric-home/electric-and-efficiency-standards-for-buildings); hot water page above | 9 Oct 2026 |
 | Rental homes from 1 March 2027 | A broken, unrepairable water heater → efficient electric (heat pump or electric-boosted solar); broken heater → efficient RCAC in main living area; efficient cooling in main living area at start of a new lease | electrification standards page; heating and cooling page | 9 Oct / 29 Oct 2026 |
 | LPG not affected | "…as well as the use of LPG, are not affected." | [Vic Planning — Gas Substitution Roadmap](https://www.planning.vic.gov.au/guides-and-resources/strategies-and-initiatives/victorias-gas-substitution-roadmap) | not shown |
 | VEU code of conduct covers lead generation and marketing | "Regulated actions" include lead generation and marketing; applies to accredited persons and scheme participants | [ESC — VEU code of conduct](https://www.esc.vic.gov.au/victorian-energy-upgrades/participating-veu-program/meeting-your-obligations-under-veu-code-conduct) | — |
@@ -51,7 +53,66 @@ Every figure on the site has to come from these pages, re-checked at publish tim
 1. "Up to $630 off heat pump hot water" is the **electric → heat pump** figure. **Gas → heat pump is $560**. The 2027 gas rule pages must use $560, not $630.
 2. "Up to $5,530" is only the largest **ducted gas → 22.4 kW ducted RCAC** case. A typical single split replacing a room gas heater is $630–$1,610. Pages must say "up to" and show the scenario table, never lead with $5,530 alone.
 
-**Not verified (mark as such on any page that uses them):** the full list of exemptions to the 2027 rule. The Victoria Government Gazette notice (GG2025S654) confirms switchboard alteration, no-electricity-needed and in-warranty exemptions; the rest (space, centralised apartment systems, other laws, network upgrades, contracts signed before 1 March 2027) come from a third-party summary of Plumbing Regulations reg 45E. Read the regulation on legislation.vic.gov.au before publishing that list. Search volumes (1,620 / 1,300 / 320 a month, KD 4–8) are Super SEO's figures (26 Sep 2026) carried from the strategy, not re-checked.
+**2027 gas hot water exemptions: now verified (13 Nov 2026).** Venture Architect read the regulation text: Building and Plumbing Amendment Regulations 2025 (SR 140/2025), reg 6, which inserts reg 45E into the Plumbing Regulations ([AustLII text](https://classic.austlii.edu.au/au/legis/vic/num_reg/bapar2025n140o2025463/s6.html); authority: [legislation.vic.gov.au](https://www.legislation.vic.gov.au/as-made/statutory-rules/building-and-plumbing-amendment-regulations-2025)). The earlier "not verified" note is replaced. The exemptions, in plain words:
+
+- **Practical limits (45E(3)):**
+  - not enough space inside, or no suitable outdoor space, for an electric water heater
+  - a Class 2 building (apartments) or a pool served by a centralised gas system
+  - an electric option would be unlawful under another law
+  - it would need the main switchboard or a distribution board altered
+  - it would need the electricity network augmented beyond a basic or standard connection
+- **Kinds of work (45E(4)):**
+  - temporary disconnection and reconnection
+  - like-for-like replacement where the gas water heater doesn't need an electricity connection to run
+  - replacement within the warranty period
+- **Timing (45E(5)):**
+  - work under a contract signed before 1 March 2027, if done within 3 months after that date
+  - building work under s10(1) or (2) of the Building Act before 1 March 2027
+  - rectification orders issued before 1 March 2027
+- **Penalty:** 20 penalty units for the plumber.
+- The Gazette notice (GG2025S654) confirms the switchboard, no-electricity and warranty items.
+
+On the site this is a plain-English summary, not legal advice, and "your licensed plumber decides". Guri reads it against the AustLII text before it's published (prompts 15 and 18). The date wording "exempt work must be done by 1 June 2027" is **not** verified. Write "within 3 months after 1 March 2027".
+
+Search volumes (1,620 / 1,300 / 320 a month, KD 4–8) are Super SEO's figures (26 Sep 2026), carried from the strategy and not re-checked. The URL map used no volume data: its "intent" column is qualitative.
+
+### 1.1 Facts added for the 53-URL expansion (from `url-map.md`, checked 13 Nov 2026)
+
+Full per-page facts and URLs are in `url-map.csv`, and the source index is in `url-map.md`. These are the ones that change the design:
+
+| Fact | Value | Source |
+|---|---|---|
+| **VEU minimum co-payments from 30 Sep 2026** (per installed product, incl. GST) | All ducted (any size) **$3,000** (was $1,000); multi-split ≥ 10 kW $3,000; multi-split < 10 kW $1,000; other non-ducted ≥ 10 kW $1,000; other non-ducted < 10 kW $200; hot water (activities 1, 3) $200; ceiling insulation (48) $200; induction $200 per product; larger commercial $10,000 | [VEU Specifications v25.0, Part 6 (PDF)](https://www.energy.vic.gov.au/__data/assets/pdf_file/0041/795488/Victorian-Energy-Upgrades-Specifications-2018-Version-25.pdf), p. 29; [industry specifications page](https://www.energy.vic.gov.au/victorian-energy-upgrades/installers/industry-specifications). Energy Victoria's consumer page doesn't show it yet. |
+| Multi-split | All indoor units from the same manufacturer as the outdoor unit; v25.0 revised the multi-split calculations from 30 Sep 2026 | SPEC25 |
+| Ceiling insulation (new VEU product) | Up to $1,500 metro (mild) / $2,100 regional (cold), 150 m² example; cuts install cost by about 30–50%; saves more than $400 a year; almost 60% of homes have none or too little; eligible below R2.0 (about 90 mm); electrical safety assessment first; halogen downlights make a home ineligible until fixed; EEC-certified installers | [Energy Victoria insulation](https://www.energy.vic.gov.au/victorian-energy-upgrades/products/insulation-discounts); [Solar Victoria news](https://www.solar.vic.gov.au/victorians-cut-energy-bills-ceiling-insulation-discounts) |
+| Induction cooktops | $140 per product (based on a $70 certificate price); buy, then send the invoice to an accredited provider; must replace a gas cooktop; home ≥ 2 years old; not claimed before; no portable units; ≥ 550 × 380 mm, 3+ zones, 2-year warranty; removing all gas avoids about $350–$400 a year in supply charges | [Energy Victoria induction](https://www.energy.vic.gov.au/victorian-energy-upgrades/products/induction-cooktop-discounts) |
+| Weather sealing / glazing | Examples: apartment $70/$140, townhouse $280/$560, house $350/$700 (2-/5-year warranty). Homes with open-flued or flueless gas heaters, or open-flued water heaters indoors, don't qualify (CO risk). Glazing $210 double / $140 secondary per 10 m² | [weather sealing](https://www.energy.vic.gov.au/victorian-energy-upgrades/products/weather-sealing-discounts), [glazing](https://www.energy.vic.gov.au/victorian-energy-upgrades/products/window-glazing-discounts) |
+| Solar Homes hot water | Up to $1,000 ($1,400 locally made), 50% of price, calculated after STCs and VEECs; owner-occupier; household income **< $150,000 from 1 Jul 2026** (was $210,000); property < $3m; system ≥ 3 years old; pre-approval, then install within 120 days | [hot water rebate](https://www.solar.vic.gov.au/hot-water-rebate); [income cap news](https://www.solar.vic.gov.au/solar-homes-program-continuing-provide-targeted-assistance) |
+| Solar PV | Up to $1,400 plus a loan to 30 Jun 2027; moves into VEU from 1 Jul 2027 (affects the reserved `/solar-battery/` section) | [PV rebate](https://www.solar.vic.gov.au/solar-panel-rebate); [transition](https://www.solar.vic.gov.au/solar-support-continue-through-victorian-energy-upgrades-program) |
+| LPG hot water | VEU Part 3 covers "gas or LPG" water heaters, but Energy Victoria's table has only a gas figure. The LPG amount is **UNVERIFIED**, so the site says "provider confirms" | SPEC25 |
+| VEU postcode table | SPEC25 Table A, "Location Variable List": Metropolitan/Regional, reticulated gas, climatic region Mild/Cold/Hot, heat pump zone 4/5. **719 rows** (`pdftotext -raw`; `-layout` drops 19) | SPEC25 |
+| Stale official summaries: don't use | The 'Latest discounts and rebates' page (24 Jul 2026) says ducted saving "up to $1,410" and PV "up to $2,800"; the Solstice page also says PV $2,800. Product pages win: $1,140 and $1,400 | [stale page](https://www.energy.vic.gov.au/households/latest-discounts-and-rebates), deny-listed in `check-sources` |
+| Source URL moved | The electrification standards page is now under `/households/save-with-all-electric-home/…` (updated in §1 and §15) | [Energy Victoria](https://www.energy.vic.gov.au/households/save-with-all-electric-home/electric-and-efficiency-standards-for-buildings) |
+| Policy risk | Victorian state election on 28 Nov 2026. DEECA's work program has pending water heating and space heating review responses and a hydronic activity. The VEET Act was amended (Act 37/2026): on proclamation, VEECs become "energy upgrade certificates" | [work program](https://www.energy.vic.gov.au/victorian-energy-upgrades/installers/industry-market-update-work-program); [ESC legislation](https://www.esc.vic.gov.au/victorian-energy-upgrades-program/about-victorian-energy-upgrades-program/veu-program-legislation) |
+| Competitor | Easy Electric SEC (state-owned SEC, launched 25 May 2026): a free quote-matching service with endorsed installers. Councils route residents to it | [SEC](https://www.secvictoria.com.au/news/going-electric-at-home-is-now-easy-as-with-sec) |
+
+**Still UNVERIFIED (kept off every page; tracked in `docs/expansion-log.md`):**
+
+- the multi-split "at most 20 kW" calculation (SPEC25 v25.0 Part 6 appears to have a 20 kW residential input line; the map still marks it unverified)
+- the combined electric → heat pump "$1,630 / $2,030"
+- "one hard-wired heater per home"
+- repeat-claim limits for heating and cooling
+- the LPG hot water amount
+- the VEEC rename commencement date
+- live VEEC prices
+- default tariffs
+- the gas meter abolishment fee
+- the Power Saving Bonus
+- the Solar for Apartments lot limit (3–50 vs 150)
+- the "by 1 June 2027" wording
+- the Wyndham survey
+- the Whittlesea "Energy Smart Homes Grant"
+- Shepparton's Solar Savers program
 
 ---
 
@@ -194,6 +255,15 @@ householdrebates/
    └─ test/                  # vitest + fastify.inject
 ```
 
+**Added by the expansion (prompts 15–23):**
+
+- `docs/url-map.md`, `docs/url-map.csv` and `docs/expansion-log.md` (conflicts, UNVERIFIED items, decisions); `docs/recheck/<date>.md`
+- `site/scripts/`: `import-url-map.mjs`, `check-urlmap.mjs`, `extract-veu-postcodes.mjs` (run by hand), `build-redirects.mjs` and `recheck-report.mjs`
+- `site/src/data/`: `url-map.json`, `rollout.json`, `redirects.json`, `stale-sources.json`, `vic-veu-postcodes.json` and `tools/hw-size-guide.json`; `eligibility/result-links.ts`
+- `site/src/pages/victoria/index.astro` (hub)
+- Components: `Breadcrumbs`, `RelatedLinks`, `HubIndex`, plus the `RunningCostsPicker`, `HwSizeGuide` and `GasExitPlanner` islands
+- `ops/nginx/householdrebates-redirects.conf` (generated; not included in nginx until a redirect is needed and Guri approves)
+
 ---
 
 ## 4. URLs, page templates and components
@@ -216,7 +286,86 @@ householdrebates/
 | 15 | `/sources/` | Trust | every source with checked-on dates; method | no |
 | + | `/terms/` (recommended), `/thanks/`, `/form-error/`, `/404.html` | Legal / utility | utilities are `noindex` | — |
 
-URL rules: state folder for anything state-specific (`/victoria/…`, later `/nsw/…`); state-neutral pages at root. **No mass suburb pages**: an area page only exists when it has at least four sourced, genuinely local facts (§5.4).
+URL rules: state folder for anything state-specific (`/victoria/…`, later `/nsw/…`); state-neutral pages at root. **No mass suburb pages**: an area page only exists when it has at least four sourced, genuinely local facts (§5.4). The launch set above is now Wave 0 of the 53-URL map (§4.1a).
+
+### 4.1a Expanded URL map: 53 URLs (approved 13 Nov 2026)
+
+The source of truth is `url-map.csv` (one row per URL: question, facts with sources, required internal links, CTA, notes), imported at build time into `site/src/data/url-map.json` (prompt 15). Counts, cross-checked against the CSV:
+
+| Wave | URLs | What | Prompt |
+|---|---|---|---|
+| 0 (live) | 16 | The launch set above, including `/terms/` | 01–14; fixes in 15–16 |
+| 1 | 19 | `/victoria/` hub; 9 upgrade swap guides (rows 18–26); 9 question pages (rows 27–35) | 17 (hub + 9), 18 (9) |
+| 2 | 10 | 5 audience pages (36–40), 3 tools (41–43), 2 support guides (44–45) | 19 (7), 20 (3) |
+| 3 | 8 | Ballarat, Bendigo, Wyndham, Casey, Whittlesea, Yarra Ranges, Solstice gas-shutdown towns (multi-town); **Shepparton gated** | 21 (7), 22 (Shepparton) |
+| **Total** | **53** | Noindex utilities (`/thanks/`, `/form-error/`, `/404.html`) not counted | |
+
+```
+/  about/  faq/  how-quotes-work/  privacy/  sources/  terms/
+victoria/                                   hub (W1), the breadcrumb "Victoria" item
+├─ eligibility-checker/                     tool (live; new paths in prompt 16)
+├─ Rebate guides (live): air-conditioner-rebate/ heat-pump-rebate/ reverse-cycle-vs-gas-heater/ gas-to-electric-hot-water-2027/
+├─ Upgrade guides (W1): ducted-gas-to-ducted-reverse-cycle/ ducted-gas-to-split-systems/ gas-room-heater-to-split-system/
+│    electric-heater-to-reverse-cycle/ gas-hot-water-to-heat-pump/ electric-hot-water-to-heat-pump/ solar-hot-water-rebate/
+│    gas-cooktop-to-induction/ ceiling-insulation-rebate/
+├─ Question pages (W1): what-is-a-veec/ veu-minimum-co-payment/ can-you-claim-veu-twice/ veu-vs-solar-homes/ veu-scams-cold-calls/
+│    gas-hot-water-broken-before-or-after-march-2027/ gas-hot-water-ban-exemptions/ already-installed-retrospective-discount/
+│    how-long-does-an-upgrade-take/
+├─ Audience (W2): renters/ landlords-rental-standards-2027/ concession-card-holders/ new-homes-all-electric-2027/ apartments-and-units/
+├─ Tools (W2): gas-vs-heat-pump-running-costs/ heat-pump-hot-water-size-guide/ get-off-gas-planner/
+├─ Support guides (W2): draught-proofing-rebate/ find-an-accredited-provider/
+└─ Areas: melbourne/ geelong/ frankston/ mornington-peninsula/ (live) · ballarat/ bendigo/ shepparton/ (gated) wyndham/ casey/
+     whittlesea/ yarra-ranges/ solstice-gas-shutdown-towns/ (W3)
+```
+
+**Dropped:** Melton. Its VEU postcode data and NCC zone match Melbourne, and it has no local program, so it has fewer than 4 local facts. **Shepparton** passes on 4 facts, but Guri gated it until the council's Goulburn Murray Solar Savers program is verified (the page returned 504 on 13 Nov 2026). Prompt 22 is a hard stop with a verification step.
+
+**Rules the expansion keeps:**
+
+- URLs stay flat (`/victoria/<slug>/`).
+- No pages beyond the map: `check-urlmap` fails on any extra indexable URL, which blocks mass suburb pages.
+- Every page has its own question, an answer-first opening, `<Money>` figures with checked-on dates, a visible FAQ with `FAQPage`, at least 3 internal links and the `IndependenceNotice`.
+- The CTA is always the eligibility checker. The quote form stays off.
+
+### 4.1b The `/victoria/` hub and the home page
+
+- `/victoria/` is rendered by the new `src/pages/victoria/index.astro` from `content/pages/victoria.mdx` (GuideLayout variant `hub`). `HubIndex` lists every enabled `/victoria/` page by `navGroup` (`rebate-guides`, `upgrade-guides`, `question-pages`, `audience`, `tools`, `support-guides`, `areas`), in the tree order above, with the checker first.
+- Breadcrumbs are Home › Victoria › Page on every `/victoria/*` page, and `BreadcrumbList` matches.
+- **Home:** the map says home "stays the national-facing pillar", but the live home (prompt 05) is Victoria-first in its title, H1 and answer. The expansion only adds a compact hub index (upgrade guides and question pages) to home. Rewriting home as a national pillar is an open decision (§14).
+
+### 4.1c Internal linking
+
+- **Required links:** each row's `internal_links` (`url-map.csv`). `RelatedLinks` renders the row's links whose targets are enabled, with anchor text from the target's H1. At least 2 row links must sit in the body copy (`[data-body]`).
+- **Inbound:** every indexable page needs at least 2 inbound links from other pages' `<main>`, and the hub counts as one. Header and footer navigation don't count. The map gives no row links into `/victoria/electric-heater-to-reverse-cycle/`, `/victoria/already-installed-retrospective-discount/` or `/victoria/shepparton/`, so they get links from:
+  - the AC rebate page
+  - the timing rule page and the checker's RETRO result
+  - the AreaLayout "Other areas" list
+- **Existing → new:**
+  - AC → 4 heating swap guides
+  - heat pump → 3 hot water swap guides
+  - timing rule ↔ room heater guide
+  - gas 2027 → exemptions and the before/after page
+  - AC co-payment section → co-payment page
+  - Geelong → insulation
+- **Checker → guides:** `RESULT_LINKS` (prompt 16) holds an internal page per activity once it exists, and the official page before that.
+- **Rollout:** `site/src/data/rollout.json` (`enabledRows`, `gatedApproved`) decides what's built, linked, in the sitemap and in llms.txt. Each prompt widens it: 1–26 → 1–35 → 1–40, 44–45 → 1–45 → 1–47, 49–53 → 1–53.
+- **`check-urlmap.mjs`** (post-build) fails if any of these is wrong:
+  - built URLs ≠ enabled rows
+  - a required link is missing
+  - fewer than 2 body links
+  - an orphan
+  - the sitemap count ≠ the enabled count
+  - the llms.txt count ≠ the sitemap count
+
+### 4.1d Redirects
+
+The map needs **no** redirects. The mechanism exists for later renames and for the time-limited Solstice page:
+
+- `site/src/data/redirects.json` (`{ from, to, code: 301|410, reason, addedOn }`).
+- A build check: `from` isn't a built URL, and `to` is built.
+- `build-redirects.mjs` writes `ops/nginx/householdrebates-redirects.conf` (`location = /from/ { return 301 /to/; }`).
+- Including that file in the server block is a server change, with its own STOP and `nginx -t`. Do it only when the first redirect is needed (prompt 23 covers the Solstice archive decision).
+- Trailing-slash and host canonicalisation stay as in §10.4.
 
 ### 4.2 Page anatomy (guides, areas, tool)
 
@@ -265,7 +414,8 @@ Defined in `site/src/content.config.ts` (Astro 6: `defineCollection`, `reference
 ```ts
 const State = z.enum(['vic', 'nsw', 'qld', 'sa', 'wa', 'tas', 'act', 'nt', 'national']);
 const Section = z.enum(['rebates', 'areas', 'tools', 'trust', 'solar-battery']);
-const Activity = z.enum(['rcac', 'hotwater', 'solar', 'battery']); // solar/battery reserved
+const Activity = z.enum(['rcac', 'hotwater', 'insulation', 'induction', 'sealing', 'glazing', 'solar', 'battery']); // solar/battery reserved; lead form uses rcac|hotwater only
+const NavGroup = z.enum(['hub', 'rebate-guides', 'upgrade-guides', 'question-pages', 'audience', 'tools', 'support-guides', 'areas', 'trust']); // expansion (prompt 17)
 ```
 
 ### 5.2 `sources`
@@ -282,9 +432,14 @@ const sources = defineCollection({
     checkedOn: z.coerce.date(),               // when we last read it
     pageLastUpdated: z.coerce.date().optional(),
     notes: z.string().optional(),
+    mapKey: z.string().optional(),            // key in url-map.md's source index, e.g. SPEC25 (prompt 15)
+    kind: z.enum(['legislation', 'regulator', 'department', 'council', 'council-program', 'state-owned', 'network-business', 'national-agency']).optional(),
+    attribution: z.string().optional(),       // e.g. ABCB climate zones, CC BY 4.0
   }),
 });
 ```
+
+Expansion: 65 sources after prompt 15 (13 + 52 from the map's source index; not EVLATEST (stale, deny-listed), MELTON (dropped) or SHEPP (prompt 22 only, after verification)). `check-sources` fetches one URL at a time with a 3 s gap (energy.vic.gov.au is behind Cloudflare), reports Cloudflare challenge pages as `CHALLENGE` for a hand check, and fails on any deny-listed URL.
 
 ### 5.3 `figures`
 
@@ -316,9 +471,26 @@ const sources = defineCollection({
   checkedOn: 2026-11-13
 ```
 
-Schema: `id`, `group`, `state`, `program`, `activity`, `audience: 'household' | 'business'`, `scenario`, `qualifier: 'up-to' | 'range' | 'exact' | 'about'`, `amountMin?`, `amountMax`, `currency: 'AUD'`, `sourceId: reference('sources')` (must resolve to `official: true`), `checkedOn`, `conditions?: string[]`. Refinements: `amountMin <= amountMax`; `qualifier === 'range'` requires `amountMin`; `checkedOn <= today`.
+Schema: `id`, `group`, `state`, `program`, `activity`, `audience: 'household' | 'business'`, `scenario`, `qualifier: 'up-to' | 'range' | 'exact' | 'about' | 'about-range' | 'minimum' | 'more-than' | 'almost'`, `unit: 'AUD' | 'percent' | 'count'` (default AUD), `display: 'standard' | 'cents' | 'compact'`, `gstIncluded?`, `effectiveFrom?`, `effectiveTo?` + `supersededBy?` (historical figures may only appear next to their replacement), `amountMin?`, `amountMax`, `currency: 'AUD'` (money only), `sourceId: reference('sources')` (must resolve to `official: true`), `checkedOn`, `conditions?: string[]`. Refinements: `amountMin <= amountMax`; `qualifier === 'range'` requires `amountMin`; `checkedOn <= today`.
+
+Rendering: `minimum` → "at least $3,000 (including GST)", `more-than` → "more than $400", `almost` → "almost 60%", `about-range` → "about $350 to $400", `cents` → "$171.60", `compact` → "$3 million". Percentages and volatile counts (provider counts, rebate counts) are figures too, so they share the 45-day freshness rule. Scenario strings never contain a `$` amount. Business figures are allowed only on `/victoria/veu-minimum-co-payment/`.
 
 Launch set (all from §1): 6 household room-RCAC rows, 8 ducted-RCAC rows (gas 10 / 16 / 22.4 kW; central electric; RCAC-replaced 10 / 16 / 22.4 kW; no decommissioning), 4 hot water rows, the 2 combined Solar Homes figures and the $200 minimum contribution (21, prompt 03), plus 3 running-cost figures from Energy Victoria added in prompt 05 (room gas → RCAC saves up to $460 a year; ducted up to $1,140; gas → electric hot water around $400). No business rows at launch.
+
+Expansion figure counts (cumulative, each prompt's `check-figures` expects them):
+
+| After prompt | Added | Total |
+|---|---|---|
+| 15 | 8 co-payments, 2 insulation, 6 Solar Homes | 40 |
+| 16 | induction ×2, weather-sealing examples ×6 | 48 |
+| 17 | supply-charge saving, insulation ×3, heat pump electricity reduction | 53 |
+| 18 | business co-payment, PV rebate, extra HW rebates count, plumbing certificate threshold | 57 |
+| 19 | concessions ×4, new-home savings ×2, Solar for Apartments ×2, glazing ×2, Casey council rebate | 68 |
+| 20 | existing-home all-electric savings ×2 | 70 |
+| 21 | provider counts ×4, Solstice top-up, Whittlesea assessment value (only if Guri accepts that source as official) | 75–76 |
+| 22 | Hume provider counts ×2 (+ a council amount only if the verified page states one) | 77–79 |
+
+Other data files under the same freshness rule: `src/data/vic-veu-postcodes.json` (SPEC25 Table A, 719 rows, prompt 16) and `src/data/tools/hw-size-guide.json` (prompt 20).
 
 ### 5.4 `guides`, `areas`, `pages`
 
@@ -345,6 +517,9 @@ const pageBase = z.object({
   noindex: z.boolean().default(false),
   related: z.array(z.string()).default([]),
   legalReviewed: z.boolean().default(false),   // legal pages must be true before LEADS_ENABLED
+  navGroup: NavGroup,                          // hub grouping (prompt 17)
+  mapRow: z.number().int(),                    // row in url-map.json; must match the page URL
+  reviewBy: z.coerce.date().optional(),        // time-sensitive pages, listed in the monthly re-check
 });
 
 const areaExtra = z.object({
@@ -353,6 +528,10 @@ const areaExtra = z.object({
   postcodes: z.array(z.string().regex(/^3\d{3}$/)).min(1),
   localFacts: z.array(z.object({ text: z.string(), sourceId: reference('sources') })).min(4), // anti-doorway
   searchDemand: z.object({ monthly: z.number(), source: z.string(), date: z.coerce.date() }).optional(),
+  variant: z.enum(['standard', 'multi-town']).default('standard'),   // expansion (prompt 21)
+  towns: z.array(z.string()).min(2).optional(),                       // multi-town only; councils optional there
+  veuPostcodeTable: z.boolean().default(true),                        // render SPEC25 Table A rows for `postcodes`
+  nccZone: z.object({ zone: z.number(), places: z.array(z.string()) }).optional(), // ABCB attribution rendered
 });
 ```
 
@@ -405,7 +584,7 @@ Pure function `assess(answers, rules, figures)` in `site/src/lib/eligibility.ts`
 | # | Question | Options |
 |---|---|---|
 | Q1 | Where is the property? | Victoria / Another state |
-| Q2 | What do you want to upgrade? | Heating and cooling / Hot water / Both |
+| Q2 | What do you want to look at? (choose one or more; was a single choice before prompt 16) | Heating and cooling / Hot water / Ceiling insulation / Induction cooktop / Draught proofing |
 | Q3 | Have you already bought or installed the new system, or has work started? | No / Bought, not installed / Installed or work started |
 | Q4 | Home or business? | Home / Business |
 | Q5 | Do you own or rent? | Own and live there / Rent / Landlord |
@@ -414,6 +593,16 @@ Pure function `assess(answers, rules, figures)` in `site/src/lib/eligibility.ts`
 | Q7b (H&C) | What would you like? | Ducted reverse-cycle / Split system(s) / Not sure |
 | Q8a (HW) | Current hot water system? | Mains gas (storage or instant) / LPG / Electric storage / Solar that no longer works / None |
 | Q8b (HW) | Hot water systems already upgraded through VEU at this address? | 0 / 1 / 2 or more / Not sure |
+| Q9a (insulation) | Property postcode | 4 digits → VEU postcode table (SPEC25 Table A) |
+| Q9b (insulation) | What's in the ceiling now? | None / Thin (less than about 90 mm, or below the top of the joists) / Thicker / Not sure |
+| Q9c (insulation) | Halogen downlights, or wiring known to be unsafe? | Yes / No / Not sure |
+| Q10a (induction) | Current cooktop? | Gas / Electric (not induction) / Induction already / None |
+| Q10b (induction) | Induction discount already claimed at this address? | No / Yes / Not sure |
+| Q10c (induction) | Kind of cooktop wanted? | Built-in or freestanding, ≥ 550 × 380 mm, 3+ zones / Portable / Not sure |
+| Q11a (sealing) | Kind of home? | Apartment / Townhouse / House |
+| Q11b (sealing) | Open-flued or flueless gas heater, or open-flued gas water heater, inside? | Yes / No / Not sure |
+
+Questions are asked only for the activities chosen. A rule the map doesn't state isn't asked or applied: no building-age rule for insulation or weather sealing, and no co-payment for weather sealing.
 
 ### 6.2 Rules (from the official pages in §1)
 
@@ -447,8 +636,34 @@ Hot water:
   Q8a mains gas  → $560 heat pump row + 1 Mar 2027 rule callout.
   Q8a electric   → $630 heat pump row.
   Q8a broken solar → heat pump and solar-boosted rows; provider confirms which category applies.
-  Q8a LPG        → heat pump rows, "provider confirms which row applies"; note the 2027 rule doesn't apply to LPG.
+  Q8a LPG        → POSSIBLE, no figure rows (the LPG amount is UNVERIFIED); notes lpg-provider-confirms + lpg-not-covered (2027 rule).
   Always         → note the $200 minimum contribution and the Solar Homes combination (link, not promised).
+
+Co-payments (from 30 Sep 2026, SPEC25 Part 6), note copay-hc with figures by path:
+  any ducted result                 → vic-veu-copay-ducted (at least $3,000 incl GST)
+  ducted gas + splits               → multi-split ≥10 kW and <10 kW rows + single split <10 kW
+  room/split results                → single split <10 kW and non-ducted ≥10 kW rows
+  Not sure                          → all heating and cooling co-payment rows
+
+Insulation (prompt 16):
+  Q9c Yes      → LIKELY_NOT (halogen downlights or unsafe wiring: ineligible until fixed)
+  Q9b Thicker  → LIKELY_NOT (only uninsulated or below R2.0, about 90 mm)
+  Show both examples (metro up to $1,500 / regional up to $2,100) + $200 co-payment. Highlight one only when the postcode's
+  Metropolitan/Regional AND Mild/Cold columns both match that example; otherwise "the provider confirms which applies".
+  Unknown postcode → POSSIBLE. Notes: safety checks, EEC-certified installer, few providers listed, renter permission,
+  rental R5.0 at a new lease from 1 Mar 2027.
+
+Induction:
+  Q10a not Gas → LIKELY_NOT · Q6 No → LIKELY_NOT · Q10b Yes → LIKELY_NOT · Q10c Portable → LIKELY_NOT
+  Figures: $140 per product + $200 co-payment. Note: buy first, then send the invoice to an accredited provider.
+  Q3 "bought" is normal (no retro caution); Q3 "installed" → POSSIBLE + retro note (decision for Guri).
+
+Draught proofing (weather sealing):
+  Q11b Yes → LIKELY_NOT (carbon monoxide risk) · Not sure → POSSIBLE + safety note
+  Figures: the two examples for the home type (2-/5-year warranty). Renters: CAV reasonable-change note; rental standard from 1 Jul 2027.
+
+RETRO result links /victoria/already-installed-retrospective-discount/ once built (RESULT_LINKS; Energy Victoria's page before then).
+The quote button never shows for insulation, induction or sealing (lead activities stay rcac | hotwater), and is hidden anyway while the form is off.
 
 "Not sure" anywhere → POSSIBLE. "An accredited provider confirms this when they quote."
 ```
@@ -915,7 +1130,7 @@ Access: a dedicated `deploy` user, SSH key only, owner of the two release trees,
 - Canonical: absolute, https, apex, trailing slash: `<link rel="canonical" href="https://householdrebates.com.au/victoria/air-conditioner-rebate/">`. Utility pages `noindex,follow`.
 - Open Graph and Twitter tags from the same data; one default OG image.
 - `<html lang="en-AU">`; dates like "13 Nov 2026".
-- Internal links: every guide → pillar, checker and one sibling; areas → pillar and the guides.
+- Internal links: every guide → pillar, checker and one sibling; areas → pillar and the guides. Expansion: each page's required links come from its `url-map.csv` row, and `check-urlmap` enforces them, along with 2 inbound links and no orphans (§4.1c).
 - Answer first: H1 → `AnswerBlock` (2–4 sentences, direct answer; any figure through `<Money>` with checked-on and source) → detail.
 - Sources visible in the body and in a `SourceList`, not hidden in a footer.
 
@@ -926,43 +1141,37 @@ Access: a dedicated `deploy` user, SSH key only, owner of the two release trees,
 | `Organization` | every page | `@id: https://householdrebates.com.au/#publisher`, `name: "Agenor Services Pty Ltd"`, `alternateName: "Household Rebates"`, `url`, `logo`, `identifier` (ABN as `PropertyValue`), `sameAs` (agenorit.com.au, LinkedIn) |
 | `WebSite` | every page | `@id …/#website`, `name: "Household Rebates"`, `publisher: {"@id": "…/#publisher"}`, `inLanguage: "en-AU"` (no SearchAction: no site search) |
 | `BreadcrumbList` | every page except home | matches visible breadcrumbs |
-| `FAQPage` | only where the same Q&As are visible on the page | answers carry no dollar figures |
-| `HowTo` | `/how-quotes-work/` only (a genuine step-by-step) | no `estimatedCost`, no money |
+| `FAQPage` | only where the same Q&As are visible on the page. Expansion: every new page has a visible FAQ (3–5), so every new page has `FAQPage` | answers carry no dollar figures |
+| `HowTo` | `/how-quotes-work/` and `/victoria/how-long-does-an-upgrade-take/` (genuine step-by-steps); `/victoria/gas-cooktop-to-induction/` only if its buy-then-claim steps are a genuine list | no `estimatedCost`, no `totalTime`, no money |
 | never | — | `LocalBusiness`, `Offer`, `PriceSpecification`, `Product` with prices, `GovernmentService`, `AggregateRating` |
 
 Google limits FAQ rich results to well-known government and health sites and stopped showing HowTo rich results in 2023, so this markup is for meaning and machine readers, not snippets. Still validate with validator.schema.org and Google's Rich Results Test.
 
 ### 10.3 `/llms.txt` (generated at build by `build-llms.mjs`)
 
+For 53 URLs, sections are generated from the collections, grouped by `navGroup` in the hub order. Only enabled, indexable, non-gated pages are included, and `check-urlmap` makes the llms.txt URL count equal the sitemap count. Shape:
+
 ```markdown
 # Household Rebates
 
-> Independent guide to Victorian Energy Upgrades (VEU) discounts for reverse-cycle air conditioning and heat pump hot water, and Victoria's 1 March 2027 gas hot water rule. Run by Agenor Services Pty Ltd (ABN <<ABN>>), Melbourne. Not a government website. Every dollar figure is indicative, dated and linked to the official Energy Victoria page it came from; the accredited provider confirms eligibility and the final discount.
+> Independent guide to Victorian home energy discounts and rebates: Victorian Energy Upgrades (VEU) discounts for heating and cooling, hot water, induction cooktops, ceiling insulation and draught proofing; Solar Homes rebates; and Victoria's 2027 rules for gas hot water, new homes and rentals. Run by Agenor Services Pty Ltd (ABN <<ABN>>), Melbourne. Not a government website. Every figure is indicative, dated and linked to the official page it came from; the accredited provider confirms eligibility and the final discount.
 
-## Victoria guides
-- [Air conditioner rebate Victoria](https://householdrebates.com.au/victoria/air-conditioner-rebate/): VEU heating and cooling discounts by scenario, eligibility, and why to contact a provider before work starts. Figures checked {date}.
-- [Heat pump rebate Victoria](https://householdrebates.com.au/victoria/heat-pump-rebate/): VEU hot water discounts for electric and gas replacements. Figures checked {date}.
-- [Gas to electric hot water from 1 March 2027](https://householdrebates.com.au/victoria/gas-to-electric-hot-water-2027/): what the rule means for existing homes and renters.
-- [Reverse-cycle vs gas heater: the timing rule](https://householdrebates.com.au/victoria/reverse-cycle-vs-gas-heater/)
-- [Eligibility checker](https://householdrebates.com.au/victoria/eligibility-checker/)
+## Victoria hub
+- [Victorian home energy rebates and discounts](https://householdrebates.com.au/victoria/): every Victorian guide, by topic.
+- [Eligibility checker](https://householdrebates.com.au/victoria/eligibility-checker/): heating and cooling, hot water, insulation, induction, draught proofing.
 
-## How it works
-- [How quotes and installers work](https://householdrebates.com.au/how-quotes-work/)
-- [FAQ](https://householdrebates.com.au/faq/)
-
-## About and sources
-- [Sources and method](https://householdrebates.com.au/sources/): every official page used, with checked-on dates.
-- [About](https://householdrebates.com.au/about/)
-- [Privacy](https://householdrebates.com.au/privacy/)
-
-## Optional
-- [Melbourne](https://householdrebates.com.au/victoria/melbourne/)
-- [Geelong](https://householdrebates.com.au/victoria/geelong/)
-- [Frankston](https://householdrebates.com.au/victoria/frankston/)
-- [Mornington Peninsula](https://householdrebates.com.au/victoria/mornington-peninsula/)
+## Rebate guides          (4 live pages; "Figures checked {date}")
+## Upgrade guides         (9: ducted, splits, room heater, electric heater, gas/electric/solar hot water, induction, insulation)
+## Questions              (9: VEECs, co-payment, claiming twice, VEU vs Solar Homes, scams, March 2027, exemptions, retrospective, timing)
+## Audience               (5: renters, landlords, concession card holders, new homes, apartments)
+## Tools                  (3: running costs, size guide, get-off-gas planner)
+## How it works           (how quotes work, find an accredited provider, draught proofing, FAQ)
+## About and sources      (sources, about, privacy, terms)
+## Optional               (areas: Melbourne, Geelong, Frankston, Mornington Peninsula, Ballarat, Bendigo, Wyndham, Casey,
+                          Whittlesea, Yarra Ranges, Solstice towns; Shepparton only after prompt 22)
 ```
 
-Format follows llmstxt.org: H1, blockquote summary, H2 sections of links with short notes, "Optional" last. Entries come from collections (`noindex` pages excluded).
+Each entry is `- [H1](url): description`, with "Figures checked {date}" on pages that have figures. Empty sections are omitted. Format follows llmstxt.org: H1, blockquote summary, H2 sections of links with short notes, and "Optional" last.
 
 ### 10.4 robots.txt, sitemap, canonical host
 
@@ -977,7 +1186,7 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 ```
 
 - AI crawlers allowed by default because being cited is the goal (open decision: block training-only bots such as GPTBot and ClaudeBot while allowing retrieval bots such as OAI-SearchBot, ChatGPT-User and PerplexityBot).
-- `@astrojs/sitemap` with `filter` (drop noindex and utility pages) and `serialize` (`lastmod` from `updatedOn`).
+- `@astrojs/sitemap` with `filter` (drop noindex and utility pages, and rows not enabled in `rollout.json` or gated) and `serialize` (`lastmod` from `updatedOn`). Expected `<loc>` counts through the expansion: 16 → 26 (prompt 17) → 35 (18) → 42 (19) → 45 (20) → 52 (21) → 53 (22, only if Shepparton is approved).
 - One host: `https://householdrebates.com.au/`. http and www 301 to it; trailing slash enforced by Astro output + nginx `try_files $uri $uri/`.
 
 ### 10.5 Search engines
@@ -1029,7 +1238,14 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 | Shared VPS: another site's problem affects this one, or the reverse | Own user, data dir, memory cap; `nginx -t` before every reload; certbot fixed first |
 | Thin or doorway area pages | Four sourced local facts or no page |
 | Looks like a lead farm | Named author, ABN, sources page, no mass pages, a genuinely useful checker |
-| 2027 exemption list wrong | Marked unverified until read from the regulation |
+| Policy change after the 28 Nov 2026 election, or the pending DEECA reviews (water heating, space heating, hydronic) | Prompt 23 re-checks every figure and rule from 30 Nov 2026; nothing announced goes on a page until it's in force on an official page; the 45-day rule forces the re-check by about 28 Dec 2026 |
+| Stale official summary pages contradict product pages ($1,410 / $2,800) | Product pages win; the stale page is deny-listed in `check-sources` |
+| energy.vic.gov.au rate-limits or challenges bots (Cloudflare) | Sequential fetches with a 3 s gap; CHALLENGE results checked by hand |
+| Council programs and provider counts change monthly (Casey budget, Whittlesea to June 2027, Ballarat trial closed) | They're figures or local facts with `checkedOn`; monthly re-check; "describe the program, not a rebate" where the status is unclear |
+| Time-limited Solstice page goes out of date once the networks close | `reviewBy` on the page; prompt 23 proposes an archive version or a 301 (redirect mechanism, §4.1d) |
+| Easy Electric SEC (state-owned, free) competes with the lead model | Mentioned openly on `/victoria/find-an-accredited-provider/`; Guri weighs it before turning the form on (§14) |
+| Doorway risk grows with 53 URLs | `check-urlmap` blocks pages beyond the map; each area needs ≥ 4 sourced local facts; Melton dropped; Shepparton gated |
+| 2027 exemption list wrong | Verified against the reg 45E text (13 Nov 2026); plain-English summary, "not legal advice, the plumber decides"; Guri reads it against AustLII before publishing; re-checked after the election and before 1 Mar 2027 |
 
 ---
 
@@ -1048,6 +1264,16 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 11. **Lawyer:** who reviews the consent wording, privacy policy, terms and installer agreement, and the budget (the only likely paid item).
 12. **Node version:** match whatever prompt 00 finds (22 or 24 LTS) or install a separate system Node 24.
 
+Added for the 53-URL expansion:
+
+13. **Easy Electric SEC vs the lead-fee model:** a free state-owned quote-matching service that councils route residents to. Does it change the installer and lead-fee plan before the form is ever switched on?
+14. **Home page role:** the map says home "stays the national-facing pillar", but the live home is Victoria-first. Keep it as is (the expansion only adds links), or rewrite it as a national pillar now?
+15. **Shepparton:** after prompt 22's verification, build with the program, build without it, or keep it gated.
+16. **Whittlesea program source:** does homeenergyprogram.org.au (funded by the City of Whittlesea) count as an official source for the "up to $575" assessment value?
+17. **Induction already installed:** the checker shows POSSIBLE with the retrospective note. Is that acceptable, or should it be LIKELY_NOT until a provider says otherwise?
+18. **Insulation amounts:** Energy Victoria's examples are metro (mild) vs regional (cold), but postcodes like Geelong are Regional + Mild. The site shows both and says the provider confirms. Should Venture Architect ask Energy Victoria which column decides?
+19. **Solstice towns:** the map gives postcodes for only 2 of the 10 towns, and no councils. Add the rest through the map (with sources), or keep the page to the 2?
+
 ---
 
 ## 15. Sources (all checked 13 Nov 2026)
@@ -1056,7 +1282,7 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 - Energy Victoria — Heating and cooling discounts (page updated 29 Oct 2026): https://www.energy.vic.gov.au/victorian-energy-upgrades/products/heating-and-cooling-discounts
 - Energy Victoria — Hot water system discounts (page updated 26 Oct 2026): https://www.energy.vic.gov.au/victorian-energy-upgrades/products/hot-water-system-discounts
 - Energy Victoria — About VEU (retrospective discounts; VEET scheme consumer factsheet link): https://www.energy.vic.gov.au/victorian-energy-upgrades/about
-- Energy Victoria — Electrification and efficiency standards (page updated 9 Oct 2026): https://www.energy.vic.gov.au/households/electric-and-efficiency-standards-for-buildings
+- Energy Victoria — Electrification and efficiency standards (page updated 9 Oct 2026): https://www.energy.vic.gov.au/households/save-with-all-electric-home/electric-and-efficiency-standards-for-buildings
 - Vic Planning — Gas Substitution Roadmap: https://www.planning.vic.gov.au/guides-and-resources/strategies-and-initiatives/victorias-gas-substitution-roadmap
 - Victoria Government Gazette S654 (2025), Building and Plumbing Amendment Regulations 2025 notice: https://www.gazette.vic.gov.au/gazette/Gazettes2025/GG2025S654.pdf
 - ESC — Meeting your obligations under the VEU code of conduct: https://www.esc.vic.gov.au/victorian-energy-upgrades/participating-veu-program/meeting-your-obligations-under-veu-code-conduct
@@ -1071,4 +1297,15 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 - Microsoft Exchange Team — SMTP AUTH Basic deprecation timeline: https://techcommunity.microsoft.com/blog/exchange/updated-exchange-online-smtp-auth-basic-authentication-deprecation-timeline/4489835
 - Astro — Upgrade to v6 (content layer): https://docs.astro.build/en/guides/upgrade-to/v6/
 - llms.txt convention: https://llmstxt.org/
+- **Expansion sources (13 Nov 2026):** the full source index (61 keys, with page dates) is in `url-map.md`, "Source index". The ones that changed this design:
+  - VEU Specifications v25.0 (PDF): https://www.energy.vic.gov.au/__data/assets/pdf_file/0041/795488/Victorian-Energy-Upgrades-Specifications-2018-Version-25.pdf
+  - Energy Victoria, industry specifications: https://www.energy.vic.gov.au/victorian-energy-upgrades/installers/industry-specifications
+  - SR 140/2025 reg 6 (new reg 45E), AustLII: https://classic.austlii.edu.au/au/legis/vic/num_reg/bapar2025n140o2025463/s6.html
+  - Building and Plumbing Amendment Regulations 2025, legislation.vic.gov.au: https://www.legislation.vic.gov.au/as-made/statutory-rules/building-and-plumbing-amendment-regulations-2025
+  - Energy Victoria, insulation / induction / weather sealing / glazing: https://www.energy.vic.gov.au/victorian-energy-upgrades/products/insulation-discounts · …/induction-cooktop-discounts · …/weather-sealing-discounts · …/window-glazing-discounts
+  - Solar Victoria, hot water rebate and income cap: https://www.solar.vic.gov.au/hot-water-rebate · https://www.solar.vic.gov.au/solar-homes-program-continuing-provide-targeted-assistance
+  - Solar Victoria, PV moves into VEU: https://www.solar.vic.gov.au/solar-support-continue-through-victorian-energy-upgrades-program
+  - Energy Victoria, VEU work program: https://www.energy.vic.gov.au/victorian-energy-upgrades/installers/industry-market-update-work-program
+  - SEC, Easy Electric SEC: https://www.secvictoria.com.au/news/going-electric-at-home-is-now-easy-as-with-sec
+  - Do not use (stale): https://www.energy.vic.gov.au/households/latest-discounts-and-rebates
 - Strategy (Venture Architect's Page): https://cursor.com/canvas/store-7e57cafa-b521-4eb1-917b-11211b735b0d/25c64cd3-857a-494b-94ce-bb3da339eac2

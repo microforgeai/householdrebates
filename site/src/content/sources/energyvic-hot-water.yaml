@@ -1,8 +1,12 @@
-title: "Hot water system discounts — Victorian Energy Upgrades"
-publisher: "Energy Victoria (DEECA)"
-url: "https://www.energy.vic.gov.au/victorian-energy-upgrades/products/hot-water-system-discounts"
+title: Hot water system discounts — Victorian Energy Upgrades
+publisher: Energy Victoria (DEECA)
+url: https://www.energy.vic.gov.au/victorian-energy-upgrades/products/hot-water-system-discounts
 official: true
 state: vic
 checkedOn: 2026-11-13
 pageLastUpdated: 2026-10-26
-notes: "Official VEU hot water replacement discounts (electric to heat pump, gas to heat pump), minimum customer contribution, and Solar Homes combination figures."
+notes: Official VEU hot water replacement discounts (electric to heat pump, gas
+  to heat pump), minimum customer contribution, and Solar Homes combination
+  figures.
+mapKey: EVHW
+kind: department

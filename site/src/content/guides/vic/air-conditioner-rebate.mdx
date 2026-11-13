@@ -11,9 +11,10 @@ updatedOn: 2026-11-13
 checkedOn: 2026-11-13
 sources:
   - energyvic-heating-cooling
-  - energyvic-about
+  - energyvic-about-veu
   - energyvic-installers
-  - energyvic-electrification-standards
+  - energyvic-electrification
+  - vic-veu-spec-v25
 figures:
   - vic-veu-rcac-room-gas
   - vic-veu-rcac-ducted-gas-22kw
@@ -31,8 +32,15 @@ figures:
   - vic-veu-rcac-ducted-no-decomm
   - vic-running-room-gas-to-rcac
   - vic-running-ducted-gas-to-rcac
+  - vic-veu-copay-ducted
+  - vic-veu-copay-ducted-until-sep-2026
+  - vic-veu-copay-multisplit-10kw-plus
+  - vic-veu-copay-multisplit-under-10kw
+  - vic-veu-copay-nonducted-10kw-plus
+  - vic-veu-copay-split-under-10kw
 faq:
   - why-rcac-discounts-vary
+  - minimum-copayment-ducted
   - retrospective-discounts
   - renters-and-landlords
 leadForm: rcac
@@ -60,6 +68,24 @@ You will often see marketing advertisements quote <Money id="vic-veu-rcac-ducted
 ## Household ducted reverse-cycle discount scenarios
 
 <FigureTable group="vic-veu-rcac-ducted-household" captionPrefix="Ducted reverse-cycle discounts by capacity and existing heater" />
+
+## The minimum you pay (from 30 September 2026)
+
+Under VEU Specifications version 25.0, Part 6 (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />), every household reverse-cycle air conditioner upgrade carries a mandatory minimum customer co-payment per installed product from **30 September 2026**:
+
+<FigureTable
+  group="vic-veu-copayments"
+  rows={[
+    'vic-veu-copay-ducted',
+    'vic-veu-copay-multisplit-10kw-plus',
+    'vic-veu-copay-multisplit-under-10kw',
+    'vic-veu-copay-nonducted-10kw-plus',
+    'vic-veu-copay-split-under-10kw',
+  ]}
+  captionPrefix="Minimum customer co-payments for household heating and cooling"
+/>
+
+For ducted systems this went up from <Money id="vic-veu-copay-ducted-until-sep-2026" />. The VEU discount comes off the price in your quote, but you still pay at least this minimum amount yourself—so any advertisement or cold call offering a "free" or near-free ducted air conditioner cannot be a legitimate VEU offer.
 
 ## Eligibility requirements for Victorian homes
 

@@ -6,12 +6,24 @@ import { formatFigureAmount } from '../lib/figures';
 
 export interface Props {
   group: string;
+  rows?: string[];
   captionPrefix?: string;
 }
 
-const { group, captionPrefix } = Astro.props;
+const { group, rows: rowFilter, captionPrefix } = Astro.props;
 const allFigures = await getCollection('figures');
-const rows = allFigures.filter((f) => f.data.group === group);
+let rows = allFigures.filter((f) => f.data.group === group);
+
+if (rowFilter && rowFilter.length > 0) {
+  const byId = new Map(rows.map((r) => [r.data.id, r]));
+  rows = rowFilter.map((id) => {
+    const found = byId.get(id);
+    if (!found) {
+      throw new Error(`<FigureTable group="${group}" /> row filter id "${id}" not found in group.`);
+    }
+    return found;
+  });
+}
 
 if (rows.length === 0) {
   throw new Error(`<FigureTable group="${group}" /> matched 0 figures.`);
@@ -27,6 +39,7 @@ if (!primarySource || !primarySource.data.official) {
 }
 
 const checkedDateStr = formatAuDate(rows[0].data.checkedOn);
+const isCopaymentGroup = group.includes('copay');
 ---
 
 <div class="figure-table-wrap" data-figure-group={group}>
@@ -35,23 +48,33 @@ const checkedDateStr = formatAuDate(rows[0].data.checkedOn);
       {captionPrefix ? `${captionPrefix} · ` : ''}
       Checked on {checkedDateStr} against{' '}
       <a href={primarySource.data.url} target="_blank" rel="noopener noreferrer">
-        {primarySource.data.title} ({primarySource.data.publisher})
+        {primarySource.data.title} ({primarySource.data.publisher}) ↗
       </a>
       . Indicative. The accredited provider confirms the final amount in your quote.
     </caption>
     <thead>
       <tr>
         <th scope="col">Upgrade scenario</th>
-        <th scope="col">Indicative VEU discount</th>
+        <th scope="col">{isCopaymentGroup ? 'Minimum customer co-payment' : 'Indicative VEU discount'}</th>
       </tr>
     </thead>
     <tbody>
-      {rows.map((row) => (
-        <tr data-figure-id={row.data.id}>
-          <td>{row.data.scenario}</td>
-          <td class="amount-cell">{formatFigureAmount(row.data)}</td>
-        </tr>
-      ))}
+      {rows.map((row) => {
+        const effFrom = row.data.effectiveFrom ? `From ${formatAuDate(row.data.effectiveFrom)}` : '';
+        const effTo = row.data.effectiveTo ? `Until ${formatAuDate(row.data.effectiveTo)}` : '';
+        const effLabel = [effFrom, effTo].filter(Boolean).join(' · ');
+        return (
+          <tr data-figure={row.data.id} data-figure-id={row.data.id}>
+            <td>
+              {row.data.scenario}
+              {effLabel && <span class="figure-table__effective"> ({effLabel})</span>}
+            </td>
+            <td class="amount-cell" data-figure={row.data.id}>
+              {formatFigureAmount(row.data)}
+            </td>
+          </tr>
+        );
+      })}
     </tbody>
   </table>
 </div>

@@ -12,19 +12,19 @@ checkedOn: 2026-11-13
 sources:
   - energyvic-heating-cooling
   - energyvic-hot-water
-  - energyvic-about
+  - energyvic-about-veu
   - energyvic-installers
-  - energyvic-electrification-standards
-  - vic-gas-substitution-roadmap
+  - energyvic-electrification
+  - vicplanning-gas-roadmap
   - vic-gazette-s654-2025
-  - esc-veu-code-of-conduct
-  - esc-lead-gen-factsheet
-  - esc-telemarketing-bans-faq
+  - esc-veu-code
+  - esc-leadgen-factsheet
+  - esc-bans-faq
   - esc-code-guideline
-  - esc-consumer-rights
-  - oaic-trading-personal-info
+  - esc-statement-of-rights
+  - oaic-trading
   - oaic-small-business
-  - acma-avoid-spam
+  - acma-spam
   - city-of-melbourne-climate
   - greater-geelong-sustainability
   - frankston-climate-action
@@ -45,4 +45,4 @@ related:
 1. **Primary sources only for figures:** Our build pipeline enforces that every figure in `figures/vic-veu.yaml` links to a source marked `official: true`.
 2. **Scenario accuracy:** Where an official table shows a range or an "up to" maximum across multiple system sizes, we reproduce the full scenario table so readers can see how room gas replacements differ from whole-home ducted replacements.
 3. **45-day staleness gate:** If any figure's `checkedOn` date is older than 45 days, our automated build check fails until we re-read the official Energy Victoria page and confirm the numbers.
-4. **Explicitly marking unverified items:** Where a detail comes from a secondary summary rather than primary legislation (for example, certain exemptions under Plumbing Regulations regulation 45E beyond those listed in Victoria Government Gazette S654), we label it as unverified on the page until we read the primary regulation directly.
+4. **Keeping unverified items off pages:** Where a claim comes only from a third-party summary or stale summary page rather than a primary official source, we log it internally and keep it off our published pages until verified against the primary source.

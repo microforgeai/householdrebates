@@ -28,7 +28,7 @@ const checkedStr = formatAuDate(fig.checkedOn);
 ---
 
 {variant === 'block' ? (
-  <span class="money-block" data-figure-id={fig.id}>
+  <span class="money-block" data-figure={fig.id} data-figure-id={fig.id}>
     <span class="money-block__amount">{formattedAmount}</span>
     <span class="money-block__meta">
       Checked on {checkedStr} ·{' '}
@@ -38,13 +38,14 @@ const checkedStr = formatAuDate(fig.checkedOn);
     </span>
   </span>
 ) : (
-  <span class="money-inline" data-figure-id={fig.id}>
+  <span class="money-inline" data-figure={fig.id} data-figure-id={fig.id}>
     {formattedAmount}
     <sup class="money-inline__sup">
       <a
         href={sourceEntry.data.url}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label={`Source: ${sourceEntry.data.publisher}, checked ${checkedStr}`}
         title={`Source: ${sourceEntry.data.title} (${sourceEntry.data.publisher}, checked ${checkedStr})`}
       >
         [source]

@@ -1,0 +1,10 @@
+title: Australian climate zone map (data.gov.au shapefile)
+publisher: Australian Building Codes Board (ABCB)
+url: https://data.gov.au/data/dataset/australian-climate-zone-map
+official: true
+state: national
+checkedOn: 2026-11-13
+mapKey: ABCB
+kind: national-agency
+attribution: Contains data from the Australian Building Codes Board climate zone
+  map, CC BY 4.0

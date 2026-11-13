@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
@@ -30,6 +31,10 @@ export interface Props {
 
 const { entry, pathname, breadcrumbs } = Astro.props;
 const d = entry.data;
+const sourceIds =
+  d.slug === 'sources'
+    ? (await getCollection('sources')).map((s) => s.id).sort()
+    : d.sources;
 ---
 
 <BaseLayout
@@ -51,7 +56,7 @@ const d = entry.data;
 
     <slot />
 
-    <SourceList ids={d.sources} />
+    <SourceList ids={sourceIds} />
     <RelatedLinks slugs={d.related} />
   </article>
 </BaseLayout>

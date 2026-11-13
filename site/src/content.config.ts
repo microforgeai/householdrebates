@@ -4,7 +4,37 @@ import { z } from 'astro/zod';
 
 export const State = z.enum(['vic', 'nsw', 'qld', 'sa', 'wa', 'tas', 'act', 'nt', 'national']);
 export const Section = z.enum(['rebates', 'areas', 'tools', 'trust', 'solar-battery']);
-export const Activity = z.enum(['rcac', 'hotwater', 'solar', 'battery']);
+export const Activity = z.enum([
+  'rcac',
+  'hotwater',
+  'solar',
+  'battery',
+  'insulation',
+  'induction',
+  'sealing',
+  'glazing',
+]);
+export const NavGroup = z.enum([
+  'hub',
+  'rebate-guides',
+  'upgrade-guides',
+  'question-pages',
+  'audience',
+  'tools',
+  'support-guides',
+  'areas',
+  'trust',
+]);
+export const SourceKind = z.enum([
+  'legislation',
+  'regulator',
+  'department',
+  'council',
+  'council-program',
+  'state-owned',
+  'network-business',
+  'national-agency',
+]);
 
 const sources = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/sources' }),
@@ -16,6 +46,9 @@ const sources = defineCollection({
     state: State,
     checkedOn: z.coerce.date(),
     pageLastUpdated: z.coerce.date().optional(),
+    mapKey: z.string().optional(),
+    kind: SourceKind.optional(),
+    attribution: z.string().optional(),
     notes: z.string().optional(),
   }),
 });
@@ -31,19 +64,41 @@ const figures = defineCollection({
       activity: Activity,
       audience: z.enum(['household', 'business']),
       scenario: z.string(),
-      qualifier: z.enum(['up-to', 'range', 'exact', 'about']),
+      qualifier: z.enum([
+        'up-to',
+        'range',
+        'exact',
+        'about',
+        'about-range',
+        'minimum',
+        'more-than',
+        'almost',
+      ]),
+      unit: z.enum(['AUD', 'percent', 'count']).default('AUD'),
+      display: z.enum(['standard', 'cents', 'compact']).default('standard'),
       amountMin: z.number().optional(),
       amountMax: z.number(),
-      currency: z.literal('AUD'),
+      currency: z.literal('AUD').optional(),
+      gstIncluded: z.boolean().optional(),
+      effectiveFrom: z.coerce.date().optional(),
+      effectiveTo: z.coerce.date().optional(),
+      supersededBy: z.string().optional(),
       sourceId: reference('sources'),
       checkedOn: z.coerce.date(),
       conditions: z.array(z.string()).optional(),
+      groupNote: z.string().optional(),
     })
     .refine((d) => (d.amountMin !== undefined ? d.amountMin <= d.amountMax : true), {
       message: 'amountMin must be <= amountMax',
     })
-    .refine((d) => (d.qualifier === 'range' ? d.amountMin !== undefined : true), {
-      message: 'range qualifier requires amountMin',
+    .refine(
+      (d) => (d.qualifier === 'range' || d.qualifier === 'about-range' ? d.amountMin !== undefined : true),
+      {
+        message: 'range / about-range qualifier requires amountMin',
+      },
+    )
+    .refine((d) => (d.effectiveTo !== undefined ? Boolean(d.supersededBy) : true), {
+      message: 'effectiveTo requires supersededBy',
     }),
 });
 
@@ -53,6 +108,9 @@ const pageBase = z.object({
   state: State,
   section: Section,
   slug: z.string().regex(/^[a-z0-9-]+$/),
+  navGroup: NavGroup.optional(),
+  mapRow: z.number().int().optional(),
+  reviewBy: z.coerce.date().optional(),
   answer: z.string(),
   author: z.literal('Gurinder Singh'),
   publishedOn: z.coerce.date(),
@@ -80,26 +138,42 @@ const guides = defineCollection({
 
 const areas = defineCollection({
   loader: glob({ pattern: '**/*.mdx', base: './src/content/areas' }),
-  schema: pageBase.extend({
-    areaName: z.string(),
-    councils: z.array(z.string()).min(1),
-    postcodes: z.array(z.string().regex(/^3\d{3}$/)).min(1),
-    localFacts: z
-      .array(
-        z.object({
-          text: z.string(),
-          sourceId: reference('sources'),
-        }),
-      )
-      .min(4),
-    searchDemand: z
-      .object({
-        monthly: z.number(),
-        source: z.string(),
-        date: z.coerce.date(),
-      })
-      .optional(),
-  }),
+  schema: pageBase
+    .extend({
+      areaName: z.string(),
+      variant: z.enum(['standard', 'multi-town']).default('standard'),
+      towns: z.array(z.string()).optional(),
+      councils: z.array(z.string()).optional(),
+      postcodes: z.array(z.string().regex(/^3\d{3}$/)).min(1),
+      veuPostcodeTable: z.boolean().default(true),
+      nccZone: z
+        .object({
+          zone: z.number().int(),
+          places: z.array(z.string()).min(1),
+        })
+        .optional(),
+      localFacts: z
+        .array(
+          z.object({
+            text: z.string(),
+            sourceId: reference('sources'),
+          }),
+        )
+        .min(4),
+      searchDemand: z
+        .object({
+          monthly: z.number(),
+          source: z.string(),
+          date: z.coerce.date(),
+        })
+        .optional(),
+    })
+    .refine(
+      (d) => (d.variant === 'multi-town' ? (d.towns?.length ?? 0) >= 2 : (d.councils?.length ?? 0) >= 1),
+      {
+        message: 'standard areas require councils (>=1); multi-town areas require towns (>=2)',
+      },
+    ),
 });
 
 const pages = defineCollection({

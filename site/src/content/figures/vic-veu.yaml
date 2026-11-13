@@ -275,6 +275,8 @@
   currency: AUD
   sourceId: energyvic-hot-water
   checkedOn: 2026-11-13
+  conditions:
+    - "Activities 1 and 3"
 
 - id: vic-running-room-gas-to-rcac
   group: vic-veu-running-savings
@@ -313,4 +315,246 @@
   amountMax: 400
   currency: AUD
   sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-ducted
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Any ducted reverse-cycle air conditioner, per installed product (activities 6A–6C)"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 3000
+  currency: AUD
+  gstIncluded: true
+  effectiveFrom: 2026-09-30
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-ducted-until-sep-2026
+  group: vic-veu-copayments-history
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Ducted reverse-cycle, before 30 Sep 2026"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 1000
+  currency: AUD
+  gstIncluded: true
+  effectiveTo: 2026-09-29
+  supersededBy: vic-veu-copay-ducted
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-multisplit-10kw-plus
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Multi-split, total rated cooling capacity 10 kW or more"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 3000
+  currency: AUD
+  gstIncluded: true
+  effectiveFrom: 2026-09-30
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-multisplit-under-10kw
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Multi-split, total rated cooling capacity below 10 kW"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 1000
+  currency: AUD
+  gstIncluded: true
+  effectiveFrom: 2026-09-30
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-nonducted-10kw-plus
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Other non-ducted system, 10 kW or more"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 1000
+  currency: AUD
+  gstIncluded: true
+  effectiveFrom: 2026-09-30
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-split-under-10kw
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Other non-ducted (single split) system, below 10 kW"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 200
+  currency: AUD
+  gstIncluded: true
+  effectiveFrom: 2026-09-30
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-insulation
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Ceiling insulation (activity 48)"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 200
+  currency: AUD
+  gstIncluded: true
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-copay-induction
+  group: vic-veu-copayments
+  state: vic
+  program: VEU
+  activity: induction
+  audience: household
+  scenario: "Induction cooktop, per product"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 200
+  currency: AUD
+  gstIncluded: true
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-13
+
+- id: vic-veu-insulation-metro
+  group: vic-veu-insulation-household
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Average 150 m² house, metro Melbourne (mild climate zone)"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 1500
+  currency: AUD
+  sourceId: energyvic-insulation
+  checkedOn: 2026-11-13
+
+- id: vic-veu-insulation-regional
+  group: vic-veu-insulation-household
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Average 150 m² house, regional Victoria (cold climate zone)"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 2100
+  currency: AUD
+  sourceId: energyvic-insulation
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-hw-rebate
+  group: vic-solar-homes-hotwater
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Solar Homes hot water rebate"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 1000
+  currency: AUD
+  sourceId: solarvic-hot-water-rebate
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-hw-rebate-local
+  group: vic-solar-homes-hotwater
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Solar Homes hot water rebate, eligible locally made product"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 1400
+  currency: AUD
+  sourceId: solarvic-hot-water-rebate
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-hw-share
+  group: vic-solar-homes-hotwater
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Share of the product price the rebate covers"
+  qualifier: exact
+  unit: percent
+  amountMax: 50
+  sourceId: solarvic-hot-water-rebate
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-income-cap
+  group: vic-solar-homes-eligibility
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Combined household taxable income cap"
+  qualifier: exact
+  unit: AUD
+  amountMax: 150000
+  currency: AUD
+  effectiveFrom: 2026-07-01
+  sourceId: solarvic-income-cap-news
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-income-cap-until-jun-2026
+  group: vic-solar-homes-eligibility-history
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Income cap before 1 Jul 2026"
+  qualifier: exact
+  unit: AUD
+  amountMax: 210000
+  currency: AUD
+  effectiveTo: 2026-06-30
+  supersededBy: vic-solar-homes-income-cap
+  sourceId: solarvic-income-cap-news
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-property-cap
+  group: vic-solar-homes-eligibility
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Property value cap"
+  qualifier: exact
+  unit: AUD
+  display: compact
+  amountMax: 3000000
+  currency: AUD
+  sourceId: solarvic-hot-water-rebate
   checkedOn: 2026-11-13

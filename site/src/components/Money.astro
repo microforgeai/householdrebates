@@ -7,9 +7,10 @@ import { formatFigureAmount } from '../lib/figures';
 export interface Props {
   id: string;
   variant?: 'inline' | 'block';
+  label?: string;
 }
 
-const { id, variant = 'inline' } = Astro.props;
+const { id, variant = 'inline', label } = Astro.props;
 const entry = await getEntry('figures', id);
 if (!entry) {
   throw new Error(`<Money id="${id}" /> references a figure ID that does not exist in figures collection.`);
@@ -23,13 +24,32 @@ if (!sourceEntry || !sourceEntry.data.official) {
   throw new Error(`Figure "${fig.id}" must reference an official source.`);
 }
 
+const isEstimate = fig.basis === 'estimate';
+if (isEstimate && variant === 'block' && (!label || !/\bestimate\b/i.test(label))) {
+  throw new Error(
+    `Estimate figure "${fig.id}" used with variant="block" must provide a label containing "estimate".`,
+  );
+}
+
 const formattedAmount = formatFigureAmount(fig);
 const checkedStr = formatAuDate(fig.checkedOn);
 ---
 
 {variant === 'block' ? (
-  <span class="money-block" data-figure={fig.id} data-figure-id={fig.id}>
+  <span
+    class="money-block"
+    data-figure={fig.id}
+    data-figure-id={fig.id}
+    data-figure-basis={fig.basis ?? 'official'}
+    data-money-label={label || undefined}
+  >
+    {label && <span class="money-block__label">{label}</span>}
     <span class="money-block__amount">{formattedAmount}</span>
+    {isEstimate && (
+      <span class="money-block__estimate-note">
+        Our calculation from VEU Specifications v25.0, Part 48. The accredited provider confirms the amount.
+      </span>
+    )}
     <span class="money-block__meta">
       Checked on {checkedStr} ·{' '}
       <a href={sourceEntry.data.url} target="_blank" rel="noopener noreferrer">
@@ -38,7 +58,12 @@ const checkedStr = formatAuDate(fig.checkedOn);
     </span>
   </span>
 ) : (
-  <span class="money-inline" data-figure={fig.id} data-figure-id={fig.id}>
+  <span
+    class="money-inline"
+    data-figure={fig.id}
+    data-figure-id={fig.id}
+    data-figure-basis={fig.basis ?? 'official'}
+  >
     {formattedAmount}
     <sup class="money-inline__sup">
       <a

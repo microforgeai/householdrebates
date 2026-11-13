@@ -263,6 +263,7 @@ export const VIC_ELIGIBILITY_RULES = {
     ductedToSplits: [
       'vic-veu-copay-multisplit-10kw-plus',
       'vic-veu-copay-multisplit-under-10kw',
+      'vic-veu-copay-nonducted-10kw-plus',
       'vic-veu-copay-split-under-10kw',
     ],
     roomSplit: ['vic-veu-copay-split-under-10kw', 'vic-veu-copay-nonducted-10kw-plus'],

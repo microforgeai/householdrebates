@@ -44,7 +44,7 @@ const enabledRowNums = parseRowRange(rollout.enabledRows);
 const gatedOk = new Set(rollout.gatedApproved ?? []);
 const enabledUrls = new Set(
   urlMap
-    .filter((r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row)))
+    .filter((r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)))
     .map((r) => r.url),
 );
 

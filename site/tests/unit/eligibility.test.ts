@@ -12,7 +12,7 @@ import { VIC_ELIGIBILITY_RULES } from '../../src/data/eligibility/vic-rules';
 import { ELIGIBILITY_NOTES } from '../../src/data/eligibility/notes';
 import { RESULT_LINKS } from '../../src/data/eligibility/result-links';
 import type { FigureData } from '../../src/lib/figures';
-import postcodesJson from '../../src/data/vic-veu-postcodes.json';
+import postcodesJson from '../../src/data/postcodes.json';
 
 const siteRoot = path.resolve(__dirname, '../..');
 const figuresYaml = fs.readFileSync(

@@ -1,0 +1,11 @@
+question: Is Greater Shepparton classified as regional and cold for VEU ceiling
+  insulation discounts?
+answer: Yes. In VEU Specifications version 25 Location Variable List (Table A),
+  all 13 Greater Shepparton postcodes are classified as Regional with a Cold
+  climatic region and heat pump zone 4, matching Energy Victoria's regional cold
+  ceiling insulation scenario. See the ceiling insulation section on this page
+  for indicative figures.
+pages:
+  - shepparton
+state: vic
+checkedOn: 2026-11-14

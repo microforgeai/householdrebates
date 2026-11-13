@@ -1,0 +1,112 @@
+{
+  "checkedOn": "2026-11-14",
+  "programs": [
+    {
+      "id": "hume-home-energy-upgrades",
+      "name": "Hume Home Energy Upgrades",
+      "operator": "Hume City Council / Yarra Energy Foundation",
+      "councils": ["Hume"],
+      "status": "paused",
+      "statusNote": "Registrations are paused after delivery partner Yarra Energy Foundation entered voluntary administration (ASIC notice 10 Nov 2026). Only insulation and draught-proofing registrations lodged before 19 Oct 2026 continue.",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "hume-energy-upgrades"
+    },
+    {
+      "id": "darebin-energy-upgrades",
+      "name": "Darebin Energy Upgrades",
+      "operator": "City of Darebin / Yarra Energy Foundation",
+      "councils": ["Darebin"],
+      "status": "paused",
+      "statusNote": "Program registrations are paused after delivery partner Yarra Energy Foundation entered voluntary administration (ASIC notice 10 Nov 2026).",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "darebin-energy-upgrades"
+    },
+    {
+      "id": "macedon-ranges-heat-pump-bulk-buy",
+      "name": "Macedon Ranges Heat Pump Hot Water Bulk Buy",
+      "operator": "Transition to Zero (t2zero)",
+      "councils": ["Macedon Ranges"],
+      "status": "closed",
+      "statusNote": "Closed to new enquiries on 31 Oct 2026; installations for existing bookings end 30 Nov 2026.",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "t2zero-macedon-bulk-buy"
+    },
+    {
+      "id": "council-home-energy-program",
+      "name": "Council Home Energy Program",
+      "operator": "EnviroGroup (12 participating councils)",
+      "councils": [
+        "Boroondara",
+        "Brimbank",
+        "Glen Eira",
+        "Kingston",
+        "Knox",
+        "Maroondah",
+        "Merri-bek",
+        "Monash",
+        "Stonnington",
+        "Whittlesea",
+        "Yarra",
+        "Yarra Ranges"
+      ],
+      "status": "open",
+      "statusNote": "Participating-council advisory and vetted-supplier program across 12 metropolitan Melbourne councils.",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "council-home-energy-program"
+    },
+    {
+      "id": "whittlesea-home-energy-program",
+      "name": "City of Whittlesea Home Energy Program",
+      "operator": "City of Whittlesea / EnviroGroup",
+      "councils": ["Whittlesea"],
+      "status": "open",
+      "statusNote": "Council-supported home energy advice and upgrade subsidies run until June 2027 or until funding is exhausted.",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "whittlesea-home-energy-program"
+    },
+    {
+      "id": "casey-diy-draught-proofing-rebate",
+      "name": "City of Casey DIY Draught-Proofing Rebate",
+      "operator": "City of Casey",
+      "councils": ["Casey"],
+      "status": "open",
+      "statusNote": "Council rebate for eligible DIY draught-proofing products purchased and installed by City of Casey residents (one claim per household).",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "casey-home-energy-rebates"
+    },
+    {
+      "id": "geelong-electric-homes-2026-27",
+      "name": "Electric Homes Program 2026–27",
+      "operator": "Geelong Sustainability",
+      "councils": [
+        "Greater Geelong",
+        "Surf Coast",
+        "Golden Plains",
+        "Colac Otway",
+        "Queenscliffe"
+      ],
+      "status": "open",
+      "statusNote": "Community-council bulk-buy and advice program across Greater Geelong, Surf Coast, Golden Plains, Colac Otway and Queenscliffe (expressions of interest opened 5 Oct 2026).",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "geelong-electric-homes-launch"
+    },
+    {
+      "id": "gmca-solar-savers",
+      "name": "Goulburn Murray Solar Savers",
+      "operator": "Goulburn Murray Climate Alliance (GMCA)",
+      "councils": [
+        "Greater Shepparton",
+        "Mitchell",
+        "Murrindindi",
+        "Wangaratta",
+        "Strathbogie",
+        "Alpine",
+        "Indigo"
+      ],
+      "status": "open",
+      "statusNote": "Vetted-provider program for solar, batteries, heat pump hot water, split systems, insulation, draught proofing and home energy assessments across seven GMCA councils (Feb 2026 notice).",
+      "statusCheckedOn": "2026-11-14",
+      "sourceId": "gmca-solar-savers"
+    }
+  ]
+}

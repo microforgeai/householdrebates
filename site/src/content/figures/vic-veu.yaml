@@ -326,12 +326,13 @@
   scenario: "Any ducted reverse-cycle air conditioner, per installed product (activities 6A–6C)"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 3000
   currency: AUD
   gstIncluded: true
   effectiveFrom: 2026-09-30
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-ducted-until-sep-2026
   group: vic-veu-copayments-history
@@ -342,13 +343,14 @@
   scenario: "Ducted reverse-cycle, before 30 Sep 2026"
   qualifier: minimum
   unit: AUD
+  kind: threshold
   amountMax: 1000
   currency: AUD
   gstIncluded: true
   effectiveTo: 2026-09-29
   supersededBy: vic-veu-copay-ducted
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-multisplit-10kw-plus
   group: vic-veu-copayments
@@ -359,12 +361,13 @@
   scenario: "Multi-split, total rated cooling capacity 10 kW or more"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 3000
   currency: AUD
   gstIncluded: true
   effectiveFrom: 2026-09-30
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-multisplit-under-10kw
   group: vic-veu-copayments
@@ -375,12 +378,13 @@
   scenario: "Multi-split, total rated cooling capacity below 10 kW"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 1000
   currency: AUD
   gstIncluded: true
   effectiveFrom: 2026-09-30
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-nonducted-10kw-plus
   group: vic-veu-copayments
@@ -388,15 +392,16 @@
   program: VEU
   activity: rcac
   audience: household
-  scenario: "Other non-ducted system, 10 kW or more"
+  scenario: "Single non-ducted system, 10 kW or more"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 1000
   currency: AUD
   gstIncluded: true
   effectiveFrom: 2026-09-30
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-split-under-10kw
   group: vic-veu-copayments
@@ -404,15 +409,16 @@
   program: VEU
   activity: rcac
   audience: household
-  scenario: "Other non-ducted (single split) system, below 10 kW"
+  scenario: "Single non-ducted split system, below 10 kW"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 200
   currency: AUD
   gstIncluded: true
   effectiveFrom: 2026-09-30
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-insulation
   group: vic-veu-copayments
@@ -423,11 +429,12 @@
   scenario: "Ceiling insulation (activity 48)"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 200
   currency: AUD
   gstIncluded: true
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-copay-induction
   group: vic-veu-copayments
@@ -438,11 +445,12 @@
   scenario: "Induction cooktop, per product"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 200
   currency: AUD
   gstIncluded: true
   sourceId: vic-veu-spec-v25
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-insulation-metro
   group: vic-veu-insulation-household
@@ -596,10 +604,11 @@
   scenario: "Example: apartment, products with a 2-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 70
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-sealing-apartment-5yr
   group: vic-veu-weather-sealing-household
@@ -610,10 +619,11 @@
   scenario: "Example: apartment, 5-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 140
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-sealing-townhouse-2yr
   group: vic-veu-weather-sealing-household
@@ -624,10 +634,11 @@
   scenario: "Example: townhouse, 2-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 280
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-sealing-townhouse-5yr
   group: vic-veu-weather-sealing-household
@@ -638,10 +649,11 @@
   scenario: "Example: townhouse, 5-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 560
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-sealing-house-2yr
   group: vic-veu-weather-sealing-household
@@ -652,10 +664,11 @@
   scenario: "Example: house, 2-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 350
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-veu-sealing-house-5yr
   group: vic-veu-weather-sealing-household
@@ -666,10 +679,11 @@
   scenario: "Example: house, 5-year warranty"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 700
   currency: AUD
   sourceId: energyvic-weather-sealing
-  checkedOn: 2026-11-13
+  checkedOn: 2026-11-14
 
 - id: vic-gas-supply-saving
   group: vic-electrify-savings
@@ -1045,3 +1059,91 @@
   currency: AUD
   sourceId: solarvic-solstice
   checkedOn: 2026-11-13
+
+- id: vic-veu-insulation-est-regional-mild
+  group: vic-veu-insulation-estimates
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Ceiling insulation, 150 m², Regional + Mild postcode (e.g. Geelong, Latrobe Valley, Bacchus Marsh)"
+  qualifier: about
+  unit: AUD
+  basis: estimate
+  kind: discount
+  method: "GHG savings for the climate region (Mild 0.00576, Cold 0.00771, Hot 0.00546) × area × 25 × regional factor (Metropolitan 0.98, Regional 1.04), scaled to Energy Victoria's two published examples (metro mild up to $1,500, regional cold up to $2,100)."
+  basedOn:
+    - vic-veu-spec-v25
+    - energyvic-insulation
+  amountMax: 1590
+  currency: AUD
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-14
+
+- id: vic-veu-insulation-est-metro-cold
+  group: vic-veu-insulation-estimates
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Ceiling insulation, 150 m², Metropolitan + Cold postcode (e.g. New Gisborne 3438, Riddells Creek 3431, Dandenong Ranges)"
+  qualifier: about
+  unit: AUD
+  basis: estimate
+  kind: discount
+  method: "GHG savings for the climate region (Mild 0.00576, Cold 0.00771, Hot 0.00546) × area × 25 × regional factor (Metropolitan 0.98, Regional 1.04), scaled to Energy Victoria's two published examples (metro mild up to $1,500, regional cold up to $2,100)."
+  basedOn:
+    - vic-veu-spec-v25
+    - energyvic-insulation
+  amountMax: 2010
+  currency: AUD
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-14
+
+- id: vic-veu-insulation-est-regional-hot
+  group: vic-veu-insulation-estimates
+  state: vic
+  program: VEU
+  activity: insulation
+  audience: household
+  scenario: "Ceiling insulation, 150 m², Regional + Hot postcode (e.g. Mildura, Swan Hill)"
+  qualifier: about
+  unit: AUD
+  basis: estimate
+  kind: discount
+  method: "GHG savings for the climate region (Mild 0.00576, Cold 0.00771, Hot 0.00546) × area × 25 × regional factor (Metropolitan 0.98, Regional 1.04), scaled to Energy Victoria's two published examples (metro mild up to $1,500, regional cold up to $2,100)."
+  basedOn:
+    - vic-veu-spec-v25
+    - energyvic-insulation
+  amountMax: 1510
+  currency: AUD
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-14
+
+- id: vic-veu-providers-hume-hw
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: household
+  scenario: "Accredited providers listed for hot water, Hume region"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 27
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-14
+
+- id: vic-veu-providers-hume-hc
+  group: vic-veu-provider-counts
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Accredited providers listed for heating and cooling, Hume region"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 60
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-14

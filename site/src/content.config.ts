@@ -76,6 +76,12 @@ const figures = defineCollection({
       ]),
       unit: z.enum(['AUD', 'percent', 'count']).default('AUD'),
       display: z.enum(['standard', 'cents', 'compact']).default('standard'),
+      basis: z.enum(['official', 'estimate']).default('official'),
+      kind: z.enum(['discount', 'payment', 'threshold', 'rate', 'saving', 'count']).optional(),
+      method: z.string().optional(),
+      basedOn: z
+        .union([reference('sources'), z.array(reference('sources')).min(1)])
+        .optional(),
       amountMin: z.number().optional(),
       amountMax: z.number(),
       currency: z.literal('AUD').optional(),
@@ -99,7 +105,13 @@ const figures = defineCollection({
     )
     .refine((d) => (d.effectiveTo !== undefined ? Boolean(d.supersededBy) : true), {
       message: 'effectiveTo requires supersededBy',
-    }),
+    })
+    .refine(
+      (d) => (d.basis === 'estimate' ? Boolean(d.method && d.basedOn && d.kind === 'discount') : true),
+      {
+        message: 'estimate figure requires method, basedOn, and kind: "discount"',
+      },
+    ),
 });
 
 const pageBase = z.object({
@@ -161,6 +173,18 @@ const areas = defineCollection({
           }),
         )
         .min(4),
+      councilPrograms: z
+        .array(
+          z.object({
+            name: z.string(),
+            operator: z.string().optional(),
+            status: z.enum(['open', 'paused', 'closing', 'closed', 'unverified']),
+            statusNote: z.string(),
+            statusCheckedOn: z.coerce.date(),
+            sourceId: reference('sources'),
+          }),
+        )
+        .default([]),
       searchDemand: z
         .object({
           monthly: z.number(),

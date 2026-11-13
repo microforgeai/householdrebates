@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import sizeGuideData from '../../src/data/tools/hw-size-guide.json';
-import postcodesJson from '../../src/data/vic-veu-postcodes.json';
+import postcodesJson from '../../src/data/postcodes.json';
 import {
   RUNNING_COST_SCENARIOS,
   resolveRunningCostScenario,

@@ -3,7 +3,7 @@ import { getEntry } from 'astro:content';
 import { SITE } from '../data/site';
 import { assertFigureNotStale, formatAuDate } from '../lib/dates';
 import sizeGuideData from '../data/tools/hw-size-guide.json';
-import postcodesJson from '../data/vic-veu-postcodes.json';
+import postcodesJson from '../data/postcodes.json';
 
 assertFigureNotStale('hw-size-guide.json', sizeGuideData.checkedOn, SITE.flags.maxFigureAgeDays);
 const factsheetSource = await getEntry('sources', sizeGuideData.sourceId);

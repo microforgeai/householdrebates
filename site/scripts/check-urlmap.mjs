@@ -30,7 +30,9 @@ const urlMap = JSON.parse(fs.readFileSync(path.join(siteRoot, 'src/data/url-map.
 const allMapUrls = new Set(urlMap.map((r) => r.url));
 const enabledRowNums = parseRowRange(rollout.enabledRows);
 const gatedOk = new Set(rollout.gatedApproved ?? []);
-const expectedRows = urlMap.filter((r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row)));
+const expectedRows = urlMap.filter(
+  (r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)),
+);
 const expectedUrls = new Set(expectedRows.map((r) => r.url));
 const rowByUrl = new Map(urlMap.map((r) => [r.url, r]));
 
@@ -63,6 +65,13 @@ for (const mdxFile of walkFiles(contentDir, '.mdx')) {
   }
   if (!allMapUrls.has(url)) {
     throw new Error(`extra URL not in map: ${url} (${path.relative(siteRoot, mdxFile)})`);
+  }
+  const mapRow = rowByUrl.get(url);
+  if (mapRow?.gated) {
+    if (enabledRowNums.has(mapRow.row) && !(gatedOk.has(mapRow.row) || gatedOk.has(url))) {
+      throw new Error(`gated page not approved: ${url} (${path.relative(siteRoot, mdxFile)})`);
+    }
+    continue;
   }
   if (!expectedUrls.has(url) && !fm.noindex) {
     throw new Error(`page not enabled in rollout.json: ${url} (${path.relative(siteRoot, mdxFile)})`);

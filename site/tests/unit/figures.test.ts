@@ -48,6 +48,15 @@ describe('figures formatting and validation helpers', () => {
     expect(
       formatFigureAmount({ qualifier: 'almost', amountMax: 60, unit: 'percent' }),
     ).toBe('almost 60%');
+    expect(
+      formatFigureAmount({ qualifier: 'about', amountMax: 1590, basis: 'estimate' }),
+    ).toBe('about $1,590 (our estimate)');
+    expect(
+      formatFigureAmount({ qualifier: 'about', amountMax: 2010, basis: 'estimate' }),
+    ).toBe('about $2,010 (our estimate)');
+    expect(
+      formatFigureAmount({ qualifier: 'about', amountMax: 1510, basis: 'estimate' }),
+    ).toBe('about $1,510 (our estimate)');
   });
 
   it('detects stale and historical figures', () => {

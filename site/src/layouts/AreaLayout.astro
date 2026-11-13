@@ -14,7 +14,7 @@ import { formatAuDate } from '../lib/dates';
 import { entryToPathname } from '../lib/urls';
 import { getEnabledUrls } from '../lib/rollout';
 import type { BreadcrumbItem } from '../lib/schema';
-import postcodesJson from '../data/vic-veu-postcodes.json';
+import postcodesJson from '../data/postcodes.json';
 
 export interface Props {
   entry: {
@@ -41,6 +41,14 @@ export interface Props {
       veuPostcodeTable?: boolean;
       nccZone?: { zone: number; places: string[] };
       localFacts: { text: string; sourceId: string | { id: string } }[];
+      councilPrograms?: {
+        name: string;
+        operator?: string;
+        status: 'open' | 'paused' | 'closing' | 'closed' | 'unverified';
+        statusNote: string;
+        statusCheckedOn: Date;
+        sourceId: string | { id: string };
+      }[];
       ruleStatus?: 'election-watch';
     };
   };
@@ -74,6 +82,34 @@ const resolvedFacts = await Promise.all(
   }),
 );
 
+const STATUS_LABELS: Record<'open' | 'paused' | 'closing' | 'closed', string> = {
+  open: 'Open',
+  paused: 'Paused',
+  closing: 'Closing soon',
+  closed: 'Closed',
+};
+
+const resolvedPrograms = await Promise.all(
+  (d.councilPrograms ?? [])
+    .filter((cp) => cp.status !== 'unverified')
+    .map(async (cp) => {
+      const sId = typeof cp.sourceId === 'string' ? cp.sourceId : cp.sourceId.id;
+      const s = await getEntry('sources', sId);
+      const status = cp.status as 'open' | 'paused' | 'closing' | 'closed';
+      return {
+        name: cp.name,
+        operator: cp.operator,
+        status,
+        statusLabel: STATUS_LABELS[status],
+        statusNote: cp.statusNote,
+        statusCheckedStr: formatAuDate(cp.statusCheckedOn),
+        statusCheckedIso: cp.statusCheckedOn.toISOString().slice(0, 10),
+        sourcePublisher: s?.data.publisher ?? sId,
+        sourceUrl: s?.data.url ?? '#',
+      };
+    }),
+);
+
 const postcodeRowsMap = postcodesJson.rows as Record<
   string,
   {
@@ -90,7 +126,7 @@ const postcodeTableRows = showPostcodeTable
       const row = postcodeRowsMap[pc];
       if (!row) {
         throw new Error(
-          `Area "${d.slug}" lists postcode "${pc}" which is missing from src/data/vic-veu-postcodes.json`,
+          `Area "${d.slug}" lists postcode "${pc}" which is missing from src/data/postcodes.json`,
         );
       }
       return { postcode: pc, ...row };
@@ -239,6 +275,34 @@ const contextSubLabel =
               Dataset ↗
             </a>
           </p>
+        </section>
+      )}
+
+      {resolvedPrograms.length > 0 && (
+        <section class="callout callout--info" aria-labelledby="council-programs-heading">
+          <strong class="callout__title" id="council-programs-heading">
+            Council and regional energy programs
+          </strong>
+          <ul style="margin-bottom: 0;">
+            {resolvedPrograms.map((prog) => (
+              <li
+                data-council-program={prog.name}
+                data-program-status={prog.status}
+                data-status-checked-on={prog.statusCheckedIso}
+                style="margin-bottom: 0.5rem;"
+              >
+                <strong>{prog.name}</strong>
+                {prog.operator ? ` (${prog.operator})` : ''} —{' '}
+                <strong>Status: {prog.statusLabel}.</strong> {prog.statusNote}{' '}
+                <span style="font-size: var(--text-xs); color: var(--text-secondary);">
+                  Status checked {prog.statusCheckedStr} ·{' '}
+                  <a href={prog.sourceUrl} target="_blank" rel="noopener noreferrer">
+                    {prog.sourcePublisher} ↗
+                  </a>
+                </span>
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

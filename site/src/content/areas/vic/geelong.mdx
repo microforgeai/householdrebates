@@ -1,6 +1,6 @@
 ---
 title: "Geelong Air Conditioner & Heat Pump Rebates (VEU)"
-description: "Victorian Energy Upgrades (VEU) discounts for reverse-cycle air conditioning and heat pump hot water across Geelong, Bellarine, and Surf Coast postcodes."
+description: "Victorian Energy Upgrades (VEU) discounts for reverse-cycle air conditioning, heat pump hot water, and insulation across Greater Geelong and the Bellarine."
 state: vic
 section: areas
 slug: geelong
@@ -10,12 +10,20 @@ areaName: "Geelong"
 councils:
   - "City of Greater Geelong"
 postcodes:
+  - "3212"
+  - "3213"
+  - "3214"
   - "3215"
   - "3216"
+  - "3217"
   - "3218"
+  - "3219"
   - "3220"
-  - "3221"
+  - "3222"
+  - "3223"
+  - "3224"
   - "3226"
+  - "3227"
 searchDemand:
   monthly: 390
   source: "Venture Architect / Super SEO keyword research"
@@ -29,20 +37,31 @@ localFacts:
     sourceId: energyvic-heating-cooling
   - text: "Semi-rural properties around Greater Geelong on bottled LPG are not subject to the 1 March 2027 mains gas hot water replacement mandate, while reticulated mains gas homes are."
     sourceId: vicplanning-gas-roadmap
-  - text: "In the VEU postcode table (VEU Specifications v25.0, Location Variable List), postcodes 3216, 3218 and 3220 are listed as Regional, with a Mild climatic region."
+  - text: "In VEU Specifications v25.0 Table A, all 14 Greater Geelong postcodes (3212–3227 excluding 3221 Surf Coast and 3225 Queenscliffe) are classified as Regional, Mild climatic region, and heat pump zone 4."
     sourceId: vic-veu-spec-v25
+  - text: "Geelong Sustainability's Electric Homes Program 2026–27 covers Greater Geelong, Surf Coast, Golden Plains, Colac Otway, and Queenscliffe (expressions of interest opened 5 October 2026)."
+    sourceId: geelong-electric-homes-launch
+councilPrograms:
+  - name: "Electric Homes Program 2026–27"
+    operator: "Geelong Sustainability"
+    status: open
+    statusNote: "Community-council bulk-buy and advice program across Greater Geelong, Surf Coast, Golden Plains, Colac Otway and Queenscliffe (expressions of interest opened 5 Oct 2026)."
+    statusCheckedOn: 2026-11-14
+    sourceId: geelong-electric-homes-launch
 answer: "Households in Greater Geelong can claim upfront Victorian Energy Upgrades (VEU) discounts when replacing older gas or electric heaters and hot water systems with approved reverse-cycle air conditioners or heat pumps. Detached Geelong homes replacing ducted gas heaters qualify for different VEU scenarios than single-room split upgrades. Always engage a VEU accredited provider (or an installer working with one) before any installation starts."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-13
-checkedOn: 2026-11-13
+updatedOn: 2026-11-14
+checkedOn: 2026-11-14
 sources:
   - greater-geelong-sustainability
+  - geelong-electric-homes-launch
   - bom-climate-victoria
   - energyvic-heating-cooling
   - energyvic-hot-water
   - vicplanning-gas-roadmap
   - vic-veu-spec-v25
+  - abs-asgs-allocation
   - energyvic-insulation
 figures:
   - vic-veu-rcac-room-gas
@@ -53,6 +72,7 @@ figures:
   - vic-veu-hw-min-contribution
   - vic-veu-insulation-metro
   - vic-veu-insulation-regional
+  - vic-veu-insulation-est-regional-mild
 faq:
   - why-rcac-discounts-vary
   - heat-pump-gas-vs-electric
@@ -90,4 +110,14 @@ If your property is on reticulated mains gas, remember that from **1 March 2027*
 
 ## Ceiling insulation discounts in Geelong
 
-Energy Victoria publishes two household ceiling insulation examples for an average 150 m² uninsulated or under-insulated home: <Money id="vic-veu-insulation-metro" /> in metro Melbourne (mild climate zone) and <Money id="vic-veu-insulation-regional" /> in regional Victoria (cold climate zone). Because postcodes 3216, 3218 and 3220 are listed in the VEU postcode table as Regional with a Mild climatic region, which example applies depends on how the program treats your postcode—the accredited provider confirms the amount in your quote. Read our full <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation rebate guide</a> for safety checks and eligibility rules.
+Greater Geelong's 14 council postcodes (`3212`–`3227`, excluding `3221` in Surf Coast and `3225` in Queenscliffe; <SourceLink id="abs-asgs-allocation" label="ABS ASGS 2021 postcode allocation" />) are all classified in VEU Specifications v25.0 Table A as **Regional** with a **Mild** climatic region (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />). Because Energy Victoria only publishes ceiling insulation examples for Metropolitan + Mild and Regional + Cold postcodes, neither published example fits Geelong directly.
+
+Applying the VEU Specifications v25.0 Part 48 calculation (Mild greenhouse gas savings coefficient `0.00576` × 150 m² × 25 × Regional factor `1.04`, scaled to Energy Victoria's published examples) gives an indicative discount of <Money id="vic-veu-insulation-est-regional-mild" /> for an uninsulated or under-insulated 150 m² Greater Geelong ceiling—**the accredited provider confirms** the exact discount in your quote after checking your ceiling area and existing R-value. Read our full <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation rebate guide</a> for safety checks and eligibility rules.
+
+<Callout type="info" title="Official examples for context">
+  Energy Victoria's two published household ceiling insulation examples for a 150 m² home are <Money id="vic-veu-insulation-metro" /> in metropolitan Melbourne (Mild climate region) and <Money id="vic-veu-insulation-regional" /> in regional Victoria (Cold climate region) (<SourceLink id="energyvic-insulation" label="Energy Victoria — Ceiling insulation discounts" />). Because Greater Geelong is Regional + Mild rather than Cold, the regional cold example does not apply directly to Geelong postcodes.
+</Callout>
+
+## Electric Homes Program 2026–27 across the Geelong region
+
+Alongside state-wide VEU discounts, Geelong Sustainability runs the **Electric Homes Program 2026–27** for households in Greater Geelong, Surf Coast, Golden Plains, Colac Otway, and Queenscliffe, with expressions of interest open from **5 October 2026** (<SourceLink id="geelong-electric-homes-launch" label="Geelong Sustainability — Electric Homes Program 2026–27" />). Check your property's VEU and Solar Homes options in the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a>.

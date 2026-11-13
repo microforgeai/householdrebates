@@ -1,11 +1,12 @@
 question: Are Dandenong Ranges and Healesville postcodes classed as Cold under VEU?
-answer: "Yarra Ranges spans multiple VEU classifications rather than a single
-  shire-wide zone: Dandenongs and Healesville postcodes (3770, 3775, 3777, 3786,
-  3787, 3788, 3795, and 3796) sit in the Cold climatic region, postcodes 3139,
-  3140, 3770, 3775, and 3777 sit in heat pump zone 5, and Warburton (3799) is
-  classified as Regional. Check the postcode table on this page for your exact
-  suburb."
+answer: "Yarra Ranges spans multiple VEU classifications across its 26 postcodes
+  rather than a single shire-wide zone: 15 hills and valley postcodes (3766,
+  3767, 3770, 3775, 3777, 3785–3789, 3792, 3793, 3795, 3796, and 3799) sit in
+  the Cold climatic region while 11 sit in Mild; seven postcodes (3139, 3140,
+  3158, 3160, 3770, 3775, and 3777) sit in heat pump zone 5; and Warburton
+  (3799) is classified as Regional. Check the postcode table on this page for
+  your exact suburb."
 pages:
   - yarra-ranges
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

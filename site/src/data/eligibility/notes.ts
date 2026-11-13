@@ -138,7 +138,7 @@ export const ELIGIBILITY_NOTES: Record<NoteId, NoteDefinition> = {
     sourceId: 'energyvic-retrospective',
   },
   'sealing-co-risk': {
-    text: "Homes with an open-flued or flueless gas heater, or an open-flued gas water heater inside, don't qualify, because sealing can raise the risk of carbon monoxide.",
+    text: "Homes with an open-flued gas space heater, an open-flued ducted heater in a cupboard, an indoor open-flued water heater, or a flueless space heater can't get the weather sealing discount (carbon monoxide risk). The accredited provider checks your appliances first.",
     sourceId: 'energyvic-weather-sealing',
   },
   'sealing-examples': {

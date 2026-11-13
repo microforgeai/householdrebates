@@ -7,10 +7,14 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, '..');
 
 const inputArg = process.argv[2] || 'data-src/veu-spec-v25.pdf';
-const pdfPath = path.resolve(process.cwd(), inputArg);
+const pdfPath = path.resolve(siteRoot, inputArg);
+const postcodesJsonPath = path.join(siteRoot, 'src/data/postcodes.json');
 
+if (!fs.existsSync(postcodesJsonPath)) {
+  throw new Error(`Missing ${postcodesJsonPath}. Run node scripts/build-postcodes.mjs first.`);
+}
 if (!fs.existsSync(pdfPath)) {
-  throw new Error(`SPEC25 PDF not found at ${pdfPath}. Download it into site/data-src/veu-spec-v25.pdf first.`);
+  throw new Error(`SPEC25 PDF not found at ${pdfPath}.`);
 }
 
 function extractRawText(filePath) {
@@ -51,7 +55,7 @@ if (!markerMatch || markerMatch.index === undefined) {
 const afterMarker = rawText.slice(markerMatch.index);
 const rowRegex = /^(3\d{3}) (Metropolitan|Regional) (Yes|No) (Mild|Cold|Hot) ([45])$/;
 
-const map = new Map();
+const pdfMap = new Map();
 let conflicts = 0;
 
 for (const rawLine of afterMarker.split(/\r?\n/)) {
@@ -66,37 +70,60 @@ for (const rawLine of afterMarker.split(/\r?\n/)) {
     hpZone: Number(hpZoneStr),
   };
   const serialized = JSON.stringify(entry);
-  if (map.has(postcode)) {
-    if (JSON.stringify(map.get(postcode)) !== serialized) {
+  if (pdfMap.has(postcode)) {
+    if (JSON.stringify(pdfMap.get(postcode)) !== serialized) {
       conflicts++;
     }
   } else {
-    map.set(postcode, entry);
+    pdfMap.set(postcode, entry);
   }
 }
 
 if (conflicts !== 0) {
-  throw new Error(`Postcode extraction failed: found ${conflicts} conflicting duplicate postcode rows.`);
+  throw new Error(`SPEC25 PDF parse failed: found ${conflicts} conflicting duplicate postcode rows.`);
 }
-if (map.size !== 719) {
-  throw new Error(`Postcode extraction failed: expected 719 unique postcodes, got ${map.size}.`);
+if (pdfMap.size !== 719) {
+  throw new Error(`SPEC25 PDF parse failed: expected 719 unique postcodes, got ${pdfMap.size}.`);
 }
 
-const sortedRows = Object.fromEntries(
-  [...map.entries()].sort(([a], [b]) => a.localeCompare(b)),
-);
+const postcodesData = JSON.parse(fs.readFileSync(postcodesJsonPath, 'utf8'));
+const csvRows = postcodesData.rows || {};
+const csvKeys = Object.keys(csvRows);
 
-const checkedOn = process.env.CHECKED_ON || '2026-11-13';
-const outputObj = {
-  source: 'vic-veu-spec-v25',
-  specVersion: '25.0',
-  checkedOn,
-  rows: sortedRows,
-};
+const mismatches = [];
 
-const outRel = 'src/data/vic-veu-postcodes.json';
-const outPath = path.join(siteRoot, outRel);
-fs.mkdirSync(path.dirname(outPath), { recursive: true });
-fs.writeFileSync(outPath, `${JSON.stringify(outputObj, null, 2)}\n`, 'utf8');
+if (csvKeys.length !== pdfMap.size) {
+  mismatches.push(`Row count mismatch: postcodes.json has ${csvKeys.length}, SPEC25 PDF has ${pdfMap.size}`);
+}
 
-console.log(`veu-postcodes: ${map.size} rows, ${conflicts} conflicts, written ${outRel}`);
+for (const [pc, pdfEntry] of pdfMap.entries()) {
+  const csvRow = csvRows[pc];
+  if (!csvRow) {
+    mismatches.push(`Postcode ${pc} is in SPEC25 PDF but missing from postcodes.json`);
+    continue;
+  }
+  if (
+    csvRow.area !== pdfEntry.area ||
+    csvRow.reticulatedGas !== pdfEntry.reticulatedGas ||
+    csvRow.climaticRegion !== pdfEntry.climaticRegion ||
+    csvRow.hpZone !== pdfEntry.hpZone
+  ) {
+    mismatches.push(
+      `Postcode ${pc} mismatch vs SPEC25 PDF: CSV=${JSON.stringify({
+        area: csvRow.area,
+        reticulatedGas: csvRow.reticulatedGas,
+        climaticRegion: csvRow.climaticRegion,
+        hpZone: csvRow.hpZone,
+      })} vs PDF=${JSON.stringify(pdfEntry)}`,
+    );
+  }
+}
+
+if (mismatches.length > 0) {
+  for (const m of mismatches) {
+    console.error(`STOP mismatch: ${m}`);
+  }
+  process.exit(1);
+}
+
+console.log(`postcodes: ${csvKeys.length} rows; 0 mismatches against the SPEC25 parse`);

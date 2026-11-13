@@ -30,7 +30,7 @@ function loadEnabledSitemapSet() {
   const allowedUrls = new Set();
   for (const r of urlMap) {
     if (!enabledNums.has(r.row)) continue;
-    if (r.gated && !gatedOk.has(r.row)) continue;
+    if (r.gated && !(gatedOk.has(r.row) || gatedOk.has(r.url))) continue;
     allowedUrls.add(`${SITE_ORIGIN}${r.url}`);
   }
   return allowedUrls;

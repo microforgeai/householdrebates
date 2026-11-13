@@ -23,24 +23,35 @@ towns:
 postcodes:
   - "3515"
   - "3523"
+  - "3585"
+  - "3549"
+  - "3463"
+  - "3579"
+  - "3638"
+  - "3264"
+  - "3909"
+  - "3888"
 localFacts:
-  - text: "Solstice Energy's compressed natural gas (CNG) networks in Marong, Heathcote, Swan Hill, Maldon, Robinvale, Kerang, Nathalia, Terang, Lakes Entrance, and Orbost are scheduled to shut by mid-to-late 2026."
+  - text: "Solstice Energy's compressed natural gas (CNG) networks are scheduled to shut by mid-to-late 2026 across 10 towns: Marong (3515) and Heathcote (3523) in Greater Bendigo, Swan Hill (3585) and Robinvale (3549) in Swan Hill, Maldon (3463) in Mount Alexander, Kerang (3579) in Gannawarra, Nathalia (3638) in Moira, Terang (3264) in Corangamite, and Lakes Entrance (3909) and Orbost (3888) in East Gippsland."
     sourceId: solarvic-solstice
+  - text: "In VEU Specifications v25.0 Table A, all 10 Solstice postcodes are classified as Regional with no reticulated gas: Cold (3515, 3523, 3463, 3638), Hot (3585, 3549, 3579), and Mild (3264, 3909, 3888)."
+    sourceId: vic-veu-spec-v25
   - text: "Solar Victoria waives key standard rules for impacted Solstice customers: no household income cap applies, gas hot water units of any age can be replaced, rental providers can apply, and a dedicated top-up covers homes that miss VEU age rules."
     sourceId: solarvic-solstice
   - text: "Solar Victoria confirmed eight VEU accredited providers available across the ten impacted regional towns."
     sourceId: solarvic-solstice
   - text: "City of Greater Bendigo's Marong customer guidance reports that bottled LPG has at least 2.5 times the running cost of electric appliances."
     sourceId: bendigo-solstice
-answer: "Households connected to closing Solstice Energy compressed natural gas (CNG) networks across Marong, Heathcote, Swan Hill, Maldon, Robinvale, Kerang, Nathalia, Terang, Lakes Entrance, and Orbost can access expanded Solar Victoria rebates alongside Victorian Energy Upgrades (VEU) point-of-sale discounts. Impacted Solstice customers are exempt from Solar Victoria's standard household income cap, can replace a gas hot water system of any age, include rental providers, and can receive a dedicated top-up when VEU property or appliance age rules are not met. Compare electric upgrade quotes early rather than defaulting to higher-running-cost bottled LPG."
+answer: "Households connected to closing Solstice Energy compressed natural gas (CNG) networks across Marong (3515), Heathcote (3523), Swan Hill (3585), Robinvale (3549), Maldon (3463), Kerang (3579), Nathalia (3638), Terang (3264), Lakes Entrance (3909), and Orbost (3888) can access expanded Solar Victoria rebates alongside Victorian Energy Upgrades (VEU) point-of-sale discounts. Impacted Solstice customers are exempt from Solar Victoria's standard household income cap, can replace a gas hot water system of any age, include rental providers, and can receive a dedicated top-up when VEU property or appliance age rules are not met. Compare electric upgrade quotes early rather than defaulting to higher-running-cost bottled LPG."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-13
-checkedOn: 2026-11-13
+updatedOn: 2026-11-14
+checkedOn: 2026-11-14
 sources:
   - solarvic-solstice
   - bendigo-solstice
   - vic-veu-spec-v25
+  - abs-asgs-allocation
 figures:
   - vic-solstice-topup
   - vic-solar-homes-income-cap
@@ -55,14 +66,30 @@ related:
   - get-off-gas-planner
   - gas-hot-water-to-heat-pump
   - veu-vs-solar-homes
+  - shepparton
+  - mildura
   - eligibility-checker
 ---
 
 ## Which ten Victorian towns are affected?
 
-Solstice Energy is closing its regional compressed natural gas (CNG) distribution networks by mid-to-late 2026 across **ten Victorian towns**: **Marong**, **Heathcote**, **Swan Hill**, **Maldon**, **Robinvale**, **Kerang**, **Nathalia**, **Terang**, **Lakes Entrance**, and **Orbost** (<SourceLink id="solarvic-solstice" label="Solar Victoria — Supporting Solstice Energy customers" />).
+Solstice Energy is closing its regional compressed natural gas (CNG) distribution networks by mid-to-late 2026 across **ten Victorian towns** (<SourceLink id="solarvic-solstice" label="Solar Victoria — Supporting Solstice Energy customers" />; <SourceLink id="abs-asgs-allocation" label="ABS ASGS 2021 postcode allocation" />):
 
-Note on the postcode table above: only **Marong (`3515`)** and **Heathcote (`3523`)** (within Greater <a href="/victoria/bendigo/">Bendigo</a>) are listed in our verified postcode extract on this page; residents in the other eight towns should confirm their exact VEU postcode classification with one of the **eight VEU accredited providers** Solar Victoria confirmed as servicing the Solstice towns (<SourceLink id="solarvic-solstice" label="Solar Victoria — Supporting Solstice Energy customers" />).
+- **Marong (`3515`)** and **Heathcote (`3523`)** — Greater <a href="/victoria/bendigo/">Bendigo</a>
+- **Swan Hill (`3585`)** and **Robinvale (`3549`)** — Swan Hill (compare nearby <LinkIfEnabled href="/victoria/mildura/">Mildura</LinkIfEnabled> Hot-zone guidance)
+- **Maldon (`3463`)** — Mount Alexander
+- **Kerang (`3579`)** — Gannawarra
+- **Nathalia (`3638`)** — Moira (near <LinkIfEnabled href="/victoria/shepparton/">Greater Shepparton</LinkIfEnabled>)
+- **Terang (`3264`)** — Corangamite
+- **Lakes Entrance (`3909`)** and **Orbost (`3888`)** — East Gippsland
+
+In VEU Specifications v25.0 Table A (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />), **all 10 postcodes** are classified as **Regional** with **no reticulated gas**, split across three VEU climatic regions (rendered in the table above from `postcodes.csv`):
+
+- **Cold climatic region:** `3515` (Marong), `3523` (Heathcote), `3463` (Maldon — heat pump zone 5), and `3638` (Nathalia).
+- **Hot climatic region:** `3585` (Swan Hill), `3549` (Robinvale), and `3579` (Kerang).
+- **Mild climatic region:** `3264` (Terang), `3909` (Lakes Entrance), and `3888` (Orbost).
+
+Solar Victoria also confirmed **eight VEU accredited providers** servicing the ten impacted towns (<SourceLink id="solarvic-solstice" label="Solar Victoria — Supporting Solstice Energy customers" />).
 
 ## Special Solar Victoria exemptions and top-up support
 

@@ -10,6 +10,8 @@ export type FigureQualifier =
 
 export type FigureUnit = 'AUD' | 'percent' | 'count';
 export type FigureDisplay = 'standard' | 'cents' | 'compact';
+export type FigureBasis = 'official' | 'estimate';
+export type FigureKind = 'discount' | 'payment' | 'threshold' | 'rate' | 'saving' | 'count';
 export type FigureActivity =
   | 'rcac'
   | 'hotwater'
@@ -31,6 +33,10 @@ export interface FigureData {
   qualifier: FigureQualifier;
   unit?: FigureUnit;
   display?: FigureDisplay;
+  basis?: FigureBasis;
+  kind?: FigureKind;
+  method?: string;
+  basedOn?: string | { id: string } | (string | { id: string })[];
   amountMin?: number;
   amountMax: number;
   currency?: 'AUD';
@@ -92,12 +98,17 @@ export function formatUnitValue(
 export function formatFigureAmount(
   fig: Pick<
     FigureData,
-    'qualifier' | 'amountMin' | 'amountMax' | 'unit' | 'display' | 'gstIncluded'
+    'qualifier' | 'amountMin' | 'amountMax' | 'unit' | 'display' | 'gstIncluded' | 'basis'
   >,
 ): string {
   const unit = fig.unit ?? 'AUD';
   const display = fig.display ?? 'standard';
   const maxStr = formatUnitValue(fig.amountMax, unit, display);
+
+  if (fig.basis === 'estimate') {
+    const estBase = `about ${maxStr} (our estimate)`;
+    return fig.gstIncluded ? `${estBase} (including GST)` : estBase;
+  }
 
   let base: string;
   switch (fig.qualifier) {

@@ -1,6 +1,6 @@
 question: "How did the heating and cooling minimum co-payments change on 30 September 2026?"
-answer: "From 30 September 2026 under VEU Specifications version 25.0 (Part 6), the mandatory minimum customer co-payment increased for all household ducted reverse-cycle systems and larger multi-split or non-ducted systems, while single non-ducted splits below 10 kW kept the lower tier. Compare every tier on /victoria/veu-minimum-co-payment/."
+answer: "From 30 September 2026 under VEU Specifications version 25.0 (Part 6), the highest minimum customer co-payment tier applies to every household ducted reverse-cycle system of any capacity and to multi-splits of 10 kW or more; a middle tier applies to multi-splits below 10 kW and single non-ducted systems of 10 kW or more; and the lowest tier applies to single non-ducted split systems below 10 kW. Compare every tier on /victoria/veu-minimum-co-payment/."
 pages:
   - veu-minimum-co-payment
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

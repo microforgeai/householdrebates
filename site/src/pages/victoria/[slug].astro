@@ -9,7 +9,7 @@ import Callout from '../../components/Callout.astro';
 import SourceLink from '../../components/SourceLink.astro';
 import HubIndex from '../../components/HubIndex.astro';
 import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
-import { assertEntryEnabled, isUrlEnabled } from '../../lib/rollout';
+import { shouldBuildEntry, isUrlEnabled } from '../../lib/rollout';
 
 export async function getStaticPaths() {
   const guides = await getCollection('guides', (g) => g.data.state === 'vic');
@@ -26,7 +26,7 @@ export async function getStaticPaths() {
 
   for (const g of guides) {
     const url = `/victoria/${g.data.slug}/`;
-    assertEntryEnabled(g.data.mapRow, url);
+    if (!shouldBuildEntry(g.data.mapRow, url)) continue;
     paths.push({
       params: { slug: g.data.slug },
       props: { kind: 'guide', id: g.id },
@@ -35,7 +35,7 @@ export async function getStaticPaths() {
 
   for (const a of areas) {
     const url = `/victoria/${a.data.slug}/`;
-    assertEntryEnabled(a.data.mapRow, url);
+    if (!shouldBuildEntry(a.data.mapRow, url)) continue;
     paths.push({
       params: { slug: a.data.slug },
       props: { kind: 'area', id: a.id },
@@ -44,7 +44,7 @@ export async function getStaticPaths() {
 
   for (const t of toolPages) {
     const url = `/victoria/${t.data.slug}/`;
-    assertEntryEnabled(t.data.mapRow, url);
+    if (!shouldBuildEntry(t.data.mapRow, url)) continue;
     paths.push({
       params: { slug: t.data.slug },
       props: { kind: 'tool', id: t.id },

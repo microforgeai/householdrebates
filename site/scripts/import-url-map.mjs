@@ -89,7 +89,7 @@ const parsed = dataRows.map((cols, idx) => {
   const priorityMatch = priorityRaw.match(/^(P[123])/);
   const priority = priorityMatch ? priorityMatch[1] : '';
   const notes = (cols[colIdx.notes] || '').trim();
-  const checkedOn = (cols[colIdx.facts_checked_on] || '').trim();
+  const factsCheckedOn = (cols[colIdx.facts_checked_on] || '').trim();
   const gated = url === '/victoria/shepparton/';
 
   if (!urlRegex.test(url)) {
@@ -109,16 +109,17 @@ const parsed = dataRows.map((cols, idx) => {
     priority,
     priorityAndIntent: priorityRaw,
     notes,
-    checkedOn,
+    factsCheckedOn,
+    checkedOn: factsCheckedOn,
     gated,
   };
 });
 
-if (parsed.length !== 53) {
-  errors.push(`Expected 53 rows, got ${parsed.length}`);
+if (parsed.length !== 74) {
+  errors.push(`Expected 74 rows, got ${parsed.length}`);
 }
 
-const waveCounts = { 0: 0, 1: 0, 2: 0, 3: 0 };
+const waveCounts = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
 const urlSet = new Set();
 for (const item of parsed) {
   waveCounts[item.wave] = (waveCounts[item.wave] || 0) + 1;
@@ -131,11 +132,12 @@ for (const item of parsed) {
 if (
   waveCounts[0] !== 16 ||
   waveCounts[1] !== 19 ||
-  waveCounts[2] !== 10 ||
-  waveCounts[3] !== 8
+  waveCounts[2] !== 12 ||
+  waveCounts[3] !== 17 ||
+  waveCounts[4] !== 10
 ) {
   errors.push(
-    `Wave counts mismatch: got wave0=${waveCounts[0]}, wave1=${waveCounts[1]}, wave2=${waveCounts[2]}, wave3=${waveCounts[3]} (expected 16/19/10/8)`,
+    `Wave counts mismatch: got wave0=${waveCounts[0]}, wave1=${waveCounts[1]}, wave2=${waveCounts[2]}, wave3=${waveCounts[3]}, wave4=${waveCounts[4]} (expected 16/19/12/17/10)`,
   );
 }
 
@@ -155,8 +157,7 @@ if (errors.length > 0) {
 fs.mkdirSync(path.dirname(outPath), { recursive: true });
 fs.writeFileSync(outPath, JSON.stringify(parsed, null, 2) + '\n', 'utf8');
 
-const gatedCount = parsed.filter((r) => r.gated).length;
 console.log(
-  `url-map: ${parsed.length} rows (wave0=${waveCounts[0]}, wave1=${waveCounts[1]}, wave2=${waveCounts[2]}, wave3=${waveCounts[3]}; ${gatedCount} gated); 0 errors`,
+  `url-map: ${parsed.length} rows (wave0 ${waveCounts[0]}, wave1 ${waveCounts[1]}, wave2 ${waveCounts[2]}, wave3 ${waveCounts[3]}, wave4 ${waveCounts[4]}); 0 errors`,
 );
 

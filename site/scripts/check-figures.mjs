@@ -56,6 +56,8 @@ const figuresList = YAML.parse(fs.readFileSync(figuresPath, 'utf8'));
 const figuresById = new Map();
 const figuresByGroup = new Map();
 let staleCount = 0;
+let estimateCount = 0;
+let unlabelledHeroes = 0;
 
 for (const fig of figuresList) {
   if (figuresById.has(fig.id)) {
@@ -73,6 +75,32 @@ for (const fig of figuresList) {
   }
   if (!src.official) {
     throw new Error(`Figure "${fig.id}" references non-official source "${fig.sourceId}"`);
+  }
+
+  if (fig.basis === 'estimate') {
+    estimateCount++;
+    if (!fig.method || typeof fig.method !== 'string' || !fig.method.trim()) {
+      throw new Error(`Estimate figure "${fig.id}" is missing required "method"`);
+    }
+    if (fig.kind !== 'discount') {
+      throw new Error(`Estimate figure "${fig.id}" must have kind: "discount" (got "${fig.kind}")`);
+    }
+    const basedOnIds = Array.isArray(fig.basedOn)
+      ? fig.basedOn
+      : fig.basedOn
+        ? [fig.basedOn]
+        : [];
+    if (basedOnIds.length === 0) {
+      throw new Error(`Estimate figure "${fig.id}" is missing required "basedOn" source reference(s)`);
+    }
+    for (const bId of basedOnIds) {
+      const bSrc = sourcesMap.get(bId);
+      if (!bSrc || !bSrc.official) {
+        throw new Error(
+          `Estimate figure "${fig.id}" basedOn references missing or non-official source "${bId}"`,
+        );
+      }
+    }
   }
 
   const ageDays = ageDaysMelbourne(fig.checkedOn);
@@ -97,17 +125,23 @@ for (const fig of figuresList) {
   }
 }
 
-// Optional: also check vic-veu-postcodes.json freshness if present
-const postcodesPath = path.join(srcDir, 'data/vic-veu-postcodes.json');
-if (fs.existsSync(postcodesPath)) {
+// Check postcodes.json freshness (45-day rule)
+const postcodesPath = path.join(srcDir, 'data/postcodes.json');
+if (!fs.existsSync(postcodesPath)) {
+  throw new Error('data/postcodes.json is missing; run scripts/build-postcodes.mjs');
+}
+{
   const pcData = JSON.parse(fs.readFileSync(postcodesPath, 'utf8'));
-  if (pcData.checkedOn) {
-    const pcAge = Math.floor(
-      (now.getTime() - new Date(pcData.checkedOn).getTime()) / (1000 * 60 * 60 * 24),
-    );
-    if (pcAge > maxAgeDays) {
-      throw new Error(`vic-veu-postcodes.json is stale (${pcAge} days old > ${maxAgeDays} days)`);
-    }
+  if (!pcData.checkedOn) {
+    throw new Error('data/postcodes.json is missing checkedOn');
+  }
+  const pcAge = ageDaysMelbourne(pcData.checkedOn);
+  if (pcAge > maxAgeDays) {
+    staleCount++;
+    throw new Error(`postcodes.json is stale (${pcAge} days old > ${maxAgeDays} days)`);
+  }
+  if (pcAge < -1) {
+    throw new Error(`postcodes.json has future checkedOn date (${pcData.checkedOn})`);
   }
 }
 
@@ -215,7 +249,9 @@ for (const file of allSrcFiles) {
   }
 
   if (allowedDollarFiles.has(file)) continue;
-  const rawMatch = content.match(/\$\s?[0-9][0-9,]*/);
+  const contentForDollarScan =
+    file === figuresPath ? content.replace(/^\s*method:.*$/gm, '') : content;
+  const rawMatch = contentForDollarScan.match(/\$\s?[0-9][0-9,]*/);
   if (rawMatch) {
     rawAmounts++;
     throw new Error(
@@ -236,10 +272,23 @@ for (const file of mdxFiles) {
   const declared = new Set(fm.figures ?? []);
 
   const usedInBody = new Set();
-  for (const m of body.matchAll(/<Money\s+[^>]*id=["']([^"']+)["']/g)) {
-    const id = m[1];
-    if (!figuresById.has(id)) {
+  for (const m of body.matchAll(/<Money\s+([^>]*?)\/?>/g)) {
+    const attrs = m[1];
+    const idMatch = attrs.match(/\bid=["']([^"']+)["']/);
+    if (!idMatch) continue;
+    const id = idMatch[1];
+    const fig = figuresById.get(id);
+    if (!fig) {
       throw new Error(`${rel}: <Money id="${id}"> does not exist`);
+    }
+    if (fig.basis === 'estimate' && /\bvariant=["']block["']/.test(attrs)) {
+      const labelMatch = attrs.match(/\blabel=["']([^"']*)["']/);
+      if (!labelMatch || !/\bestimate\b/i.test(labelMatch[1])) {
+        unlabelledHeroes++;
+        throw new Error(
+          `${rel}: estimate hero <Money id="${id}" variant="block"> must include a label containing "estimate"`,
+        );
+      }
     }
     usedInBody.add(id);
   }
@@ -303,6 +352,52 @@ for (const file of mdxFiles) {
   }
 }
 
+function extractBalancedElementsWithAttr(html, tagName, attrRegex) {
+  const openRe = new RegExp(`<${tagName}\\b[^>]*>`, 'gi');
+  const extracted = [];
+  let out = '';
+  let cursor = 0;
+
+  while (cursor < html.length) {
+    openRe.lastIndex = cursor;
+    const m = openRe.exec(html);
+    if (!m) {
+      out += html.slice(cursor);
+      break;
+    }
+    const start = m.index;
+    const openTag = m[0];
+    if (!attrRegex.test(openTag)) {
+      out += html.slice(cursor, start + openTag.length);
+      cursor = start + openTag.length;
+      continue;
+    }
+
+    out += html.slice(cursor, start);
+    let depth = 1;
+    let pos = start + openTag.length;
+    const tokenRe = new RegExp(`<\\/?${tagName}\\b[^>]*>`, 'gi');
+    while (depth > 0 && pos < html.length) {
+      tokenRe.lastIndex = pos;
+      const tm = tokenRe.exec(html);
+      if (!tm) {
+        pos = html.length;
+        break;
+      }
+      if (tm[0].startsWith('</')) {
+        depth--;
+      } else if (!tm[0].endsWith('/>')) {
+        depth++;
+      }
+      pos = tm.index + tm[0].length;
+    }
+    extracted.push({ openTag, fullHtml: html.slice(start, pos) });
+    cursor = pos;
+  }
+
+  return { stripped: out, extracted };
+}
+
 // 5. Post-build HTML check (if dist exists): check JSON-LD for $ amounts and text outside data-figure
 let schemaAmounts = 0;
 if (fs.existsSync(distDir)) {
@@ -326,12 +421,45 @@ if (fs.existsSync(distDir)) {
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '');
 
-    // Remove table rows and spans marked with data-figure
-    stripped = stripped
-      .replace(/<tr[^>]*\bdata-figure=["'][^"']+["'][^>]*>[\s\S]*?<\/tr>/gi, '')
-      .replace(/<span class="money-block"[^>]*\bdata-figure=["'][^"']+["'][^>]*>[\s\S]*?<\/span>\s*<\/span>/gi, '')
-      .replace(/<span class="money-inline"[^>]*\bdata-figure=["'][^"']+["'][^>]*>[\s\S]*?<\/sup>\s*<\/span>/gi, '')
-      .replace(/<[a-z0-9]+[^>]*\bdata-figure=["'][^"']+["'][^>]*>[\s\S]*?<\/[a-z0-9]+>/gi, '');
+    // Verify rendered estimate figures and strip balanced data-figure elements
+    const trRes = extractBalancedElementsWithAttr(stripped, 'tr', /\bdata-figure=["'][^"']+["']/i);
+    stripped = trRes.stripped;
+    const spanRes = extractBalancedElementsWithAttr(stripped, 'span', /\bdata-figure=["'][^"']+["']/i);
+    stripped = spanRes.stripped;
+    const figRes = extractBalancedElementsWithAttr(stripped, 'figure', /\bdata-figure=["'][^"']+["']/i);
+    stripped = figRes.stripped;
+
+    for (const elem of [...trRes.extracted, ...spanRes.extracted, ...figRes.extracted]) {
+      const idMatch = elem.openTag.match(/\bdata-figure=["']([^"']+)["']/i);
+      if (!idMatch) continue;
+      const fig = figuresById.get(idMatch[1]);
+      if (fig && fig.basis === 'estimate') {
+        if (!elem.fullHtml.includes('(our estimate)')) {
+          throw new Error(
+            `Rendered estimate figure "${fig.id}" is missing "(our estimate)" label in ${rel}`,
+          );
+        }
+        if (/\bmoney-block\b/.test(elem.openTag)) {
+          const lblMatch = elem.openTag.match(/\bdata-money-label=["']([^"']*)["']/i);
+          if (!lblMatch || !/\bestimate\b/i.test(lblMatch[1])) {
+            unlabelledHeroes++;
+            throw new Error(
+              `Estimate hero "${fig.id}" is missing a label containing "estimate" in ${rel}`,
+            );
+          }
+          if (!elem.fullHtml.includes('Our calculation from VEU Specifications')) {
+            throw new Error(
+              `Estimate hero "${fig.id}" is missing the Part 48 calculation note in ${rel}`,
+            );
+          }
+        }
+      }
+    }
+
+    stripped = stripped.replace(
+      /<[a-z0-9]+[^>]*\bdata-figure=["'][^"']+["'][^>]*>[\s\S]*?<\/[a-z0-9]+>/gi,
+      '',
+    );
 
     // Remove HTML tags to inspect visible text + check title/meta description attributes
     const titleMeta = [
@@ -356,7 +484,7 @@ if (fs.existsSync(distDir)) {
 }
 
 console.log(
-  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts`,
+  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts, ${unlabelledHeroes} unlabelled heroes, ${estimateCount} estimates, every estimate labelled`,
 );
 console.log(
   `tool data: ${toolFileCount} ${toolFileCount === 1 ? 'file' : 'files'}, ${toolStaleCount} stale`,

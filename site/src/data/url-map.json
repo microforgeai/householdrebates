@@ -12,6 +12,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -28,6 +29,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -44,6 +46,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -60,6 +63,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -76,6 +80,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -92,6 +97,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -108,6 +114,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -124,6 +131,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -140,6 +148,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -156,6 +165,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -172,6 +182,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -188,6 +199,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -204,6 +216,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -220,6 +233,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -236,6 +250,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -252,6 +267,7 @@
     "priority": "",
     "priorityAndIntent": "",
     "notes": "See \"Changes needed on existing pages\" in url-map.md",
+    "factsCheckedOn": "",
     "checkedOn": "",
     "gated": false
   },
@@ -277,6 +293,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: Medium (navigational/informational). Needed as the breadcrumb target for every /victoria/ page.",
     "notes": "No FAQ $ amounts (faqs schema bans them); figures via <Money>. Becomes the BreadcrumbList 'Victoria' item. Home (/) stays the national-facing pillar.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -298,12 +315,14 @@
       "/victoria/ducted-gas-to-split-systems/",
       "/victoria/veu-minimum-co-payment/",
       "/victoria/reverse-cycle-vs-gas-heater/",
+      "/victoria/electric-heater-to-reverse-cycle/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial, ready-to-quote)",
     "notes": "Lead with the scenario table, never $5,530 alone (existing rule). Energy Vic's 'Latest discounts' page still says ducted savings up to $1,410/yr; the newer product page says $1,140. Use $1,140. Existing /victoria/air-conditioner-rebate/ must add the $3,000 co-payment.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -330,6 +349,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial)",
     "notes": "Third-party trade sites say home multi-split incentives are now calculated on at most 20 kW: UNVERIFIED against the spec text; don't publish until checked in SPEC25 Part 6. Checker rule 'Ducted gas + splits' must show the new co-payment.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -350,12 +370,14 @@
       "/victoria/air-conditioner-rebate/",
       "/victoria/draught-proofing-rebate/",
       "/victoria/renters/",
+      "/victoria/electric-heater-to-reverse-cycle/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial; the most common single-room job)",
     "notes": "Differentiate from /victoria/reverse-cycle-vs-gas-heater/ (that page = comparison/decision; this = the swap, steps and money). Cross-link both ways.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -381,6 +403,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium–High (commercial, smaller audience)",
     "notes": "Portable heaters: not listed as an eligible 'current system' on Energy Vic. Third-party claims that only one hard-wired heater per home counts: UNVERIFIED; leave out.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -408,6 +431,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial; the 2027 rule pushes this)",
     "notes": "Cannibalisation risk with /victoria/heat-pump-rebate/: keep that page as the 'rebate' hub and make this one the practical swap guide (steps, placement, noise, frost, stacking). The LPG discount amount isn't on Energy Vic's table; say 'provider confirms'. Use $560, never $630, for gas.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -434,6 +458,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial)",
     "notes": "Energy Vic's 'Latest discounts' page shows a combined 'up to $1,630 / $2,030', which is the electric→heat pump case ($630 + $1,000/$1,400). Only show it with that label, and only once the combination is confirmed on the hot water product page (that page shows the gas case: $1,560/$1,960).",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -458,7 +483,8 @@
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (commercial, niche)",
-    "notes": "Rental standard accepts heat pump OR electric-boosted solar [[EVRENTAL]]; link to the landlords page.",
+    "notes": "Rental standard accepts heat pump OR electric-boosted solar <https://www.energy.vic.gov.au/households/save-with-all-electric-home/electric-and-efficiency-standards-for-buildings/energy-efficiency-for-rental-properties-in-victoria>; link to the landlords page.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -485,6 +511,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (commercial; low ticket, good for trust and AEO)",
     "notes": "The checker has no cooktop path today. Either add one (Indie Builder) or have the CTA say 'check your hot water and heating too'. The low lead value suits AEO more than leads.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -506,12 +533,14 @@
       "/victoria/draught-proofing-rebate/",
       "/victoria/ballarat/",
       "/victoria/veu-minimum-co-payment/",
+      "/victoria/postcode/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (commercial; new activity Oct 2026, low competition likely, qualitative)",
-    "notes": "RULE CHANGE: new VEU activity, not in the current pack. Metro vs regional comes from the VEU postcode table (SPEC25 'Location Variable List'). Only 3 accredited providers listed on 13 Nov 2026 [[EVINS]]. The checker has no insulation path.",
+    "notes": "RULE CHANGE: new VEU activity, not in the current pack. Metro vs regional comes from the VEU postcode table (SPEC25 'Location Variable List'). Only 3 accredited providers listed on 13 Nov 2026 <https://www.energy.vic.gov.au/victorian-energy-upgrades/products/insulation-discounts>. The checker has no insulation path.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -532,12 +561,14 @@
       "/victoria/veu-vs-solar-homes/",
       "/how-quotes-work/",
       "/victoria/air-conditioner-rebate/",
+      "/victoria/business-energy-upgrades/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational; strong AEO/GEO target)",
     "notes": "Don't publish a live VEEC spot price: the only sources are trader sites, not official. The rename commencement date (proclamation, or automatically 2 Oct 2028) comes from a trade summary; mark it UNVERIFIED until checked in Act 37/2026 itself.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -564,6 +595,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: Medium–High (pre-purchase; protects against 'free aircon' offers)",
     "notes": "RULE CHANGE (30 Sep 2026). Energy Vic's consumer product page doesn't show it yet; cite the spec PDF. Strong anti-scam angle: 'free ducted' offers can't be legitimate.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -584,12 +616,14 @@
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/gas-cooktop-to-induction/",
       "/victoria/heat-pump-rebate/",
+      "/victoria/already-installed-retrospective-discount/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational)",
     "notes": "Heating/cooling repeat-claim limits (e.g. 'one ducted system per home') appear only on trade sites: UNVERIFIED; say 'provider confirms'.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -608,6 +642,8 @@
     ],
     "internalLinks": [
       "/victoria/heat-pump-rebate/",
+      "/victoria/solar-panel-rebate/",
+      "/victoria/battery-rebate/",
       "/victoria/can-you-claim-veu-twice/",
       "/victoria/what-is-a-veec/",
       "/victoria/apartments-and-units/",
@@ -617,6 +653,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: Medium–High (comparison; strong AEO)",
     "notes": "RULE CHANGES: the income cap fell to $150k on 1 Jul 2026, and PV moves into VEU on 1 Jul 2027. Energy Vic's 'Latest discounts' page and the Solstice page still say PV 'up to $2,800'. That's stale: use $1,400 from the PV rebate page.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -636,6 +673,7 @@
       "/how-quotes-work/",
       "/victoria/veu-minimum-co-payment/",
       "/victoria/find-an-accredited-provider/",
+      "/victoria/help-in-your-language/",
       "/about/",
       "/victoria/eligibility-checker/"
     ],
@@ -643,6 +681,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: Medium (informational; trust builder)",
     "notes": "Must state plainly that Household Rebates isn't a government site and never cold-calls (consistent with the IndependenceNotice).",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -664,12 +703,14 @@
       "/victoria/gas-hot-water-ban-exemptions/",
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/how-long-does-an-upgrade-take/",
+      "/victoria/already-installed-retrospective-discount/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (urgent, problem-aware)",
     "notes": "Traffic will peak Jan–Jun 2027. Exempt work must be done by 1 Jun 2027 (3 months after 1 Mar 2027); confirm that date wording with the reg text before publishing.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -697,6 +738,7 @@
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: Medium–High (informational; low competition likely)",
     "notes": "CORRECTION: solution-design §1 marks this list UNVERIFIED (third-party). It's now checked against the SR 140/2025 reg 6 text (AustLII, as made). Link legislation.vic.gov.au as the authority. Not legal advice; plumbers decide.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -722,6 +764,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (problem-aware)",
     "notes": "Matches the checker's RETRO branch. Link this page from that result.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -748,6 +791,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational)",
     "notes": "There's no official 'typical install time' figure, so don't state hours or days for the install itself. HowTo schema with 3+ steps. Abolishment times are AusNet's; other distributors may differ.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -768,12 +812,14 @@
       "/victoria/draught-proofing-rebate/",
       "/victoria/gas-room-heater-to-split-system/",
       "/victoria/concession-card-holders/",
+      "/victoria/already-installed-retrospective-discount/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational; large audience)",
-    "notes": "Solar Homes hot water is owner-occupier only (except Solstice towns) [[SVHW]] [[SVSOL]].",
+    "notes": "Solar Homes hot water is owner-occupier only (except Solstice towns) <https://www.solar.vic.gov.au/hot-water-rebate> <https://www.solar.vic.gov.au/supporting-solstice-customers>.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -799,7 +845,8 @@
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P1",
     "priorityAndIntent": "P1 · Intent: High (compliance-driven, commercial)",
-    "notes": "The rental page shows 'up to $5,530' without the size caveat. On our site always attach the 22.4 kW scenario. Every standard's upgrade is VEU-eligible, per CAV [[CAVMEES]].",
+    "notes": "The rental page shows 'up to $5,530' without the size caveat. On our site always attach the 22.4 kW scenario. Every standard's upgrade is VEU-eligible, per CAV <https://www.consumer.vic.gov.au/resources-and-tools/legislation/public-consultations-and-reviews/new-minimum-energy-efficiency-standards>.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -820,12 +867,14 @@
       "/victoria/get-off-gas-planner/",
       "/victoria/renters/",
       "/victoria/veu-scams-cold-calls/",
+      "/victoria/electric-heater-to-reverse-cycle/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational)",
     "notes": "The $100 Power Saving Bonus round closed 31 Mar 2026 (energy.gov.au, per search). Don't promote it; re-check for a new round. Excess-bill thresholds ($4,038.82 electricity, $2,598.58 gas) change yearly.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -846,12 +895,14 @@
       "/victoria/air-conditioner-rebate/",
       "/victoria/veu-vs-solar-homes/",
       "/victoria/wyndham/",
+      "/victoria/north-west-corridor/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational; growth-corridor audience)",
     "notes": "Explains why many homes in growth areas (Wyndham, Casey, Whittlesea) can't get replacement discounts if they're under 2 years old.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -878,6 +929,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (informational)",
     "notes": "CONFLICT: the Solar for Apartments eligibility section still says 3–50 lots, while the 26 Oct 2026 news says 150. Show 'expanding: check current rules' until the program page updates.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -898,12 +950,14 @@
       "/victoria/get-off-gas-planner/",
       "/victoria/heat-pump-hot-water-size-guide/",
       "/victoria/concession-card-holders/",
+      "/victoria/mildura/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium–High (tool; link magnet)",
     "notes": "MVP = show Energy Vic's published savings by scenario (no own modelling). Any tariff-based mode needs user-entered tariffs; default tariffs (e.g. Victorian Default Offer) are UNVERIFIED here. Fetch them from the ESC at build time if used.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -924,12 +978,14 @@
       "/victoria/electric-hot-water-to-heat-pump/",
       "/victoria/heat-pump-rebate/",
       "/victoria/ballarat/",
+      "/victoria/macedon-ranges/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (pre-purchase)",
     "notes": "Pure lookup, no lead capture. Add a 'cold area' note fed by the VEU postcode table (heat pump climatic zone 4 or 5).",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -950,12 +1006,15 @@
       "/victoria/gas-vs-heat-pump-running-costs/",
       "/victoria/how-long-does-an-upgrade-take/",
       "/victoria/solstice-gas-shutdown-towns/",
+      "/victoria/latrobe-valley/",
+      "/victoria/mitchell/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (planning)",
     "notes": "Abolishment fee $: UNVERIFIED (AusNet's page points to its yearly tariff schedule; trade sites quote about $270). Pull each distributor's published fee at build time, or link only. Don't present the Bendigo payback as statewide.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -973,6 +1032,7 @@
     ],
     "internalLinks": [
       "/victoria/ceiling-insulation-rebate/",
+      "/victoria/other-veu-discounts/",
       "/victoria/renters/",
       "/victoria/casey/",
       "/victoria/landlords-rental-standards-2027/",
@@ -982,6 +1042,7 @@
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (low ticket)",
     "notes": "Safety copy is mandatory (CO risk). Rental draughtproofing standard starts 1 Jul 2027.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -1008,6 +1069,7 @@
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium–High (bottom-funnel)",
     "notes": "COMMERCIAL FLAG: SEC (state-owned) runs a free quote-matching service that competes with our lead model. Mention it honestly. Hiding it would hurt trust and EEAT.",
+    "factsCheckedOn": "13 Nov 2026",
     "checkedOn": "13 Nov 2026",
     "gated": false
   },
@@ -1028,13 +1090,16 @@
       "/victoria/heat-pump-hot-water-size-guide/",
       "/victoria/ducted-gas-to-ducted-reverse-cycle/",
       "/victoria/geelong/",
+      "/victoria/business-energy-upgrades/",
+      "/victoria/latrobe-valley/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (local commercial)",
     "notes": "INCLUDED. The council news is from Mar 2025 and its rebate trial is reported closed: describe the program, not a rebate. Re-check monthly.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1054,13 +1119,15 @@
       "/victoria/get-off-gas-planner/",
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/ceiling-insulation-rebate/",
+      "/victoria/shepparton/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: Medium (local commercial)",
     "notes": "INCLUDED. The strongest local page of the set.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1085,8 +1152,9 @@
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (local)",
-    "notes": "INCLUDED, CONDITIONAL. It passes on 4 verified facts, but verify the council program before publishing and add it if confirmed. If it can't be confirmed, it's still OK, but it's the thinnest regional page.",
-    "checkedOn": "13 Nov 2026",
+    "notes": "INCLUDED. Goulburn Murray Solar Savers is confirmed through GMCA (gmca.org.au, Feb 2026 notice; checked 14 Nov 2026). The Greater Shepparton council's own Solar Savers page is NOT verified (504 Gateway Timeout on 13 and 14 Nov 2026). Prompts cite GMCA only, never the council page. Shepparton is Regional + Cold in Table A, so the $2,100 regional/cold insulation example applies. Inbound links added from /victoria/bendigo/, /victoria/mitchell/ and /victoria/solstice-gas-shutdown-towns/.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": true
   },
   {
@@ -1107,13 +1175,15 @@
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/melbourne/",
       "/victoria/concession-card-holders/",
+      "/victoria/melbourne-west/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (local)",
     "notes": "INCLUDED (marginal: climate and gas status are the same as Melbourne; the local value is the council program). Wyndham's residents' survey to 30 Nov 2026 came from a local-media search: UNVERIFIED.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1133,13 +1203,15 @@
       "/victoria/ceiling-insulation-rebate/",
       "/victoria/gas-room-heater-to-split-system/",
       "/victoria/melbourne/",
+      "/victoria/melbourne-south-east/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (local)",
     "notes": "INCLUDED. 'May pause when budget exhausted': re-check monthly.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1159,13 +1231,15 @@
       "/victoria/get-off-gas-planner/",
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/melbourne/",
+      "/victoria/melbourne-north/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (local)",
     "notes": "INCLUDED. Council's 'Energy Smart Homes Grant' page returned 403: UNVERIFIED, leave out.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1185,13 +1259,15 @@
       "/victoria/heat-pump-hot-water-size-guide/",
       "/victoria/ducted-gas-to-ducted-reverse-cycle/",
       "/victoria/find-an-accredited-provider/",
+      "/victoria/melbourne-east/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P3",
     "priorityAndIntent": "P3 · Intent: Medium (local)",
     "notes": "INCLUDED. A mixed shire: show a postcode table rather than one claim for the whole shire.",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   },
   {
@@ -1211,13 +1287,605 @@
       "/victoria/get-off-gas-planner/",
       "/victoria/gas-hot-water-to-heat-pump/",
       "/victoria/veu-vs-solar-homes/",
+      "/victoria/shepparton/",
+      "/victoria/mildura/",
       "/victoria/eligibility-checker/"
     ],
     "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
     "priority": "P2",
     "priorityAndIntent": "P2 · Intent: High for a small audience (problem-aware)",
     "notes": "NEW LOCATION FIND: genuinely local and officially sourced. Time-limited: once the networks close, move it to an archive or 'what happened' page. The Solstice page's 'PV up to $2,800' is stale (PV is $1,400).",
-    "checkedOn": "13 Nov 2026",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 54,
+    "url": "/victoria/postcode/",
+    "wave": 2,
+    "status": "new",
+    "template": "Tool – postcode lookup (static; data from postcodes.csv)",
+    "question": "Is my postcode metro or regional for VEU, and does it have mains gas?",
+    "secondaryQuestions": [
+      "What climate region is my postcode?",
+      "Which heat pump zone am I in?",
+      "Which council am I in?",
+      "Which insulation figure applies to me?"
+    ],
+    "internalLinks": [
+      "/victoria/eligibility-checker/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/heat-pump-hot-water-size-guide/",
+      "/victoria/get-off-gas-planner/",
+      "/victoria/lpg-homes/",
+      "/victoria/melbourne/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P1",
+    "priorityAndIntent": "P1 · Intent: High (every visitor's first local question)",
+    "notes": "One page with a client-side search over postcodes.csv. Result card: area, gas, climate, HP zone, localities, council, then a link to the matching hub or council page. Don't generate 719 per-postcode pages (doorway risk). The checker reuses the same data at its postcode step.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 55,
+    "url": "/victoria/business-energy-upgrades/",
+    "wave": 2,
+    "status": "new",
+    "template": "Guide – audience (business)",
+    "question": "What Victorian Energy Upgrades discounts can a business get?",
+    "secondaryQuestions": [
+      "Which products are business-only?",
+      "Are large energy users excluded?",
+      "What is a custom (M&V) upgrade?",
+      "Can a business get a battery discount?"
+    ],
+    "internalLinks": [
+      "/victoria/business-heating-cooling/",
+      "/victoria/business-led-lighting/",
+      "/victoria/business-cold-rooms-refrigeration/",
+      "/victoria/business-hot-water-motors/",
+      "/victoria/battery-rebate/",
+      "/victoria/eligibility-checker/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/what-is-a-veec/",
+      "/victoria/veu-minimum-co-payment/",
+      "/victoria/veu-scams-cold-calls/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (B2B; separate audience)",
+    "notes": "NEW. Business hub (14 Nov 2026): links the 4 Wave 4 business pages; no separate /victoria/business/ hub. This is the landing page for the checker's Business branch. Keep figures as 'indicative'. No lead capture for business yet.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 56,
+    "url": "/victoria/north-west-corridor/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area – corridor hub (AreaLayout variant with a postcode table)",
+    "question": "What energy rebates apply in Sunbury, Diggers Rest, Melton and Gisborne?",
+    "secondaryQuestions": [
+      "Is Diggers Rest in Melton or Hume?",
+      "Why is Gisborne 'regional' but Sunbury 'metro'?",
+      "Is the Hume council program open?",
+      "Can a new estate home get VEU?"
+    ],
+    "internalLinks": [
+      "/victoria/macedon-ranges/",
+      "/victoria/melbourne-west/",
+      "/victoria/melbourne-north/",
+      "/victoria/postcode/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P1",
+    "priorityAndIntent": "P1 · Intent: Medium-High (local; Guri's own area, fast-growing estates)",
+    "notes": "INCLUDED. Melton now passes as part of the corridor, not as a page of its own. Insulation: Gisborne 3437 (Regional, Cold) fits Energy Vic's $2,100 example; New Gisborne 3438 (Metropolitan, Cold) fits neither example: about $2,010 by the spec formula (ASSUMPTION: same 150 m² house; provider confirms).",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 57,
+    "url": "/victoria/macedon-ranges/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area (AreaLayout; postcode table)",
+    "question": "Is the Macedon Ranges a cold region for VEU, and what does that mean for heating and hot water rebates?",
+    "secondaryQuestions": [
+      "Which towns have no mains gas?",
+      "Is Gisborne metro or regional?",
+      "Does the council run a program?",
+      "What heat pump zone am I in?"
+    ],
+    "internalLinks": [
+      "/victoria/north-west-corridor/",
+      "/victoria/heat-pump-hot-water-size-guide/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/get-off-gas-planner/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (local; cold-climate angle)",
+    "notes": "INCLUDED (6 local facts). The strongest new council page: a cold climate, zone 5, and off-gas pockets all differ from Melbourne.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 58,
+    "url": "/victoria/mitchell/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area (AreaLayout; postcode table)",
+    "question": "What energy rebates can households in Wallan, Kilmore, Broadford and Seymour get?",
+    "secondaryQuestions": [
+      "Is Wallan metro?",
+      "Which towns have no mains gas?",
+      "Is Solar Savers available?"
+    ],
+    "internalLinks": [
+      "/victoria/melbourne-north/",
+      "/victoria/shepparton/",
+      "/victoria/get-off-gas-planner/",
+      "/victoria/postcode/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (local growth corridor)",
+    "notes": "INCLUDED (5 local facts). Wallan/Beveridge estates: stress the 2-year building rule.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 59,
+    "url": "/victoria/latrobe-valley/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area (AreaLayout)",
+    "question": "What energy rebates and programs are available in Traralgon, Morwell and Moe?",
+    "secondaryQuestions": [
+      "Is there an SEC heat pump offer here?",
+      "What did the Morwell electrification trial find?",
+      "Which towns have no mains gas?"
+    ],
+    "internalLinks": [
+      "/victoria/gas-hot-water-to-heat-pump/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/get-off-gas-planner/",
+      "/victoria/concession-card-holders/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (local)",
+    "notes": "INCLUDED (6 local facts). The 44% figure is from a news report quoting AusNet: label it as reported, not official. The SEC pilot is the state's own installer service, so mention it openly. Insulation: Regional but Mild, so neither Energy Vic example fits; about $1,590 by the spec formula (ASSUMPTION; provider confirms).",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 60,
+    "url": "/victoria/mildura/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area (AreaLayout)",
+    "question": "What energy rebates suit Mildura's hot climate?",
+    "secondaryQuestions": [
+      "Is Mildura a 'hot' region for VEU?",
+      "Which towns have no mains gas?",
+      "Can I borrow an energy kit?"
+    ],
+    "internalLinks": [
+      "/victoria/air-conditioner-rebate/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/solstice-gas-shutdown-towns/",
+      "/victoria/gas-hot-water-to-heat-pump/",
+      "/victoria/lpg-homes/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (local; cooling angle)",
+    "notes": "INCLUDED (5 local facts). Cooling-led page. Swan Hill and Robinvale (Solstice towns) are also Hot, so cross-link.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 61,
+    "url": "/victoria/melbourne-north/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area – metro hub (Plan Melbourne Northern region; postcode table)",
+    "question": "What energy rebates apply in Melbourne's north (Hume, Whittlesea, Darebin, Banyule, Merri-bek, Nillumbik, Mitchell)?",
+    "secondaryQuestions": [
+      "Which northern postcodes are 'Cold' or off-gas?",
+      "Which council programs are open?",
+      "Is Hume's program paused?"
+    ],
+    "internalLinks": [
+      "/victoria/whittlesea/",
+      "/victoria/mitchell/",
+      "/victoria/north-west-corridor/",
+      "/victoria/postcode/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (metro local)",
+    "notes": "INCLUDED. List all 66 postcodes with localities from postcodes.csv.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 62,
+    "url": "/victoria/melbourne-west/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area – metro hub (Plan Melbourne Western region; postcode table)",
+    "question": "What energy rebates apply in Melbourne's west (Wyndham, Melton, Brimbank, Hobsons Bay, Maribyrnong, Moonee Valley)?",
+    "secondaryQuestions": [
+      "Is anywhere in the west 'regional'?",
+      "Which councils run programs?",
+      "Are there webinars in my language?"
+    ],
+    "internalLinks": [
+      "/victoria/wyndham/",
+      "/victoria/north-west-corridor/",
+      "/victoria/concession-card-holders/",
+      "/victoria/postcode/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (metro local)",
+    "notes": "INCLUDED, MARGINAL: the climate and gas data match inner Melbourne, so the local value is the council programs.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 63,
+    "url": "/victoria/melbourne-east/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area – metro hub (Plan Melbourne Eastern region; postcode table)",
+    "question": "What energy rebates apply in Melbourne's east and the Dandenongs?",
+    "secondaryQuestions": [
+      "Which eastern postcodes are 'Cold'?",
+      "Which are heat pump zone 5?",
+      "Which councils run programs?"
+    ],
+    "internalLinks": [
+      "/victoria/yarra-ranges/",
+      "/victoria/heat-pump-hot-water-size-guide/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/postcode/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (metro local)",
+    "notes": "INCLUDED. The Cold/zone 5 split inside one metro region is the hook.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 64,
+    "url": "/victoria/melbourne-south-east/",
+    "wave": 3,
+    "status": "new",
+    "template": "Area – metro hub (Plan Melbourne Southern region; postcode table)",
+    "question": "What energy rebates apply in Melbourne's south-east (Casey, Cardinia, Dandenong, Kingston, Frankston, Mornington Peninsula)?",
+    "secondaryQuestions": [
+      "Is Pakenham metro?",
+      "Which councils offer rebates?",
+      "Is Koo Wee Rup regional?"
+    ],
+    "internalLinks": [
+      "/victoria/casey/",
+      "/victoria/frankston/",
+      "/victoria/mornington-peninsula/",
+      "/victoria/postcode/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (metro local)",
+    "notes": "INCLUDED. Cardinia is covered here, not on a page of its own (see dropped).",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 65,
+    "url": "/victoria/business-heating-cooling/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – business (navGroup business)",
+    "question": "What VEU discounts can a Victorian business get for heating and cooling?",
+    "secondaryQuestions": [
+      "Which business sizes are listed (16, 25, 32, 56 kW)?",
+      "What is the minimum the business pays?",
+      "Can a new building get it?",
+      "Are large energy users excluded?"
+    ],
+    "internalLinks": [
+      "/victoria/business-energy-upgrades/",
+      "/victoria/veu-minimum-co-payment/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/veu-scams-cold-calls/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker, Business path (/victoria/eligibility-checker/). Quote form stays off; no business lead capture until a business AP agreement is signed.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium-High (B2B, commercial)",
+    "notes": "From the business review §7 item 5 and eligibility-checker-spec.md §2.4 and §5.3 (BH-1..7). Show the size table, never the largest figure alone. Checker result lines BH-* link here.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 66,
+    "url": "/victoria/business-led-lighting/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – business (navGroup business)",
+    "question": "Can a Victorian business still get a VEU discount for LED lighting?",
+    "secondaryQuestions": [
+      "Why only fluorescent indoor lights?",
+      "What about car parks and outdoor lighting?",
+      "Can councils get street lighting discounts?",
+      "Do apartment common areas count?"
+    ],
+    "internalLinks": [
+      "/victoria/business-energy-upgrades/",
+      "/victoria/apartments-and-units/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker, Business path (/victoria/eligibility-checker/). Quote form stays off; no business lead capture until a business AP agreement is signed.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (B2B)",
+    "notes": "Spec rules BL-1..4 and message N-LIGHT. The fluorescent-only rule goes in the answer block. Common areas: \"possibly, provider confirms\" only.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 67,
+    "url": "/victoria/business-cold-rooms-refrigeration/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – business (navGroup business)",
+    "question": "What VEU discounts are there for cold rooms and commercial refrigeration in Victoria?",
+    "secondaryQuestions": [
+      "Does my cool room qualify (size and temperature)?",
+      "What is the minimum contribution?",
+      "What about display fridges and fan motors?",
+      "Can a cafe, butcher or grocer apply?"
+    ],
+    "internalLinks": [
+      "/victoria/business-energy-upgrades/",
+      "/victoria/business-hot-water-motors/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker, Business path (/victoria/eligibility-checker/). Quote form stays off; no business lead capture until a business AP agreement is signed.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (B2B; cafes, butchers, grocers, farms)",
+    "notes": "Spec rules BR-1..4 and message N-COLD. Display cabinets and fan motors: no figure, \"provider confirms\".",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 68,
+    "url": "/victoria/business-hot-water-motors/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – business (navGroup business)",
+    "question": "What VEU discounts can a business get for hot water, motors and commercial kitchen spray valves?",
+    "secondaryQuestions": [
+      "How many hot water systems can a business upgrade?",
+      "What changes for large commercial heat pumps?",
+      "Which motor sizes are listed?",
+      "What is a pre-rinse spray valve discount?"
+    ],
+    "internalLinks": [
+      "/victoria/business-energy-upgrades/",
+      "/victoria/business-cold-rooms-refrigeration/",
+      "/victoria/gas-hot-water-to-heat-pump/",
+      "/victoria/find-an-accredited-provider/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker, Business path (/victoria/eligibility-checker/). Quote form stays off; no business lead capture until a business AP agreement is signed.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (B2B)",
+    "notes": "Spec rules BW-1..3, BM-1..2, BK-1..2 and message N-PRV. No figure for large C&I heat pumps.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 69,
+    "url": "/victoria/battery-rebate/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – program (federal, label FEDERAL)",
+    "question": "Is there a battery rebate in Victoria, and how does the federal Cheaper Home Batteries discount work?",
+    "secondaryQuestions": [
+      "How much is the discount?",
+      "Why does the size matter (14, 28, 50 kWh)?",
+      "What changes on 1 Jan 2027?",
+      "Do I need solar panels?",
+      "Can a business get it?"
+    ],
+    "internalLinks": [
+      "/victoria/solar-panel-rebate/",
+      "/victoria/veu-vs-solar-homes/",
+      "/victoria/business-energy-upgrades/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P1",
+    "priorityAndIntent": "P1 · Intent: High (hard date: 1 Jan 2027)",
+    "notes": "Label the program FEDERAL. A Victorian battery rebate is UNVERIFIED (spec §9): say nothing about one. A report of further cuts (Finder) is unconfirmed: keep it off the page. The alert sign-up (prompt 29b) sits here. Not a battery sub-site.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 70,
+    "url": "/victoria/solar-panel-rebate/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – program (Solar Homes)",
+    "question": "How much is the Victorian solar panel rebate, and what changes on 1 July 2027?",
+    "secondaryQuestions": [
+      "Who is eligible (income, property value, 10-year rule)?",
+      "Is the interest-free loan still offered?",
+      "Can I get it on a home under construction?",
+      "What about rentals?",
+      "What about businesses?"
+    ],
+    "internalLinks": [
+      "/victoria/veu-vs-solar-homes/",
+      "/victoria/battery-rebate/",
+      "/victoria/apartments-and-units/",
+      "/victoria/new-homes-all-electric-2027/",
+      "/victoria/business-energy-upgrades/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P1",
+    "priorityAndIntent": "P1 · Intent: High",
+    "notes": "Business solar (30–200 kW) is on the business hub, not here. Rental criteria detail is UNVERIFIED: link Solar Victoria, no detail. Don't use the stale \"up to $2,800\" on Energy Vic's Latest discounts page or the Solstice page.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 71,
+    "url": "/victoria/other-veu-discounts/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – question (AEO)",
+    "question": "What other VEU discounts are there for Victorian homes (windows, dryers, fridges, shower heads, TVs)?",
+    "secondaryQuestions": [
+      "How much is each?",
+      "Can businesses get any of them?",
+      "Is the Residential Efficiency Scorecard still part of VEU?",
+      "Is there a pool pump or EV charger discount?"
+    ],
+    "internalLinks": [
+      "/victoria/draught-proofing-rebate/",
+      "/victoria/gas-cooktop-to-induction/",
+      "/victoria/ceiling-insulation-rebate/",
+      "/victoria/what-is-a-veec/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P3",
+    "priorityAndIntent": "P3 · Intent: Medium (completes the topic for AI answers)",
+    "notes": "Low value each. The EV charger FAQ is a decision for Guri (the review found no household EV charger rebate; Solar Victoria gives guidance only).",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 72,
+    "url": "/victoria/help-in-your-language/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – support (trust)",
+    "question": "Where can I get information about energy rebates in my language?",
+    "secondaryQuestions": [
+      "Which languages are available?",
+      "Can I get an interpreter on the phone?",
+      "Where is the VEU consumer-rights factsheet in my language?",
+      "How do I avoid scams?"
+    ],
+    "internalLinks": [
+      "/victoria/veu-scams-cold-calls/",
+      "/victoria/concession-card-holders/",
+      "/victoria/wyndham/",
+      "/how-quotes-work/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (trust; Wyndham, Hume, Melton, Casey)",
+    "notes": "Links only; no machine-translated pages. Any later Punjabi or Hindi summary is a separate map row and must be reviewed by a fluent human. Language names in their own scripts, copied from the official pages. Corrected 14 Nov 2026: Energy Vic lists 11 factsheet languages (not Punjabi/Sinhalese), Solar Victoria lists 14 languages; ECCV UNVERIFIED.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 73,
+    "url": "/about/gurinder-singh/",
+    "wave": 4,
+    "status": "new",
+    "template": "Trust – author page (Person)",
+    "question": "Who writes and checks Household Rebates?",
+    "secondaryQuestions": [
+      "How are figures checked?",
+      "How is the site paid for?",
+      "Who reviews the technical pages?",
+      "How do I report an error?"
+    ],
+    "internalLinks": [
+      "/about/",
+      "/sources/",
+      "/how-quotes-work/",
+      "/victoria/"
+    ],
+    "cta": "None (trust page). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Low (E-E-A-T)",
+    "notes": "Biography, credentials, photo and profile links come only from Guri (placeholders until then). No reviewer is named until one has signed. Do not publish with placeholder text: noindex until Guri supplies the bio.",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
+    "gated": false
+  },
+  {
+    "row": 74,
+    "url": "/victoria/lpg-homes/",
+    "wave": 4,
+    "status": "new",
+    "template": "Guide – audience",
+    "question": "I use bottled LPG. Which Victorian energy discounts can I get, and does the 2027 gas rule affect me?",
+    "secondaryQuestions": [
+      "Can I get the VEU hot water discount replacing LPG?",
+      "Can I replace an LPG heater or cooktop?",
+      "Which postcodes have no mains gas?",
+      "Is LPG covered by the 1 March 2027 rule?"
+    ],
+    "internalLinks": [
+      "/victoria/postcode/",
+      "/victoria/gas-hot-water-to-heat-pump/",
+      "/victoria/gas-cooktop-to-induction/",
+      "/victoria/gas-room-heater-to-split-system/",
+      "/victoria/macedon-ranges/",
+      "/victoria/eligibility-checker/"
+    ],
+    "cta": "Eligibility checker (/victoria/eligibility-checker/). Quote form stays off.",
+    "priority": "P2",
+    "priorityAndIntent": "P2 · Intent: Medium (regional; AI answers)",
+    "notes": "No LPG dollar figure (UNVERIFIED). LPG running costs: only with a cited source; otherwise leave them off. The checker LPG prompt (GAS-NO) links here. Reg 45E text re-read 14 Nov 2026 via search snippet of the AustLII page (direct fetch blocked by Cloudflare).",
+    "factsCheckedOn": "14 Nov 2026",
+    "checkedOn": "14 Nov 2026",
     "gated": false
   }
 ]

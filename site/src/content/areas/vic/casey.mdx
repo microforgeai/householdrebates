@@ -10,11 +10,17 @@ areaName: "City of Casey"
 councils:
   - "City of Casey"
 postcodes:
+  - "3177"
+  - "3802"
+  - "3803"
+  - "3804"
   - "3805"
   - "3806"
+  - "3975"
   - "3976"
   - "3977"
   - "3978"
+  - "3980"
 localFacts:
   - text: "The City of Casey offers a household rebate for eligible DIY draught-proofing products (one per household, receipts within 6 months, claimed online via Rebately)."
     sourceId: casey-home-energy-rebates
@@ -22,21 +28,34 @@ localFacts:
     sourceId: casey-home-energy-rebates
   - text: "Residents can hire an Energy and Water Efficiency Home Audit Kit through the City of Casey to pinpoint air leaks and high-use appliances."
     sourceId: casey-home-energy-rebates
-  - text: "VEU weather sealing (installed by an accredited provider) is separate from Casey's DIY product rebate and carries its own household discount schedule."
+  - text: "VEU weather sealing (installed by an accredited provider) is separate from Casey's DIY product rebate and carries indicative household discounts by home type (apartment, townhouse, or house) and product warranty."
     sourceId: energyvic-weather-sealing
-  - text: "In VEU Specifications v25.0 Table A, Casey postcodes 3805, 3806, 3976, 3977, and 3978 are classified as Metropolitan with reticulated gas and Mild climatic region."
+  - text: "In VEU Specifications v25.0 Table A, all 11 City of Casey postcodes are Metropolitan with reticulated gas and heat pump zone 4, and all sit in the Mild climatic region except Tooradin (3980), which is Cold."
     sourceId: vic-veu-spec-v25
-answer: "Households in the City of Casey—covering Narre Warren, Berwick, Hampton Park, Cranbourne, and Clyde—can claim a dedicated council rebate for DIY draught-proofing products alongside state-wide Victorian Energy Upgrades (VEU) discounts. Casey's municipal DIY rebate is claimed online with itemised product receipts and is completely separate from VEU provider-installed weather sealing, ceiling insulation, heating, and hot water discounts."
+councilPrograms:
+  - name: "City of Casey DIY Draught-Proofing Rebate"
+    operator: "City of Casey"
+    status: open
+    statusNote: "Council rebate for eligible DIY draught-proofing products purchased and installed by City of Casey residents (one claim per household; may pause if budget is exhausted)."
+    statusCheckedOn: 2026-11-14
+    sourceId: casey-home-energy-rebates
+answer: "Households in the City of Casey—covering Narre Warren, Berwick, Hampton Park, Cranbourne, Clyde, and Tooradin—can claim a dedicated council rebate for DIY draught-proofing products alongside state-wide Victorian Energy Upgrades (VEU) discounts. Casey's municipal DIY rebate is claimed online with itemised product receipts and is completely separate from VEU provider-installed weather sealing, ceiling insulation, heating, and hot water discounts."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-13
-checkedOn: 2026-11-13
+updatedOn: 2026-11-14
+checkedOn: 2026-11-14
 sources:
   - casey-home-energy-rebates
   - energyvic-weather-sealing
   - vic-veu-spec-v25
+  - abs-asgs-allocation
 figures:
   - casey-diy-draught-rebate
+  - vic-veu-sealing-apartment-2yr
+  - vic-veu-sealing-apartment-5yr
+  - vic-veu-sealing-townhouse-2yr
+  - vic-veu-sealing-townhouse-5yr
+  - vic-veu-sealing-house-2yr
   - vic-veu-sealing-house-5yr
 faq:
   - casey-diy-draught-rebate-rules
@@ -64,5 +83,8 @@ Unlike most metropolitan councils, the City of Casey runs a direct household pro
 
 Casey's municipal DIY product rebate and **Victorian Energy Upgrades (VEU)** are separate programs:
 
-- **VEU weather sealing (provider-installed):** When an accredited provider's installer fits approved weather-sealing products across a detached house, Energy Victoria lists an indicative discount of <Money id="vic-veu-sealing-house-5yr" /> for 5-year warranty products (<SourceLink id="energyvic-weather-sealing" label="Energy Victoria — Weather sealing discounts" />). Always read the mandatory carbon monoxide gas-heater safety rules first on our <a href="/victoria/draught-proofing-rebate/">draught proofing (weather sealing) guide</a>.
-- **Ceiling insulation and heating swaps:** Because Casey postcodes (`3805`, `3806`, `3976`, `3977`, `3978`) sit in VEU's **Metropolitan / Mild** classification like <a href="/victoria/melbourne/">Melbourne</a> (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />), compare metropolitan examples on our <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation guide</a> and <a href="/victoria/gas-room-heater-to-split-system/">gas room heater to split system guide</a>, or check your home in the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a>.
+- **VEU weather sealing (provider-installed):** When an accredited provider's installer fits approved weather-sealing products, Energy Victoria's indicative discount depends on your home type (apartment, townhouse, or house) and whether the products carry at least a 2-year or 5-year warranty (<SourceLink id="energyvic-weather-sealing" label="Energy Victoria — Weather sealing discounts" />). Homes with an open-flued gas space heater, an open-flued ducted heater in a cupboard, an indoor open-flued gas water heater, or a flueless space heater cannot claim VEU weather sealing due to carbon monoxide risk—the provider checks your appliances first. Read the full rules on our <a href="/victoria/draught-proofing-rebate/">draught proofing (weather sealing) guide</a>.
+
+<FigureTable group="vic-veu-weather-sealing-household" captionPrefix="VEU provider-installed weather sealing examples by home type" />
+
+- **Ceiling insulation and heating swaps:** In VEU Specifications v25.0 Table A (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />; <SourceLink id="abs-asgs-allocation" label="ABS ASGS 2021 postcode allocation" />), 10 of Casey's 11 postcodes sit in **Metropolitan / Mild** like <a href="/victoria/melbourne/">Melbourne</a>, while **Tooradin (`3980`)** is **Metropolitan / Cold**. Compare scenarios on our <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation guide</a> and <a href="/victoria/gas-room-heater-to-split-system/">gas room heater to split system guide</a>, or check your postcode in the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a>.

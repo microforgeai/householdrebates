@@ -14,6 +14,7 @@ export interface UrlMapRow {
   priority: string;
   priorityAndIntent: string;
   notes: string;
+  factsCheckedOn?: string;
   checkedOn: string;
   gated: boolean;
 }
@@ -37,14 +38,18 @@ const ALL_ROWS = urlMapRows as UrlMapRow[];
 const ROW_BY_NUM = new Map<number, UrlMapRow>(ALL_ROWS.map((r) => [r.row, r]));
 const ROW_BY_URL = new Map<string, UrlMapRow>(ALL_ROWS.map((r) => [r.url, r]));
 
+function isGatedRowApproved(row: UrlMapRow, gatedOk: Set<number | string>): boolean {
+  return gatedOk.has(row.row) || gatedOk.has(row.url);
+}
+
 export function getEnabledRowNumbers(): Set<number> {
   const raw = parseRowRange(rolloutConfig.enabledRows);
-  const gatedOk = new Set<number>(rolloutConfig.gatedApproved ?? []);
+  const gatedOk = new Set<number | string>(rolloutConfig.gatedApproved ?? []);
   const enabled = new Set<number>();
   for (const rowNum of raw) {
     const row = ROW_BY_NUM.get(rowNum);
     if (!row) continue;
-    if (row.gated && !gatedOk.has(rowNum)) continue;
+    if (row.gated && !isGatedRowApproved(row, gatedOk)) continue;
     enabled.add(rowNum);
   }
   return enabled;
@@ -72,7 +77,7 @@ export function getMapRowByUrl(url: string): UrlMapRow | undefined {
   return ROW_BY_URL.get(url);
 }
 
-export function assertEntryEnabled(mapRow: number | undefined, expectedUrl: string): void {
+export function shouldBuildEntry(mapRow: number | undefined, expectedUrl: string): boolean {
   const rowInMap = ROW_BY_URL.get(expectedUrl);
   if (rowInMap && mapRow !== undefined && rowInMap.row !== mapRow) {
     throw new Error(
@@ -80,11 +85,29 @@ export function assertEntryEnabled(mapRow: number | undefined, expectedUrl: stri
     );
   }
   if (rowInMap) {
+    const raw = parseRowRange(rolloutConfig.enabledRows);
+    const gatedOk = new Set<number | string>(rolloutConfig.gatedApproved ?? []);
+    if (rowInMap.gated) {
+      if (!raw.has(rowInMap.row)) {
+        return false;
+      }
+      if (!isGatedRowApproved(rowInMap, gatedOk)) {
+        throw new Error(`gated page not approved: ${expectedUrl}`);
+      }
+      return true;
+    }
     const enabled = getEnabledRowNumbers();
     if (!enabled.has(rowInMap.row)) {
       throw new Error(
         `page not enabled in rollout.json: row ${rowInMap.row} (${expectedUrl})`,
       );
     }
+  }
+  return true;
+}
+
+export function assertEntryEnabled(mapRow: number | undefined, expectedUrl: string): void {
+  if (!shouldBuildEntry(mapRow, expectedUrl)) {
+    throw new Error(`page not enabled in rollout.json: ${expectedUrl}`);
   }
 }

@@ -20,7 +20,8 @@
 - **Insulation accredited provider count (3 on 13 Nov 2026) (Prompt 17, row 26):** Left off the page rather than hardcoding a volatile count.
 - **VEEC rename commencement date "2 Oct 2028" (Prompt 18, row 27):** Trade summary only; page states "on proclamation" without a date until checked against Act No. 37/2026.
 - **Live or recent VEEC spot price (Prompt 18, row 27):** Trader sites only, never official; kept off the site.
-- **Heating and cooling repeat-claim limits ("one ducted system per home") (Prompt 18, row 29):** Trade sites only; page states "ask the accredited provider".
+- **Heating and cooling repeat-claim limits ("one ducted system per home") (Prompts 16 & 18, row 29):** Trade sites only; checker does not ask and page states "ask the accredited provider".
+- **Weather sealing building-age rule or co-payment (Prompt 16):** Not stated in the URL map; checker does not ask about or apply either.
 - **$100 Power Saving Bonus (Prompt 19, row 38):** Round closed 31 Mar 2026 per search result; not promoted on the concession page.
 - **Excess-bill concession thresholds ($4,038.82 electricity, $2,598.58 gas) (Prompt 19, row 38):** Appear only in map notes, change yearly, and have no row fact; kept off the page.
 - **Default electricity and gas tariffs / Victorian Default Offer (Prompt 20, row 41):** Not verified in the map; running-costs tool shows Energy Victoria's published scenario savings only.
@@ -36,9 +37,11 @@
 - **`whittlesea-home-energy-program` (`homeenergyprogram.org.au/councils/whittlesea/`):** Funded by the City of Whittlesea and linked from the council's official news release; backs the "free home energy assessments valued up to $575" figure (`whittlesea-assessment-value`) in Prompt 21. Decide whether to accept `whittlesea-home-energy-program` as `official: true` (`kind: council-program`) or keep it `official: false` and omit the $575 figure.
 - **Home (`/`) national vs Victoria framing:** Decide whether `/` remains Victoria-first in its H1 and answer block while linking to `/victoria/`, or gets rewritten as a national pillar when other states are added.
 - **Easy Electric SEC vs lead-fee model:** State-owned SEC runs a free quote-matching service (`Easy Electric SEC`) that councils route residents to. Mentioned openly on `/victoria/find-an-accredited-provider/`; weigh in installer and lead-fee decisions before enabling the quote form.
+- **Already-installed induction cooktop claims (Prompt 16):** The URL map notes buying before claiming is normal for induction cooktops, without stating whether an already-installed cooktop can still be claimed. The checker treats Q3 = "Installed or work started" for induction as `POSSIBLE` with the `retro` note rather than `RETRO`.
 - **Shepparton gate (`/victoria/shepparton/`, Prompt 22):** Gated pending verification of the Greater Shepparton Solar Savers page and Guri's explicit decision.
 
 ## Done
 
 - Prompt 15: URL map imported (`53` rows), figure/source schemas extended, 65 sources and 40 figures loaded, and 5 existing pages updated (`2026-11-13`).
+- Prompt 16: Extracted 719-row SPEC25 postcode table (`vic-veu-postcodes.json`), added 8 induction/weather-sealing figures (`48` total), updated checker with 30 Sep 2026 co-payments, LPG wording, and ceiling insulation / induction cooktop / draught-proofing paths.
 

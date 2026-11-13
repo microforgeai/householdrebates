@@ -31,9 +31,9 @@ for (const file of htmlFiles) {
   for (const m of scriptTags) {
     const attrs = m[1];
     const body = m[2].trim();
-    const isJsonLd = /type=["']application\/ld\+json["']/i.test(attrs);
+    const isDataJson = /type=["']application\/(ld\+)?json["']/i.test(attrs);
     const hasSrc = /\bsrc=["'][^"']+["']/i.test(attrs);
-    if (!isJsonLd && (!hasSrc || body.length > 0)) {
+    if (!isDataJson && (!hasSrc || body.length > 0)) {
       throw new Error(
         `${rel}: Inline executable <script> detected (violates strict CSP script-src 'self'). Attrs: ${attrs}`,
       );

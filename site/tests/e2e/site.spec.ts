@@ -12,7 +12,8 @@ test.describe('Household Rebates static site e2e', () => {
 
   test('evaluates scenarios in the Victoria Eligibility Checker', async ({ page }) => {
     await page.goto('/victoria/eligibility-checker/');
-    await page.selectOption('#chk-q2', 'hotwater');
+    await page.uncheck('#chk-q2-rcac');
+    await page.check('#chk-q2-hotwater');
     await page.selectOption('#chk-q8a', 'mains-gas');
     await page.click('button[type="submit"]');
     const output = page.locator('[data-checker-output]');

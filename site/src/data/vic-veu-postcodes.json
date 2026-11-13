@@ -1,0 +1,4321 @@
+{
+  "source": "vic-veu-spec-v25",
+  "specVersion": "25.0",
+  "checkedOn": "2026-11-13",
+  "rows": {
+    "3000": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3001": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3002": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3003": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3004": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3006": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3008": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3010": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3011": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3012": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3013": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3015": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3016": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3018": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3019": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3020": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3021": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3022": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3023": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3024": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3025": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3026": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3027": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3028": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3029": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3030": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3031": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3032": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3033": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3034": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3036": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3037": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3038": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3039": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3040": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3041": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3042": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3043": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3044": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3045": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3046": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3047": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3048": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3049": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3050": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3051": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3052": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3053": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3054": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3055": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3056": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3057": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3058": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3059": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3060": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3061": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3062": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3063": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3064": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3065": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3066": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3067": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3068": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3070": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3071": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3072": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3073": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3074": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3075": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3076": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3078": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3079": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3081": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3082": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3083": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3084": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3085": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3086": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3087": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3088": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3089": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3090": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3091": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3093": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3094": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3095": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3096": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3097": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3099": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3101": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3102": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3103": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3104": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3105": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3106": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3107": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3108": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3109": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3111": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3113": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3114": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3115": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3116": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3121": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3122": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3123": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3124": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3125": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3126": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3127": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3128": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3129": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3130": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3131": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3132": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3133": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3134": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3135": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3136": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3137": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3138": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3139": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3140": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3141": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3142": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3143": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3144": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3145": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3146": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3147": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3148": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3149": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3150": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3151": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3152": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3153": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3154": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3155": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3156": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3158": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3159": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3160": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3161": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3162": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3163": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3164": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3165": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3166": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3167": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3168": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3169": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3170": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3171": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3172": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3173": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3174": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3175": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3176": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3177": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3178": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3179": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3180": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3181": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3182": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3183": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3184": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3185": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3186": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3187": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3188": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3189": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3190": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3191": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3192": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3193": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3194": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3195": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3196": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3197": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3198": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3199": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3200": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3201": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3202": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3204": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3205": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3206": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3207": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3211": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3212": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3213": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3214": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3215": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3216": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3217": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3218": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3219": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3220": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3221": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3222": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3223": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3224": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3225": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3226": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3227": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3228": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3230": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3231": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3232": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3233": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3234": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3235": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3236": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3237": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3238": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3239": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3240": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3241": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3242": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3243": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3249": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3250": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3251": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3254": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3260": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3264": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3265": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3266": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3267": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3268": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3269": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3270": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3271": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3272": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3273": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3274": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3275": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3276": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3277": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3278": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3279": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3280": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3281": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3282": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3283": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3284": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3285": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3286": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3287": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3289": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3292": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3293": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3294": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3300": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3301": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3302": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3303": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3304": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3305": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3309": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3310": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3311": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3312": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3314": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3315": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3317": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3318": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3319": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3321": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3322": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3323": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3324": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3325": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3328": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3329": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3330": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3331": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3332": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3333": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3334": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3335": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3336": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3337": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3338": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3340": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3341": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3342": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3345": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3350": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3351": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3352": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3353": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3354": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3355": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3356": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3357": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3358": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3360": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3361": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3363": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3364": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3370": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3371": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3373": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3374": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3375": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3377": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3378": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3379": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3380": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3381": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3384": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3385": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3387": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3388": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3390": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3391": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3392": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3393": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3395": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3396": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3400": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3401": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3402": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3407": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3409": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3412": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3413": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3414": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3415": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3418": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3419": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3420": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3423": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3424": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3427": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3428": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3429": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3430": {
+      "area": "Metropolitan",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3431": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3432": {
+      "area": "Metropolitan",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3433": {
+      "area": "Metropolitan",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3434": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3435": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3437": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3438": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3440": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3441": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3442": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3444": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3446": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3447": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3448": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3450": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3451": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3453": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3458": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3460": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3461": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3462": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3463": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3464": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3465": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3467": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3468": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3469": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3472": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3475": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3477": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3478": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3480": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3482": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3483": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3485": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3487": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3488": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3489": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3490": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3491": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3494": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3496": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3498": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3500": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3501": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3502": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3505": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3506": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3507": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3509": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3512": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3515": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3516": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3517": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3518": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3520": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3521": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3522": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3523": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3525": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3527": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3529": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3530": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3531": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3533": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3537": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3540": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3542": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3544": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3546": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3549": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3550": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3551": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3552": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3554": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3555": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3556": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3557": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3558": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3559": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3561": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3562": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3563": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3564": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3565": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3566": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3567": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3568": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3570": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3571": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3572": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3573": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3575": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3576": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3579": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3580": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3581": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3583": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3584": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3585": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3586": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3588": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3589": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3590": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3591": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3594": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3595": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3596": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3597": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3599": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Hot",
+      "hpZone": 4
+    },
+    "3607": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3608": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3610": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3612": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3614": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3616": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3617": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3618": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3619": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3620": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3621": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3622": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3623": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3624": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3629": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3630": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3631": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3632": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3633": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3634": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3635": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3636": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3637": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3638": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3639": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3640": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3641": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3643": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3644": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3646": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3647": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3649": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3658": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3659": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3660": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3661": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3662": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3663": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3664": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3665": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3666": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3669": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3670": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3671": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3672": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3673": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3675": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3676": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3677": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3678": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3682": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3683": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3685": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3687": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3688": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3689": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3690": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3691": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3694": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3695": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3697": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3698": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3699": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3700": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3701": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3704": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3705": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3707": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3708": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3709": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3711": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3712": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3713": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3714": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3715": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3717": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3718": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3719": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3720": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3722": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3723": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3724": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3725": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3726": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3727": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3728": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3730": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3732": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3733": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3735": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3736": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3737": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3738": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3739": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3740": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3741": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3744": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3746": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3747": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3749": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3750": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3751": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3752": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3753": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3754": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3755": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3756": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3757": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3758": {
+      "area": "Metropolitan",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3759": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3760": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3761": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3762": {
+      "area": "Metropolitan",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3763": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3764": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3765": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3766": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3767": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3770": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3775": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3777": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3778": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3779": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3781": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3782": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3783": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3785": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3786": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3787": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3788": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3789": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3791": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3792": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3793": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3795": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3796": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3797": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3799": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3800": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3802": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3803": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3804": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3805": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3806": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3807": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3808": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3809": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3810": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3812": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3813": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3814": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3815": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3816": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3818": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3820": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3821": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3822": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3823": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3824": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3825": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3831": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3832": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3833": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3835": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3840": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3841": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3842": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3844": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3847": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3850": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3851": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3852": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3853": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3854": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3856": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3857": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3858": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3859": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3860": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3862": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3864": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3865": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3869": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3870": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3871": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3873": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3874": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3875": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3878": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3880": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3882": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3885": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 5
+    },
+    "3886": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3887": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3888": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3889": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3890": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3891": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3892": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3893": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3895": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3896": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3898": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3900": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 5
+    },
+    "3902": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3903": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3904": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3909": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3910": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3911": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3912": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3913": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3915": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3916": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3918": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3919": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3920": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3921": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3922": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3923": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3925": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3926": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3927": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3928": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3929": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3930": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3931": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3933": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3934": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3936": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3937": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3938": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3939": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3940": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3941": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3942": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3943": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3944": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3945": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3946": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3950": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3951": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3953": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3954": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3956": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3957": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3958": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3959": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3960": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3962": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3964": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3965": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3966": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3967": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3971": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3975": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3976": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3977": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3978": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3979": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3980": {
+      "area": "Metropolitan",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3981": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3984": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3987": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3988": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Cold",
+      "hpZone": 4
+    },
+    "3990": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3991": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3992": {
+      "area": "Regional",
+      "reticulatedGas": false,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3995": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    },
+    "3996": {
+      "area": "Regional",
+      "reticulatedGas": true,
+      "climaticRegion": "Mild",
+      "hpZone": 4
+    }
+  }
+}

@@ -558,3 +558,115 @@
   currency: AUD
   sourceId: solarvic-hot-water-rebate
   checkedOn: 2026-11-13
+
+- id: vic-veu-induction
+  group: vic-veu-induction-household
+  state: vic
+  program: VEU
+  activity: induction
+  audience: household
+  scenario: "Induction cooktop replacing a gas cooktop, per product"
+  qualifier: exact
+  unit: AUD
+  amountMax: 140
+  currency: AUD
+  sourceId: energyvic-induction
+  checkedOn: 2026-11-13
+
+- id: vic-veu-induction-cert-price-basis
+  group: vic-veu-induction-household
+  state: vic
+  program: VEU
+  activity: induction
+  audience: household
+  scenario: "Certificate price Energy Victoria's induction figure is based on"
+  qualifier: exact
+  unit: AUD
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-induction
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-apartment-2yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: apartment, products with a 2-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-apartment-5yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: apartment, 5-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 140
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-townhouse-2yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: townhouse, 2-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 280
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-townhouse-5yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: townhouse, 5-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 560
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-house-2yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: house, 2-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 350
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13
+
+- id: vic-veu-sealing-house-5yr
+  group: vic-veu-weather-sealing-household
+  state: vic
+  program: VEU
+  activity: sealing
+  audience: household
+  scenario: "Example: house, 5-year warranty"
+  qualifier: exact
+  unit: AUD
+  amountMax: 700
+  currency: AUD
+  sourceId: energyvic-weather-sealing
+  checkedOn: 2026-11-13

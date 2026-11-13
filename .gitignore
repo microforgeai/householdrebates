@@ -4,6 +4,8 @@ node_modules/
 # Build output
 site/dist/
 site/.astro/
+site/data-src/
+data-src/
 api/dist/
 
 # Databases & local state

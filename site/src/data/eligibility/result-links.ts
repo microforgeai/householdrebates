@@ -16,6 +16,7 @@ export interface ResultLinkEntry {
 
 export const RESULT_LINKS: Record<ResultLinkKey, ResultLinkEntry> = {
   retro: {
+    internal: '/victoria/already-installed-retrospective-discount/',
     external: { sourceId: 'energyvic-retrospective' },
   },
   rcac: {

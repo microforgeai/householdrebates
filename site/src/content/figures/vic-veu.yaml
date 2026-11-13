@@ -739,3 +739,58 @@
   amountMax: 75
   sourceId: energyvic-hot-water
   checkedOn: 2026-11-13
+
+- id: vic-veu-copay-business-large
+  group: vic-veu-copayments-business
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: business
+  scenario: "Larger commercial and industrial upgrades"
+  qualifier: minimum
+  unit: AUD
+  amountMax: 10000
+  currency: AUD
+  sourceId: energyvic-hot-water
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-pv-rebate
+  group: vic-solar-homes-pv
+  state: vic
+  program: Solar Homes
+  activity: solar
+  audience: household
+  scenario: "Solar Homes solar panel (PV) rebate, plus an optional interest-free loan"
+  qualifier: up-to
+  unit: AUD
+  amountMax: 1400
+  currency: AUD
+  sourceId: solarvic-pv-rebate
+  checkedOn: 2026-11-13
+
+- id: vic-solar-homes-hw-extra-2026-27
+  group: vic-solar-homes-hotwater
+  state: vic
+  program: Solar Homes
+  activity: hotwater
+  audience: household
+  scenario: "Extra hot water rebates in 2026–27"
+  qualifier: exact
+  unit: count
+  amountMax: 27000
+  sourceId: solarvic-income-cap-news
+  checkedOn: 2026-11-13
+
+- id: vic-plumbing-cert-threshold
+  group: vic-plumbing
+  state: vic
+  program: BPC
+  activity: hotwater
+  audience: household
+  scenario: "Plumbing work value above which a compliance certificate is required"
+  qualifier: more-than
+  unit: AUD
+  amountMax: 750
+  currency: AUD
+  sourceId: bpc-plumbing-compliance
+  checkedOn: 2026-11-13

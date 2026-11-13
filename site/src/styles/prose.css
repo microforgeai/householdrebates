@@ -101,6 +101,27 @@ li {
   margin-bottom: 0;
 }
 
+/* Election & Rule Status Notice */
+.rule-status-notice {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--text-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+.rule-status-notice__label {
+  font-weight: 700;
+}
+
+.rule-status-notice__source {
+  color: var(--text-secondary);
+}
+
 /* Money Component */
 .money-inline {
   font-weight: 700;

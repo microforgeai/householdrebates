@@ -10,6 +10,24 @@ const distDir = path.join(siteRoot, 'dist');
 
 const maxAgeDays = Number(process.env.MAX_FIGURE_AGE_DAYS || 45);
 const now = new Date();
+const melbourneTodayParts = new Intl.DateTimeFormat('en-CA', {
+  timeZone: 'Australia/Melbourne',
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+}).format(now);
+const [melbY, melbM, melbD] = melbourneTodayParts.split('-').map(Number);
+const todayMelbourneUtc = Date.UTC(melbY, melbM - 1, melbD);
+
+function ageDaysMelbourne(checkedOn) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(checkedOn || '').trim());
+  if (m) {
+    const checkedUtc = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return Math.floor((todayMelbourneUtc - checkedUtc) / (1000 * 60 * 60 * 24));
+  }
+  const d = new Date(checkedOn);
+  return Math.floor((now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
+}
 
 // 0. Check stale-sources.json deny list if present
 const staleSourcesPath = path.join(srcDir, 'data/stale-sources.json');
@@ -57,8 +75,7 @@ for (const fig of figuresList) {
     throw new Error(`Figure "${fig.id}" references non-official source "${fig.sourceId}"`);
   }
 
-  const checkedDate = new Date(fig.checkedOn);
-  const ageDays = Math.floor((now.getTime() - checkedDate.getTime()) / (1000 * 60 * 60 * 24));
+  const ageDays = ageDaysMelbourne(fig.checkedOn);
   if (ageDays > maxAgeDays) {
     staleCount++;
     throw new Error(`Figure "${fig.id}" is stale (${ageDays} days old > ${maxAgeDays} days)`);
@@ -91,6 +108,39 @@ if (fs.existsSync(postcodesPath)) {
     if (pcAge > maxAgeDays) {
       throw new Error(`vic-veu-postcodes.json is stale (${pcAge} days old > ${maxAgeDays} days)`);
     }
+  }
+}
+
+// 2a. Check src/data/rule-status.json freshness and banner source freshness
+const ruleStatusPath = path.join(srcDir, 'data/rule-status.json');
+if (fs.existsSync(ruleStatusPath)) {
+  const rsData = JSON.parse(fs.readFileSync(ruleStatusPath, 'utf8'));
+  const ew = rsData?.electionWatch;
+  if (!ew || !ew.sourceId || !ew.checkedOn) {
+    throw new Error('data/rule-status.json is missing electionWatch.sourceId or electionWatch.checkedOn');
+  }
+  const rsSrc = sourcesMap.get(ew.sourceId);
+  if (!rsSrc) {
+    throw new Error(`data/rule-status.json references missing source "${ew.sourceId}"`);
+  }
+  if (!rsSrc.official) {
+    throw new Error(`data/rule-status.json references non-official source "${ew.sourceId}"`);
+  }
+  const ewAge = ageDaysMelbourne(ew.checkedOn);
+  if (ewAge > maxAgeDays) {
+    throw new Error(`data/rule-status.json checkedOn is stale (${ewAge} days old > ${maxAgeDays} days)`);
+  }
+  if (ewAge < -1) {
+    throw new Error(`data/rule-status.json has future checkedOn date (${ew.checkedOn})`);
+  }
+  const srcAge = ageDaysMelbourne(rsSrc.checkedOn);
+  if (srcAge > maxAgeDays) {
+    throw new Error(
+      `Banner source "${ew.sourceId}" (content/sources/${ew.sourceId}.yaml) is stale (${srcAge} days old > ${maxAgeDays} days)`,
+    );
+  }
+  if (srcAge < -1) {
+    throw new Error(`Banner source "${ew.sourceId}" has future checkedOn date (${rsSrc.checkedOn})`);
   }
 }
 

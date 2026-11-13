@@ -1,11 +1,11 @@
 question: Is there an official order for replacing gas appliances in Victoria?
 answer: No official Victorian Government source prescribes a mandatory sequence
-  for electrifying an existing home, and owner-occupiers are not required to
-  remove working gas space heaters or gas cooktops. The one legal trigger to
-  plan around is 1 March 2027, when a mains gas water heater in an existing home
-  that fails and needs replacement generally cannot be replaced with another
-  mains gas unit.
+  for electrifying an existing home, and under currently legislated rules
+  owner-occupiers are not required to remove working gas space heaters or gas
+  cooktops. The one currently legislated trigger to plan around is 1 March 2027,
+  when a mains gas water heater in an existing home that fails and needs
+  replacement generally cannot be replaced with another mains gas unit.
 pages:
   - get-off-gas-planner
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

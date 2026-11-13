@@ -5,11 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && node scripts/build-llms.mjs && node scripts/build-redirects.mjs && node scripts/check-answers.mjs",
+    "build": "astro build && node scripts/build-llms.mjs && node scripts/build-redirects.mjs && node scripts/check-answers.mjs && node scripts/check-rule-status.mjs",
     "preview": "astro preview",
     "astro": "astro",
     "import:urlmap": "node scripts/import-url-map.mjs",
-    "check": "node scripts/check-figures.mjs && node scripts/check-urlmap.mjs && node scripts/check-copy.mjs && node scripts/check-schema.mjs && node scripts/check-seo.mjs && node scripts/check-links.mjs && node scripts/check-consent-hash.mjs && node scripts/check-installers.mjs && node scripts/check-legal.mjs && astro check",
+    "check": "node scripts/check-figures.mjs && node scripts/check-urlmap.mjs && node scripts/check-copy.mjs && node scripts/check-rule-status.mjs && node scripts/check-schema.mjs && node scripts/check-seo.mjs && node scripts/check-links.mjs && node scripts/check-consent-hash.mjs && node scripts/check-installers.mjs && node scripts/check-legal.mjs && astro check",
     "check:sources": "node scripts/check-sources.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"

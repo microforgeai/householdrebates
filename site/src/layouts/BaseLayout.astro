@@ -17,6 +17,7 @@ export interface Props {
   breadcrumbs?: BreadcrumbItem[];
   faqs?: FaqSchemaItem[];
   howTo?: HowToSchemaInput;
+  ruleStatus?: 'election-watch';
 }
 
 const {
@@ -27,6 +28,7 @@ const {
   breadcrumbs = [],
   faqs = [],
   howTo,
+  ruleStatus,
 } = Astro.props;
 
 const schemaGraph = buildJsonLdGraph({
@@ -52,7 +54,7 @@ const schemaGraph = buildJsonLdGraph({
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <IndependenceNotice />
     <Header />
-    <main id="main-content">
+    <main id="main-content" data-rule-status={ruleStatus}>
       <slot />
     </main>
     <Footer />

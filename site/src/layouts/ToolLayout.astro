@@ -3,6 +3,7 @@ import { getEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import RuleStatusNotice from '../components/RuleStatusNotice.astro';
 import Money from '../components/Money.astro';
 import EligibilityChecker from '../components/EligibilityChecker.astro';
 import RunningCostsPicker from '../components/RunningCostsPicker.astro';
@@ -32,6 +33,7 @@ export interface Props {
       leadForm?: false | 'rcac' | 'hotwater' | 'either';
       noindex: boolean;
       related: string[];
+      ruleStatus?: 'election-watch';
     };
   };
   pathname: string;
@@ -58,6 +60,7 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
   faqs={validFaqs}
+  ruleStatus={d.ruleStatus}
 >
   <Breadcrumbs items={breadcrumbs} />
   <article class="prose-container">
@@ -70,6 +73,7 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
         </div>
       )}
     </AnswerBlock>
+    {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
     <div class="byline">
       By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
       {formatAuDate(d.updatedOn)}

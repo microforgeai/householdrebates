@@ -1,0 +1,35 @@
+---
+import { getEntry } from 'astro:content';
+import { assertFigureNotStale } from '../lib/dates';
+import { resolveElectionWatchNotice } from '../lib/rule-status';
+
+const notice = resolveElectionWatchNotice();
+const sourceEntry = await getEntry('sources', notice.sourceId);
+
+if (!sourceEntry) {
+  throw new Error(`RuleStatusNotice references missing source "${notice.sourceId}"`);
+}
+if (!sourceEntry.data.official) {
+  throw new Error(`RuleStatusNotice source "${notice.sourceId}" must have official: true`);
+}
+
+assertFigureNotStale(
+  `source:${notice.sourceId}`,
+  sourceEntry.data.checkedOn,
+  Number(process.env.MAX_FIGURE_AGE_DAYS || 45),
+);
+---
+
+{notice.visible && (
+  <div class="rule-status-notice" role="note" data-rule-status-notice>
+    <strong class="rule-status-notice__label">Election watch:</strong>{' '}
+    {notice.message}{' '}
+    <span class="rule-status-notice__source">
+      (Source:{' '}
+      <a href={sourceEntry.data.url} target="_blank" rel="noopener noreferrer">
+        Energy Victoria
+      </a>
+      , checked {notice.checkedOnFormatted}.)
+    </span>
+  </div>
+)}

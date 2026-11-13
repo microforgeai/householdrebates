@@ -1,11 +1,12 @@
 question: Does my building permit date decide whether Victoria’s 2027
   all-electric new-home rule applies?
-answer: Yes. Energy Victoria states that the all-electric standard for new homes
-  and knock-down rebuilds applies to building permits issued on or after 1
-  January 2027, with a limited transitional exception where substantial design
-  progress is certified under the regulations. Existing buildings without an
-  existing gas connection also cannot connect to mains gas from 1 January 2027.
+answer: Yes. Under currently legislated rules, Energy Victoria states that the
+  all-electric standard for new homes and knock-down rebuilds applies to building
+  permits issued on or after 1 January 2027, with a limited transitional
+  exception where substantial design progress is certified under the regulations.
+  Under currently legislated rules, existing buildings without an existing gas
+  connection also cannot connect to mains gas from 1 January 2027.
 pages:
   - new-homes-all-electric-2027
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

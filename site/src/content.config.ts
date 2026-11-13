@@ -111,6 +111,7 @@ const pageBase = z.object({
   navGroup: NavGroup,
   mapRow: z.number().int(),
   reviewBy: z.coerce.date().optional(),
+  ruleStatus: z.enum(['election-watch']).optional(),
   answer: z.string(),
   author: z.literal('Gurinder Singh'),
   publishedOn: z.coerce.date(),

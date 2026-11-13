@@ -3,6 +3,7 @@ import { getEntry, getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import RuleStatusNotice from '../components/RuleStatusNotice.astro';
 import Money from '../components/Money.astro';
 import Toc, { type HeadingItem } from '../components/Toc.astro';
 import Faq from '../components/Faq.astro';
@@ -40,6 +41,7 @@ export interface Props {
       veuPostcodeTable?: boolean;
       nccZone?: { zone: number; places: string[] };
       localFacts: { text: string; sourceId: string | { id: string } }[];
+      ruleStatus?: 'election-watch';
     };
   };
   pathname: string;
@@ -136,6 +138,7 @@ const contextSubLabel =
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
   faqs={validFaqs}
+  ruleStatus={d.ruleStatus}
 >
   <Breadcrumbs items={breadcrumbs} />
   <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
@@ -149,6 +152,7 @@ const contextSubLabel =
           </div>
         )}
       </AnswerBlock>
+      {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
       <div class="byline">
         By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
         {formatAuDate(d.updatedOn)}

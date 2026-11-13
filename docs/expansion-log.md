@@ -38,7 +38,22 @@
 - **Home (`/`) national vs Victoria framing:** Decide whether `/` remains Victoria-first in its H1 and answer block while linking to `/victoria/`, or gets rewritten as a national pillar when other states are added.
 - **Easy Electric SEC vs lead-fee model:** State-owned SEC runs a free quote-matching service (`Easy Electric SEC`) that councils route residents to. Mentioned openly on `/victoria/find-an-accredited-provider/`; weigh in installer and lead-fee decisions before enabling the quote form.
 - **Already-installed induction cooktop claims (Prompt 16):** The URL map notes buying before claiming is normal for induction cooktops, without stating whether an already-installed cooktop can still be claimed. The checker treats Q3 = "Installed or work started" for induction as `POSSIBLE` with the `retro` note rather than `RETRO`.
-- **Shepparton gate (`/victoria/shepparton/`, Prompt 22):** Gated pending verification of the Greater Shepparton Solar Savers page and Guri's explicit decision.
+- **Shepparton gate (`/victoria/shepparton/`, Prompt 22 & 34):** Resolved (14 Nov 2026): keep gated (option c).
+- **Election-watch notice wording (Prompt 24):** Resolved (14 Nov 2026): keep neutral wording (no political parties or repeal pledges named).
+- **Passing 2027 mentions on other pages (Prompt 24):** Resolved (14 Nov 2026): keep `RuleStatusNotice` on the 9 primary 2027-rule pages only.
+
+## Scheduled re-checks
+
+- Post-election re-verification, 30 Nov–5 Dec 2026, prompt 23. Inputs: `rule-status.json`, the 9 election-watch pages (`reviewBy: 2026-12-05`):
+  - `/` (`mapRow: 1`)
+  - `/victoria/` (`mapRow: 17`)
+  - `/victoria/gas-to-electric-hot-water-2027/` (`mapRow: 11`)
+  - `/victoria/new-homes-all-electric-2027/` (`mapRow: 39`)
+  - `/victoria/gas-hot-water-broken-before-or-after-march-2027/` (`mapRow: 32`; restore `reviewBy: 2027-03-01` after post-election re-verification if rule is unchanged)
+  - `/victoria/gas-hot-water-ban-exemptions/` (`mapRow: 33`)
+  - `/victoria/landlords-rental-standards-2027/` (`mapRow: 37`)
+  - `/victoria/renters/` (`mapRow: 36`)
+  - `/victoria/get-off-gas-planner/` (`mapRow: 43`)
 
 ## Done
 
@@ -49,4 +64,5 @@
 - Prompt 19 (Wave 2a): Enabled rows `1-40,44-45`, added 11 figures (`68` total), added 21 FAQs, 5 audience pages (rows 36–40), and 2 support guides (rows 44–45, including CO safety lead on draught proofing and open Easy Electric SEC coverage), and wired `RESULT_LINKS.sealing.internal` (`42` indexable URLs).
 - Prompt 20 (Wave 2b): Enabled rows `1-45`, added 2 electrification figures (`70` total) and `hw-size-guide.json` (`1` tool data file verified), built `RunningCostsPicker`, `HwSizeGuide`, and `GasExitPlanner` islands (< 1 KB gzipped each) with unit and Playwright e2e tests (`45` indexable URLs).
 - Prompt 21 (Wave 3): Enabled rows `1-47,49-53` (row 48 `/victoria/shepparton/` kept gated), added 5 regional provider and Solstice figures (`75` total; `whittlesea-assessment-value` skipped pending `official` decision on `whittlesea-home-energy-program`), added 21 FAQs and 7 area pages (`ballarat`, `bendigo`, `wyndham`, `casey`, `whittlesea`, `yarra-ranges`, `solstice-gas-shutdown-towns`), verified ABCB `CC BY 4.0` attribution and SPEC25 postcode tables (`52` indexable URLs).
+- Prompt 24: Added `rule-status.json`, `energyvic-caretaker-banner.yaml` (`checkedOn: 2026-11-14`), `RuleStatusNotice.astro`, `"currently legislated"` copy pass across the 9 election-watch pages (`reviewBy: 2026-12-05`), and `check-rule-status.mjs` build guard (`52` indexable URLs).
 

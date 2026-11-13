@@ -5,9 +5,20 @@ const MELBOURNE_FORMATTER = new Intl.DateTimeFormat('en-AU', {
   timeZone: 'Australia/Melbourne',
 });
 
+const MELBOURNE_DAY_MONTH_FORMATTER = new Intl.DateTimeFormat('en-AU', {
+  day: 'numeric',
+  month: 'short',
+  timeZone: 'Australia/Melbourne',
+});
+
 export function formatAuDate(dateInput: Date | string): string {
   const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
   return MELBOURNE_FORMATTER.format(d);
+}
+
+export function formatAuDayMonth(dateInput: Date | string): string {
+  const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+  return MELBOURNE_DAY_MONTH_FORMATTER.format(d);
 }
 
 export function daysBetween(checkedOn: Date | string, referenceDate: Date = new Date()): number {

@@ -122,7 +122,7 @@ export const GAS_PLANNER_STEPS: GasPlannerStep[] = [
     guideHref: '/victoria/gas-hot-water-to-heat-pump/',
     guideLabel: 'Gas hot water to heat pump guide',
     detail:
-      'Trigger note: from 1 March 2027, a mains gas water heater in an existing home that needs replacing generally cannot be replaced with another mains gas heater.',
+      'Trigger note: under the currently legislated rule, from 1 March 2027, a mains gas water heater in an existing home that needs replacing generally cannot be replaced with another mains gas heater.',
   },
   {
     key: 'room',

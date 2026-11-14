@@ -978,9 +978,9 @@
   state: vic
   program: VEU
   activity: glazing
-  audience: household
+  audience: both
   scenario: "Example: double glazing, per 10 m²"
-  qualifier: exact
+  qualifier: up-to
   unit: AUD
   kind: discount
   amountMax: 210
@@ -993,7 +993,7 @@
   state: vic
   program: VEU
   activity: glazing
-  audience: household
+  audience: both
   scenario: "Example: secondary glazing, per 10 m²"
   qualifier: exact
   unit: AUD
@@ -1207,4 +1207,752 @@
   kind: count
   amountMax: 60
   sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-14
+
+- id: vic-veu-appliance-dryer
+  group: vic-veu-appliances
+  state: vic
+  program: VEU
+  activity: appliances
+  audience: both
+  scenario: "Heat pump clothes dryer, per eligible unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-veu-products
+  checkedOn: 2026-11-14
+  conditions:
+    - "ESC Part 25 lists clothes dryers for residential and non-residential premises; provider confirms business eligibility"
+
+- id: vic-veu-appliance-fridge
+  group: vic-veu-appliances
+  state: vic
+  program: VEU
+  activity: appliances
+  audience: both
+  scenario: "High-efficiency refrigerator or freezer (250 to 700 L), per eligible unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-fridge-freezer
+  checkedOn: 2026-11-14
+
+- id: vic-veu-appliance-tv
+  group: vic-veu-appliances
+  state: vic
+  program: VEU
+  activity: appliances
+  audience: both
+  scenario: "High-efficiency television, per eligible unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-veu-products
+  checkedOn: 2026-11-14
+
+- id: vic-veu-appliance-showerhead
+  group: vic-veu-appliances
+  state: vic
+  program: VEU
+  activity: appliances
+  audience: both
+  scenario: "Water-efficient shower head (shower rose), per eligible unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-veu-products
+  checkedOn: 2026-11-14
+
+- id: vic-veu-appliance-ihd
+  group: vic-veu-appliances
+  state: vic
+  program: VEU
+  activity: appliances
+  audience: household
+  scenario: "In-home energy display, per eligible residential unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-veu-products
+  checkedOn: 2026-11-14
+  conditions:
+    - "ESC Part 30 applies to residential premises only"
+
+- id: vic-veu-biz-rcac-room-gas
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a non-ducted gas heater with a room split system (3 to 9 kW)"
+  qualifier: range
+  unit: AUD
+  kind: discount
+  amountMin: 420
+  amountMax: 1050
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-4splits
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with 4 single split systems"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1680
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-multisplit
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with a 10 kW multi-split reverse-cycle system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1820
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-16kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with a 16 kW ducted reverse-cycle system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 2590
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-25kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with a 25 kW ducted reverse-cycle system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 3850
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-32kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with a 32 kW ducted reverse-cycle system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 6230
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-gas-56kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a ducted gas heater with a 56 kW ducted reverse-cycle system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 8820
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-central-electric-ducted
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a central electric resistance ducted heater with a ducted reverse-cycle system (16 to 56 kW)"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 4060
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-replaced-ducted-16kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace an existing ducted reverse-cycle system with a new 16 kW ducted system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 910
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-replaced-ducted-25kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace an existing ducted reverse-cycle system with a new 25 kW ducted system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 1400
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-replaced-ducted-32kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace an existing ducted reverse-cycle system with a new 32 kW ducted system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 3010
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-replaced-ducted-56kw
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace an existing ducted reverse-cycle system with a new 56 kW ducted system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 3290
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-replaced-room
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace an existing non-ducted reverse-cycle air conditioner with a new room split system"
+  qualifier: range
+  unit: AUD
+  kind: discount
+  amountMin: 210
+  amountMax: 490
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-hardwired-electric
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: replace a hard-wired electric room heater with a room split system"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 490
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-ducted-no-decomm
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: install a ducted reverse-cycle system without decommissioning an existing heater"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1820
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-rcac-room-no-decomm
+  group: vic-veu-biz-heating
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Business: install a room reverse-cycle split system without decommissioning an existing heater"
+  qualifier: range
+  unit: AUD
+  kind: discount
+  amountMin: 70
+  amountMax: 140
+  currency: AUD
+  sourceId: energyvic-heating-cooling
+  checkedOn: 2026-11-13
+
+- id: vic-veu-biz-lighting-100-tubes
+  group: vic-veu-biz-lighting
+  state: vic
+  program: VEU
+  activity: lighting
+  audience: business
+  scenario: "Example: 100 fluorescent tubes (24 W) replaced with 50 LED tubes"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 1260
+  currency: AUD
+  sourceId: energyvic-lighting
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-lighting-20-carpark
+  group: vic-veu-biz-lighting
+  state: vic
+  program: VEU
+  activity: lighting
+  audience: business
+  scenario: "Example: 20 metal halide car park lights replaced with LED high bays"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 3150
+  currency: AUD
+  sourceId: energyvic-lighting
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-lighting-100-street
+  group: vic-veu-biz-lighting
+  state: vic
+  program: VEU
+  activity: lighting
+  audience: business
+  scenario: "Example: 100 street lights upgraded for councils and road authorities"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 21350
+  currency: AUD
+  sourceId: energyvic-lighting
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-coldroom-small
+  group: vic-veu-biz-cold-rooms
+  state: vic
+  program: VEU
+  activity: coldroom
+  audience: business
+  scenario: "Small walk-in cold room (4 to 9 m²), electronic expansion valve and controller"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 420
+  currency: AUD
+  sourceId: energyvic-cold-rooms
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-coldroom-medium
+  group: vic-veu-biz-cold-rooms
+  state: vic
+  program: VEU
+  activity: coldroom
+  audience: business
+  scenario: "Medium walk-in cold room (over 9 to under 24 m²), 3-part upgrade"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 1540
+  currency: AUD
+  sourceId: energyvic-cold-rooms
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-coldroom-large
+  group: vic-veu-biz-cold-rooms
+  state: vic
+  program: VEU
+  activity: coldroom
+  audience: business
+  scenario: "Large walk-in cold room (24 m² or more), 5-part upgrade"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 4620
+  currency: AUD
+  sourceId: energyvic-cold-rooms
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-coldroom-copay
+  group: vic-veu-biz-cold-rooms
+  state: vic
+  program: VEU
+  activity: coldroom
+  audience: business
+  scenario: "Walk-in cold room upgrade, minimum customer contribution"
+  qualifier: minimum
+  unit: AUD
+  kind: payment
+  amountMax: 500
+  currency: AUD
+  sourceId: energyvic-cold-rooms
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-motor-15kw-premium
+  group: vic-veu-biz-motors
+  state: vic
+  program: VEU
+  activity: motors
+  audience: business
+  scenario: "Example: 15 kW premium-efficiency motor"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 280
+  currency: AUD
+  sourceId: energyvic-motors
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-motor-75kw-he
+  group: vic-veu-biz-motors
+  state: vic
+  program: VEU
+  activity: motors
+  audience: business
+  scenario: "Example: 75 kW high-efficiency motor"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 560
+  currency: AUD
+  sourceId: energyvic-motors
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-motor-75kw-premium
+  group: vic-veu-biz-motors
+  state: vic
+  program: VEU
+  activity: motors
+  audience: business
+  scenario: "Example: 75 kW premium-efficiency motor"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 1120
+  currency: AUD
+  sourceId: energyvic-motors
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-motor-185kw-premium
+  group: vic-veu-biz-motors
+  state: vic
+  program: VEU
+  activity: motors
+  audience: business
+  scenario: "High-efficiency motor, up to 185 kW premium-efficiency unit"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 2380
+  currency: AUD
+  sourceId: energyvic-motors
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-motor-copay
+  group: vic-veu-biz-motors
+  state: vic
+  program: VEU
+  activity: motors
+  audience: business
+  scenario: "High-efficiency motor upgrade, minimum customer contribution"
+  qualifier: minimum
+  unit: AUD
+  kind: payment
+  amountMax: 200
+  currency: AUD
+  sourceId: energyvic-motors
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-prv
+  group: vic-veu-biz-kitchen
+  state: vic
+  program: VEU
+  activity: kitchen
+  audience: business
+  scenario: "Pre-rinse spray valve, per valve replaced"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 210
+  currency: AUD
+  sourceId: energyvic-pre-rinse-spray-valve
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-50kw
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "Example: 50 kW commercial solar PV system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 4550
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-75kw
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "Example: 75 kW commercial solar PV system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 6860
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-100kw
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "Example: 100 kW commercial solar PV system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 9100
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-150kw
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "Example: 150 kW commercial solar PV system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 25760
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-200kw
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "Example: 200 kW commercial solar PV system"
+  qualifier: exact
+  unit: AUD
+  kind: discount
+  amountMax: 34300
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-solar-veec-basis
+  group: vic-veu-biz-solar-pv
+  state: vic
+  program: VEU
+  activity: solar
+  audience: business
+  scenario: "VEEC certificate price basis used for Energy Victoria's commercial solar PV examples"
+  qualifier: exact
+  unit: AUD
+  kind: rate
+  amountMax: 70
+  currency: AUD
+  sourceId: energyvic-solar-pv
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-saving-small
+  group: vic-veu-biz-savings
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Small business estimated annual energy bill saving from VEU upgrades"
+  qualifier: up-to
+  unit: AUD
+  kind: saving
+  amountMax: 500
+  currency: AUD
+  sourceId: energyvic-businesses
+  checkedOn: 2026-11-14
+
+- id: vic-veu-biz-saving-large
+  group: vic-veu-biz-savings
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: business
+  scenario: "Larger business estimated annual energy bill saving from VEU upgrades"
+  qualifier: up-to
+  unit: AUD
+  kind: saving
+  amountMax: 74000
+  currency: AUD
+  sourceId: energyvic-businesses
+  checkedOn: 2026-11-14
+
+- id: fed-battery-discount-pct
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "Indicative upfront cost discount under the federal Cheaper Home Batteries Program"
+  qualifier: about
+  unit: percent
+  kind: rate
+  amountMax: 30
+  sourceId: dcceew-cheaper-home-batteries
+  checkedOn: 2026-11-14
+
+- id: fed-battery-size-kwh
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "Eligible small-scale battery nominal capacity range in kWh"
+  qualifier: range
+  unit: count
+  kind: threshold
+  amountMin: 5
+  amountMax: 100
+  sourceId: dcceew-cheaper-home-batteries
+  checkedOn: 2026-11-14
+
+- id: fed-battery-taper-0-14kwh
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "STC factor taper share applied up to 14 kWh usable capacity"
+  qualifier: exact
+  unit: percent
+  kind: rate
+  amountMax: 100
+  effectiveFrom: 2026-05-01
+  sourceId: cer-battery-changes-may-2026
+  checkedOn: 2026-11-14
+
+- id: fed-battery-taper-14-28kwh
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "STC factor taper share applied for usable capacity from over 14 kWh to 28 kWh"
+  qualifier: exact
+  unit: percent
+  kind: rate
+  amountMax: 60
+  effectiveFrom: 2026-05-01
+  sourceId: cer-battery-changes-may-2026
+  checkedOn: 2026-11-14
+
+- id: fed-battery-taper-28-50kwh
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "STC factor taper share applied for usable capacity from over 28 kWh to 50 kWh"
+  qualifier: exact
+  unit: percent
+  kind: rate
+  amountMax: 15
+  effectiveFrom: 2026-05-01
+  sourceId: cer-battery-changes-may-2026
+  checkedOn: 2026-11-14
+
+- id: fed-battery-stc-factor-2026-h2
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "STC factor per kWh of usable capacity for installations from May to December 2026"
+  qualifier: exact
+  unit: count
+  kind: rate
+  amountMax: 6.8
+  effectiveFrom: 2026-05-01
+  sourceId: dcceew-cheaper-home-batteries
+  checkedOn: 2026-11-14
+
+- id: fed-battery-stc-factor-2027-h1
+  group: fed-batteries
+  state: national
+  program: "Cheaper Home Batteries"
+  activity: battery
+  audience: both
+  jurisdiction: federal
+  scenario: "STC factor per kWh of usable capacity for installations from 1 January 2027"
+  qualifier: exact
+  unit: count
+  kind: rate
+  amountMax: 5.7
+  effectiveFrom: 2027-01-01
+  sourceId: dcceew-cheaper-home-batteries
   checkedOn: 2026-11-14

@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
@@ -13,6 +14,7 @@ import LeadForm from '../components/LeadForm.astro';
 import Faq from '../components/Faq.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
+import { getCheckerReferencedFigureIds } from '../lib/checker/rules';
 import { formatAuDate } from '../lib/dates';
 import { resolvePageFaqs } from '../lib/faqs';
 import { ensureTrailingSlash } from '../lib/urls';
@@ -49,6 +51,17 @@ const d = entry.data;
 
 const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs(pathname, d.faq ?? []);
 const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
+
+let effectiveCheckedOn: Date = d.checkedOn;
+if (isCheckerPage) {
+  const checkerFigIds = new Set(getCheckerReferencedFigureIds());
+  const checkerFigures = await getCollection('figures', (f) => checkerFigIds.has(f.id));
+  for (const fig of checkerFigures) {
+    if (fig.data.checkedOn.getTime() < effectiveCheckedOn.getTime()) {
+      effectiveCheckedOn = fig.data.checkedOn;
+    }
+  }
+}
 ---
 
 <BaseLayout
@@ -69,7 +82,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
     </AnswerBlock>
     {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
     <div class="byline">
-      By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
+      By {d.author}, Agenor · Figures checked on {formatAuDate(effectiveCheckedOn)} against official Victorian sources · Updated{' '}
       {formatAuDate(d.updatedOn)}
     </div>
 

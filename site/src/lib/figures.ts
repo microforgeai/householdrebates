@@ -20,7 +20,12 @@ export type FigureActivity =
   | 'insulation'
   | 'induction'
   | 'sealing'
-  | 'glazing';
+  | 'glazing'
+  | 'appliances'
+  | 'lighting'
+  | 'coldroom'
+  | 'motors'
+  | 'kitchen';
 
 export interface FigureData {
   id: string;
@@ -28,7 +33,8 @@ export interface FigureData {
   state: string;
   program: string;
   activity: FigureActivity;
-  audience: 'household' | 'business';
+  audience: 'household' | 'business' | 'both';
+  jurisdiction?: 'state' | 'federal' | 'local';
   scenario: string;
   qualifier: FigureQualifier;
   unit?: FigureUnit;
@@ -43,6 +49,7 @@ export interface FigureData {
   gstIncluded?: boolean;
   effectiveFrom?: Date | string;
   effectiveTo?: Date | string;
+  expiresOn?: Date | string;
   supersededBy?: string;
   sourceId: string | { id: string };
   checkedOn: Date | string;
@@ -68,6 +75,10 @@ const COUNT_FORMATTER = new Intl.NumberFormat('en-AU', {
   maximumFractionDigits: 0,
 });
 
+const COUNT_DECIMAL_FORMATTER = new Intl.NumberFormat('en-AU', {
+  maximumFractionDigits: 2,
+});
+
 export function formatAud(amount: number, display: FigureDisplay = 'standard'): string {
   if (display === 'cents') {
     return AUD_CENTS_FORMATTER.format(amount);
@@ -90,7 +101,9 @@ export function formatUnitValue(
     return `${numStr}%`;
   }
   if (unit === 'count') {
-    return COUNT_FORMATTER.format(amount);
+    return Number.isInteger(amount)
+      ? COUNT_FORMATTER.format(amount)
+      : COUNT_DECIMAL_FORMATTER.format(amount);
   }
   return formatAud(amount, display);
 }

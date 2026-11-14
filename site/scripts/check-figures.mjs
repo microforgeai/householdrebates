@@ -102,6 +102,7 @@ const figuresPath = path.join(srcDir, 'content/figures/vic-veu.yaml');
 const figuresList = YAML.parse(fs.readFileSync(figuresPath, 'utf8'));
 const figuresById = new Map();
 const figuresByGroup = new Map();
+const scenariosSeen = new Map();
 let staleCount = 0;
 let estimateCount = 0;
 let unlabelledHeroes = 0;
@@ -112,6 +113,14 @@ for (const fig of figuresList) {
     throw new Error(`Duplicate figure ID "${fig.id}" in vic-veu.yaml`);
   }
   figuresById.set(fig.id, fig);
+
+  const scenarioKey = `${fig.program}|${fig.audience}|${String(fig.scenario || '').trim().toLowerCase()}`;
+  if (scenariosSeen.has(scenarioKey)) {
+    throw new Error(
+      `Duplicate figure scenario in vic-veu.yaml: "${fig.id}" duplicates "${scenariosSeen.get(scenarioKey)}" (${fig.program} / ${fig.audience} / "${fig.scenario}")`,
+    );
+  }
+  scenariosSeen.set(scenarioKey, fig.id);
 
   if (!fig.kind || !VALID_KINDS.has(fig.kind)) {
     figuresWithoutKind++;

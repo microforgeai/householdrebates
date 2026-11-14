@@ -14,6 +14,11 @@ export const Activity = z.enum([
   'induction',
   'sealing',
   'glazing',
+  'appliances',
+  'lighting',
+  'coldroom',
+  'motors',
+  'kitchen',
 ]);
 export const NavGroup = z.enum([
   'hub',
@@ -63,7 +68,8 @@ const figures = defineCollection({
       state: State,
       program: z.string(),
       activity: Activity,
-      audience: z.enum(['household', 'business']),
+      audience: z.enum(['household', 'business', 'both']),
+      jurisdiction: z.enum(['state', 'federal', 'local']).optional(),
       scenario: z.string(),
       qualifier: z.enum([
         'up-to',
@@ -89,6 +95,7 @@ const figures = defineCollection({
       gstIncluded: z.boolean().optional(),
       effectiveFrom: z.coerce.date().optional(),
       effectiveTo: z.coerce.date().optional(),
+      expiresOn: z.coerce.date().optional(),
       supersededBy: z.string().optional(),
       sourceId: reference('sources'),
       checkedOn: z.coerce.date(),

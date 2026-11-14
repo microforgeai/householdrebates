@@ -385,4 +385,35 @@ test.describe('Household Rebates static site e2e', () => {
     const melbAxe = await new AxeBuilder({ page }).analyze();
     expect(melbAxe.violations).toEqual([]);
   });
+
+  test('renders /victoria/lpg-homes/ (election-watch, piped-LPG note, dynamic 313/719 counts) and dynamic 20-area footer with 0 axe violations', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/victoria/lpg-homes/');
+
+    await expect(page.locator('main[data-rule-status="election-watch"]')).toBeVisible();
+    await expect(page.locator('[data-rule-status-notice]')).toBeVisible();
+    await expect(page.locator('main')).toContainText(
+      'If your estate has piped LPG, your plumber confirms whether the rule applies to your water heater.',
+    );
+    await expect(page.locator('[data-figure-id="vic-veu-table-a-no-gas-postcodes"]')).toContainText('313');
+    await expect(page.locator('[data-figure-id="vic-veu-table-a-total-postcodes"]')).toContainText('719');
+
+    const footerAreas = page.locator('[data-footer-areas]');
+    await expect(footerAreas).toBeVisible();
+    await expect(footerAreas.locator('h2')).toHaveText('Areas covered');
+    await expect(footerAreas.locator('[data-footer-area-group="melbourne-hubs"] li')).toHaveCount(5);
+    await expect(footerAreas.locator('[data-footer-area-group="regional"] li')).toHaveCount(6);
+    await expect(footerAreas.locator('[data-footer-area-group="corridors-councils"] li')).toHaveCount(9);
+    await expect(footerAreas.locator('a')).toHaveCount(20);
+
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(overflow).toBe(false);
+
+    const lpgAxe = await new AxeBuilder({ page }).analyze();
+    expect(lpgAxe.violations).toEqual([]);
+  });
 });

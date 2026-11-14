@@ -76,6 +76,19 @@ expectEq('Statewide heat pump zone 4 count', allRows.filter((r) => r.hpZone === 
 expectEq('Statewide heat pump zone 5 count', allRows.filter((r) => r.hpZone === 5).length, 111);
 expectEq('Statewide zero-dwelling PO-box postcodes', allRows.filter((r) => r.dwellings_2021 === 0).length, 25);
 
+const figuresYamlPath = path.join(siteRoot, 'src/content/figures/vic-veu.yaml');
+if (fs.existsSync(figuresYamlPath)) {
+  const figs = YAML.parse(fs.readFileSync(figuresYamlPath, 'utf8')) || [];
+  const noGasFig = figs.find((f) => f.id === 'vic-veu-table-a-no-gas-postcodes');
+  const totalPcFig = figs.find((f) => f.id === 'vic-veu-table-a-total-postcodes');
+  expectEq(
+    'vic-veu.yaml vic-veu-table-a-no-gas-postcodes vs postcodes.csv',
+    noGasFig?.amountMax,
+    allRows.filter((r) => !r.reticulatedGas).length,
+  );
+  expectEq('vic-veu.yaml vic-veu-table-a-total-postcodes vs postcodes.csv', totalPcFig?.amountMax, allRows.length);
+}
+
 // 3. Location rows in docs/url-map.csv against postcodes.csv
 function parseCsvSimple(text) {
   const rows = [];

@@ -55,6 +55,16 @@ function walkFiles(dir, ext) {
   );
 }
 
+const GUIDE_NAV_GROUPS = new Set([
+  'rebate-guides',
+  'upgrade-guides',
+  'question-pages',
+  'audience',
+  'support-guides',
+  'business',
+]);
+const navGroupByUrl = new Map();
+
 for (const mdxFile of walkFiles(contentDir, '.mdx')) {
   const raw = fs.readFileSync(mdxFile, 'utf8');
   const m = raw.match(/^---\n([\s\S]*?)\n---/);
@@ -71,6 +81,9 @@ for (const mdxFile of walkFiles(contentDir, '.mdx')) {
     url = '/victoria/';
   } else if (fm.state === 'vic' && fm.section === 'tools') {
     url = `/victoria/${slug}/`;
+  }
+  if (fm.navGroup) {
+    navGroupByUrl.set(url, fm.navGroup);
   }
   if (!allMapUrls.has(url)) {
     throw new Error(`extra URL not in map: ${url} (${path.relative(siteRoot, mdxFile)})`);
@@ -229,14 +242,28 @@ if (missingLinkErrors.length > 0) {
   throw new Error(`missing link(s): ${missingLinkErrors.join('; ')}`);
 }
 
+const inboundSummary = Object.fromEntries(
+  [...inboundFromOtherMain.entries()]
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([url, sourcesSet]) => [url, sourcesSet.size]),
+);
+fs.writeFileSync(path.join(distDir, '_inbound.json'), `${JSON.stringify(inboundSummary, null, 2)}\n`);
+
 const orphans = [];
+const weakGuides = [];
 for (const [url, sourcesSet] of inboundFromOtherMain.entries()) {
+  const navGroup = navGroupByUrl.get(url);
   if (sourcesSet.size < 2) {
     orphans.push(`${url} (inbound=${sourcesSet.size}: ${[...sourcesSet].join(', ')})`);
+  } else if (GUIDE_NAV_GROUPS.has(navGroup) && sourcesSet.size < 6) {
+    weakGuides.push(`${url} [${navGroup}] (inbound=${sourcesSet.size}: ${[...sourcesSet].join(', ')})`);
   }
 }
 if (orphans.length > 0) {
   throw new Error(`orphan page(s) with < 2 inbound <main> links: ${orphans.join('; ')}`);
+}
+if (weakGuides.length > 0) {
+  throw new Error(`guide page(s) with < 6 inbound <main> links: ${weakGuides.join('; ')}`);
 }
 
 // 5. Sitemap <loc> count
@@ -273,5 +300,5 @@ if (llmsUrls.size !== sitemapCount) {
 }
 
 console.log(
-  `check-urlmap: ${builtIndexableHtml.size} URLs (expected ${expectedUrls.size}), 0 extra, 0 missing links, 0 orphans, sitemap ${sitemapCount}, llms ${llmsUrls.size}`,
+  `check-urlmap: ${builtIndexableHtml.size} URLs (expected ${expectedUrls.size}), 0 extra, 0 missing links, 0 orphans, 0 guides under 6 inbound, sitemap ${sitemapCount}, llms ${llmsUrls.size}`,
 );

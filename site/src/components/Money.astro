@@ -1,5 +1,6 @@
 ---
 import { getEntry } from 'astro:content';
+import postcodesData from '../data/postcodes.json';
 import { SITE } from '../data/site';
 import { assertFigureNotExpired, assertFigureNotStale, formatAuDate } from '../lib/dates';
 import { assertValidBlockLabel, formatFigureAmount, KIND_TAGS } from '../lib/figures';
@@ -20,6 +21,25 @@ const fig = entry.data;
 assertFigureNotStale(fig.id, fig.checkedOn, SITE.flags.maxFigureAgeDays);
 assertFigureNotExpired(fig.id, fig.expiresOn);
 
+let resolvedFig = fig;
+if (fig.id === 'vic-veu-table-a-no-gas-postcodes') {
+  const noGasCount = Object.values(postcodesData.rows).filter((r) => !r.reticulatedGas).length;
+  if (noGasCount !== fig.amountMax) {
+    throw new Error(
+      `Figure "${fig.id}" (${fig.amountMax}) does not match build-time postcodes.csv no-gas count (${noGasCount}).`,
+    );
+  }
+  resolvedFig = { ...fig, amountMax: noGasCount };
+} else if (fig.id === 'vic-veu-table-a-total-postcodes') {
+  const totalCount = Object.keys(postcodesData.rows).length;
+  if (totalCount !== fig.amountMax) {
+    throw new Error(
+      `Figure "${fig.id}" (${fig.amountMax}) does not match build-time postcodes.csv total count (${totalCount}).`,
+    );
+  }
+  resolvedFig = { ...fig, amountMax: totalCount };
+}
+
 const sourceEntry = await getEntry(fig.sourceId);
 if (!sourceEntry || !sourceEntry.data.official) {
   throw new Error(`Figure "${fig.id}" must reference an official source.`);
@@ -32,7 +52,7 @@ if (!fig.kind || !(fig.kind in KIND_TAGS)) {
 const isEstimate = fig.basis === 'estimate';
 const validLabel = variant === 'block' ? assertValidBlockLabel(fig.id, label, isEstimate) : undefined;
 const kindTag = KIND_TAGS[fig.kind];
-const formattedAmount = formatFigureAmount(fig);
+const formattedAmount = formatFigureAmount(resolvedFig);
 const checkedStr = formatAuDate(fig.checkedOn);
 ---
 

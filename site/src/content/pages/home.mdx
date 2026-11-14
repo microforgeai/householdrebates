@@ -8,11 +8,11 @@ navGroup: trust
 mapRow: 1
 reviewBy: 2026-12-05
 ruleStatus: election-watch
-answer: "Replacing a room gas heater with one 3 to 9 kW split system has an indicative Victorian Energy Upgrades (VEU) discount of <Money id=\"vic-veu-rcac-room-gas\" />, from Energy Victoria's household table. Across heating, cooling, hot water, insulation, induction cooktops, and weather sealing, your discount depends on what system you replace, the new unit's size and efficiency, and certificate prices. You must involve a VEU accredited provider (or an installer working with one) before any installation work begins."
+answer: "Victorian households upgrading inefficient gas or electric appliances can reduce upfront installation quotes through Victorian Energy Upgrades (VEU) certificates, such as <Money id=\"vic-veu-rcac-room-gas\" /> when replacing a room gas heater with one 3 to 9 kW split system or <Money id=\"vic-veu-hw-gas-to-heatpump\" /> when replacing mains gas hot water with a heat pump. Your exact VEU deduction varies with the appliance you decommission, your postcode's climate setting, product capacity, and live certificate values, and owner-occupiers may also stack Solar Victoria's Solar Homes rebates where eligible. Always engage a VEU accredited provider (or a licensed installer partnered with one) before buying equipment or disconnecting an old unit."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-14
-checkedOn: 2026-11-14
+updatedOn: 2026-11-15
+checkedOn: 2026-11-15
 sources:
   - energyvic-heating-cooling
   - energyvic-caretaker-banner
@@ -29,13 +29,7 @@ figures:
   - vic-veu-rcac-ducted-gas-4splits
   - vic-veu-rcac-ducted-gas-multisplit
   - vic-veu-rcac-hardwired-electric
-  - vic-veu-rcac-split-replaced
-  - vic-veu-rcac-room-no-decomm
   - vic-veu-rcac-central-electric-ducted
-  - vic-veu-rcac-replaced-10kw
-  - vic-veu-rcac-replaced-16kw
-  - vic-veu-rcac-replaced-22kw
-  - vic-veu-rcac-ducted-no-decomm
   - vic-veu-hw-electric-to-heatpump
   - vic-veu-hw-gas-to-heatpump
   - vic-veu-hw-electric-to-solar
@@ -73,34 +67,59 @@ The Victorian Energy Upgrades (VEU) program provides upfront, point-of-sale disc
 
 ## Reverse-cycle air conditioning discounts in Victoria
 
-Many headlines quote the largest possible VEU figure (<Money id="vic-veu-rcac-ducted-gas-22kw" />), which applies only when decommissioning a whole-home ducted gas heater and installing a large 22.4 kW ducted reverse-cycle system. For a typical Victorian home replacing a non-ducted room gas heater with a single split system (3 to 9 kW), Energy Victoria lists an indicative discount of <Money id="vic-veu-rcac-room-gas" />.
+Headline advertisements often highlight the top VEU figure (<Money id="vic-veu-rcac-ducted-gas-22kw" />), which applies specifically to decommissioning whole-home ducted gas heating and fitting a 22.4 kW ducted reverse-cycle unit. Most single-room gas wall furnace swaps use a 3 to 9 kW split system, which Energy Victoria lists at <Money id="vic-veu-rcac-room-gas" /> alongside estimated yearly bill reductions of <Money id="vic-running-room-gas-to-rcac" /> (or <Money id="vic-running-ducted-gas-to-rcac" /> per year when replacing ducted gas with ducted reverse-cycle).
 
-Energy Victoria also estimates annual energy bill savings of <Money id="vic-running-room-gas-to-rcac" /> per year when switching from a room gas heater to a split system, and <Money id="vic-running-ducted-gas-to-rcac" /> per year when replacing ducted gas with ducted reverse-cycle heating.
+### Core heater-replacement split scenarios (household)
 
-### Room and split-system scenarios (household)
+<FigureTable
+  group="vic-veu-rcac-room-household"
+  rows={[
+    'vic-veu-rcac-room-gas',
+    'vic-veu-rcac-ducted-gas-4splits',
+    'vic-veu-rcac-ducted-gas-multisplit',
+    'vic-veu-rcac-hardwired-electric',
+  ]}
+  captionPrefix="Key household split and multi-split heater-replacement scenarios"
+/>
 
-<FigureTable group="vic-veu-rcac-room-household" captionPrefix="Household split and multi-split scenarios" />
+### Core heater-replacement ducted scenarios (household)
 
-### Ducted reverse-cycle scenarios (household)
+<FigureTable
+  group="vic-veu-rcac-ducted-household"
+  rows={[
+    'vic-veu-rcac-ducted-gas-10kw',
+    'vic-veu-rcac-ducted-gas-16kw',
+    'vic-veu-rcac-ducted-gas-22kw',
+    'vic-veu-rcac-central-electric-ducted',
+  ]}
+  captionPrefix="Key household ducted heater-replacement scenarios"
+/>
 
-<FigureTable group="vic-veu-rcac-ducted-household" captionPrefix="Household ducted reverse-cycle scenarios" />
-
-See the full breakdown of eligibility rules, warranty requirements, and rental rules in our <a href="/victoria/air-conditioner-rebate/">Air Conditioner Rebate Victoria guide</a>.
+See the complete 14-scenario table (including existing air-conditioner replacements and non-decommissioning installs), mandatory Part 6 minimum co-payments, and rental rules in our <a href="/victoria/air-conditioner-rebate/">Air Conditioner Rebate Victoria guide</a>.
 
 ## Heat pump and solar-boosted hot water discounts
 
-Under the VEU hot water activity, the indicative discount depends on whether your existing water heater runs on electricity or mains gas:
+Under VEU Part 1 and Part 3 hot water activities, your point-of-sale deduction depends on the water heater being removed:
 
-- Replacing an **inefficient electric** storage water heater with an approved heat pump has an indicative VEU discount of <Money id="vic-veu-hw-electric-to-heatpump" />.
-- Replacing an **inefficient gas** water heater with an approved heat pump has an indicative VEU discount of <Money id="vic-veu-hw-gas-to-heatpump" />.
+- Replacing an **inefficient electric** storage tank with an approved heat pump carries an indicative VEU discount of <Money id="vic-veu-hw-electric-to-heatpump" />.
+- Replacing an **inefficient mains gas** water heater with an approved heat pump carries an indicative VEU discount of <Money id="vic-veu-hw-gas-to-heatpump" />.
 
-Every VEU hot water upgrade requires a minimum customer co-contribution of <Money id="vic-veu-hw-min-contribution" />, and the building must be at least two years old. Eligible households can also combine the VEU discount with the Solar Victoria Solar Homes hot water rebate for combined savings of <Money id="vic-hw-combined-solar-homes" /> (or <Money id="vic-hw-combined-solar-homes-local" /> when choosing an eligible locally made product). Switching from gas to efficient electric hot water saves <Money id="vic-running-gas-to-electric-hw" /> a year on bills according to Energy Victoria.
+Every VEU hot water upgrade requires at least a <Money id="vic-veu-hw-min-contribution" /> customer co-contribution in a building over two years old. Owner-occupiers meeting Solar Victoria's income and property caps can stack the Solar Homes hot water rebate for combined reductions of <Money id="vic-hw-combined-solar-homes" /> (<Money id="vic-hw-combined-solar-homes-local" /> with an eligible locally made tank), while Energy Victoria estimates <Money id="vic-running-gas-to-electric-hw" /> a year in bill savings when moving off mains gas hot water.
 
 <FigureTable group="vic-veu-hotwater-household" captionPrefix="Household hot water VEU discounts" />
 
 <FigureTable group="vic-veu-hotwater-combined" captionPrefix="Combined Solar Homes figures and minimum contribution" />
 
 Explore product eligibility and co-contributions in our <a href="/victoria/heat-pump-rebate/">Heat Pump Rebate Victoria guide</a>.
+
+## Rooftop solar, home batteries, appliances, LPG homes, and businesses
+
+Beyond heating and hot water, Victorian households and businesses can compare four related upgrade streams:
+
+- **Solar PV and home batteries:** Check Solar Victoria's <a href="/victoria/solar-panel-rebate/">Victorian solar panel rebate and interest-free loan</a> alongside the <a href="/victoria/battery-rebate/">federal Cheaper Home Batteries discount</a>.
+- **Smaller VEU household activities:** Compare <a href="/victoria/other-veu-discounts/">double glazing, heat pump dryers, fridges, TVs, and shower heads</a>.
+- **Regional and fringe bottled-LPG properties:** See how VEU Part 3, Part 6, and Part 46 apply to <a href="/victoria/lpg-homes/">bottled LPG homes in Victoria</a>.
+- **Commercial premises:** Shops, farms, warehouses, and strata common areas have dedicated schedules on our <a href="/victoria/business-energy-upgrades/">Victorian business energy upgrades hub</a>.
 
 ## Victoria's 1 March 2027 gas hot water replacement rule
 

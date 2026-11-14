@@ -1,9 +1,33 @@
 ---
+import { getCollection } from 'astro:content';
 import { SITE } from '../data/site';
 import { isUrlEnabled } from '../lib/rollout';
 
 const businessHubEnabled = isUrlEnabled('/victoria/business-energy-upgrades/');
 const languageHelpEnabled = isUrlEnabled('/victoria/help-in-your-language/');
+
+const allAreas = await getCollection('areas');
+const enabledAreas = allAreas
+  .filter((a) => !a.data.noindex && isUrlEnabled(`/victoria/${a.data.slug}/`))
+  .sort((a, b) => a.data.mapRow - b.data.mapRow);
+
+const areaGroups = [
+  {
+    id: 'melbourne-hubs',
+    heading: 'Melbourne hubs',
+    items: enabledAreas.filter((a) => a.data.areaGroup === 'melbourne-hubs'),
+  },
+  {
+    id: 'regional',
+    heading: 'Regional',
+    items: enabledAreas.filter((a) => a.data.areaGroup === 'regional'),
+  },
+  {
+    id: 'corridors-councils',
+    heading: 'Corridors and councils',
+    items: enabledAreas.filter((a) => a.data.areaGroup === 'corridors-councils'),
+  },
+].filter((g) => g.items.length > 0);
 ---
 
 <footer class="site-footer">
@@ -17,15 +41,6 @@ const languageHelpEnabled = isUrlEnabled('/victoria/help-in-your-language/');
         <li><a href="/victoria/gas-to-electric-hot-water-2027/">1 March 2027 Gas Hot Water Rule</a></li>
         <li><a href="/victoria/reverse-cycle-vs-gas-heater/">Reverse-Cycle vs Gas Heater Timing Rule</a></li>
         <li><a href="/victoria/eligibility-checker/">VEU Eligibility Checker</a></li>
-      </ul>
-    </div>
-    <div>
-      <h2>Victoria Areas Covered</h2>
-      <ul>
-        <li><a href="/victoria/melbourne/">Melbourne</a></li>
-        <li><a href="/victoria/geelong/">Geelong</a></li>
-        <li><a href="/victoria/frankston/">Frankston</a></li>
-        <li><a href="/victoria/mornington-peninsula/">Mornington Peninsula</a></li>
       </ul>
     </div>
     {businessHubEnabled && (
@@ -52,6 +67,25 @@ const languageHelpEnabled = isUrlEnabled('/victoria/help-in-your-language/');
       </ul>
     </div>
   </div>
+  {areaGroups.length > 0 && (
+    <div class="site-footer__areas" data-footer-areas>
+      <h2>Areas covered</h2>
+      <div class="site-footer__area-groups">
+        {areaGroups.map((group) => (
+          <div data-footer-area-group={group.id}>
+            <h3>{group.heading}</h3>
+            <ul>
+              {group.items.map((area) => (
+                <li>
+                  <a href={`/victoria/${area.data.slug}/`}>{area.data.areaName}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  )}
   <div class="site-footer__legal">
     <p>
       Published by <strong>{SITE.publisher.legalName}</strong> (ABN {SITE.publisher.abn}), {SITE.publisher.location}.

@@ -184,6 +184,7 @@ const areas = defineCollection({
   schema: pageBase
     .extend({
       areaName: z.string(),
+      areaGroup: z.enum(['melbourne-hubs', 'regional', 'corridors-councils']),
       variant: z.enum(['standard', 'multi-town']).default('standard'),
       towns: z.array(z.string()).optional(),
       councils: z.array(z.string()).optional(),

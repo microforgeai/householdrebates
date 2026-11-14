@@ -2082,3 +2082,31 @@
   checkedOn: 2026-11-15
   conditions:
     - "Available to Boroondara residents until 31 December 2026 or until program funds are exhausted"
+
+- id: vic-veu-table-a-no-gas-postcodes
+  group: vic-veu-table-a-counts
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: both
+  scenario: "VEU Specifications v25.0 Table A postcodes with no reticulated mains gas (reticulated_gas = No)"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 313
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-15
+
+- id: vic-veu-table-a-total-postcodes
+  group: vic-veu-table-a-counts
+  state: vic
+  program: VEU
+  activity: hotwater
+  audience: both
+  scenario: "Total Victorian postcodes listed in VEU Specifications v25.0 Table A"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 719
+  sourceId: vic-veu-spec-v25
+  checkedOn: 2026-11-15

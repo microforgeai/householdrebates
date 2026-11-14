@@ -187,7 +187,7 @@ describe('Rule tests beyond the 6 spec examples', () => {
     expect(both.ineligibleLines[0].message?.id).toBe('N-BIZ-RES');
   });
 
-  it('GAS-NO links to get-off-gas-planner until row 74 is enabled, and HPZ-5 fires on zone-5 postcodes with no figure', () => {
+  it('GAS-NO links to lpg-homes now that row 74 is enabled (with get-off-gas-planner fallback), and HPZ-5 fires on zone-5 postcodes with no figure', () => {
     // 3463 Maldon is Regional, no reticulated gas, Cold, heat pump zone 5
     const resDefault = evaluate({
       S1: 'residential',
@@ -209,13 +209,14 @@ describe('Rule tests beyond the 6 spec examples', () => {
     const gasNo = resDefault.banners.find((b) => b.ruleId === 'GAS-NO')!;
     expect(gasNo).toBeDefined();
     expect(gasNo.figureIds).toEqual([]);
-    expect(gasNo.links[0].href).toBe('/victoria/get-off-gas-planner/');
+    expect(gasNo.links[0].href).toBe('/victoria/lpg-homes/');
 
     const hpz5 = resDefault.banners.find((b) => b.ruleId === 'HPZ-5')!;
     expect(hpz5).toBeDefined();
     expect(hpz5.figureIds).toEqual([]);
 
-    const resWithLpgRow = evaluate(
+    const withoutLpgUrls = new Set([...ctx.enabledUrls].filter((u) => u !== '/victoria/lpg-homes/'));
+    const resFallback = evaluate(
       {
         S1: 'residential',
         R2: '3463',
@@ -232,10 +233,10 @@ describe('Rule tests beyond the 6 spec examples', () => {
         SH2: 'yes',
         SH3: 'no',
       },
-      { enabledUrls: new Set([...ctx.enabledUrls, '/victoria/lpg-homes/']) },
+      { enabledUrls: withoutLpgUrls },
     );
-    const gasNoEnabled = resWithLpgRow.banners.find((b) => b.ruleId === 'GAS-NO')!;
-    expect(gasNoEnabled.links[0].href).toBe('/victoria/lpg-homes/');
+    const gasNoFallback = resFallback.banners.find((b) => b.ruleId === 'GAS-NO')!;
+    expect(gasNoFallback.links[0].href).toBe('/victoria/get-off-gas-planner/');
   });
 
   it('client bootstrap hydration, compact postcodes, and #a= share hash match server evaluate() identically', () => {

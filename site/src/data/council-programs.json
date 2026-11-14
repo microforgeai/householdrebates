@@ -125,8 +125,38 @@
       ],
       "status": "open",
       "statusNote": "Vetted-provider program for solar, batteries, heat pump hot water, split systems, insulation, draught proofing and home energy assessments across seven GMCA councils (Feb 2026 notice).",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "gmca-solar-savers"
+    },
+    {
+      "id": "mrsc-climate-action-resources",
+      "name": "Macedon Ranges Sustainable Home Kits & Climate Action Resources",
+      "operator": "Macedon Ranges Shire Council",
+      "councils": ["Macedon Ranges"],
+      "status": "open",
+      "statusNote": "Council resources include library Sustainable Home Kit loans, Cool Changes community climate plans across seven town groups, and Empower Your Home webinars (no council cash rebate).",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "mrsc-take-climate-action"
+    },
+    {
+      "id": "sec-latrobe-heat-pump-pilot",
+      "name": "SEC Heat Pump Hot Water Pilot (Latrobe City)",
+      "operator": "SEC Victoria",
+      "councils": ["Latrobe"],
+      "status": "open",
+      "statusNote": "State-owned SEC one-stop-shop pilot covering Morwell, Moe, Newborough, Traralgon, and Churchill with product comparisons and quotes from SEC-endorsed installers.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "premier-latrobe-pilot"
+    },
+    {
+      "id": "mildura-library-energy-toolkit",
+      "name": "Mildura Library Home Energy Efficiency Toolkit",
+      "operator": "Mildura Rural City Council",
+      "councils": ["Mildura"],
+      "status": "open",
+      "statusNote": "Mildura Rural City Council lends Home Energy Efficiency Toolkits (thermal camera, PowerMate Lite energy meter, thermometer, and water flow cup) through Mildura Library.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "mildura-electrify-your-home"
     }
   ]
 }

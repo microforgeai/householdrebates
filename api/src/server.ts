@@ -27,30 +27,54 @@ import {
   buildConsumerConfirmationEmail,
   buildInternalNoticeEmail,
 } from './mail/templates.js';
+import {
+  assertAlertsStartupGuards,
+  createAlertsMailDriver,
+  loadAlertsConfig,
+  type AlertsConfig,
+} from './alerts/config.js';
+import { openAlertsDatabase } from './alerts/db.js';
+import { registerAlertRoutes } from './alerts/routes.js';
+import type { AlertsRepository } from './alerts/repository.js';
 
 export interface BuildServerOptions {
   config?: ApiConfig;
   installers?: InstallerRecord[];
   mailDriver?: MailDriver;
+  alertsConfig?: AlertsConfig;
+  alertsMailDriver?: MailDriver;
 }
 
 export async function buildServer(opts: BuildServerOptions = {}): Promise<{
   app: FastifyInstance;
   db: ReturnType<typeof openDatabase>;
+  alertsDb: ReturnType<typeof openAlertsDatabase>;
+  alertsRepo: AlertsRepository;
   mail: MailDriver;
+  alertsMail: MailDriver;
   config: ApiConfig;
+  alertsConfig: AlertsConfig;
 }> {
   const config = opts.config ?? loadConfig();
   const installers = opts.installers ?? loadInstallers(config.installersPath);
+  const alertsConfig = opts.alertsConfig ?? loadAlertsConfig(process.env, config);
 
   assertStartupGuards(config, installers);
+  assertAlertsStartupGuards(alertsConfig);
 
   const mail = opts.mailDriver ?? createMailDriver(config);
   if (config.leadsEnabled) {
     await mail.verify();
   }
 
+  const alertsMail =
+    opts.alertsMailDriver ?? opts.mailDriver ?? createAlertsMailDriver(alertsConfig, config);
+  if (alertsConfig.alertsEnabled) {
+    await alertsMail.verify();
+  }
+
   const db = openDatabase(config.dbPath);
+  const alertsDb = openAlertsDatabase(alertsConfig.alertsDbPath);
 
   const app = Fastify({
     logger: config.nodeEnv !== 'test',
@@ -327,7 +351,26 @@ export async function buildServer(opts: BuildServerOptions = {}): Promise<{
     return reply.status(200).send({ ok: true, ref });
   });
 
-  return { app, db, mail, config };
+  const alertsRepo = registerAlertRoutes(app, {
+    alertsDb,
+    alertsConfig,
+    siteOrigin: config.siteOrigin,
+    ipHashSecret: config.ipHashSecret,
+    formTokenSecret: config.formTokenSecret,
+    alertsMail,
+  });
+
+  app.addHook('onClose', (_instance, done) => {
+    try {
+      if (alertsDb.open) alertsDb.close();
+      if (db.open) db.close();
+    } catch {
+      // ignore close errors
+    }
+    done();
+  });
+
+  return { app, db, alertsDb, alertsRepo, mail, alertsMail, config, alertsConfig };
 }
 
 // Entrypoint when run directly

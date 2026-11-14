@@ -57,6 +57,14 @@ export function createGraphDriver(cfg: ApiConfig): MailDriver {
           ...(msg.replyTo
             ? { replyTo: [{ emailAddress: { address: msg.replyTo } }] }
             : {}),
+          ...(msg.headers
+            ? {
+                internetMessageHeaders: Object.entries(msg.headers).map(([name, value]) => ({
+                  name,
+                  value,
+                })),
+              }
+            : {}),
         },
         saveToSentItems: true,
       };

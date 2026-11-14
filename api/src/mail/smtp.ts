@@ -20,12 +20,13 @@ export function createSmtpDriver(cfg: ApiConfig): MailDriver {
   return {
     async send(msg: MailMessage): Promise<{ messageId: string }> {
       const info = await transporter.sendMail({
-        from: cfg.mailFrom,
+        from: msg.from || cfg.mailFrom,
         to: msg.to,
         replyTo: msg.replyTo,
         subject: msg.subject,
         text: msg.text,
         html: msg.html,
+        headers: msg.headers,
       });
       return { messageId: info.messageId || `smtp-${Date.now()}` };
     },

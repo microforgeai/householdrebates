@@ -868,6 +868,11 @@ CREATE INDEX idx_consents_expiry ON consents(expires_at_utc);
 | Consent record (version, hash, snapshot, scopes, dates) | 24 months after expiry or withdrawal | deleted; installers/APs may need it for ESC audits — confirm the period |
 | Deliveries (installer, date, outcome, fee) | 7 years (tax) | no personal details after purge |
 | `ip_hash`, `user_agent` | 30 days | nulled by purge |
+| Alert subscribers (`confirmed`) | Until unsubscribe | `alerts:unsubscribe` / link / RFC 8058 one-click sets `status='unsubscribed'` and writes `email_hash` to `alert_suppression` |
+| Alert subscribers (`pending` / `expired` unconfirmed) | Confirmation TTL (`ALERTS_CONFIRM_TTL_HOURS`, default 72 h) | `alerts:purge` deletes unconfirmed rows, tokens and unconfirmed consent snapshots |
+| Alert consent snapshots (`alert_consents`) | 24 months after unsubscribe | deleted by `alerts:purge` |
+| Alert suppression hashes (`alert_suppression`) | Indefinitely | HMAC-SHA256 hash retained permanently so suppressed/erased addresses are never re-added |
+| Alert `ip_hash`, `user_agent` | 30 days | nulled by `alerts:purge` |
 | nginx access/error logs | 30 days (logrotate) | AI-referrer log 180 days, holds no IP |
 | DB backups | 30 days rolling | pruned |
 
@@ -883,6 +888,25 @@ CREATE INDEX idx_consents_expiry ON consents(expires_at_utc);
 - `/var/lib/householdrebates` owned by hrapi, 0700. Backups encrypted with `age` to a public key; the private key stays off the VPS.
 - Lockfiles committed; `npm audit --omit=dev` in CI; Dependabot on.
 - Fastify: `bodyLimit: 8192`, `trustProxy: '127.0.0.1'`, no CORS (same origin), strict Origin check, generic error responses (no stack traces).
+
+### 7.10 Rule-change alerts (Prompt 29a — separate from leads, all flags off by default)
+
+- **Purpose & strict isolation:** Owned double-opt-in email list for four dated rule changes (28 Nov 2026 Victorian election result, 1 Jan 2027 federal battery STC factor drop, 1 Mar 2027 Victorian gas hot water rule, 1 Jul 2027 solar PV move into VEU). Email only; never quotes, commercial offers, or sharing with installers. Lives in an isolated `api/src/alerts/` module with its own SQLite database handle (`ALERTS_DB_PATH` / `alerts.sqlite`) and schema (`api/src/alerts/migrations/002_alerts.sql`), physically inaccessible from `deliver.ts` and the `leads` DB handle.
+- **Flags & startup/send gates (all default `false`):**
+  - `ALERTS_ENABLED` (API, default `false`): when `false`, every `/api/alerts/*` request returns `503` and nothing is stored or sent. When `true`, startup refuses unless `ALERTS_CONSENT_VERSION`, `PRIVACY_POLICY_VERSION`, `ALERTS_REVIEWED_BY` (signed by Gurinder Singh after legal review — go-live stays blocked while unset), `ALERTS_FROM`, and sender block values (`ALERTS_SENDER_ABN`, `ALERTS_SENDER_ADDRESS`, `ALERTS_SENDER_EMAIL` with zero unresolved `<<...>>` placeholders) are set and `alertsMail.verify()` passes.
+  - `ALERTS_SEND_ENABLED` (API, default `false`): when `false`, `alerts:send` sends only to internal test addresses (`ALERTS_TEST_TO`). Live sends require `ALERTS_SEND_ENABLED=true`, `ALERTS_REVIEWED_BY` set, and `--confirm <draft-sha256>` matching the exact draft SHA-256, paced at `ALERTS_SEND_RATE_PER_MINUTE` (default `50`/min, configurable) in batches of `ALERTS_SEND_BATCH_SIZE` (default `50`).
+  - `PUBLIC_ALERTS_ENABLED` (site build flag, Prompt 29b, default `false`): hides the sign-up form until go-live approval.
+  - Mail transport (`ALERTS_MAIL_TRANSPORT`, default `memory`) and sender address (`ALERTS_FROM`) are config-only in 29a; live provider choice and data-residency wording are resolved in 29b.
+- **Flow & endpoints:**
+  - `POST /api/alerts/subscribe` (`{ email, consent: true, consentVersion, formToken, website }`): Origin/Referer check, honeypot, optional HMAC `formToken`, IP rate limit. If `email_hash` (`HMAC-SHA256(lowerEmail, ALERTS_HASH_SECRET)`) is suppressed, already `confirmed`, or has an active `pending` token within `ALERTS_CONFIRM_TTL_HOURS` (default `72` hours), returns the identical `202` response and sends nothing (no account enumeration). Otherwise stores `pending` subscriber + `alerts-v1` consent snapshot + SHA-256 hashed confirm token, sends one transactional confirmation email, and returns `202`.
+  - `GET /api/alerts/confirm?t=`: one-time token valid for `ALERTS_CONFIRM_TTL_HOURS` (`72` h) → marks `confirmed` and redirects `303 /alerts/confirmed/`; expired or re-used tokens redirect `303 /alerts/expired/`.
+  - `GET /api/alerts/unsubscribe?t=`: renders a `noindex` one-button confirmation page (no login, no questions; safe against mail-scanner prefetch). `POST /api/alerts/unsubscribe?t=` marks `unsubscribed` (`unsubscribe_method='link'`), inserts `email_hash` into `alert_suppression`, and redirects `303 /alerts/unsubscribed/`.
+  - `POST /api/alerts/unsubscribe-one-click`: RFC 8058 one-click handler for `List-Unsubscribe-Post: List-Unsubscribe=One-Click` → marks `unsubscribed` (`unsubscribe_method='one-click'`), records `alert_suppression`, and returns `200`. Unsubscribe tokens do not expire (exceeding the Spam Act 30-day minimum).
+- **Tables (`api/src/alerts/migrations/002_alerts.sql`):** `alert_subscribers`, `alert_consents`, `alert_tokens`, `alert_sends`, and `alert_suppression` (plus isolated `schema_migrations` and `rate_counters`).
+- **Emails & CLIs:**
+  - Templates (`api/src/mail/templates/alerts-*.ts`): plain text + simple HTML, zero `$` amounts anywhere (linking to the canonical site guide so the 45-day figure check stays the single source of truth), `"We're not a government website"` line, resolved Agenor Services Pty Ltd + ABN + address + contact email block, visible unsubscribe link, and `List-Unsubscribe` (`mailto:` + `https:`) + `List-Unsubscribe-Post` headers.
+  - CLIs (`npm run -w api …`): `migrate`, `alerts:draft`, `alerts:send`, `alerts:unsubscribe`, `alerts:export`, `alerts:erase`, `alerts:stats` (counts by status only — no list-export CLI exists), and `alerts:purge`.
+- **Retention:** see §7.8 table above (`confirmed` kept until unsubscribe; `pending` purged after `72` h TTL; `alert_consents` kept `24` months after unsubscribe; `alert_suppression` hashes kept indefinitely; `ip_hash` and `user_agent` nulled after `30` days).
 
 ---
 
@@ -1227,6 +1251,8 @@ Sitemap: https://householdrebates.com.au/sitemap-index.xml
 | Every figure accurate and dated | ACL; strategy | `figures` collection, `<Money>`, `MAX_FIGURE_AGE_DAYS`, `check-figures.mjs` | Build fails on raw or stale figures |
 | Disclosure for a benefit: consent, and treat the APPs as applying | OAIC trading; OAIC small business | Express consent naming recipients and the fee; APP privacy policy; collection notice at the form; access, correction, erasure CLIs | `legalReviewed: true` required before enabling |
 | Spam Act for any follow-ups | ACMA | v1 sends transactional mail only; any marketing needs a separate unticked opt-in, sender ID + ABN, unsubscribe honoured within 5 working days, a consent record | No marketing code path at launch |
+| Spam Act 2003 for rule-change email alerts | ACMA (`avoid-sending-spam`); RFC 8058 | Double opt-in (`alerts-v1` unticked checkbox + 72 h confirm link); resolved Agenor Services Pty Ltd + ABN + address + contact email block on every message; non-expiring unsubscribe link (`303`) + RFC 8058 one-click (`200`) honoured immediately and `alerts:unsubscribe` CLI for reply requests within ≤ 5 business days; permanent `alert_suppression` HMAC hash; zero `$` amounts in alert templates | `api/test/alerts.test.ts` (subscribe, confirm, unsubscribe × 3, suppression, headers, flags, `$` ban) |
+| APP 5 & APP 6 for rule-change alert collection notice & purpose isolation | OAIC (`trading-in-personal-information`, APP 5, APP 6, APP 12) | Collection notice draft (`docs/legal/alerts-consent-v1.md`); single purpose (`topics='rule-changes'`), never shared with installers; separate SQLite DB (`alertsDb`) isolated from `deliver.ts`; `alerts:export`, `alerts:erase`, `alerts:purge`; startup & live sends blocked while `ALERTS_REVIEWED_BY` is unset | `api/test/alerts.test.ts` (startup guard, retention schedule, DB & module isolation test) |
 | Written installer agreement before the form goes live | Strategy; ESC FAQ Q10/Q13 (buyers need evidence of valid consent) | API startup guard needs `agreementSignedOn`; consent record sent with every lead | Startup test |
 | Renters need landlord approval for heating and cooling | Energy Victoria H&C page | Checker note + form tick | Unit test |
 

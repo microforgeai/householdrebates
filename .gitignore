@@ -13,6 +13,10 @@ api/dist/
 *.db-shm
 *.db-wal
 *.sqlite
+*.sqlite-shm
+*.sqlite-wal
+drafts/
+api/drafts/
 
 # Environment & secrets
 .env

@@ -10,6 +10,7 @@ Before we switch `PUBLIC_LEADS_ENABLED=true` and `LEADS_ENABLED=true` on `househ
 2. **Privacy Policy:** `site/src/content/pages/privacy.mdx`
 3. **Website Terms of Use:** `site/src/content/pages/terms.mdx`
 4. **Participating Installer Lead Supply Agreement:** `docs/installer-agreement-draft.md`
+5. **Rule-Change Email Alerts Consent & APP 5 Notice (`alerts-v1`, separate from quote enquiries):** `docs/legal/alerts-consent-v1.md`
 
 ## 2. Specific Questions for Legal Sign-Off
 1. **VEU Code of Conduct & Telemarketing/Doorknocking Bans:** Does our online consent block (`CONSENT_TEMPLATE_V1`) satisfy all elements of "express prior consent" under the *Victorian Energy Efficiency Target Act 2007* and ESC guidance (naming the installer and accredited provider, separate checkboxes for phone / email / site visit, 3-month expiry, clear withdrawal mechanism)?

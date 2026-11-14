@@ -44,28 +44,28 @@ nccZone:
     - "Olinda"
     - "Warburton"
 localFacts:
-  - text: "In VEU Specifications v25.0 Table A, all 26 Yarra Ranges postcodes have reticulated gas: 15 sit in the Cold climatic region (3766, 3767, 3770, 3775, 3777, 3785–3789, 3792, 3793, 3795, 3796, and 3799) and 11 in Mild; postcodes 3139, 3140, 3158, 3160, 3770, 3775, and 3777 sit in heat pump zone 5; and Warburton (3799) is the only Regional postcode."
+  - text: "Twenty-five Yarra Ranges postcodes sit in VEU's Metropolitan column and only Warburton (3799) sits in Regional; every one of the 26 shire postcodes is marked Yes for reticulated gas, split across 15 Cold and 11 Mild postcodes plus seven hot water zone 5 postcodes."
     sourceId: vic-veu-spec-v25
-  - text: "Australian Building Codes Board climate zone point checks place Lilydale, Healesville, Olinda, and Warburton in National Construction Code (NCC) climate zone 7."
+  - text: "ABCB climate map checks place Lilydale, Healesville, Olinda, and Warburton inside NCC climate zone 7."
     sourceId: abcb-climate-zones-data
-  - text: "Yarra Ranges Council's Home Energy Program covers draught proofing, insulation, and home assessments, with electrification upgrades routed via Easy Electric SEC."
+  - text: "Yarra Ranges Council's Home Energy Program supports draught proofing, ceiling insulation, and home energy assessments, while appliance electrification enquiries go through Easy Electric SEC."
     sourceId: yarra-ranges-sustainable-homes
-  - text: "Yarra Ranges Council notes that Victorian homes built before 1990 average a 1.5-star energy efficiency rating."
+  - text: "According to Yarra Ranges Council, Victorian houses constructed prior to 1990 average a 1.5-star thermal energy rating."
     sourceId: yarra-ranges-sustainable-homes
-  - text: "Local community energy groups active in the shire include Healesville CoRE and Repower the Dandenongs."
+  - text: "Healesville CoRE and Repower the Dandenongs operate volunteer community energy groups across the Yarra Valley and Dandenong Ranges."
     sourceId: yarra-ranges-sustainable-homes
 councilPrograms:
   - name: "Council Home Energy Program"
     operator: "EnviroGroup (12 participating councils)"
     status: open
-    statusNote: "Participating-council advisory and vetted-supplier program covering Yarra Ranges for draught proofing, insulation, and home energy assessments, with electrification enquiries routed via Easy Electric SEC."
-    statusCheckedOn: 2026-11-14
+    statusNote: "Covers Yarra Ranges households seeking draught-proofing, ceiling insulation, or home energy assessment quotes, while appliance electrification referrals go via Easy Electric SEC."
+    statusCheckedOn: 2026-11-15
     sourceId: council-home-energy-program
 answer: "Yarra Ranges households can combine Yarra Ranges Council's Home Energy Program and local community energy support with Victorian Energy Upgrades (VEU) point-of-sale discounts and Solar Homes rebates. Because Yarra Ranges spans 26 postcodes across outer-east valley suburbs, the Dandenong Ranges, and Upper Yarra towns, VEU Metropolitan/Regional, Mild/Cold, and heat pump zone 4/5 classifications vary by postcode rather than following a single shire-wide rule. Check your exact postcode in the table above and confirm installer accreditation before booking work."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-14
-checkedOn: 2026-11-14
+updatedOn: 2026-11-15
+checkedOn: 2026-11-15
 sources:
   - vic-veu-spec-v25
   - abs-asgs-allocation
@@ -73,7 +73,18 @@ sources:
   - abcb-climate-map
   - yarra-ranges-sustainable-homes
   - council-home-energy-program
-figures: []
+  - energyvic-insulation
+  - energyvic-heating-cooling
+  - energyvic-hot-water
+figures:
+  - vic-veu-insulation-metro
+  - vic-veu-insulation-est-metro-cold
+  - vic-veu-insulation-regional
+  - vic-veu-copay-insulation
+  - vic-veu-rcac-ducted-gas-22kw
+  - vic-veu-copay-ducted
+  - vic-veu-hw-gas-to-heatpump
+  - vic-veu-hw-min-contribution
 faq:
   - yarra-ranges-cold-area-veu
   - yarra-ranges-home-energy-program
@@ -81,27 +92,41 @@ faq:
 leadForm: false
 noindex: false
 related:
+  - melbourne-east
   - ceiling-insulation-rebate
   - heat-pump-hot-water-size-guide
   - ducted-gas-to-ducted-reverse-cycle
   - find-an-accredited-provider
   - eligibility-checker
+hero:
+  id: vic-veu-insulation-est-metro-cold
+  label: "Dandenong Ranges 150 m² ceiling insulation estimate"
 ---
 
 ## Why Yarra Ranges VEU settings depend on your exact postcode
 
-Unlike uniform inner-metro councils, Yarra Ranges covers 26 council postcodes stretching from Chirnside Park (`3116`), Kilsyth (`3137`), Mooroolbark (`3138`), Lilydale (`3140`), and Upwey/Belgrave (`3158`–`3160`) across the Dandenong Ranges, Healesville (`3777`), and east to Warburton (`3799`). No single VEU classification covers the entire shire (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />; <SourceLink id="abs-asgs-allocation" label="ABS ASGS 2021 postcode allocation" />):
+Stretching from urban foothill suburbs at Chirnside Park (`3116`), Kilsyth (`3137`), Mooroolbark (`3138`), and Montrose (`3765`) across the Dandenong Ranges ridge, down to the Yarra Valley floor around Lilydale (`3140`), Coldstream (`3770`), Yarra Glen (`3775`), and Healesville (`3777`), and east along the Upper Yarra highway to Yarra Junction (`3797`) and Warburton (`3799`), Yarra Ranges spans 26 postcodes with four distinct VEU combinations (<SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" />; <SourceLink id="abs-asgs-allocation" label="ABS ASGS 2021 postcode allocation" />):
 
-- **Metropolitan vs Regional:** 25 of the 26 Yarra Ranges postcodes sit in **Metropolitan**, while Warburton (`3799`) is the only **Regional** postcode (all 26 have reticulated gas).
-- **Mild vs Cold climatic region:** 11 foothill and valley postcodes (including `3116`, `3137`–`3140`, `3158`–`3160`, `3765`, `3791`, and `3797`) sit in **Mild**, whereas 15 hills and valley postcodes (`3766`, `3767`, `3770`, `3775`, `3777`, `3785`–`3789`, `3792`, `3793`, `3795`, `3796`, and `3799`) sit in **Cold**—which affects certificate calculations for <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation upgrades</a> and space heating.
-- **Heat pump zone 4 vs zone 5:** Seven postcodes (`3139`, `3140`, `3158`, `3160`, `3770`, `3775`, and `3777`) sit in **heat pump climatic zone 5**, while the remaining 19 postcodes sit in **zone 4**. Use our <a href="/victoria/heat-pump-hot-water-size-guide/">heat pump hot water size guide</a> to check cold-climate frost protection and tank sizing.
+- **7 Metropolitan + Mild + zone 4 postcodes:** Chirnside Park (`3116`), Kilsyth (`3137`, split 71% Yarra Ranges and 29% Maroondah), Mooroolbark (`3138`), Menzies Creek and Selby (`3159`, split 93% Yarra Ranges and 7% Cardinia), Montrose (`3765`), Kallista (`3791`), and Yarra Junction, Gladysdale, Gilderoy, Powelltown, and Three Bridges (`3797`).
+- **4 Metropolitan + Mild + zone 5 postcodes:** Wandin North, Seville, Seville East, and Gruyere (`3139`), Lilydale (`3140`), Upwey (`3158`), and Belgrave, Belgrave Heights, Belgrave South, and Tecoma (`3160`) stay **Mild** for space heating and ceiling insulation yet shift into **zone 5** for hot water heat pumps.
+- **14 Metropolitan + Cold postcodes:** Coldstream (`3770`), Yarra Glen, Dixons Creek, Steels Creek, and Tarrawarra (`3775`, 91% Yarra Ranges and 9% Nillumbik), and Healesville, Badger Creek, Chum Creek, and Toolangi (`3777`, 95% Yarra Ranges and 5% Murrindindi) pair **Cold** climate ratings with **zone 5** hot water, while Kalorama (`3766`), Mount Dandenong (`3767`), Tremont (`3785`), Ferny Creek (`3786`), Sassafras (`3787`), Olinda (`3788`), Sherbrooke (`3789`), The Patch (`3792`), Monbulk (`3793`), Silvan (`3795`), and Mount Evelyn (`3796`) sit in **Cold** + **zone 4**.
+- **1 Regional + Cold + zone 4 postcode:** Warburton, East Warburton, Millgrove, Reefton, McMahons Creek, and Big Pats Creek (`3799`) form the shire's lone **Regional** postcode. Even though all 26 shire postcodes are marked `Yes` for reticulated gas at the postcode level in Table A, individual bushland properties on unreticulated roads in Toolangi, Powelltown, Reefton, or Sherbrooke often run on bottled LPG or wood heaters rather than mains gas.
 
-Always check the postcode table above for your street's postcode before comparing quotes on <a href="/victoria/ducted-gas-to-ducted-reverse-cycle/">ducted gas to ducted reverse-cycle</a> or hot water upgrades.
+Those four Table A combinations produce three different 150 m² <a href="/victoria/ceiling-insulation-rebate/">ceiling insulation discounts</a> (<SourceLink id="energyvic-insulation" label="Energy Victoria — Ceiling insulation discounts" />; customer co-payment <Money id="vic-veu-copay-insulation" />): <Money id="vic-veu-insulation-metro" /> in the 11 Metropolitan + Mild postcodes, <Money id="vic-veu-insulation-est-metro-cold" /> across the 14 Metropolitan + Cold ridge and valley postcodes (confirmed after roof inspection by your accredited provider), and <Money id="vic-veu-insulation-regional" /> in Regional + Cold Warburton (`3799`).
 
-## Council Home Energy Program and older hills housing
+In homes built more than two years ago, replacing an older gas ducted unit with a 22.4 kW <a href="/victoria/ducted-gas-to-ducted-reverse-cycle/">ducted reverse-cycle system</a> carries an indicative VEU discount of <Money id="vic-veu-rcac-ducted-gas-22kw" /> (<Money id="vic-veu-copay-ducted" /> minimum customer co-payment), while replacing mains gas hot water with a heat pump carries <Money id="vic-veu-hw-gas-to-heatpump" /> (<Money id="vic-veu-hw-min-contribution" /> minimum contribution; <SourceLink id="energyvic-heating-cooling" label="Energy Victoria — Heating and cooling discounts" />; <SourceLink id="energyvic-hot-water" label="Energy Victoria — Hot water system discounts" />). Across frost-prone Yarra Valley flats and **NCC climate zone 7** ridge villages, check winter defrost behaviour, noise placement on sloping blocks, and tank sizing in our <a href="/victoria/heat-pump-hot-water-size-guide/">heat pump hot water size guide</a>, or compare neighbouring Maroondah, Knox, Monash, Whitehorse, and Manningham postcodes on our <a href="/victoria/melbourne-east/">Melbourne East & Dandenongs hub</a>.
 
-Yarra Ranges Council highlights that Victorian houses built before 1990 average a **1.5-star** energy rating (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />). Through Council's **Home Energy Program**, residents can get help with draught proofing, ceiling insulation, and home assessments, with appliance electrification enquiries connected to **Easy Electric SEC** (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />). You can also verify any VEU installer directly using our <a href="/victoria/find-an-accredited-provider/">accredited provider guide</a>.
+## Council Home Energy Program and pre-1990 hills housing
+
+Yarra Ranges Council highlights that Victorian houses constructed before 1990 average just a **1.5-star** thermal efficiency rating—meaning uninsulated pitched roofs, subfloor air leaks, and unsealed wall vents drive winter heating bills across older hills weatherboards and split-level brick homes (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />).
+
+On Yarra Ranges Council's Sustainable Homes page, municipal support splits by upgrade type (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />):
+
+- **Thermal shell upgrades and assessments:** Draught proofing, ceiling insulation top-ups, and home energy assessments run through the council-backed **Home Energy Program**.
+- **Appliance electrification:** Enquiries for reverse-cycle air conditioners, hot water heat pumps, solar PV, and induction cooking are directed to the state government's **Easy Electric SEC** service.
+
+Whether you request quotes via council channels, SEC, or a local hills trade, confirm VEU provider accreditation before signing any contract using our <a href="/victoria/find-an-accredited-provider/">accredited provider guide</a>.
 
 ## Local community energy groups
 
-Alongside council programs, volunteer-led local groups including **Healesville CoRE** and **Repower the Dandenongs** run neighbourhood electrification information sessions and peer support across the shire (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />). Check which Victorian rebates apply to your home in the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a>.
+Two volunteer-led community energy groups highlighted by Yarra Ranges Council—**Healesville CoRE** in the Yarra Valley and **Repower the Dandenongs** across hills townships—run local information nights, thermal-comfort workshops, and neighbour-to-neighbour electrification guidance (<SourceLink id="yarra-ranges-sustainable-homes" label="Yarra Ranges Council — Sustainable homes" />). Enter your street's postcode and existing appliances in the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a> to see which Victorian rebates and co-payments apply.

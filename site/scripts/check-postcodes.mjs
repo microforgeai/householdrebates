@@ -380,34 +380,70 @@ expectEq(
 expectEq('Mildura gas count', mildura.filter((r) => r.reticulatedGas).length, 7);
 expectEq('Mildura no-gas count', mildura.filter((r) => !r.reticulatedGas).length, 5);
 
-// Plan Melbourne Metro Hubs (rows 61–64 + inner Melbourne 52)
-const north = byLgas(['Banyule', 'Darebin', 'Hume', 'Merri-bek', 'Mitchell', 'Nillumbik', 'Whittlesea']);
+// Plan Melbourne Metro Hubs (rows 61–64 + inner Melbourne 52) from metro-regions.json
+const metroRegionsPath = path.join(siteRoot, 'src/data/metro-regions.json');
+const linksDataPath = path.join(siteRoot, 'src/lib/checker/links-data.json');
+if (!fs.existsSync(metroRegionsPath)) {
+  throw new Error('Missing src/data/metro-regions.json');
+}
+const metroRegions = JSON.parse(fs.readFileSync(metroRegionsPath, 'utf8'));
+const mrChecked = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(metroRegions.checkedOn || ''));
+if (!mrChecked) {
+  diffs.push(`metro-regions.json missing valid checkedOn (${metroRegions.checkedOn})`);
+} else {
+  const mrUtc = Date.UTC(Number(mrChecked[1]), Number(mrChecked[2]) - 1, Number(mrChecked[3]));
+  const mrAge = Math.floor((todayMelbUtc - mrUtc) / (1000 * 60 * 60 * 24));
+  if (mrAge > maxAgeDays) {
+    diffs.push(`metro-regions.json checkedOn ${metroRegions.checkedOn} is stale (${mrAge} days > ${maxAgeDays} days)`);
+  }
+}
+
+const regionBySlug = new Map((metroRegions.regions || []).map((r) => [r.slug, r]));
+expectEq(
+  'metro-regions.json slugs',
+  [...regionBySlug.keys()],
+  ['melbourne', 'melbourne-north', 'melbourne-west', 'melbourne-east', 'melbourne-south-east'],
+);
+
+if (fs.existsSync(linksDataPath)) {
+  const linksData = JSON.parse(fs.readFileSync(linksDataPath, 'utf8'));
+  const expectedMetroHubByLga = {};
+  for (const reg of metroRegions.regions || []) {
+    for (const lga of reg.lgas) {
+      expectedMetroHubByLga[lga] = { url: reg.url, label: reg.checkerLabel };
+    }
+  }
+  expectEq('links-data.json metroHubByLga vs metro-regions.json', linksData.metroHubByLga, expectedMetroHubByLga);
+}
+
+const north = byLgas(regionBySlug.get('melbourne-north').lgas);
 expectEq('Melbourne North stats', [
   north.length,
   north.filter((r) => r.area === 'Metropolitan').length,
   north.filter((r) => r.area === 'Regional').length,
+  north.filter((r) => r.area === 'Regional').every((r) => r.primary_lga === 'Mitchell'),
   north.filter((r) => !r.reticulatedGas).length,
   north.filter((r) => r.climaticRegion === 'Cold').length,
-], [66, 58, 8, 6, 9]);
+], [66, 58, 8, true, 6, 9]);
 
-const west = byLgas(['Brimbank', 'Hobsons Bay', 'Maribyrnong', 'Melton', 'Moonee Valley', 'Wyndham']);
+const west = byLgas(regionBySlug.get('melbourne-west').lgas);
 expectEq('Melbourne West stats', [
   west.length,
   west.every((r) => r.climaticRegion === 'Mild' && r.reticulatedGas),
   pcsOf(west.filter((r) => r.area === 'Regional')),
 ], [34, true, ['3211']]);
 
-const east = byLgas(['Knox', 'Manningham', 'Maroondah', 'Monash', 'Whitehorse', 'Yarra Ranges']);
+const east = byLgas(regionBySlug.get('melbourne-east').lgas);
 expectEq('Melbourne East stats', [
   east.length,
   east.filter((r) => r.area === 'Metropolitan').length,
   pcsOf(east.filter((r) => r.area === 'Regional')),
   east.every((r) => r.reticulatedGas),
   east.filter((r) => r.climaticRegion === 'Cold').length,
-  east.filter((r) => r.hpZone === 5).length,
-], [65, 64, ['3799'], true, 15, 7]);
+  pcsOf(east.filter((r) => r.hpZone === 5)),
+], [65, 64, ['3799'], true, 15, ['3139', '3140', '3158', '3160', '3770', '3775', '3777']]);
 
-const southEast = byLgas(['Cardinia', 'Casey', 'Frankston', 'Greater Dandenong', 'Kingston', 'Mornington Peninsula']);
+const southEast = byLgas(regionBySlug.get('melbourne-south-east').lgas);
 expectEq('Melbourne South-East stats', [
   southEast.length,
   southEast.every((r) => r.reticulatedGas),
@@ -415,7 +451,7 @@ expectEq('Melbourne South-East stats', [
   pcsOf(southEast.filter((r) => r.climaticRegion === 'Cold')),
 ], [67, true, ['3981'], ['3980', '3981']]);
 
-const innerMelb = byLgas(['Melbourne', 'Port Phillip', 'Yarra', 'Stonnington', 'Glen Eira', 'Boroondara', 'Bayside']);
+const innerMelb = byLgas(regionBySlug.get('melbourne').lgas);
 expectEq('Inner Melbourne hub stats', [
   innerMelb.length,
   innerMelb.every((r) => r.area === 'Metropolitan' && r.reticulatedGas && r.climaticRegion === 'Mild' && r.hpZone === 4),
@@ -423,6 +459,7 @@ expectEq('Inner Melbourne hub stats', [
 
 // 4. Verify area MDX files' postcodes match postcodes.csv
 const areaSlugExpectedPcs = {
+  melbourne: pcsOf(innerMelb),
   geelong: pcsOf(geelong),
   frankston: pcsOf(frankston),
   'mornington-peninsula': pcsOf(mornPen),
@@ -473,12 +510,7 @@ for (const file of fs.readdirSync(areasDir).filter((f) => f.endsWith('.mdx'))) {
     }
   }
 
-  // melbourne.mdx is rescoped to 52 postcodes in prompt 39; enforce once rescoped
-  if (slug === 'melbourne') {
-    if (pcs.length > 6) {
-      expectEq(`areas/vic/${file} postcodes`, [...pcs].sort(), pcsOf(innerMelb));
-    }
-  } else if (areaSlugExpectedPcs[slug]) {
+  if (areaSlugExpectedPcs[slug]) {
     if (slug === 'solstice-gas-shutdown-towns') {
       expectEq(`areas/vic/${file} postcodes`, [...pcs].sort(), [...areaSlugExpectedPcs[slug]].sort());
     } else {
@@ -554,5 +586,5 @@ if (diffs.length > 0) {
 }
 
 console.log(
-  `check-postcodes: every location row matches postcodes.csv (0 differences; Mildura ${mildura.length}, Mitchell ${mitchell.length} incl. 3661, Latrobe ${latrobe.length} incl. 3841, Geelong ${geelong.length} without 3221/3225)`,
+  `check-postcodes: every location row matches postcodes.csv (0 differences; Melbourne ${innerMelb.length}, North ${north.length}, West ${west.length}, East ${east.length}, South-East ${southEast.length}, Mildura ${mildura.length}, Mitchell ${mitchell.length} incl. 3661, Latrobe ${latrobe.length} incl. 3841, Geelong ${geelong.length} without 3221/3225)`,
 );

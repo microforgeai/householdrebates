@@ -338,4 +338,51 @@ test.describe('Household Rebates static site e2e', () => {
       expect('offers' in webApps[0]).toBe(false);
     }
   });
+
+  test('renders Melbourne North (66 rows) and rescoped Inner Melbourne (52 rows) usable and sortable at 375px with 0 axe violations', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+
+    await page.goto('/victoria/melbourne-north/');
+    const northRows = page.locator('[data-postcode-table] tbody tr[data-postcode]');
+    await expect(northRows).toHaveCount(66);
+    await expect(northRows.first()).toHaveAttribute('data-postcode', '3043');
+
+    const overflowNorth = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(overflowNorth).toBe(false);
+
+    // Sort by Postcode descending -> 3764 (Kilmore) moves to top
+    const postcodeSortBtn = page.locator('[data-postcode-table] button[data-sort-col="0"]');
+    await postcodeSortBtn.click();
+    await expect(
+      page.locator('[data-postcode-table] thead th').first(),
+    ).toHaveAttribute('aria-sort', 'descending');
+    await expect(northRows.first()).toHaveAttribute('data-postcode', '3764');
+
+    // Sort by Climatic region ascending -> Cold rows appear first
+    await page.locator('[data-postcode-table] button[data-sort-col="5"]').click();
+    await expect(
+      page.locator('[data-postcode-table] thead th').nth(5),
+    ).toHaveAttribute('aria-sort', 'ascending');
+    await expect(northRows.first().locator('td').nth(5)).toHaveText('Cold');
+
+    const northAxe = await new AxeBuilder({ page }).analyze();
+    expect(northAxe.violations).toEqual([]);
+
+    await page.goto('/victoria/melbourne/');
+    const melbRows = page.locator('[data-postcode-table] tbody tr[data-postcode]');
+    await expect(melbRows).toHaveCount(52);
+    await expect(melbRows.first()).toHaveAttribute('data-postcode', '3000');
+
+    const overflowMelb = await page.evaluate(
+      () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+    );
+    expect(overflowMelb).toBe(false);
+
+    const melbAxe = await new AxeBuilder({ page }).analyze();
+    expect(melbAxe.violations).toEqual([]);
+  });
 });

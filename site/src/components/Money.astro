@@ -1,7 +1,7 @@
 ---
 import { getEntry } from 'astro:content';
 import { SITE } from '../data/site';
-import { assertFigureNotStale, formatAuDate } from '../lib/dates';
+import { assertFigureNotExpired, assertFigureNotStale, formatAuDate } from '../lib/dates';
 import { assertValidBlockLabel, formatFigureAmount, KIND_TAGS } from '../lib/figures';
 
 export interface Props {
@@ -18,6 +18,7 @@ if (!entry) {
 
 const fig = entry.data;
 assertFigureNotStale(fig.id, fig.checkedOn, SITE.flags.maxFigureAgeDays);
+assertFigureNotExpired(fig.id, fig.expiresOn);
 
 const sourceEntry = await getEntry(fig.sourceId);
 if (!sourceEntry || !sourceEntry.data.official) {

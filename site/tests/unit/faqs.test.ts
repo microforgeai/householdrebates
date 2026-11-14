@@ -41,7 +41,7 @@ describe('FAQ canonical assignment and area localFacts invariants (Prompt 27)', 
     }
   });
 
-  it('requires at least 5 sourced localFacts on every area page except Melbourne (pending Prompt 39)', () => {
+  it('requires at least 5 sourced localFacts on every area page', () => {
     const files = fs
       .readdirSync(areasDir)
       .filter((f) => f.endsWith('.mdx'))
@@ -53,11 +53,7 @@ describe('FAQ canonical assignment and area localFacts invariants (Prompt 27)', 
       expect(fmMatch, `${file} frontmatter`).not.toBeNull();
       const fm = YAML.parse(fmMatch![1]);
       const facts: unknown[] = fm.localFacts ?? [];
-      if (fm.slug === 'melbourne') {
-        expect(facts.length, 'melbourne.mdx localFacts').toBeGreaterThanOrEqual(4);
-      } else {
-        expect(facts.length, `${file} localFacts must have >= 5 entries`).toBeGreaterThanOrEqual(5);
-      }
+      expect(facts.length, `${file} localFacts must have >= 5 entries`).toBeGreaterThanOrEqual(5);
       for (const fact of facts) {
         expect(String(fact).includes('$'), `${file} localFacts must not contain $`).toBe(false);
       }

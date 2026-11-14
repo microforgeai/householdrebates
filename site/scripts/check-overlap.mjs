@@ -8,12 +8,9 @@ const distDir = path.join(siteRoot, 'dist');
 const allowListPath = path.join(__dirname, 'overlap-allow.json');
 const outputJsonPath = path.join(distDir, '_overlap.json');
 
-// TODO(prompt-39): Once Prompt 39 rescopes /victoria/melbourne/ to the 52 inner-Melbourne
-// postcodes, make containment (25%) a hard gate by switching OVERLAP_METRIC to 'containment'
-// (or failing when either jaccard >= 0.25 or containment >= 0.25).
-const OVERLAP_METRIC = 'jaccard';
+// Both Jaccard (>= 0.25) and Containment (>= 0.25) are hard build gates (promoted in Prompt 39
+// after rescoping /victoria/melbourne/ to the 52 inner-Melbourne postcodes).
 const MAX_OVERLAP = 0.25;
-const CONTAINMENT_WARN_THRESHOLD = 0.25;
 const SHINGLE_SIZE = 6;
 const BOILERPLATE_DOC_FREQ_RATIO = 0.3;
 
@@ -219,7 +216,7 @@ for (let i = 0; i < pages.length; i++) {
     };
     pairs.push(record);
 
-    if (!allowed && record[OVERLAP_METRIC] >= MAX_OVERLAP) {
+    if (!allowed && (record.jaccard >= MAX_OVERLAP || record.containment >= MAX_OVERLAP)) {
       failures.push(record);
     }
   }
@@ -244,24 +241,9 @@ for (const [idx, p] of pairs.slice(0, 10).entries()) {
   );
 }
 
-const containmentWarnings = pairs
-  .filter((p) => !isAllowListed(p.a, p.b) && p.containment > CONTAINMENT_WARN_THRESHOLD)
-  .sort((x, y) => y.containment - x.containment || y.jaccard - x.jaccard);
-
-if (containmentWarnings.length > 0) {
-  console.warn(
-    `check-overlap WARNING (non-failing until Prompt 39): ${containmentWarnings.length} pair(s) have containment > ${(CONTAINMENT_WARN_THRESHOLD * 100).toFixed(0)}%:`,
-  );
-  for (const w of containmentWarnings) {
-    console.warn(
-      `  - ${w.a} <-> ${w.b}: containment ${(w.containment * 100).toFixed(1)}% (${w.containment.toFixed(4)}), jaccard ${(w.jaccard * 100).toFixed(1)}% (${w.jaccard.toFixed(4)})`,
-    );
-  }
-}
-
 if (failures.length > 0) {
   console.error(
-    `check-overlap FAILED: ${failures.length} pair(s) have ${OVERLAP_METRIC} >= ${MAX_OVERLAP}:`,
+    `check-overlap FAILED: ${failures.length} pair(s) have Jaccard >= ${MAX_OVERLAP} or Containment >= ${MAX_OVERLAP}:`,
   );
   for (const f of failures) {
     console.error(
@@ -272,7 +254,11 @@ if (failures.length > 0) {
 }
 
 const nonAllowed = pairs.filter((p) => !isAllowListed(p.a, p.b));
-const maxPair = nonAllowed[0] ?? pairs[0];
+const maxJaccardPair = nonAllowed[0] ?? pairs[0];
+const maxContainmentPair =
+  [...nonAllowed].sort(
+    (x, y) => y.containment - x.containment || y.jaccard - x.jaccard,
+  )[0] ?? pairs[0];
 console.log(
-  `check-overlap: ${pageCount} pages, max Jaccard ${maxPair.jaccard.toFixed(4)} (${maxPair.a} <-> ${maxPair.b}), ${allowUsed} allow-listed`,
+  `check-overlap: ${pageCount} pages, max Jaccard ${maxJaccardPair.jaccard.toFixed(4)} (${maxJaccardPair.a} <-> ${maxJaccardPair.b}), max Containment ${maxContainmentPair.containment.toFixed(4)} (${maxContainmentPair.a} <-> ${maxContainmentPair.b}), ${allowUsed} allow-listed`,
 );

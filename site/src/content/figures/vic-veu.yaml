@@ -2063,3 +2063,22 @@
   amountMax: 14
   sourceId: solarvic-community-languages
   checkedOn: 2026-11-14
+
+- id: local-boroondara-solar-savers-max
+  group: local-boroondara-solar-savers
+  state: vic
+  program: "City of Boroondara Solar Savers"
+  activity: rcac
+  audience: household
+  jurisdiction: local
+  scenario: "City of Boroondara Solar Savers one-off discount across eligible home energy upgrades (until 31 December 2026 or until funds run out)"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 2000
+  currency: AUD
+  expiresOn: 2026-12-31
+  sourceId: energygov-boroondara-solar-savers
+  checkedOn: 2026-11-15
+  conditions:
+    - "Available to Boroondara residents until 31 December 2026 or until program funds are exhausted"

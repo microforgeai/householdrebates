@@ -14,5 +14,9 @@
   {
     "phrase": "Baw Baw",
     "reason": "Official Victorian municipality name (Baw Baw Shire) in ABS ASGS / postcodes.csv (postcode 3825)"
+  },
+  {
+    "phrase": "Nar Nar",
+    "reason": "Official Victorian locality names Nar Nar Goon and Nar Nar Goon North in ABS ASGS / postcodes.csv (postcode 3812)"
   }
 ]

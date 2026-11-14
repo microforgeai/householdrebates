@@ -1,0 +1,87 @@
+{
+  "checkedOn": "2026-11-15",
+  "sourceIds": [
+    "plan-melbourne-regions-map",
+    "vic-veu-spec-v25",
+    "abs-asgs-allocation"
+  ],
+  "regions": [
+    {
+      "slug": "melbourne",
+      "url": "/victoria/melbourne/",
+      "mapRow": 14,
+      "planMelbourneRegion": "Inner Metro and Inner South East",
+      "checkerLabel": "More about inner Melbourne rebates",
+      "lgas": [
+        "Melbourne",
+        "Port Phillip",
+        "Yarra",
+        "Stonnington",
+        "Glen Eira",
+        "Boroondara",
+        "Bayside"
+      ]
+    },
+    {
+      "slug": "melbourne-north",
+      "url": "/victoria/melbourne-north/",
+      "mapRow": 61,
+      "planMelbourneRegion": "Northern",
+      "checkerLabel": "More about northern Melbourne rebates",
+      "lgas": [
+        "Hume",
+        "Whittlesea",
+        "Darebin",
+        "Banyule",
+        "Merri-bek",
+        "Nillumbik",
+        "Mitchell"
+      ]
+    },
+    {
+      "slug": "melbourne-west",
+      "url": "/victoria/melbourne-west/",
+      "mapRow": 62,
+      "planMelbourneRegion": "Western",
+      "checkerLabel": "More about western Melbourne rebates",
+      "lgas": [
+        "Wyndham",
+        "Melton",
+        "Brimbank",
+        "Hobsons Bay",
+        "Maribyrnong",
+        "Moonee Valley"
+      ]
+    },
+    {
+      "slug": "melbourne-east",
+      "url": "/victoria/melbourne-east/",
+      "mapRow": 63,
+      "planMelbourneRegion": "Eastern",
+      "checkerLabel": "More about eastern Melbourne rebates",
+      "lgas": [
+        "Manningham",
+        "Whitehorse",
+        "Knox",
+        "Maroondah",
+        "Monash",
+        "Yarra Ranges"
+      ]
+    },
+    {
+      "slug": "melbourne-south-east",
+      "url": "/victoria/melbourne-south-east/",
+      "mapRow": 64,
+      "planMelbourneRegion": "Southern",
+      "checkerLabel": "More about south-east Melbourne rebates",
+      "lgas": [
+        "Casey",
+        "Cardinia",
+        "Greater Dandenong",
+        "Kingston",
+        "Frankston",
+        "Mornington Peninsula"
+      ]
+    }
+  ]
+}

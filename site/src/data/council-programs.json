@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-11-14",
+  "checkedOn": "2026-11-15",
   "programs": [
     {
       "id": "hume-home-energy-upgrades",
@@ -38,7 +38,7 @@
       "councils": ["Darebin"],
       "status": "paused",
       "statusNote": "Program registrations are paused after delivery partner Yarra Energy Foundation entered voluntary administration (ASIC notice 10 Nov 2026).",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "darebin-energy-upgrades"
     },
     {
@@ -71,8 +71,18 @@
       ],
       "status": "open",
       "statusNote": "Participating-council advisory and vetted-supplier program across 12 metropolitan Melbourne councils.",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "council-home-energy-program"
+    },
+    {
+      "id": "boroondara-solar-savers",
+      "name": "City of Boroondara Solar Savers Program",
+      "operator": "City of Boroondara",
+      "councils": ["Boroondara"],
+      "status": "open",
+      "statusNote": "Boroondara residents can access a free home energy assessment and a one-off council discount on eligible upgrades until 31 Dec 2026 or until program funds are exhausted.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "energygov-boroondara-solar-savers"
     },
     {
       "id": "whittlesea-home-energy-program",
@@ -81,8 +91,18 @@
       "councils": ["Whittlesea"],
       "status": "open",
       "statusNote": "Council-supported home energy advice and upgrade subsidies run until June 2027 or until funding is exhausted.",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "whittlesea-home-energy-program"
+    },
+    {
+      "id": "wyndham-energy-smart-homes",
+      "name": "Wyndham Energy Smart Homes & Home Energy in Your Language",
+      "operator": "Wyndham City Council / WAGA",
+      "councils": ["Wyndham"],
+      "status": "open",
+      "statusNote": "Electrification workshop recordings, borrowable library efficiency kits in Wyndham, and interpreted Home Energy in Your Language webinars across six western councils.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "wyndham-energy-smart-homes"
     },
     {
       "id": "casey-diy-draught-proofing-rebate",
@@ -91,8 +111,28 @@
       "councils": ["Casey"],
       "status": "open",
       "statusNote": "Council rebate for eligible DIY draught-proofing products purchased and installed by City of Casey residents (one claim per household).",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "casey-home-energy-rebates"
+    },
+    {
+      "id": "sec-east-heat-pump-pilot",
+      "name": "SEC Heat Pump Hot Water Pilot (Maroondah & Yarra Ranges)",
+      "operator": "SEC Victoria",
+      "councils": ["Maroondah", "Yarra Ranges"],
+      "status": "open",
+      "statusNote": "State-owned SEC heat pump hot water one-stop-shop pilot open to residents in Maroondah and the Yarra Ranges alongside Ballan and Latrobe City.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "premier-latrobe-pilot"
+    },
+    {
+      "id": "sec-installer-network-metro",
+      "name": "SEC Installer Network (Merri-bek & Casey)",
+      "operator": "SEC Victoria",
+      "councils": ["Merri-bek", "Casey"],
+      "status": "open",
+      "statusNote": "State-owned SEC installer network open to households in Merri-bek and Casey alongside Ballarat ahead of broader 2026 statewide rollout.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "premier-latrobe-pilot"
     },
     {
       "id": "geelong-electric-homes-2026-27",

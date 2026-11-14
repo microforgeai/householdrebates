@@ -141,6 +141,9 @@ function formatCouncilShare(row: {
 }
 
 const showPostcodeTable = d.veuPostcodeTable ?? true;
+const isInitiallySortedByPostcode = d.postcodes.every(
+  (pc, idx, arr) => idx === 0 || arr[idx - 1].localeCompare(pc) <= 0,
+);
 const postcodeTableRows = showPostcodeTable
   ? d.postcodes.map((pc) => {
       const row = postcodeRowsMap[pc];
@@ -255,20 +258,34 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         <section data-postcode-table aria-labelledby="veu-postcode-table-heading">
           <h2 id="veu-postcode-table-heading">VEU postcode classification for {d.areaName}</h2>
           <div class="figure-table-wrap">
-            <table class="figure-table">
+            <table class="figure-table postcode-table">
               <caption>
                 Source: VEU Specifications v{postcodesJson.specVersion}, Location Variable List (Table A), with localities and 2021 Census dwelling council shares from ABS ASGS Edition 3 allocation files. Checked{' '}
-                {formatAuDate(new Date(postcodesJson.checkedOn))}.
+                {formatAuDate(new Date(postcodesJson.checkedOn))}. Select any column heading to sort.
               </caption>
               <thead>
                 <tr>
-                  <th scope="col">Postcode</th>
-                  <th scope="col">Localities</th>
-                  <th scope="col">Council share</th>
-                  <th scope="col">VEU area</th>
-                  <th scope="col">Reticulated gas</th>
-                  <th scope="col">Climatic region</th>
-                  <th scope="col">Heat pump zone</th>
+                  <th scope="col" aria-sort={isInitiallySortedByPostcode ? 'ascending' : 'none'}>
+                    <button type="button" class="postcode-sort-btn" data-sort-col="0">Postcode</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="1">Localities</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="2">Council share</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="3">VEU area</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="4">Reticulated gas</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="5">Climatic region</button>
+                  </th>
+                  <th scope="col" aria-sort="none">
+                    <button type="button" class="postcode-sort-btn" data-sort-col="6">Heat pump zone</button>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -410,4 +427,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
 
     {hasToc && <Toc headings={headings} />}
   </div>
+  {showPostcodeTable && postcodeTableRows.length > 0 && (
+    <script src="../components/postcode-table.client.ts"></script>
+  )}
 </BaseLayout>

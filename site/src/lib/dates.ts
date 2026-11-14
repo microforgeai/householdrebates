@@ -43,3 +43,27 @@ export function assertFigureNotStale(
     throw new Error(`Figure "${id}" has a future checkedOn date (${formatAuDate(checkedOn)}).`);
   }
 }
+
+export function assertFigureNotExpired(
+  id: string,
+  expiresOn: Date | string | undefined,
+  referenceDate: Date = new Date(),
+): void {
+  if (!expiresOn) return;
+  const melbParts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Australia/Melbourne',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(referenceDate);
+  const [rY, rM, rD] = melbParts.split('-').map(Number);
+  const refUtc = Date.UTC(rY, rM - 1, rD);
+
+  const exp = typeof expiresOn === 'string' ? new Date(expiresOn) : expiresOn;
+  const expUtc = Date.UTC(exp.getUTCFullYear(), exp.getUTCMonth(), exp.getUTCDate());
+  if (refUtc > expUtc) {
+    throw new Error(
+      `Figure "${id}" has passed its expiresOn date (${formatAuDate(exp)}); remove or re-source expired content.`,
+    );
+  }
+}

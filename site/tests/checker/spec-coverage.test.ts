@@ -158,30 +158,41 @@ describe('spec coverage and rule integrity', () => {
 describe('area link resolution', () => {
   const ctx = getDefaultCheckerContext();
 
-  it('resolves 3427, 3029, 3064 and 3000 to their target area or hub pages with rollout fallbacks', () => {
-    const fullEnabled = new Set([
-      ...ctx.enabledUrls,
-      '/victoria/north-west-corridor/',
-      '/victoria/wyndham/',
-      '/victoria/melbourne-north/',
-      '/victoria/melbourne/',
-      '/victoria/postcode/',
-    ]);
-
-    expect(resolveAreaLink(ctx.postcodes.rows['3427'], fullEnabled).href).toBe(
+  it('resolves 3427, 3029, 3064, 3000 and all five metro hubs under live rollout.json, with metro-regions.json 1:1 parity', () => {
+    // Live rollout.json now has rows 61–64 enabled alongside row 14 and the specific council/corridor pages
+    expect(resolveAreaLink(ctx.postcodes.rows['3029'], ctx.enabledUrls).href).toBe('/victoria/wyndham/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3064'], ctx.enabledUrls).href).toBe('/victoria/melbourne-north/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3000'], ctx.enabledUrls).href).toBe('/victoria/melbourne/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3427'], ctx.enabledUrls).href).toBe(
       '/victoria/north-west-corridor/',
     );
-    expect(resolveAreaLink(ctx.postcodes.rows['3029'], fullEnabled).href).toBe(
-      '/victoria/wyndham/',
+    expect(resolveAreaLink(ctx.postcodes.rows['3020'], ctx.enabledUrls).href).toBe('/victoria/melbourne-west/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3128'], ctx.enabledUrls).href).toBe('/victoria/melbourne-east/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3810'], ctx.enabledUrls).href).toBe(
+      '/victoria/melbourne-south-east/',
     );
-    expect(resolveAreaLink(ctx.postcodes.rows['3064'], fullEnabled).href).toBe(
-      '/victoria/melbourne-north/',
-    );
-    expect(resolveAreaLink(ctx.postcodes.rows['3000'], fullEnabled).href).toBe(
-      '/victoria/melbourne/',
-    );
+    // Specific enabled council pages take precedence over their containing metro hub
+    expect(resolveAreaLink(ctx.postcodes.rows['3805'], ctx.enabledUrls).href).toBe('/victoria/casey/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3076'], ctx.enabledUrls).href).toBe('/victoria/whittlesea/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3140'], ctx.enabledUrls).href).toBe('/victoria/yarra-ranges/');
+    expect(resolveAreaLink(ctx.postcodes.rows['3756'], ctx.enabledUrls).href).toBe('/victoria/mitchell/');
 
-    // Fallback when row 56 isn't enabled yet, with row 54 enabled vs disabled
+    // Verify metro-regions.json agrees 1-to-1 with links-data.json metroHubByLga
+    const metroRegions = JSON.parse(
+      fs.readFileSync(path.join(repoRoot, 'site/src/data/metro-regions.json'), 'utf8'),
+    );
+    const linksData = JSON.parse(
+      fs.readFileSync(path.join(repoRoot, 'site/src/lib/checker/links-data.json'), 'utf8'),
+    );
+    const expectedByLga: Record<string, { url: string; label: string }> = {};
+    for (const reg of metroRegions.regions) {
+      for (const lga of reg.lgas) {
+        expectedByLga[lga] = { url: reg.url, label: reg.checkerLabel };
+      }
+    }
+    expect(linksData.metroHubByLga).toEqual(expectedByLga);
+
+    // Fallback when specific/hub rows aren't enabled, with row 54 enabled vs disabled
     const withPostcodePageOnly = new Set(['/victoria/', '/victoria/postcode/']);
     expect(resolveAreaLink(ctx.postcodes.rows['3427'], withPostcodePageOnly).href).toBe(
       '/victoria/postcode/',

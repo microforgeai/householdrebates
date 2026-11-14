@@ -238,9 +238,8 @@ const areas = defineCollection({
         message: 'standard areas require councils (>=1); multi-town areas require towns (>=2)',
       },
     )
-    .refine((d) => (d.slug === 'melbourne' ? d.localFacts.length >= 4 : d.localFacts.length >= 5), {
-      message:
-        'Every area page requires at least 5 sourced localFacts (melbourne rescope to 52 postcodes in prompt 39).',
+    .refine((d) => d.localFacts.length >= 5, {
+      message: 'Every area page requires at least 5 sourced localFacts.',
     }),
 });
 

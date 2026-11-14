@@ -195,6 +195,15 @@ const areas = defineCollection({
           places: z.array(z.string()).min(1),
         })
         .optional(),
+      nccZones: z
+        .array(
+          z.object({
+            zone: z.number().int(),
+            places: z.array(z.string()).min(1),
+          }),
+        )
+        .min(1)
+        .optional(),
       localFacts: z
         .array(
           z.object({

@@ -8,8 +8,28 @@
       "councils": ["Hume"],
       "status": "paused",
       "statusNote": "Registrations are paused after delivery partner Yarra Energy Foundation entered voluntary administration (ASIC notice 10 Nov 2026). Only insulation and draught-proofing registrations lodged before 19 Oct 2026 continue.",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "hume-energy-upgrades"
+    },
+    {
+      "id": "hume-household-energy-officer",
+      "name": "Hume Household Energy Officer (Energy Bill Support)",
+      "operator": "Hume City Council",
+      "councils": ["Hume"],
+      "status": "open",
+      "statusNote": "Hume City Council's Household Energy Officer provides resident and community-group guidance on Victorian energy concessions, Utility Relief Grants, and retailer payment plans.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "hume-energy-bill-support"
+    },
+    {
+      "id": "melton-living-green-power-mate",
+      "name": "Melton Living Green Power-Mate Meter Loans",
+      "operator": "Melton City Council",
+      "councils": ["Melton"],
+      "status": "open",
+      "statusNote": "Melton City Council lends Power-Mate Lite plug-in energy meters so residents can measure appliance electricity use at home before choosing upgrades.",
+      "statusCheckedOn": "2026-11-15",
+      "sourceId": "melton-living-green"
     },
     {
       "id": "darebin-energy-upgrades",
@@ -28,7 +48,7 @@
       "councils": ["Macedon Ranges"],
       "status": "closed",
       "statusNote": "Closed to new enquiries on 31 Oct 2026; installations for existing bookings end 30 Nov 2026.",
-      "statusCheckedOn": "2026-11-14",
+      "statusCheckedOn": "2026-11-15",
       "sourceId": "t2zero-macedon-bulk-buy"
     },
     {

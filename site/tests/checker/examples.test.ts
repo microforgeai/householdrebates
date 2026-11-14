@@ -57,15 +57,8 @@ describe('Spec §8 acceptance examples (1–6)', () => {
       SH3: 'no' as const,
     };
 
-    // With row 56 enabled -> /victoria/north-west-corridor/
-    const enabledWithCorridor = new Set([
-      ...ctx.enabledUrls,
-      '/victoria/north-west-corridor/',
-    ]);
-    const res = evaluate(
-      { ...answers, R6: [...answers.R6] },
-      { enabledUrls: enabledWithCorridor },
-    );
+    // Default live rollout (row 56 enabled in Prompt 37) resolves directly to /victoria/north-west-corridor/
+    const res = evaluate({ ...answers, R6: [...answers.R6] });
 
     expect(res.validPostcode).toBe(true);
     expect(res.areaCard?.summaryText).toBe(

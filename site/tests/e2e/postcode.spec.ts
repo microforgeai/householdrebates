@@ -34,12 +34,10 @@ test.describe('Victorian Postcode Lookup (/victoria/postcode/) — Prompt 36', (
     await expect(insBox).toHaveAttribute('data-figure-basis', 'official');
     await expect(insBox).toContainText('up to $1,500');
 
-    // Area link: corridor when row 56 enabled, melbourne-west when row 62 enabled, else /victoria/ (never self-link)
+    // Area link: row 56 is enabled in Prompt 37 -> /victoria/north-west-corridor/ (never self-link)
     const areaAnchor = card.locator('[data-area-link] a');
     const areaHref = await areaAnchor.getAttribute('href');
-    expect(['/victoria/north-west-corridor/', '/victoria/melbourne-west/', '/victoria/']).toContain(
-      areaHref,
-    );
+    expect(areaHref).toBe('/victoria/north-west-corridor/');
     expect(areaHref).not.toBe('/victoria/postcode/');
 
     // Nothing typed stored in web storage or sent externally

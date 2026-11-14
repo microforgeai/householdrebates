@@ -45,6 +45,7 @@ export interface Props {
       postcodes: string[];
       veuPostcodeTable?: boolean;
       nccZone?: { zone: number; places: string[] };
+      nccZones?: { zone: number; places: string[] }[];
       localFacts: { text: string; sourceId: string | { id: string } }[];
       councilPrograms?: {
         name: string;
@@ -161,8 +162,9 @@ const postcodeTableRows = showPostcodeTable
     })
   : [];
 
-const abcbDataSource = d.nccZone ? await getEntry('sources', 'abcb-climate-zones-data') : null;
-const abcbMapSource = d.nccZone ? await getEntry('sources', 'abcb-climate-map') : null;
+const nccZoneEntries = d.nccZones ?? (d.nccZone ? [d.nccZone] : []);
+const abcbDataSource = nccZoneEntries.length > 0 ? await getEntry('sources', 'abcb-climate-zones-data') : null;
+const abcbMapSource = nccZoneEntries.length > 0 ? await getEntry('sources', 'abcb-climate-map') : null;
 
 const allInstallers = await getCollection('installers');
 const coveringInstallers = allInstallers
@@ -287,19 +289,24 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         </section>
       )}
 
-      {d.nccZone && (
+      {nccZoneEntries.length > 0 && (
         <section class="callout callout--info" aria-labelledby="ncc-zone-heading">
           <strong class="callout__title" id="ncc-zone-heading">
-            National Construction Code (NCC) climate zone {d.nccZone.zone}
+            {nccZoneEntries.length === 1
+              ? `National Construction Code (NCC) climate zone ${nccZoneEntries[0].zone}`
+              : `National Construction Code (NCC) climate zones ${nccZoneEntries.map((z) => z.zone).join(' and ')}`}
           </strong>
           <p style="font-size: var(--text-sm); margin-bottom: 0.35rem;">
-            Point checks at {d.nccZone.places.join(', ')} fall in NCC climate zone {d.nccZone.zone}. Check your exact street or postcode on the{' '}
+            {nccZoneEntries.length === 1
+              ? `Point checks at ${nccZoneEntries[0].places.join(', ')} fall in NCC climate zone ${nccZoneEntries[0].zone}.`
+              : `Point checks fall in ${nccZoneEntries.map((z) => `NCC climate zone ${z.zone} at ${z.places.join(', ')}`).join('; and ')}.`}{' '}
+            Confirm your exact street or postcode on the{' '}
             <a
-              href={abcbMapSource?.data.url ?? 'https://www.abcb.gov.au/resources/climate-zone-map'}
+              href={abcbMapSource?.data.url ?? 'https://www.abcb.gov.au/abcb-climate-map'}
               target="_blank"
               rel="noopener noreferrer"
             >
-              ABCB Climate Zone Map ↗
+              ABCB Climate Map ↗
             </a>.
           </p>
           <p style="font-size: var(--text-xs); color: var(--text-secondary); margin-bottom: 0;">

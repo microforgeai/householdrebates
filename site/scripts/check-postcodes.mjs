@@ -434,6 +434,20 @@ const areaSlugExpectedPcs = {
   whittlesea: pcsOf(whittlesea),
   'yarra-ranges': pcsOf(yarraRanges),
   'solstice-gas-shutdown-towns': solsticeExpected.map(([pc]) => pc),
+  'north-west-corridor': [
+    '3023',
+    '3335',
+    '3336',
+    '3337',
+    '3338',
+    '3427',
+    '3428',
+    '3429',
+    '3430',
+    '3431',
+    '3437',
+    '3438',
+  ],
   'macedon-ranges': pcsOf(macedon),
   mitchell: pcsOf(mitchell),
   'latrobe-valley': pcsOf(latrobe),
@@ -469,6 +483,64 @@ for (const file of fs.readdirSync(areasDir).filter((f) => f.endsWith('.mdx'))) {
       expectEq(`areas/vic/${file} postcodes`, [...pcs].sort(), [...areaSlugExpectedPcs[slug]].sort());
     } else {
       expectEq(`areas/vic/${file} postcodes`, [...pcs].sort(), areaSlugExpectedPcs[slug]);
+    }
+  }
+
+  // 5. When dist/ is built, verify rendered <tr data-postcode> rows in dist/victoria/<slug>/index.html match postcodes.json
+  const distHtmlPath = path.join(siteRoot, 'dist/victoria', slug, 'index.html');
+  if (fs.existsSync(distHtmlPath) && fm.veuPostcodeTable !== false) {
+    const html = fs.readFileSync(distHtmlPath, 'utf8');
+    const secMatch = html.match(/<section\b[^>]*\bdata-postcode-table\b[^>]*>([\s\S]*?)<\/section>/i);
+    if (!secMatch) {
+      diffs.push(`dist/victoria/${slug}/index.html: missing <section data-postcode-table>`);
+    } else {
+      const decodeHtml = (s) =>
+        s
+          .replace(/&amp;/g, '&')
+          .replace(/&lt;/g, '<')
+          .replace(/&gt;/g, '>')
+          .replace(/&quot;/g, '"')
+          .replace(/&#39;|&apos;/g, "'")
+          .replace(/&nbsp;/g, ' ');
+      const formatExpectedCouncil = (row) => {
+        const primary = row.primary_lga ?? 'Unknown';
+        if (row.primary_lga_share_pct === null || row.primary_lga_share_pct === undefined) {
+          return `${primary} (PO box, indicative)`;
+        }
+        if (row.other_lgas && row.other_lgas.length > 0) {
+          const others = row.other_lgas.map((o) => `${o.lga} ${o.pct}%`).join(', ');
+          return `${primary} ${row.primary_lga_share_pct}% (${others})`;
+        }
+        return `${primary} (${row.primary_lga_share_pct}%)`;
+      };
+      const trMatches = [...secMatch[1].matchAll(/<tr\b[^>]*\bdata-postcode=["'](\d{4})["'][^>]*>([\s\S]*?)<\/tr>/gi)];
+      expectEq(
+        `dist/victoria/${slug}/index.html rendered postcode order`,
+        trMatches.map((m) => m[1]),
+        pcs,
+      );
+      for (const tr of trMatches) {
+        const pc = tr[1];
+        const row = rowsByPc[pc];
+        if (!row) continue;
+        const cells = [...tr[2].matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/gi)].map((c) =>
+          decodeHtml(c[1].replace(/<[^>]+>/g, '')).replace(/\s+/g, ' ').trim(),
+        );
+        const expectedLocalities =
+          row.localitiesList && row.localitiesList.length > 0
+            ? row.localitiesList.join(', ')
+            : String(row.localities ?? '').replace(/;\s*/g, ', ');
+        const expectedCells = [
+          pc,
+          expectedLocalities,
+          formatExpectedCouncil(row),
+          row.area,
+          row.reticulatedGas ? 'Yes' : 'No',
+          row.climaticRegion,
+          `Zone ${row.hpZone}`,
+        ];
+        expectEq(`dist/victoria/${slug}/index.html row ${pc}`, cells, expectedCells);
+      }
     }
   }
 }

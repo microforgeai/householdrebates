@@ -97,6 +97,12 @@ for (const file of htmlFiles) {
   const pageUrl = htmlRelToUrl(rel);
   const html = fs.readFileSync(file, 'utf8');
 
+  // 0. Full-document placeholder guard (HTML head/body/attributes and JSON-LD scripts)
+  for (const m of html.matchAll(/<<[^>]*>>|<<|&lt;&lt;/g)) {
+    tokens++;
+    errors.push(`${pageUrl}: unresolved placeholder "${m[0]}" in built HTML or JSON-LD`);
+  }
+
   const mainMatch = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
   if (!mainMatch) {
     errors.push(`${pageUrl}: missing <main> element`);

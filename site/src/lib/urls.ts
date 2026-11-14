@@ -17,10 +17,13 @@ export function canonicalUrl(pathname: string): string {
 
 export function entryToPathname(
   collection: 'guides' | 'areas' | 'pages',
-  data: { slug: string; state: string; section: string },
+  data: { slug: string; state: string; section: string; parent?: string },
 ): string {
   if (collection === 'guides' || collection === 'areas') {
     return `/victoria/${data.slug}/`;
+  }
+  if (data.parent === 'about') {
+    return `/about/${data.slug}/`;
   }
   if (data.slug === 'home') return '/';
   if (data.slug === 'victoria') return '/victoria/';
@@ -85,6 +88,14 @@ export function resolveSlugToPath(slug: string): { path: string; label: string }
     about: {
       path: '/about/',
       label: 'About Household Rebates',
+    },
+    'gurinder-singh': {
+      path: '/about/gurinder-singh/',
+      label: 'Who Writes and Checks Household Rebates? (Gurinder Singh)',
+    },
+    'about-gurinder-singh': {
+      path: '/about/gurinder-singh/',
+      label: 'Who Writes and Checks Household Rebates? (Gurinder Singh)',
     },
     sources: {
       path: '/sources/',

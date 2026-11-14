@@ -139,6 +139,44 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
+// Prompt 32 Step 4: placeholder bio ⇔ noindex present on /about/gurinder-singh/ ⇔ not in sitemap-0.xml
+const peoplePath = path.join(siteRoot, 'src/data/people.json');
+const people = JSON.parse(fs.readFileSync(peoplePath, 'utf8'));
+const authorBio = people?.['gurinder-singh']?.bio ?? '';
+const bioIsPlaceholder =
+  typeof authorBio !== 'string' || !authorBio.trim() || /<<|>>/.test(authorBio);
+
+const authorHtmlPath = path.join(distDir, 'about/gurinder-singh/index.html');
+const sitemapPath = path.join(distDir, 'sitemap-0.xml');
+
+if (fs.existsSync(authorHtmlPath) && fs.existsSync(sitemapPath)) {
+  const authorHtml = fs.readFileSync(authorHtmlPath, 'utf8');
+  const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
+  const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml);
+  const inSitemap = sitemapXml.includes('https://householdrebates.com.au/about/gurinder-singh/');
+
+  if (bioIsPlaceholder && !hasNoindex) {
+    throw new Error(
+      'dist/about/gurinder-singh/index.html must carry noindex while people.json["gurinder-singh"].bio is a placeholder',
+    );
+  }
+  if (!bioIsPlaceholder && hasNoindex) {
+    throw new Error(
+      'dist/about/gurinder-singh/index.html still carries noindex after people.json["gurinder-singh"].bio was supplied',
+    );
+  }
+  if (hasNoindex && inSitemap) {
+    throw new Error(
+      'dist/sitemap-0.xml must not include /about/gurinder-singh/ while the page carries noindex',
+    );
+  }
+  if (!hasNoindex && !inSitemap) {
+    throw new Error(
+      'dist/sitemap-0.xml must include /about/gurinder-singh/ once noindex is lifted',
+    );
+  }
+}
+
 console.log(
-  `check-seo: 0 errors (${mdxFiles.length} MDX files, ${htmlFiles.length} HTML pages; ${titlesOver60} titles over 60, ${duplicateBrands} duplicate brands, ${duplicateDescriptions} duplicate descriptions; longest title ${longestTitleLen} chars: "${longestTitle}").`,
+  `check-seo: 0 errors (${mdxFiles.length} MDX files, ${htmlFiles.length} HTML pages; ${titlesOver60} titles over 60, ${duplicateBrands} duplicate brands, ${duplicateDescriptions} duplicate descriptions; author bio placeholder=${bioIsPlaceholder}; longest title ${longestTitleLen} chars: "${longestTitle}").`,
 );

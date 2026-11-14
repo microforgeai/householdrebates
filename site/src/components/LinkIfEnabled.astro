@@ -1,5 +1,6 @@
 ---
 import { isUrlEnabled } from '../lib/rollout';
+import { isAuthorBioReady } from '../lib/people';
 import { ensureTrailingSlash } from '../lib/urls';
 
 export interface Props {
@@ -12,7 +13,8 @@ const cleanBase = ensureTrailingSlash(basePath);
 const currentPath = ensureTrailingSlash(Astro.url.pathname);
 const fullHref = hash ? `${cleanBase}#${hash}` : cleanBase;
 const isSelfWithoutHash = !hash && cleanBase === currentPath;
-const enabled = isUrlEnabled(cleanBase) && !isSelfWithoutHash;
+const authorBlocked = cleanBase === '/about/gurinder-singh/' && !isAuthorBioReady();
+const enabled = isUrlEnabled(cleanBase) && !isSelfWithoutHash && !authorBlocked;
 ---
 
 {enabled ? <a href={fullHref}><slot /></a> : <slot />}

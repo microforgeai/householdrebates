@@ -1,0 +1,26 @@
+---
+import { isAuthorBioReady } from '../lib/people';
+import { ensureTrailingSlash } from '../lib/urls';
+
+export interface Props {
+  name?: string;
+  currentPath?: string;
+  strong?: boolean;
+}
+
+const { name = 'Gurinder Singh', currentPath = '', strong = false } = Astro.props;
+const cleanCurrent = currentPath ? ensureTrailingSlash(currentPath) : '';
+const shouldLink = isAuthorBioReady() && cleanCurrent !== '/about/gurinder-singh/';
+---
+
+{shouldLink ? (
+  strong ? (
+    <strong><a href="/about/gurinder-singh/">{name}</a></strong>
+  ) : (
+    <a href="/about/gurinder-singh/">{name}</a>
+  )
+) : strong ? (
+  <strong>{name}</strong>
+) : (
+  name
+)}

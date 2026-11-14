@@ -23,15 +23,25 @@ function parseRowRange(spec) {
   return out;
 }
 
+function isAuthorBioReadySync() {
+  const peoplePath = path.join(__dirname, 'src/data/people.json');
+  if (!fs.existsSync(peoplePath)) return false;
+  const people = JSON.parse(fs.readFileSync(peoplePath, 'utf8'));
+  const bio = people?.['gurinder-singh']?.bio;
+  return typeof bio === 'string' && bio.trim().length > 0 && !/<<|>>/.test(bio);
+}
+
 function loadEnabledSitemapSet() {
   const rollout = JSON.parse(fs.readFileSync(path.join(__dirname, 'src/data/rollout.json'), 'utf8'));
   const urlMap = JSON.parse(fs.readFileSync(path.join(__dirname, 'src/data/url-map.json'), 'utf8'));
+  const authorBioReady = isAuthorBioReadySync();
   const enabledNums = parseRowRange(rollout.enabledRows);
   const gatedOk = new Set(rollout.gatedApproved ?? []);
   const allowedUrls = new Set();
   for (const r of urlMap) {
     if (!enabledNums.has(r.row)) continue;
     if (r.gated && !(gatedOk.has(r.row) || gatedOk.has(r.url))) continue;
+    if (r.url === '/about/gurinder-singh/' && !authorBioReady) continue;
     allowedUrls.add(`${SITE_ORIGIN}${r.url}`);
   }
   return allowedUrls;
@@ -54,6 +64,8 @@ function loadUpdatedOnMap() {
     let pathname = `/${fm.slug}/`;
     if (file.includes('/content/guides/') || file.includes('/content/areas/')) {
       pathname = `/victoria/${fm.slug}/`;
+    } else if (fm.parent === 'about') {
+      pathname = `/about/${fm.slug}/`;
     } else if (fm.slug === 'home') {
       pathname = '/';
     } else if (fm.slug === 'victoria') {

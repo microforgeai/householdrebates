@@ -40,11 +40,20 @@ function parseRowRange(spec) {
 
 const rollout = JSON.parse(fs.readFileSync(path.join(siteRoot, 'src/data/rollout.json'), 'utf8'));
 const urlMap = JSON.parse(fs.readFileSync(path.join(siteRoot, 'src/data/url-map.json'), 'utf8'));
+const peoplePath = path.join(siteRoot, 'src/data/people.json');
+const people = fs.existsSync(peoplePath) ? JSON.parse(fs.readFileSync(peoplePath, 'utf8')) : null;
+const authorBio = people?.['gurinder-singh']?.bio;
+const authorBioReady = typeof authorBio === 'string' && authorBio.trim().length > 0 && !/<<|>>/.test(authorBio);
 const enabledRowNums = parseRowRange(rollout.enabledRows);
 const gatedOk = new Set(rollout.gatedApproved ?? []);
 const enabledUrls = new Set(
   urlMap
-    .filter((r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)))
+    .filter(
+      (r) =>
+        enabledRowNums.has(r.row) &&
+        (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)) &&
+        !(r.url === '/about/gurinder-singh/' && !authorBioReady),
+    )
     .map((r) => r.url),
 );
 
@@ -67,6 +76,7 @@ function entryUrl(file, fm) {
   if (file.includes('/content/guides/') || file.includes('/content/areas/')) {
     return `/victoria/${fm.slug}/`;
   }
+  if (fm.parent === 'about') return `/about/${fm.slug}/`;
   if (fm.slug === 'home') return '/';
   if (fm.slug === 'victoria') return '/victoria/';
   if (fm.state === 'vic' && fm.section === 'tools') return `/victoria/${fm.slug}/`;
@@ -101,7 +111,8 @@ entries.sort((a, b) => a.mapRow - b.mapRow);
 const SECTIONS = [
   {
     heading: 'Victoria hub',
-    match: (e) => e.navGroup === 'hub',
+    match: (e) =>
+      e.navGroup === 'hub' || e.url === '/' || e.url === '/victoria/eligibility-checker/',
   },
   {
     heading: 'Rebate guides',
@@ -125,7 +136,7 @@ const SECTIONS = [
   },
   {
     heading: 'Tools',
-    match: (e) => e.navGroup === 'tools',
+    match: (e) => e.navGroup === 'tools' && e.url !== '/victoria/eligibility-checker/',
   },
   {
     heading: 'How it works',
@@ -135,7 +146,10 @@ const SECTIONS = [
   {
     heading: 'About and sources',
     match: (e) =>
-      e.navGroup === 'trust' && e.url !== '/how-quotes-work/' && e.url !== '/faq/',
+      e.navGroup === 'trust' &&
+      e.url !== '/' &&
+      e.url !== '/how-quotes-work/' &&
+      e.url !== '/faq/',
   },
   {
     heading: 'Optional',
@@ -146,7 +160,7 @@ const SECTIONS = [
 const lines = [
   '# Household Rebates',
   '',
-  "> Independent guide to Victorian Energy Upgrades (VEU) discounts, Solar Homes rebates, and Victoria's 2027 electrification rules. Run by Agenor Services Pty Ltd (ABN 29 644 447 263), Melbourne. Not a government website. Every figure is indicative, dated, and linked to its official source; an accredited provider confirms eligibility and the final discount.",
+  "> Independent guide to Victorian Energy Upgrades (VEU) discounts, Solar Homes rebates, and Victoria's 2027 electrification rules. Run by Agenor Services Pty Ltd (ABN 29 644 447 263), Melbourne. Not a government website. Every figure is indicative, dated, and linked to its official source (full registry at https://householdrebates.com.au/sources/); an accredited provider confirms eligibility and the final discount.",
   '',
 ];
 

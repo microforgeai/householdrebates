@@ -6,7 +6,7 @@ import AnswerBlock from '../components/AnswerBlock.astro';
 import AnswerText from '../components/AnswerText.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { formatAuDate } from '../lib/dates';
+import Byline from '../components/Byline.astro';
 import type { BreadcrumbItem } from '../lib/schema';
 
 export interface Props {
@@ -45,6 +45,13 @@ const sourceIds =
   pathname={pathname}
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
+  pageSchema={{
+    kind: 'trust',
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
 >
   <Breadcrumbs items={breadcrumbs} />
   <article class="prose-container">
@@ -52,9 +59,13 @@ const sourceIds =
     <AnswerBlock>
       <AnswerText text={d.answer} />
     </AnswerBlock>
-    <div class="byline">
-      By {d.author}, Agenor · Checked on {formatAuDate(d.checkedOn)} · Updated {formatAuDate(d.updatedOn)}
-    </div>
+    <Byline
+      author={d.author}
+      checkedOn={d.checkedOn}
+      updatedOn={d.updatedOn}
+      pathname={pathname}
+      variant="short"
+    />
 
     <div class="page-body" data-body>
       <slot />

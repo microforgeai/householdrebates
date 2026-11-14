@@ -7,10 +7,63 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, '..');
 const pagesDir = path.join(siteRoot, 'src/content/pages');
 const ruleStatusPath = path.join(siteRoot, 'src/data/rule-status.json');
+const peoplePath = path.join(siteRoot, 'src/data/people.json');
+const distDir = path.join(siteRoot, 'dist');
 
 const leadsEnabled = process.env.PUBLIC_LEADS_ENABLED === 'true';
 const alertsEnabled = process.env.PUBLIC_ALERTS_ENABLED === 'true';
+const authorPublishRequested = process.env.PUBLIC_AUTHOR_LIVE === 'true';
 const legalSlugs = ['privacy', 'terms'];
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function hasPlaceholder(val) {
+  if (typeof val === 'string') return /<<|>>/.test(val);
+  if (Array.isArray(val)) return val.some(hasPlaceholder);
+  if (val && typeof val === 'object') return Object.values(val).some(hasPlaceholder);
+  return false;
+}
+
+function isValidSignedReviewer(rev) {
+  if (!rev || typeof rev !== 'object' || hasPlaceholder(rev)) return false;
+  if (typeof rev.id !== 'string' || !/^[a-z0-9-]+$/.test(rev.id.trim())) return false;
+  if (typeof rev.name !== 'string' || !rev.name.trim()) return false;
+  if (
+    !rev.licence ||
+    typeof rev.licence.type !== 'string' ||
+    !rev.licence.type.trim() ||
+    typeof rev.licence.number !== 'string' ||
+    !rev.licence.number.trim()
+  ) {
+    return false;
+  }
+  if (!Array.isArray(rev.scope) || rev.scope.length === 0 || rev.scope.some((s) => !s?.trim())) {
+    return false;
+  }
+  if (typeof rev.paidInstaller !== 'boolean') return false;
+  if (typeof rev.agreementSignedOn !== 'string' || !ISO_DATE_RE.test(rev.agreementSignedOn.trim())) {
+    return false;
+  }
+  if (!Array.isArray(rev.reviewedPages)) return false;
+  return rev.reviewedPages.every(
+    (rp) =>
+      rp &&
+      typeof rp.url === 'string' &&
+      rp.url.startsWith('/') &&
+      typeof rp.date === 'string' &&
+      ISO_DATE_RE.test(rp.date.trim()),
+  );
+}
+
+function walkHtml(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory()
+      ? walkHtml(path.join(dir, e.name))
+      : e.name.endsWith('.html')
+        ? [path.join(dir, e.name)]
+        : [],
+  );
+}
 
 const parsedBySlug = new Map();
 
@@ -78,6 +131,130 @@ if (alertsEnabled) {
   }
 }
 
+// Prompt 32 author bio & signed-reviewer publishing gates:
+// Never allow placeholder author bio or placeholder/unsigned reviewer entries to publish.
+const people = JSON.parse(fs.readFileSync(peoplePath, 'utf8'));
+const peopleBlockers = [];
+
+const author = people?.['gurinder-singh'];
+if (!author || typeof author !== 'object') {
+  peopleBlockers.push('people.json is missing the "gurinder-singh" author object');
+} else {
+  if (typeof author.name !== 'string' || !author.name.trim() || hasPlaceholder(author.name)) {
+    peopleBlockers.push(
+      'people.json["gurinder-singh"].name is missing or holds a <<...>> placeholder',
+    );
+  }
+  if (typeof author.role !== 'string' || !author.role.trim() || hasPlaceholder(author.role)) {
+    peopleBlockers.push(
+      'people.json["gurinder-singh"].role is missing or holds a <<...>> placeholder',
+    );
+  }
+}
+
+const bioReady =
+  Boolean(author) &&
+  typeof author.bio === 'string' &&
+  author.bio.trim().length > 0 &&
+  !hasPlaceholder(author.bio);
+
+if (authorPublishRequested && !bioReady) {
+  peopleBlockers.push(
+    'Refusing PUBLIC_AUTHOR_LIVE=true: people.json["gurinder-singh"].bio still holds a <<...>> placeholder (Guri must supply his bio first)',
+  );
+}
+
+if (bioReady && author) {
+  if (author.credentials !== undefined && hasPlaceholder(author.credentials)) {
+    peopleBlockers.push(
+      'people.json["gurinder-singh"].credentials still holds a <<...>> placeholder; Guri must supply credentials or remove the field before publishing /about/gurinder-singh/',
+    );
+  }
+  if (author.image !== undefined && hasPlaceholder(author.image)) {
+    peopleBlockers.push(
+      'people.json["gurinder-singh"].image still holds a <<...>> placeholder; Guri must supply a photo path or remove the field before publishing /about/gurinder-singh/',
+    );
+  }
+  if (Array.isArray(author.sameAs) && hasPlaceholder(author.sameAs)) {
+    peopleBlockers.push(
+      'people.json["gurinder-singh"].sameAs still holds a <<...>> placeholder; Guri must supply profile URLs or set sameAs to [] before publishing /about/gurinder-singh/',
+    );
+  }
+}
+
+if (!Array.isArray(people?.reviewers)) {
+  peopleBlockers.push('people.json.reviewers must be an array');
+} else {
+  people.reviewers.forEach((rev, idx) => {
+    if (hasPlaceholder(rev)) {
+      peopleBlockers.push(
+        `people.json.reviewers[${idx}] contains <<...>> placeholder values; keep reviewers: [] until Guri supplies a real reviewer who has signed in writing`,
+      );
+    } else if (!isValidSignedReviewer(rev)) {
+      peopleBlockers.push(
+        `people.json.reviewers[${idx}] is missing required signed reviewer fields (id, name, licence.type, licence.number, scope[], boolean paidInstaller, YYYY-MM-DD agreementSignedOn, reviewedPages[])`,
+      );
+    }
+  });
+}
+
+if (fs.existsSync(distDir)) {
+  const authorHtmlPath = path.join(distDir, 'about/gurinder-singh/index.html');
+  const sitemapPath = path.join(distDir, 'sitemap-0.xml');
+  const llmsPath = path.join(distDir, 'llms.txt');
+
+  if (fs.existsSync(authorHtmlPath)) {
+    const authorHtml = fs.readFileSync(authorHtmlPath, 'utf8');
+    const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml);
+    if (!bioReady && !hasNoindex) {
+      peopleBlockers.push(
+        'Refusing to publish /about/gurinder-singh/ without noindex while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
+      );
+    }
+    if (/<<|>>|&lt;&lt;|&gt;&gt;/.test(authorHtml)) {
+      peopleBlockers.push(
+        'dist/about/gurinder-singh/index.html contains unresolved <<...>> placeholder text',
+      );
+    }
+  }
+
+  if (!bioReady && fs.existsSync(sitemapPath)) {
+    const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
+    if (sitemapXml.includes('/about/gurinder-singh/')) {
+      peopleBlockers.push(
+        'Refusing build: sitemap-0.xml lists /about/gurinder-singh/ while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
+      );
+    }
+  }
+
+  if (!bioReady && fs.existsSync(llmsPath)) {
+    const llmsTxt = fs.readFileSync(llmsPath, 'utf8');
+    if (llmsTxt.includes('/about/gurinder-singh/')) {
+      peopleBlockers.push(
+        'Refusing build: llms.txt lists /about/gurinder-singh/ while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
+      );
+    }
+  }
+
+  if (Array.isArray(people?.reviewers) && people.reviewers.length === 0) {
+    for (const htmlFile of walkHtml(distDir)) {
+      const html = fs.readFileSync(htmlFile, 'utf8');
+      if (html.includes('data-reviewed-by') || html.includes('"reviewedBy"')) {
+        const rel = path.relative(siteRoot, htmlFile);
+        peopleBlockers.push(
+          `${rel} renders reviewedBy / data-reviewed-by while people.json.reviewers is empty`,
+        );
+      }
+    }
+  }
+}
+
+if (peopleBlockers.length > 0) {
+  throw new Error(
+    `Refusing build (author bio / reviewer publishing check failed):\n  - ${peopleBlockers.join('\n  - ')}`,
+  );
+}
+
 console.log(
-  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}).`,
+  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}, authorBioReady=${bioReady}, signedReviewers=${people.reviewers.length}).`,
 );

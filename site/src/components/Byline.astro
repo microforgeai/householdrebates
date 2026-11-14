@@ -1,0 +1,32 @@
+---
+import AuthorName from './AuthorName.astro';
+import { formatAuDate } from '../lib/dates';
+import { getSignedPageReviews } from '../lib/people';
+
+export interface Props {
+  author: string;
+  checkedOn: Date;
+  updatedOn: Date;
+  pathname: string;
+  variant?: 'victoria' | 'short';
+}
+
+const { author, checkedOn, updatedOn, pathname, variant = 'victoria' } = Astro.props;
+const signedReviews = getSignedPageReviews(pathname);
+---
+
+<div class="byline">
+  By <AuthorName name={author} currentPath={pathname} />, Agenor ·{' '}
+  {variant === 'short' ? (
+    <>Checked on {formatAuDate(checkedOn)} · Updated {formatAuDate(updatedOn)}</>
+  ) : (
+    <>Figures checked on {formatAuDate(checkedOn)} against official Victorian sources · Updated {formatAuDate(updatedOn)}</>
+  )}
+</div>
+{signedReviews.map((rev) => (
+  <div class="reviewed-by" data-reviewed-by>
+    Technically reviewed by <strong>{rev.name}</strong> ({rev.licenceType} {rev.licenceNumber}) on{' '}
+    {formatAuDate(new Date(`${rev.reviewDate}T00:00:00+11:00`))} · Paid installer:{' '}
+    {rev.paidInstaller ? 'yes' : 'no'}
+  </div>
+))}

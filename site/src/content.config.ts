@@ -145,6 +145,7 @@ const pageBase = z.object({
   description: z.string().min(70).max(155),
   state: State,
   section: Section,
+  parent: z.enum(['about']).optional(),
   slug: z.string().regex(/^[a-z0-9-]+$/),
   navGroup: NavGroup,
   mapRow: z.number().int(),

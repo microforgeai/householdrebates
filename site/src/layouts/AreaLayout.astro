@@ -11,6 +11,7 @@ import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
+import Byline from '../components/Byline.astro';
 import { formatAuDate } from '../lib/dates';
 import { resolvePageFaqs } from '../lib/faqs';
 import { entryToPathname, ensureTrailingSlash } from '../lib/urls';
@@ -202,6 +203,13 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
   breadcrumbs={breadcrumbs}
   faqs={canonicalFaqs}
   ruleStatus={d.ruleStatus}
+  pageSchema={{
+    kind: 'area',
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
 >
   <Breadcrumbs items={breadcrumbs} />
   <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
@@ -212,10 +220,12 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         <HeroBlock hero={d.hero} />
       </AnswerBlock>
       {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
-      <div class="byline">
-        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
-        {formatAuDate(d.updatedOn)}
-      </div>
+      <Byline
+        author={d.author}
+        checkedOn={d.checkedOn}
+        updatedOn={d.updatedOn}
+        pathname={pathname}
+      />
 
       <section class="callout callout--info" aria-labelledby="local-facts-heading">
         <strong class="callout__title" id="local-facts-heading">

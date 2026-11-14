@@ -1,0 +1,6 @@
+question: "How are energy rebate figures checked on Household Rebates?"
+answer: "Every discount, rebate, co-payment, and cap figure is stored in a single structured data file linked to an official government publication with a visible checked-on date, and automated build checks fail if any figure is more than 45 days old. See our [Official Sources and Method](/sources/) page for the complete source registry."
+canonicalPage: "/about/gurinder-singh/"
+alsoLinkFrom: []
+state: vic
+checkedOn: 2026-11-14

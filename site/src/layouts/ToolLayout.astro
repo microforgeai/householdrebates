@@ -15,8 +15,8 @@ import LeadForm from '../components/LeadForm.astro';
 import Faq from '../components/Faq.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
+import Byline from '../components/Byline.astro';
 import { getCheckerReferencedFigureIds } from '../lib/checker/rules';
-import { formatAuDate } from '../lib/dates';
 import { resolvePageFaqs } from '../lib/faqs';
 import { ensureTrailingSlash } from '../lib/urls';
 import type { BreadcrumbItem, HowToSchemaInput } from '../lib/schema';
@@ -75,6 +75,13 @@ if (isCheckerPage) {
   faqs={canonicalFaqs}
   howTo={d.howTo}
   ruleStatus={d.ruleStatus}
+  pageSchema={{
+    kind: 'tool',
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
 >
   <Breadcrumbs items={breadcrumbs} />
   <article class="prose-container">
@@ -84,10 +91,12 @@ if (isCheckerPage) {
       <HeroBlock hero={d.hero} />
     </AnswerBlock>
     {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
-    <div class="byline">
-      By {d.author}, Agenor · Figures checked on {formatAuDate(effectiveCheckedOn)} against official Victorian sources · Updated{' '}
-      {formatAuDate(d.updatedOn)}
-    </div>
+    <Byline
+      author={d.author}
+      checkedOn={effectiveCheckedOn}
+      updatedOn={d.updatedOn}
+      pathname={pathname}
+    />
 
     {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
     {d.slug === 'postcode' && <PostcodeLookup />}

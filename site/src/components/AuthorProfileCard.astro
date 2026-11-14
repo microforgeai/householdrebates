@@ -1,0 +1,40 @@
+---
+import { resolveAuthorProfile } from '../lib/people';
+
+const author = resolveAuthorProfile();
+---
+
+{author.bioReady && author.bio && (
+  <section class="callout callout--info" data-author-bio aria-labelledby="author-bio-heading">
+    <h2 id="author-bio-heading" style="margin-top: 0;">About {author.name}</h2>
+    {author.image && (
+      <p>
+        <img src={author.image} alt={author.name} width="96" height="96" loading="lazy" />
+      </p>
+    )}
+    {author.role && (
+      <p>
+        <strong>Role:</strong> {author.role}
+      </p>
+    )}
+    <p>{author.bio}</p>
+    {author.credentials && (
+      <p>
+        <strong>Credentials:</strong> {author.credentials}
+      </p>
+    )}
+    {author.sameAs.length > 0 && (
+      <p style="margin-bottom: 0;">
+        <strong>Profiles:</strong>{' '}
+        {author.sameAs.map((url, idx) => (
+          <>
+            {idx > 0 ? ' · ' : ''}
+            <a href={url} target="_blank" rel="noopener noreferrer">
+              {url}
+            </a>
+          </>
+        ))}
+      </p>
+    )}
+  </section>
+)}

@@ -12,10 +12,10 @@ import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
-import { formatAuDate } from '../lib/dates';
+import Byline from '../components/Byline.astro';
 import { resolvePageFaqs } from '../lib/faqs';
 import { ensureTrailingSlash } from '../lib/urls';
-import type { BreadcrumbItem } from '../lib/schema';
+import type { BreadcrumbItem, PageSchemaKind } from '../lib/schema';
 
 export interface Props {
   entry: {
@@ -60,7 +60,14 @@ const d = entry.data;
 const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs(pathname, d.faq ?? []);
 const hasToc = variant !== 'hub' && headings.filter((h) => h.depth === 2).length >= 3;
 const heroValue = variant === 'hub' ? false : d.hero;
-const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
+const cleanPath = ensureTrailingSlash(pathname);
+const isCheckerPage = cleanPath === '/victoria/eligibility-checker/';
+const schemaKind: PageSchemaKind =
+  variant === 'hub' || cleanPath === '/'
+    ? 'hub'
+    : cleanPath === '/faq/'
+      ? 'trust'
+      : 'guide';
 ---
 
 <BaseLayout
@@ -72,6 +79,13 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
   faqs={canonicalFaqs}
   howTo={d.howTo}
   ruleStatus={d.ruleStatus}
+  pageSchema={{
+    kind: schemaKind,
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
 >
   <Breadcrumbs items={breadcrumbs} />
   <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
@@ -82,10 +96,12 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         <HeroBlock hero={heroValue} />
       </AnswerBlock>
       {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
-      <div class="byline">
-        By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
-        {formatAuDate(d.updatedOn)}
-      </div>
+      <Byline
+        author={d.author}
+        checkedOn={d.checkedOn}
+        updatedOn={d.updatedOn}
+        pathname={pathname}
+      />
       {d.alertSignup && <AlertSignup placement="guide" />}
 
       {d.howTo && (

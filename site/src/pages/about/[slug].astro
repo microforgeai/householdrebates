@@ -1,0 +1,109 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/seo/Breadcrumbs.astro';
+import AnswerBlock from '../../components/AnswerBlock.astro';
+import AnswerText from '../../components/AnswerText.astro';
+import Byline from '../../components/Byline.astro';
+import AuthorProfileCard from '../../components/AuthorProfileCard.astro';
+import Toc from '../../components/Toc.astro';
+import Faq from '../../components/Faq.astro';
+import SourceList from '../../components/SourceList.astro';
+import RelatedLinks from '../../components/RelatedLinks.astro';
+import Money from '../../components/Money.astro';
+import MoneyPair from '../../components/MoneyPair.astro';
+import FigureTable from '../../components/FigureTable.astro';
+import Callout from '../../components/Callout.astro';
+import SourceLink from '../../components/SourceLink.astro';
+import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
+import AuthorName from '../../components/AuthorName.astro';
+import { resolvePageFaqs } from '../../lib/faqs';
+import { isAuthorBioReady } from '../../lib/people';
+import { assertEntryEnabled } from '../../lib/rollout';
+
+export async function getStaticPaths() {
+  const aboutChildPages = await getCollection('pages', (p) => p.data.parent === 'about');
+  for (const p of aboutChildPages) {
+    assertEntryEnabled(p.data.mapRow, `/about/${p.data.slug}/`);
+  }
+  return aboutChildPages.map((p) => ({
+    params: { slug: p.data.slug },
+    props: { id: p.id },
+  }));
+}
+
+const { slug } = Astro.params;
+const { id } = Astro.props;
+const entry = await getEntry('pages', id);
+if (!entry) {
+  throw new Error(`Missing page entry "${id}"`);
+}
+
+const d = entry.data;
+const pathname = `/about/${slug}/`;
+const { Content, headings } = await render(entry);
+const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs(pathname, d.faq ?? []);
+const effectiveNoindex = d.noindex || (slug === 'gurinder-singh' && !isAuthorBioReady());
+const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
+
+const breadcrumbs = [
+  { name: 'Home', path: '/' },
+  { name: 'About Us and How We Are Paid', path: '/about/' },
+  { name: d.title, path: pathname },
+];
+
+const mdxComponents = {
+  Money,
+  MoneyPair,
+  FigureTable,
+  Callout,
+  SourceLink,
+  LinkIfEnabled,
+  AuthorName,
+};
+---
+
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  pathname={pathname}
+  noindex={effectiveNoindex}
+  breadcrumbs={breadcrumbs}
+  faqs={canonicalFaqs}
+  pageSchema={{
+    kind: slug === 'gurinder-singh' ? 'author' : 'trust',
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
+>
+  <Breadcrumbs items={breadcrumbs} />
+  <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
+    <article class="prose-container">
+      <h1>{d.h1 ?? d.title}</h1>
+      <AnswerBlock>
+        <AnswerText text={d.answer} />
+      </AnswerBlock>
+      <Byline
+        author={d.author}
+        checkedOn={d.checkedOn}
+        updatedOn={d.updatedOn}
+        pathname={pathname}
+        variant="short"
+      />
+
+      {slug === 'gurinder-singh' && <AuthorProfileCard />}
+
+      <div class="page-body" data-body>
+        <Content components={mdxComponents} />
+      </div>
+
+      <Faq items={canonicalFaqs} linkedItems={linkedFaqs} pathname={pathname} />
+      <SourceList ids={d.sources} />
+      <RelatedLinks pathname={pathname} slugs={d.related} />
+    </article>
+
+    {hasToc && <Toc headings={headings} />}
+  </div>
+</BaseLayout>

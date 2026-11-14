@@ -298,4 +298,49 @@ test.describe('Household Rebates static site e2e', () => {
       page.locator('main a[href="/victoria/help-in-your-language/"]').first(),
     ).toBeVisible();
   });
+
+  test('renders /about/gurinder-singh/ as noindex without << placeholders, byline links, reviewedBy, or Person schema while bio is unfilled, and emits Article + WebApplication JSON-LD', async ({
+    page,
+  }) => {
+    await page.goto('/about/gurinder-singh/');
+    const robots = await page.locator('meta[name="robots"]').getAttribute('content');
+    expect(robots).toContain('noindex');
+    const html = await page.content();
+    expect(html).not.toContain('<<');
+    expect(html).not.toContain('"@type":"Person"');
+    expect(html).not.toContain('"@type":"ProfilePage"');
+    await expect(page.locator('[data-author-profile]')).toHaveCount(0);
+    await expect(page.locator('[data-reviewed-by]')).toHaveCount(0);
+
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(
+      axe.violations,
+      `axe violations on /about/gurinder-singh/: ${JSON.stringify(axe.violations, null, 2)}`,
+    ).toEqual([]);
+
+    await page.goto('/victoria/air-conditioner-rebate/');
+    await expect(page.locator('a[href="/about/gurinder-singh/"]')).toHaveCount(0);
+    await expect(page.locator('[data-reviewed-by]')).toHaveCount(0);
+    const guideScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+    const guideTypes = guideScripts.flatMap((s) =>
+      (JSON.parse(s)['@graph'] ?? []).map((n: Record<string, unknown>) => n['@type']),
+    );
+    expect(guideTypes).toContain('Article');
+    expect(guideTypes).toContain('Person');
+    expect(guideTypes).toContain('WebPage');
+
+    for (const toolUrl of ['/victoria/eligibility-checker/', '/victoria/postcode/']) {
+      await page.goto(toolUrl);
+      const toolScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
+      const webApps = toolScripts.flatMap((s) =>
+        (JSON.parse(s)['@graph'] ?? []).filter(
+          (n: Record<string, unknown>) => n['@type'] === 'WebApplication',
+        ),
+      );
+      expect(webApps).toHaveLength(1);
+      expect(webApps[0].applicationCategory).toBe('UtilitiesApplication');
+      expect(webApps[0].isAccessibleForFree).toBe(true);
+      expect('offers' in webApps[0]).toBe(false);
+    }
+  });
 });

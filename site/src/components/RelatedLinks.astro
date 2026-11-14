@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import { entryToPathname, ensureTrailingSlash, resolveSlugToPath } from '../lib/urls';
 import { getEnabledUrls, getMapRowByUrl } from '../lib/rollout';
+import { isAuthorBioReady } from '../lib/people';
 
 export interface Props {
   pathname?: string;
@@ -11,6 +12,7 @@ export interface Props {
 const { pathname, slugs = [] } = Astro.props;
 const currentPath = ensureTrailingSlash(pathname || Astro.url.pathname);
 const enabledUrls = getEnabledUrls();
+const authorReady = isAuthorBioReady();
 
 const [guides, areas, pages] = await Promise.all([
   getCollection('guides'),
@@ -42,6 +44,7 @@ const seen = new Set<string>();
 
 const addUrl = (u: string) => {
   if (!u || u === '*' || u === currentPath) return;
+  if (u === '/about/gurinder-singh/' && !authorReady) return;
   if (!enabledUrls.has(u)) return;
   if (seen.has(u)) return;
   seen.add(u);

@@ -7,7 +7,13 @@ import JsonLd from '../components/seo/JsonLd.astro';
 import IndependenceNotice from '../components/IndependenceNotice.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { buildJsonLdGraph, type BreadcrumbItem, type FaqSchemaItem, type HowToSchemaInput } from '../lib/schema';
+import {
+  buildJsonLdGraph,
+  type BreadcrumbItem,
+  type FaqSchemaItem,
+  type HowToSchemaInput,
+  type PageSchemaInput,
+} from '../lib/schema';
 
 export interface Props {
   title: string;
@@ -18,6 +24,7 @@ export interface Props {
   faqs?: FaqSchemaItem[];
   howTo?: HowToSchemaInput;
   ruleStatus?: 'election-watch';
+  pageSchema?: PageSchemaInput;
 }
 
 const {
@@ -29,6 +36,7 @@ const {
   faqs = [],
   howTo,
   ruleStatus,
+  pageSchema,
 } = Astro.props;
 
 const schemaGraph = buildJsonLdGraph({
@@ -36,6 +44,7 @@ const schemaGraph = buildJsonLdGraph({
   breadcrumbs,
   faqs,
   howTo,
+  pageSchema,
 });
 ---
 

@@ -27,11 +27,18 @@ function parseRowRange(spec) {
 
 const rollout = JSON.parse(fs.readFileSync(path.join(siteRoot, 'src/data/rollout.json'), 'utf8'));
 const urlMap = JSON.parse(fs.readFileSync(path.join(siteRoot, 'src/data/url-map.json'), 'utf8'));
+const peoplePath = path.join(siteRoot, 'src/data/people.json');
+const people = fs.existsSync(peoplePath) ? JSON.parse(fs.readFileSync(peoplePath, 'utf8')) : null;
+const authorBio = people?.['gurinder-singh']?.bio;
+const authorBioReady = typeof authorBio === 'string' && authorBio.trim().length > 0 && !/<<|>>/.test(authorBio);
 const allMapUrls = new Set(urlMap.map((r) => r.url));
 const enabledRowNums = parseRowRange(rollout.enabledRows);
 const gatedOk = new Set(rollout.gatedApproved ?? []);
 const expectedRows = urlMap.filter(
-  (r) => enabledRowNums.has(r.row) && (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)),
+  (r) =>
+    enabledRowNums.has(r.row) &&
+    (!r.gated || gatedOk.has(r.row) || gatedOk.has(r.url)) &&
+    !(r.url === '/about/gurinder-singh/' && !authorBioReady),
 );
 const expectedUrls = new Set(expectedRows.map((r) => r.url));
 const rowByUrl = new Map(urlMap.map((r) => [r.url, r]));
@@ -56,6 +63,8 @@ for (const mdxFile of walkFiles(contentDir, '.mdx')) {
   let url = `/${slug}/`;
   if (mdxFile.includes('/content/guides/') || mdxFile.includes('/content/areas/')) {
     url = `/victoria/${slug}/`;
+  } else if (fm.parent === 'about') {
+    url = `/about/${slug}/`;
   } else if (slug === 'home') {
     url = '/';
   } else if (slug === 'victoria') {
@@ -71,6 +80,9 @@ for (const mdxFile of walkFiles(contentDir, '.mdx')) {
     if (enabledRowNums.has(mapRow.row) && !(gatedOk.has(mapRow.row) || gatedOk.has(url))) {
       throw new Error(`gated page not approved: ${url} (${path.relative(siteRoot, mdxFile)})`);
     }
+    continue;
+  }
+  if (url === '/about/gurinder-singh/' && enabledRowNums.has(73) && !authorBioReady) {
     continue;
   }
   if (!expectedUrls.has(url) && !fm.noindex) {
@@ -118,6 +130,28 @@ if (extraUrls.length > 0) {
 const missingBuilt = [...expectedUrls].filter((u) => !builtIndexableHtml.has(u));
 if (missingBuilt.length > 0) {
   throw new Error(`missing built URL(s) expected from rollout.json: ${missingBuilt.join(', ')}`);
+}
+
+// Row 73 (/about/gurinder-singh/) when enabled with placeholder bio: must exist on disk as noindex and carry its row links
+if (enabledRowNums.has(73) && !authorBioReady) {
+  const authorDistPath = path.join(distDir, 'about/gurinder-singh/index.html');
+  if (!fs.existsSync(authorDistPath)) {
+    throw new Error('missing built dist/about/gurinder-singh/index.html for enabled row 73');
+  }
+  const authorHtml = fs.readFileSync(authorDistPath, 'utf8');
+  if (!/meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml)) {
+    throw new Error('/about/gurinder-singh/ must carry noindex while people.json bio is a placeholder');
+  }
+  const authorMainMatch = authorHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
+  const authorRow = rowByUrl.get('/about/gurinder-singh/');
+  if (authorMainMatch && authorRow?.internalLinks?.length) {
+    const authorMainHrefs = extractHrefs(authorMainMatch[1]);
+    for (const reqTarget of authorRow.internalLinks) {
+      if (expectedUrls.has(reqTarget) && !authorMainHrefs.has(reqTarget)) {
+        throw new Error(`missing link on /about/gurinder-singh/ -> ${reqTarget}`);
+      }
+    }
+  }
 }
 
 function normalizeInternalHref(href) {

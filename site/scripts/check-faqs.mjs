@@ -160,13 +160,15 @@ for (const file of mdxFiles) {
   const pageUrl =
     col === 'guides' || col === 'areas'
       ? `/victoria/${fm.slug}/`
-      : fm.slug === 'home'
-        ? '/'
-        : fm.slug === 'victoria'
-          ? '/victoria/'
-          : fm.state === 'vic' && fm.section === 'tools'
-            ? `/victoria/${fm.slug}/`
-            : `/${fm.slug}/`;
+      : fm.parent === 'about'
+        ? `/about/${fm.slug}/`
+        : fm.slug === 'home'
+          ? '/'
+          : fm.slug === 'victoria'
+            ? '/victoria/'
+            : fm.state === 'vic' && fm.section === 'tools'
+              ? `/victoria/${fm.slug}/`
+              : `/${fm.slug}/`;
 
   const refs = fm.faq ?? [];
   for (const ref of refs) {

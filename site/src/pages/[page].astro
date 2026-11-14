@@ -9,12 +9,14 @@ import Callout from '../components/Callout.astro';
 import SourceLink from '../components/SourceLink.astro';
 import HubIndex from '../components/HubIndex.astro';
 import LinkIfEnabled from '../components/LinkIfEnabled.astro';
+import AuthorName from '../components/AuthorName.astro';
 import { assertEntryEnabled } from '../lib/rollout';
 
 export async function getStaticPaths() {
   const allPages = await getCollection('pages');
   const rootPages = allPages.filter(
     (p) =>
+      !p.data.parent &&
       p.data.slug !== 'home' &&
       p.data.slug !== 'victoria' &&
       !(p.data.state === 'vic' && p.data.section === 'tools'),
@@ -48,7 +50,16 @@ const isLegalOrTrust =
   entry.data.slug === 'about' ||
   entry.data.slug === 'sources';
 
-const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
+const mdxComponents = {
+  Money,
+  MoneyPair,
+  FigureTable,
+  Callout,
+  SourceLink,
+  HubIndex,
+  LinkIfEnabled,
+  AuthorName,
+};
 ---
 
 {isLegalOrTrust ? (

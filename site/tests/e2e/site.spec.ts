@@ -1,3 +1,4 @@
+import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 test.describe('Household Rebates static site e2e', () => {
@@ -253,5 +254,48 @@ test.describe('Household Rebates static site e2e', () => {
         expect(entity.acceptedAnswer.text).toBe(visA);
       }
     }
+  });
+
+  test('renders Help in Your Language (11 Energy Vic + 14 Solar Vic rows, lang tags, 0 axe violations) plus footer, inbound links, and seniors boxes', async ({
+    page,
+  }) => {
+    await page.goto('/victoria/help-in-your-language/');
+
+    const tables = page.locator('[data-body] table');
+    await expect(tables).toHaveCount(2);
+
+    const energyVicRows = tables.nth(0).locator('tbody tr');
+    await expect(energyVicRows).toHaveCount(11);
+    const energyVicText = await tables.nth(0).innerText();
+    expect(energyVicText).not.toContain('Punjabi');
+    expect(energyVicText).not.toContain('Sinhalese');
+
+    const solarVicRows = tables.nth(1).locator('tbody tr');
+    await expect(solarVicRows).toHaveCount(14);
+    await expect(tables.nth(1).locator('[lang]')).toHaveCount(14);
+    await expect(tables.nth(1).locator('[lang="ar"][dir="rtl"]')).toHaveCount(1);
+    await expect(tables.nth(1).locator('[lang="pa"]')).toHaveCount(1);
+    await expect(tables.nth(1).locator('[lang="hi"]')).toHaveCount(1);
+
+    await expect(page.locator('footer a[href="/victoria/help-in-your-language/"]')).toBeVisible();
+
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(
+      axe.violations,
+      `axe violations on /victoria/help-in-your-language/: ${JSON.stringify(axe.violations, null, 2)}`,
+    ).toEqual([]);
+
+    for (const seniorsPage of ['/victoria/veu-scams-cold-calls/', '/victoria/concession-card-holders/']) {
+      await page.goto(seniorsPage);
+      await expect(page.locator('main')).toContainText('Seniors: avoid pressure sales');
+      await expect(
+        page.locator('main a[href="/victoria/help-in-your-language/"]').first(),
+      ).toBeVisible();
+    }
+
+    await page.goto('/victoria/wyndham/');
+    await expect(
+      page.locator('main a[href="/victoria/help-in-your-language/"]').first(),
+    ).toBeVisible();
   });
 });

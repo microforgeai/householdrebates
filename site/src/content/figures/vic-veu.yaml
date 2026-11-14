@@ -2035,3 +2035,31 @@
   currency: AUD
   sourceId: solarvic-hot-water-rebate
   checkedOn: 2026-11-14
+
+- id: vic-veu-translations-listed-count
+  group: vic-community-languages
+  state: vic
+  program: VEU
+  activity: rcac
+  audience: household
+  scenario: "Community languages listed on Energy Victoria's VEU consumer-rights translations page"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 11
+  sourceId: energyvic-translations
+  checkedOn: 2026-11-14
+
+- id: vic-solar-homes-translations-count
+  group: vic-community-languages
+  state: vic
+  program: Solar Homes
+  activity: solar
+  audience: household
+  scenario: "Community languages published on Solar Victoria's Solar Homes translations page"
+  qualifier: exact
+  unit: count
+  kind: count
+  amountMax: 14
+  sourceId: solarvic-community-languages
+  checkedOn: 2026-11-14

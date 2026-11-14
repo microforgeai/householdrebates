@@ -3,6 +3,7 @@ import { SITE } from '../data/site';
 import { isUrlEnabled } from '../lib/rollout';
 
 const businessHubEnabled = isUrlEnabled('/victoria/business-energy-upgrades/');
+const languageHelpEnabled = isUrlEnabled('/victoria/help-in-your-language/');
 ---
 
 <footer class="site-footer">
@@ -40,6 +41,9 @@ const businessHubEnabled = isUrlEnabled('/victoria/business-energy-upgrades/');
       <ul>
         <li><a href="/how-quotes-work/">How Quotes and Installers Work</a></li>
         <li><a href="/how-quotes-work/#your-rights">Your Rights Under the VEU Code</a></li>
+        {languageHelpEnabled && (
+          <li><a href="/victoria/help-in-your-language/">Help in your language</a></li>
+        )}
         <li><a href="/faq/">Frequently Asked Questions</a></li>
         <li><a href="/sources/">Official Sources & Method</a></li>
         <li><a href="/about/">About {SITE.name}</a></li>

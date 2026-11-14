@@ -1,6 +1,5 @@
 question: "Do I buy an induction cooktop first and claim the VEU discount afterwards?"
 answer: "Yes. Unlike heating or hot water upgrades, Energy Victoria's induction cooktop process lets you check that your home and chosen model meet the rules, purchase the eligible cooktop, and then submit your purchase invoice to a participating accredited provider to claim the discount, while arranging licensed installation separately."
-pages:
-  - gas-cooktop-to-induction
+canonicalPage: /victoria/gas-cooktop-to-induction/
 state: vic
 checkedOn: 2026-11-13

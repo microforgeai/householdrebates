@@ -1,6 +1,5 @@
 question: How much less electricity does a heat pump use compared to an electric storage tank?
 answer: Energy Victoria states that heat pump water heaters use a fraction of the electricity of a conventional electric resistance storage water heater because they move heat from the air rather than generating heat directly with an element. Check the published percentage figure and VEU discount table above.
-pages:
-  - electric-hot-water-to-heat-pump
+canonicalPage: /victoria/electric-hot-water-to-heat-pump/
 state: vic
 checkedOn: 2026-11-14

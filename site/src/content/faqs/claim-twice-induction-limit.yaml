@@ -1,6 +1,5 @@
 question: "Can I claim the VEU induction cooktop discount more than once?"
 answer: "No. Energy Victoria's induction cooktop eligibility rules state that you must not have previously claimed a VEU induction cooktop discount."
-pages:
-  - can-you-claim-veu-twice
+canonicalPage: /victoria/can-you-claim-veu-twice/
 state: vic
 checkedOn: 2026-11-13

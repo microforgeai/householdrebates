@@ -1,8 +1,10 @@
 question: Why does the air conditioner discount vary so much between homes?
 answer: The [air conditioner rebate in Victoria](/victoria/air-conditioner-rebate/) under VEU is calculated from the greenhouse gas savings of your specific upgrade. Replacing a whole-home ducted gas heater with a high-capacity ducted reverse-cycle system creates far more certificates than replacing a single room gas heater or installing a split system without decommissioning an existing heater.
-pages:
-  - home
-  - air-conditioner-rebate
-  - faq
+canonicalPage: /victoria/what-is-a-veec/
+alsoLinkFrom:
+  - /faq/
+  - /victoria/air-conditioner-rebate/
+  - /victoria/reverse-cycle-vs-gas-heater/
+  - /victoria/eligibility-checker/
 state: vic
 checkedOn: 2026-11-14

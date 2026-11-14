@@ -1,6 +1,5 @@
 question: "Do plug-in portable electric heaters count for a VEU replacement discount?"
 answer: "No. Energy Victoria's household heating and cooling table only lists hard-wired electric resistance room heaters and central electric resistance ducted heaters as eligible electric systems to replace. If you only use portable plug-in heaters, any new reverse-cycle unit falls under the smaller scenario where no fixed heater is decommissioned."
-pages:
-  - electric-heater-to-reverse-cycle
+canonicalPage: /victoria/electric-heater-to-reverse-cycle/
 state: vic
 checkedOn: 2026-11-13

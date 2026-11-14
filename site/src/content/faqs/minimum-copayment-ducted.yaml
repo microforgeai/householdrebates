@@ -1,8 +1,10 @@
 question: Is there a minimum I have to pay for a ducted system?
-answer: Yes. Under Victorian Energy Upgrades Specifications version 25.0 (Part 6), every household heating and cooling upgrade requires a minimum customer co-payment that took effect on 30 September 2026, so the discount cannot cover the full cost of the system. Check every tier by system type in [VEU Minimum Co-Payment Victoria](/victoria/veu-minimum-co-payment/).
-pages:
-  - air-conditioner-rebate
-  - ducted-gas-to-ducted-reverse-cycle
-  - electric-heater-to-reverse-cycle
+answer: Yes. Under Victorian Energy Upgrades Specifications version 25.0 (Part 6), every household ducted reverse-cycle air conditioner of any capacity requires the highest mandatory minimum customer co-payment tier that took effect on 30 September 2026, so the discount cannot cover the full cost of the system. Compare every tier by system type in [the household co-payment table above](/victoria/veu-minimum-co-payment/#household-minimum-co-payments-from-30-september-2026).
+canonicalPage: /victoria/veu-minimum-co-payment/
+alsoLinkFrom:
+  - /faq/
+  - /victoria/air-conditioner-rebate/
+  - /victoria/ducted-gas-to-ducted-reverse-cycle/
+  - /victoria/electric-heater-to-reverse-cycle/
 state: vic
 checkedOn: 2026-11-14

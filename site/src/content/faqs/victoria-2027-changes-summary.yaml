@@ -1,6 +1,5 @@
 question: "What changes for Victorian homes in 2027?"
 answer: "Under currently legislated rules, three major dates take effect in 2027: new residential buildings must be built all-electric from 1 January 2027, existing mains gas water heaters that fail and need replacement must switch to efficient electric alternatives from 1 March 2027 unless exempt, and phased minimum energy efficiency standards for rental properties start from 1 March 2027."
-pages:
-  - victoria
+canonicalPage: /victoria/
 state: vic
 checkedOn: 2026-11-14

@@ -1,6 +1,5 @@
 question: "What is the difference between gas-boosted and electric-boosted solar hot water under Victoria's rules?"
 answer: "An electric-boosted solar water heater uses an electric element for cloudy-day backup rather than mains gas, so it satisfies Victoria's 1 March 2027 rental and existing-home electric replacement standards, whereas new mains gas replacements are phased out from 1 March 2027 unless an exemption applies."
-pages:
-  - solar-hot-water-rebate
+canonicalPage: /victoria/solar-hot-water-rebate/
 state: vic
 checkedOn: 2026-11-13

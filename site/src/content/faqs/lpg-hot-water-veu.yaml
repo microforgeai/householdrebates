@@ -1,6 +1,5 @@
 question: "Does replacing a bottled LPG water heater qualify for a VEU discount?"
 answer: "Part 3 of the Victorian Energy Upgrades Specifications covers gas or LPG water heaters when replaced with an eligible heat pump or solar-boosted system in a building at least two years old. Because Energy Victoria's consumer table publishes only a mains gas figure, your accredited provider confirms the exact discount for an LPG replacement."
-pages:
-  - gas-hot-water-to-heat-pump
+canonicalPage: /victoria/gas-hot-water-to-heat-pump/
 state: vic
 checkedOn: 2026-11-13

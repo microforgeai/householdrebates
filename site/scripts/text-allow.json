@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "phrase": "Lal Lal",
+    "reason": "Official Victorian locality name in ABS ASGS / postcodes.csv (postcode 3352)"
+  },
+  {
+    "phrase": "Tol Tol",
+    "reason": "Official Victorian locality name in ABS ASGS / postcodes.csv (postcode 3549)"
+  }
+]

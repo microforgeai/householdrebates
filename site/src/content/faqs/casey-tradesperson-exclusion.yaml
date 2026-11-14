@@ -3,7 +3,6 @@ question: Can I use the City of Casey rebate to pay a tradesperson or buy
 answer: No. City of Casey rules state that its DIY draught-proofing rebate
   cannot be claimed for paying a tradesperson, nor for ceiling insulation batts,
   double glazing, or heating system upgrades.
-pages:
-  - casey
+canonicalPage: /victoria/casey/
 state: vic
 checkedOn: 2026-11-13

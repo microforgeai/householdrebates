@@ -1,8 +1,8 @@
 question: Are cold calls and doorknocking allowed under the Victorian Energy Upgrades program?
 answer: No. Telemarketing cold calls have been banned since 1 May 2024 and doorknocking has been banned since 1 August 2024 under the VEU code of conduct, unless you have given express prior consent under the rules for [how VEU quotes and consumer rights work](/how-quotes-work/). Express prior consent given via an online enquiry form lasts for three months unless withdrawn sooner.
-pages:
-  - how-quotes-work
-  - faq
-  - veu-scams-cold-calls
+canonicalPage: /victoria/veu-scams-cold-calls/
+alsoLinkFrom:
+  - /faq/
+  - /how-quotes-work/
 state: vic
 checkedOn: 2026-11-14

@@ -1,6 +1,5 @@
 question: "Can I run a heat pump water heater off my rooftop solar panels?"
 answer: "Yes. Energy Victoria's water heating consumer factsheet notes that many heat pump models include built-in timers so you can heat water during sunny daytime hours using your solar PV output, though setting a daytime-only timer can require a slightly larger storage tank."
-pages:
-  - electric-hot-water-to-heat-pump
+canonicalPage: /victoria/electric-hot-water-to-heat-pump/
 state: vic
 checkedOn: 2026-11-13

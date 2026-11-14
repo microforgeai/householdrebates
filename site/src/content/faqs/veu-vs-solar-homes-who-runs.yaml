@@ -1,6 +1,5 @@
 question: "Who runs Victorian Energy Upgrades versus the Solar Homes program?"
 answer: "Victorian Energy Upgrades is regulated by the Essential Services Commission with policy set by Energy Victoria (DEECA) and delivered through accredited providers, whereas the Solar Homes program is administered directly by Solar Victoria with a formal pre-approval application."
-pages:
-  - veu-vs-solar-homes
+canonicalPage: /victoria/veu-vs-solar-homes/
 state: vic
 checkedOn: 2026-11-13

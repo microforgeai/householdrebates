@@ -115,4 +115,108 @@ test.describe('Household Rebates static site e2e', () => {
       'Plumbing work value that needs a compliance certificate',
     );
   });
+
+  test('renders unique canonical FAQs across home, /faq/, and original area pages, navigates 5 "→" links to visible answers, and emits valid FAQPage JSON-LD', async ({
+    page,
+  }) => {
+    const checkPages = [
+      '/',
+      '/faq/',
+      '/victoria/frankston/',
+      '/victoria/geelong/',
+      '/victoria/mornington-peninsula/',
+    ];
+    const seenQuestions = new Set<string>();
+
+    for (const url of checkPages) {
+      await page.goto(url);
+      const canonicalItems = page.locator('[data-faq-canonical]');
+      const count = await canonicalItems.count();
+      expect(count, `${url} should have 3–5 canonical FAQs`).toBeGreaterThanOrEqual(3);
+      expect(count, `${url} should have 3–5 canonical FAQs`).toBeLessThanOrEqual(5);
+
+      for (let i = 0; i < count; i++) {
+        const q = (await canonicalItems.nth(i).locator('h3').innerText()).trim();
+        expect(seenQuestions.has(q), `Question "${q}" repeated on ${url}`).toBe(false);
+        seenQuestions.add(q);
+      }
+    }
+
+    // Home links to /faq/ for general VEU questions
+    await page.goto('/');
+    await expect(page.locator('.faq-more a[href="/faq/"]')).toBeVisible();
+
+    // Follow 5 "→" alsoLinkFrom links and verify each lands on #faq-<id> with visible answer
+    const linkChecks = [
+      {
+        from: '/faq/',
+        targetHref: '/victoria/already-installed-retrospective-discount/#faq-retrospective-discounts',
+        targetId: 'faq-retrospective-discounts',
+      },
+      {
+        from: '/how-quotes-work/',
+        targetHref: '/victoria/veu-scams-cold-calls/#faq-cold-call-and-doorknocking-ban',
+        targetId: 'faq-cold-call-and-doorknocking-ban',
+      },
+      {
+        from: '/victoria/air-conditioner-rebate/',
+        targetHref: '/victoria/what-is-a-veec/#faq-why-rcac-discounts-vary',
+        targetId: 'faq-why-rcac-discounts-vary',
+      },
+      {
+        from: '/victoria/heat-pump-rebate/',
+        targetHref: '/victoria/gas-to-electric-hot-water-2027/#faq-march-2027-gas-hot-water-rule',
+        targetId: 'faq-march-2027-gas-hot-water-rule',
+      },
+      {
+        from: '/victoria/eligibility-checker/',
+        targetHref: '/victoria/renters/#faq-renters-and-landlords',
+        targetId: 'faq-renters-and-landlords',
+      },
+    ];
+
+    for (const c of linkChecks) {
+      await page.goto(c.from);
+      const link = page.locator(`[data-faq-links] a[href="${c.targetHref}"]`);
+      await expect(link).toBeVisible();
+      await expect(link).toContainText('→');
+      await link.click();
+      await expect(page).toHaveURL(new RegExp(`${c.targetHref.replace('#', '\\#')}$`));
+      const targetFaq = page.locator(`#${c.targetId}`);
+      await expect(targetFaq).toBeVisible();
+      await expect(targetFaq.locator('p')).toBeVisible();
+    }
+
+    // Validate 3 pages' FAQPage JSON-LD structure against schema.org rules and visible canonical FAQs
+    for (const schemaUrl of ['/', '/faq/', '/victoria/geelong/']) {
+      await page.goto(schemaUrl);
+      const scripts = await page
+        .locator('script[type="application/ld+json"]')
+        .allTextContents();
+      const graphs = scripts.map((s) => JSON.parse(s));
+      const faqNodes = graphs.flatMap((g) =>
+        (g['@graph'] ?? []).filter((n: Record<string, unknown>) => n['@type'] === 'FAQPage'),
+      );
+      expect(faqNodes).toHaveLength(1);
+      const faqNode = faqNodes[0];
+      expect(Array.isArray(faqNode.mainEntity)).toBe(true);
+
+      const visibleCount = await page.locator('[data-faq-canonical]').count();
+      expect(faqNode.mainEntity).toHaveLength(visibleCount);
+
+      for (let i = 0; i < visibleCount; i++) {
+        const entity = faqNode.mainEntity[i];
+        expect(entity['@type']).toBe('Question');
+        expect(typeof entity.name).toBe('string');
+        expect(entity.acceptedAnswer?.['@type']).toBe('Answer');
+        expect(typeof entity.acceptedAnswer?.text).toBe('string');
+        expect(entity.acceptedAnswer.text.includes('$')).toBe(false);
+
+        const visQ = (await page.locator('[data-faq-canonical]').nth(i).locator('h3').innerText()).trim();
+        const visA = (await page.locator('[data-faq-canonical]').nth(i).locator('p').innerText()).trim();
+        expect(entity.name).toBe(visQ);
+        expect(entity.acceptedAnswer.text).toBe(visA);
+      }
+    }
+  });
 });

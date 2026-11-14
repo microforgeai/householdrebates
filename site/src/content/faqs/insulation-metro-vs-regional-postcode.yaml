@@ -1,6 +1,5 @@
 question: "Why are Energy Victoria's metro and regional ceiling insulation examples different?"
 answer: "Colder regional postcodes achieve higher calculated heating energy savings from ceiling insulation than milder metropolitan Melbourne postcodes, creating more certificates under the VEU formula. The VEU Specifications postcode table sets how each Victorian postcode is classified, and your accredited provider confirms the exact figure."
-pages:
-  - ceiling-insulation-rebate
+canonicalPage: /victoria/ceiling-insulation-rebate/
 state: vic
 checkedOn: 2026-11-13

@@ -1,5 +1,4 @@
 ---
-import { getEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
@@ -15,6 +14,7 @@ import Faq from '../components/Faq.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
+import { resolvePageFaqs } from '../lib/faqs';
 import { ensureTrailingSlash } from '../lib/urls';
 import type { BreadcrumbItem } from '../lib/schema';
 
@@ -47,14 +47,7 @@ export interface Props {
 const { entry, pathname, breadcrumbs } = Astro.props;
 const d = entry.data;
 
-const faqEntries = await Promise.all(
-  (d.faq ?? []).map(async (ref) => {
-    const id = typeof ref === 'string' ? ref : ref.id;
-    const f = await getEntry('faqs', id);
-    return f ? { question: f.data.question, answer: f.data.answer } : null;
-  }),
-);
-const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs(pathname, d.faq ?? []);
 const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
 ---
 
@@ -64,7 +57,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
   pathname={pathname}
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
-  faqs={validFaqs}
+  faqs={canonicalFaqs}
   ruleStatus={d.ruleStatus}
 >
   <Breadcrumbs items={breadcrumbs} />
@@ -103,7 +96,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
       )
     )}
 
-    <Faq items={validFaqs} pathname={pathname} />
+    <Faq items={canonicalFaqs} linkedItems={linkedFaqs} pathname={pathname} />
     <SourceList ids={d.sources} />
     <RelatedLinks pathname={pathname} slugs={d.related} />
   </article>

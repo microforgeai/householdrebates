@@ -12,6 +12,7 @@ import LeadForm from '../components/LeadForm.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
+import { resolvePageFaqs } from '../lib/faqs';
 import { entryToPathname, ensureTrailingSlash } from '../lib/urls';
 import { getEnabledUrls } from '../lib/rollout';
 import type { BreadcrumbItem } from '../lib/schema';
@@ -63,14 +64,7 @@ export interface Props {
 const { entry, pathname, breadcrumbs, headings = [] } = Astro.props;
 const d = entry.data;
 
-const faqEntries = await Promise.all(
-  (d.faq ?? []).map(async (ref) => {
-    const id = typeof ref === 'string' ? ref : ref.id;
-    const f = await getEntry('faqs', id);
-    return f ? { question: f.data.question, answer: f.data.answer } : null;
-  }),
-);
-const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs(pathname, d.faq ?? []);
 
 const resolvedFacts = await Promise.all(
   d.localFacts.map(async (lf) => {
@@ -120,8 +114,29 @@ const postcodeRowsMap = postcodesJson.rows as Record<
     reticulatedGas: boolean;
     climaticRegion: string;
     hpZone: number;
+    localities?: string;
+    localitiesList?: string[];
+    primary_lga?: string;
+    primary_lga_share_pct?: number | null;
+    other_lgas?: { lga: string; pct: number }[];
   }
 >;
+
+function formatCouncilShare(row: {
+  primary_lga?: string;
+  primary_lga_share_pct?: number | null;
+  other_lgas?: { lga: string; pct: number }[];
+}): string {
+  const primary = row.primary_lga ?? 'Unknown';
+  if (row.primary_lga_share_pct === null || row.primary_lga_share_pct === undefined) {
+    return `${primary} (PO box, indicative)`;
+  }
+  if (row.other_lgas && row.other_lgas.length > 0) {
+    const others = row.other_lgas.map((o) => `${o.lga} ${o.pct}%`).join(', ');
+    return `${primary} ${row.primary_lga_share_pct}% (${others})`;
+  }
+  return `${primary} (${row.primary_lga_share_pct}%)`;
+}
 
 const showPostcodeTable = d.veuPostcodeTable ?? true;
 const postcodeTableRows = showPostcodeTable
@@ -132,7 +147,16 @@ const postcodeTableRows = showPostcodeTable
           `Area "${d.slug}" lists postcode "${pc}" which is missing from src/data/postcodes.json`,
         );
       }
-      return { postcode: pc, ...row };
+      const localitiesDisplay =
+        row.localitiesList && row.localitiesList.length > 0
+          ? row.localitiesList.join(', ')
+          : (row.localities ?? '').replace(/;\s*/g, ', ');
+      return {
+        postcode: pc,
+        ...row,
+        localitiesDisplay,
+        councilDisplay: formatCouncilShare(row),
+      };
     })
   : [];
 
@@ -176,7 +200,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
   pathname={pathname}
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
-  faqs={validFaqs}
+  faqs={canonicalFaqs}
   ruleStatus={d.ruleStatus}
 >
   <Breadcrumbs items={breadcrumbs} />
@@ -216,17 +240,19 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
       </section>
 
       {showPostcodeTable && postcodeTableRows.length > 0 && (
-        <section aria-labelledby="veu-postcode-table-heading">
+        <section data-postcode-table aria-labelledby="veu-postcode-table-heading">
           <h2 id="veu-postcode-table-heading">VEU postcode classification for {d.areaName}</h2>
           <div class="figure-table-wrap">
             <table class="figure-table">
               <caption>
-                Source: VEU Specifications v{postcodesJson.specVersion}, Location Variable List (Table A). Checked{' '}
+                Source: VEU Specifications v{postcodesJson.specVersion}, Location Variable List (Table A), with localities and 2021 Census dwelling council shares from ABS ASGS Edition 3 allocation files. Checked{' '}
                 {formatAuDate(new Date(postcodesJson.checkedOn))}.
               </caption>
               <thead>
                 <tr>
                   <th scope="col">Postcode</th>
+                  <th scope="col">Localities</th>
+                  <th scope="col">Council share</th>
                   <th scope="col">VEU area</th>
                   <th scope="col">Reticulated gas</th>
                   <th scope="col">Climatic region</th>
@@ -235,8 +261,10 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
               </thead>
               <tbody>
                 {postcodeTableRows.map((r) => (
-                  <tr>
+                  <tr data-postcode={r.postcode}>
                     <td>{r.postcode}</td>
+                    <td>{r.localitiesDisplay}</td>
+                    <td>{r.councilDisplay}</td>
                     <td>{r.area}</td>
                     <td>{r.reticulatedGas ? 'Yes' : 'No'}</td>
                     <td>{r.climaticRegion}</td>
@@ -328,7 +356,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         )}
       </section>
 
-      <Faq items={validFaqs} pathname={pathname} />
+      <Faq items={canonicalFaqs} linkedItems={linkedFaqs} pathname={pathname} />
 
       {d.leadForm !== false && coveringInstallers.length > 0 ? (
         <LeadForm activity={d.leadForm} areaSlug={d.slug} />

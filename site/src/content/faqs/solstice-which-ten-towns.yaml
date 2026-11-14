@@ -6,7 +6,6 @@ answer: "Solar Victoria lists ten regional towns whose Solstice Energy
   in Swan Hill, Maldon (3463) in Mount Alexander, Kerang (3579) in Gannawarra,
   Nathalia (3638) in Moira, Terang (3264) in Corangamite, and Lakes Entrance
   (3909) and Orbost (3888) in East Gippsland."
-pages:
-  - solstice-gas-shutdown-towns
+canonicalPage: /victoria/solstice-gas-shutdown-towns/
 state: vic
 checkedOn: 2026-11-14

@@ -1,6 +1,5 @@
 question: "How do I know whether my home needs a 10 kW, 16 kW, or 22.4 kW ducted system?"
 answer: "Energy Victoria publishes indicative ducted replacement examples at 10 kW, 16 kW, and 22.4 kW capacities, and recommends asking an installer for an on-site home assessment so the unit matches your floor area, insulation, and ductwork. Installing an oversized unit can increase electricity use, and your accredited provider confirms the exact capacity and discount in your quote."
-pages:
-  - ducted-gas-to-ducted-reverse-cycle
+canonicalPage: /victoria/ducted-gas-to-ducted-reverse-cycle/
 state: vic
 checkedOn: 2026-11-13

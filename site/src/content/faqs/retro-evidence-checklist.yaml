@@ -1,6 +1,5 @@
 question: "What documents and photos are needed for a retrospective VEU claim?"
 answer: "Energy Victoria lists itemised tax invoices showing brand and model numbers, electrical or plumbing compliance certificates, decommissioning and disposal evidence, and geo-tagged before-and-after photographs."
-pages:
-  - already-installed-retrospective-discount
+canonicalPage: /victoria/already-installed-retrospective-discount/
 state: vic
 checkedOn: 2026-11-13

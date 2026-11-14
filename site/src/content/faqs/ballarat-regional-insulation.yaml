@@ -4,7 +4,6 @@ answer: Yes. In VEU Specifications version 25 Location Variable List (Table A),
   all 8 Ballarat council postcodes (3350 and 3352–3358) are classified as
   Regional with a Cold climatic region, matching Energy Victoria’s regional cold
   ceiling insulation scenario.
-pages:
-  - ballarat
+canonicalPage: /victoria/ballarat/
 state: vic
 checkedOn: 2026-11-14

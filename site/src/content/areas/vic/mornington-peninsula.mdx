@@ -42,14 +42,16 @@ searchDemand:
 localFacts:
   - text: "Mornington Peninsula Shire's Towards a Net Zero Peninsula initiatives highlight that electricity and gas use is the largest source of local carbon emissions and support community renewable energy and energy-smart building upgrades."
     sourceId: mornington-peninsula-climate
+  - text: "Under ABS ASGS Edition 3 dwelling allocations, 23 of Mornington Peninsula Shire's 25 postcodes (3913–3944 from Tyabb, Hastings, and Mount Eliza through Mornington, Dromana, Rosebud, Rye, Sorrento, and Portsea) sit 100% in the shire, while 3911 (Baxter and Langwarrin South: 70% Mornington Peninsula, 30% Frankston) and 3912 (Somerville and Pearcedale: 78% Mornington Peninsula, 22% Casey) share council boundaries."
+    sourceId: abs-asgs-allocation
+  - text: "In VEU Specifications v25.0 Table A, each of the 25 Mornington Peninsula postcodes (3911–3944, listed per postcode with localities in the schedule below) is classified as Metropolitan, reticulated gas, Mild climatic region, and heat pump zone 4."
+    sourceId: vic-veu-spec-v25
   - text: "Bureau of Meteorology records for Mornington Peninsula stations show mild maritime conditions with winter minimums around 6.8°C to 8.0°C."
     sourceId: bom-climate-victoria
-  - text: "While Mornington, Mount Eliza, Dromana, and Rosebud have reticulated mains gas, many properties in Red Hill, Main Ridge, Flinders, and Cape Schanck use electric storage or bottled LPG."
+  - text: "While Mornington, Mount Eliza, Dromana, and Rosebud have reticulated mains gas, many properties in Red Hill (3937), Main Ridge (3928), Flinders (3929), and Cape Schanck (3939) use electric storage or bottled LPG, and bottled LPG is outside the 1 March 2027 reticulated gas rule."
     sourceId: vicplanning-gas-roadmap
-  - text: "Replacing an electric storage hot water unit on the Peninsula attracts a higher indicative VEU heat pump discount than replacing a mains gas water heater under Energy Victoria's schedule."
+  - text: "Replacing an electric storage hot water unit in off-gas Peninsula pockets attracts a higher indicative VEU heat pump discount than replacing a mains gas water heater under Energy Victoria's schedule."
     sourceId: energyvic-hot-water
-  - text: "In VEU Specifications v25.0 Table A, all 25 Mornington Peninsula Shire postcodes (3911–3944) are classified as Metropolitan, reticulated gas, Mild climatic region, and heat pump zone 4."
-    sourceId: vic-veu-spec-v25
 answer: "On the Mornington Peninsula, Energy Victoria lists an indicative VEU hot water discount of <Money id=\"vic-veu-hw-gas-to-heatpump\" /> when replacing mains gas with a heat pump and <Money id=\"vic-veu-hw-electric-to-heatpump\" /> when replacing inefficient electric storage. Because some Peninsula towns use reticulated mains gas while hinterland and coastal pockets rely on electric storage or bottled LPG, your exact VEU discount depends on your current system. Always involve an accredited provider before work begins."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
@@ -71,9 +73,9 @@ figures:
   - vic-veu-rcac-hardwired-electric
   - vic-veu-rcac-ducted-gas-22kw
 faq:
-  - heat-pump-gas-vs-electric
-  - march-2027-gas-hot-water-rule
-  - retrospective-discounts
+  - mornington-peninsula-postcode-classification
+  - mornington-peninsula-electric-and-lpg-pockets
+  - mornington-peninsula-net-zero-guidance
 leadForm: either
 noindex: false
 related:
@@ -91,12 +93,18 @@ hero:
     - Electric storage → heat pump
 ---
 
+## Postcodes, council boundaries, and shire guidance across the Peninsula
+
+Under ABS 2021 Census dwelling allocations (<SourceLink id="abs-asgs-allocation" label="ABS ASGS Edition 3 allocation files" />), 23 of the 25 postcodes on this page (`3913`–`3944`, spanning Western Port towns from Tyabb, Hastings, Bittern, Crib Point, Balnarring, Somers, and Flinders across Port Phillip Bay from Mount Eliza, Mornington, and Mount Martha to Dromana, Rosebud, Rye, Blairgowrie, Sorrento, and Portsea) sit **100% within Mornington Peninsula Shire**. Two northern boundary postcodes cross council lines: `3911` (Baxter and Langwarrin South: 70% Mornington Peninsula, 30% <a href="/victoria/frankston/">Frankston</a>) and `3912` (Somerville and Pearcedale: 78% Mornington Peninsula, 22% <a href="/victoria/casey/">Casey</a>).
+
+Mornington Peninsula Shire's <SourceLink id="mornington-peninsula-climate" label="Towards a Net Zero Peninsula initiatives" /> note that electricity and gas use is the largest local carbon emissions source and promote energy-smart building upgrades alongside state-wide VEU incentives.
+
 ## Hot water upgrades on the Mornington Peninsula: electric vs gas vs LPG
 
-Across Mornington Peninsula Shire (including Mornington 3931, Mount Eliza 3930, Mount Martha 3934, Dromana 3936, Rosebud 3939, Rye 3941, and Sorrento 3943), hot water fuel types vary by locality:
+Across Mornington Peninsula Shire, hot water fuel types vary sharply between bayside townships and rural hinterland or southern coastal pockets:
 
-- **Replacing an inefficient electric storage water heater with a heat pump** (common in hinterland and southern Peninsula homes without mains gas): indicative VEU discount of <Money id="vic-veu-hw-electric-to-heatpump" />.
-- **Replacing an inefficient mains gas water heater with a heat pump** (common in Mornington, Mount Eliza, and Rosebud): indicative VEU discount of <Money id="vic-veu-hw-gas-to-heatpump" />.
+- **Replacing an inefficient electric storage water heater with a heat pump** (common in Red Hill `3937`, Main Ridge `3928`, Flinders `3929`, and Cape Schanck `3939` where properties are off mains gas): indicative VEU discount of <Money id="vic-veu-hw-electric-to-heatpump" /> (see our <a href="/victoria/electric-hot-water-to-heat-pump/">electric hot water to heat pump guide</a>).
+- **Replacing an inefficient mains gas water heater with a heat pump** (common in Mount Eliza `3930`, Mornington `3931`, Dromana `3936`, and Rosebud `3939`): indicative VEU discount of <Money id="vic-veu-hw-gas-to-heatpump" />.
 - **Minimum customer co-contribution:** <Money id="vic-veu-hw-min-contribution" />.
 
 If your Peninsula property uses **bottled LPG**, note that Victoria's **1 March 2027** mains gas hot water replacement mandate does not apply to LPG, and your accredited provider will confirm which VEU hot water replacement category applies to your existing unit.

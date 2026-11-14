@@ -1,6 +1,5 @@
 question: "Does decommissioning an old unit or buying an induction cooktop before 30 June 2026 affect a retrospective claim?"
 answer: "Energy Victoria notes that retrospective claims are easier where no existing system had to be decommissioned (since missing pre-removal photos usually block replacement claims), and induction cooktops purchased before 30 June 2026 must appear on the older Part 46 product list."
-pages:
-  - already-installed-retrospective-discount
+canonicalPage: /victoria/already-installed-retrospective-discount/
 state: vic
 checkedOn: 2026-11-13

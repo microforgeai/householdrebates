@@ -1,28 +1,55 @@
 ---
 import { renderFaqAnswerHtml } from '../lib/faq-markdown';
+import { ensureTrailingSlash } from '../lib/urls';
+import type { CanonicalFaqItem, LinkedFaqItem } from '../lib/faqs';
 
-export interface FaqItem {
-  question: string;
-  answer: string;
-}
+export type FaqItem = CanonicalFaqItem;
 
 export interface Props {
-  items: FaqItem[];
+  items: CanonicalFaqItem[];
+  linkedItems?: LinkedFaqItem[];
   heading?: string;
   pathname?: string;
 }
 
-const { items, heading = 'Frequently asked questions', pathname = Astro.url.pathname } = Astro.props;
+const {
+  items,
+  linkedItems = [],
+  heading = 'Frequently asked questions',
+  pathname = Astro.url.pathname,
+} = Astro.props;
+
+const normPath = ensureTrailingSlash(pathname);
+const isHome = normPath === '/';
 ---
 
-{items.length > 0 && (
+{(items.length > 0 || linkedItems.length > 0 || isHome) && (
   <section class="faq-list" aria-labelledby="faq-heading">
     <h2 id="faq-heading">{heading}</h2>
     {items.map((item) => (
-      <div class="faq-item">
+      <div class="faq-item" id={`faq-${item.id}`} data-faq-canonical={item.id}>
         <h3>{item.question}</h3>
-        <p set:html={renderFaqAnswerHtml(item.answer, pathname)} />
+        <p set:html={renderFaqAnswerHtml(item.answer, normPath)} />
       </div>
     ))}
+
+    {linkedItems.length > 0 && (
+      <div class="faq-also" data-faq-links>
+        <p class="faq-also__label">Answered in full on their dedicated guides:</p>
+        <ul class="faq-link-list">
+          {linkedItems.map((link) => (
+            <li>
+              <a href={`${link.canonicalPage}#faq-${link.id}`}>{link.question} →</a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    )}
+
+    {isHome && (
+      <p class="faq-more">
+        <a href="/faq/">Read general Victorian Energy Upgrades questions →</a>
+      </p>
+    )}
   </section>
 )}

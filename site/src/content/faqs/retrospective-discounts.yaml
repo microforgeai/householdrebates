@@ -1,10 +1,13 @@
 question: Can I claim a Victorian Energy Upgrades discount after my system is already installed?
-answer: Generally no. Energy Victoria advises that you must contact an accredited provider (or use an installer working with one) before buying or installing your system. Retrospective discounts after installation work has started are typically not possible—see our guide on [VEU retrospective discounts in Victoria](/victoria/already-installed-retrospective-discount/).
-pages:
-  - home
-  - air-conditioner-rebate
-  - heat-pump-rebate
-  - reverse-cycle-vs-gas-heater
-  - faq
+answer: Generally no. Energy Victoria advises that you must contact an accredited provider (or use an installer working with one) before buying or installing your system—see [how VEU quotes work](/how-quotes-work/). Retrospective discounts after installation work has started are possible only in very limited cases within the strict calendar-year deadline explained above.
+canonicalPage: /victoria/already-installed-retrospective-discount/
+alsoLinkFrom:
+  - /faq/
+  - /how-quotes-work/
+  - /victoria/air-conditioner-rebate/
+  - /victoria/heat-pump-rebate/
+  - /victoria/reverse-cycle-vs-gas-heater/
+  - /victoria/ducted-gas-to-ducted-reverse-cycle/
+  - /victoria/eligibility-checker/
 state: vic
 checkedOn: 2026-11-14

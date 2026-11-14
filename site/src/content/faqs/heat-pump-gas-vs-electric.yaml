@@ -1,9 +1,9 @@
 question: Why is the VEU heat pump discount different when replacing gas versus electric hot water?
-answer: Under the Victorian Energy Upgrades methodology, replacing an inefficient electric resistance water heater saves more calculated emissions than replacing a mains gas water heater, so the [heat pump rebate in Victoria](/victoria/heat-pump-rebate/) differs between the two replacement scenarios.
-pages:
-  - home
-  - heat-pump-rebate
-  - gas-to-electric-hot-water-2027
-  - faq
+answer: Under the Victorian Energy Upgrades methodology, replacing an inefficient electric resistance water heater saves more calculated greenhouse gas emissions than replacing a mains gas water heater, so Energy Victoria's indicative discount differs between the two scenarios—compare [the VEU household hot water scenarios above](/victoria/heat-pump-rebate/#veu-household-hot-water-discount-scenarios).
+canonicalPage: /victoria/heat-pump-rebate/
+alsoLinkFrom:
+  - /faq/
+  - /victoria/gas-to-electric-hot-water-2027/
+  - /victoria/eligibility-checker/
 state: vic
 checkedOn: 2026-11-14

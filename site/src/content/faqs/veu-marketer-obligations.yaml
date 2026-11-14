@@ -1,6 +1,5 @@
 question: "What must a VEU marketer or installer tell me, and what are they banned from saying?"
 answer: "Under Essential Services Commission consumer rights rules, marketers must state that participating in VEU is voluntary and must never claim to work for the VEU program, the Essential Services Commission, or the Victorian Government, or tell you that an upgrade is mandatory when it is not."
-pages:
-  - veu-scams-cold-calls
+canonicalPage: /victoria/veu-scams-cold-calls/
 state: vic
 checkedOn: 2026-11-13

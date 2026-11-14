@@ -1,0 +1,5 @@
+question: How often are the figures and rules on Household Rebates checked?
+answer: Every figure on Household Rebates is stored in a structured data file tied to an official government publication with a visible verification date, and an automated build check blocks any figure older than 45 days until we re-read the primary source—see our [Official Sources and Verification Method](/sources/).
+canonicalPage: /faq/
+state: vic
+checkedOn: 2026-11-14

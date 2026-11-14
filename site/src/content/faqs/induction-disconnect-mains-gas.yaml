@@ -1,6 +1,5 @@
 question: "Do existing Victorian homes have to remove gas cooktops, or is switching optional?"
 answer: "Switching from a gas cooktop to induction in an existing Victorian home is completely voluntary. Victoria's building electrification rules do not require existing homeowners to replace working or broken gas cooktops, though removing your final gas appliance lets you abolish the gas meter and avoid ongoing gas supply charges."
-pages:
-  - gas-cooktop-to-induction
+canonicalPage: /victoria/gas-cooktop-to-induction/
 state: vic
 checkedOn: 2026-11-13

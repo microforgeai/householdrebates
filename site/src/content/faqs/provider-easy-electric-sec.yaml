@@ -4,7 +4,6 @@ answer: Easy Electric SEC is a free online quote-matching tool operated by the
   connects households with SEC-endorsed installers. According to the SEC, an
   endorsed installer contacts you within one business day after you submit your
   details through its tool.
-pages:
-  - find-an-accredited-provider
+canonicalPage: /victoria/find-an-accredited-provider/
 state: vic
 checkedOn: 2026-11-13

@@ -215,7 +215,11 @@ const areas = defineCollection({
       {
         message: 'standard areas require councils (>=1); multi-town areas require towns (>=2)',
       },
-    ),
+    )
+    .refine((d) => (d.slug === 'melbourne' ? d.localFacts.length >= 4 : d.localFacts.length >= 5), {
+      message:
+        'Every area page requires at least 5 sourced localFacts (melbourne rescope to 52 postcodes in prompt 39).',
+    }),
 });
 
 const pages = defineCollection({
@@ -223,27 +227,34 @@ const pages = defineCollection({
   schema: pageBase,
 });
 
+const CANONICAL_URL_RE = /^\/(?:[a-z0-9-]+\/)*$/;
+
 const faqs = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/faqs' }),
-  schema: z.object({
-    question: z.string(),
-    answer: z.string().refine(
-      (val) => {
-        try {
-          return validateFaqAnswerMarkdown(val);
-        } catch {
-          return false;
-        }
-      },
-      {
-        message:
-          'FAQ answer must be plain text with optional [anchor](/internal-path/) links only (no HTML, no images, no dollar amounts).',
-      },
-    ),
-    pages: z.array(z.string()),
-    state: State,
-    checkedOn: z.coerce.date(),
-  }),
+  schema: z
+    .object({
+      question: z.string().min(1),
+      answer: z.string().refine(
+        (val) => {
+          try {
+            return validateFaqAnswerMarkdown(val);
+          } catch {
+            return false;
+          }
+        },
+        {
+          message:
+            'FAQ answer must be plain text with optional [anchor](/internal-path/) links only (no HTML, no images, no dollar amounts).',
+        },
+      ),
+      canonicalPage: z.string().regex(CANONICAL_URL_RE),
+      alsoLinkFrom: z.array(z.string().regex(CANONICAL_URL_RE)).default([]),
+      state: State,
+      checkedOn: z.coerce.date(),
+    })
+    .refine((d) => !d.alsoLinkFrom.includes(d.canonicalPage), {
+      message: 'alsoLinkFrom must not contain canonicalPage',
+    }),
 });
 
 const installers = defineCollection({

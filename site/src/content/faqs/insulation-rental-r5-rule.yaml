@@ -1,6 +1,5 @@
 question: "Do Victorian rental properties need ceiling insulation from 1 March 2027?"
 answer: "Under Victoria's rental minimum energy efficiency standards, rental properties that currently have no ceiling insulation must have at least R5.0 ceiling insulation installed at the start of a new lease from 1 March 2027, unless a regulatory exemption applies."
-pages:
-  - ceiling-insulation-rebate
+canonicalPage: /victoria/ceiling-insulation-rebate/
 state: vic
 checkedOn: 2026-11-13

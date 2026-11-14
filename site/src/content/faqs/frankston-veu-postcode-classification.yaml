@@ -1,0 +1,5 @@
+question: How are Frankston City postcodes classified in VEU Table A, and why is Baxter (3911) separate?
+answer: In VEU Specifications version 25.0 Table A, all five postcodes whose primary council is Frankston City—3198 (Seaford), 3199 (Frankston and Frankston South), 3200 (Frankston North), 3201 (Carrum Downs), and 3910 (Langwarrin)—sit 100% within Frankston City by 2021 Census dwellings and are Metropolitan, on reticulated gas, Mild climatic region, and heat pump zone 4. Neighbouring 3911 (Baxter and Langwarrin South) has 70% of its dwellings in Mornington Peninsula Shire and 30% in Frankston City, so it is listed on our [Mornington Peninsula guide](/victoria/mornington-peninsula/).
+canonicalPage: /victoria/frankston/
+state: vic
+checkedOn: 2026-11-14

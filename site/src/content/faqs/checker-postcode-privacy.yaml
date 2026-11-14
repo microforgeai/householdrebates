@@ -1,6 +1,5 @@
 question: "Why does the checker ask for my postcode?"
 answer: "When you check ceiling insulation, the VEU postcode table sets whether your postcode is listed as metropolitan or regional and its climatic region. Your postcode stays in your browser and nothing is sent anywhere."
-pages:
-  - eligibility-checker
+canonicalPage: /victoria/eligibility-checker/
 state: vic
 checkedOn: 2026-11-13

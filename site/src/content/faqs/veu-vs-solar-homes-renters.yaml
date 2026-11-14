@@ -1,6 +1,5 @@
 question: "Can renters access both VEU discounts and Solar Homes hot water rebates?"
 answer: "Private renters can access VEU discounts across heating, cooling, hot water, and other activities with their landlord's permission where required, whereas the standard Solar Homes hot water rebate is limited to owner-occupiers."
-pages:
-  - veu-vs-solar-homes
+canonicalPage: /victoria/veu-vs-solar-homes/
 state: vic
 checkedOn: 2026-11-13

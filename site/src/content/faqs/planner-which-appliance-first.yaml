@@ -5,7 +5,6 @@ answer: No official Victorian Government source prescribes a mandatory sequence
   cooktops. The one currently legislated trigger to plan around is 1 March 2027,
   when a mains gas water heater in an existing home that fails and needs
   replacement generally cannot be replaced with another mains gas unit.
-pages:
-  - get-off-gas-planner
+canonicalPage: /victoria/get-off-gas-planner/
 state: vic
 checkedOn: 2026-11-14

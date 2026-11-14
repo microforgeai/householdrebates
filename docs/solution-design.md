@@ -528,7 +528,7 @@ const areaExtra = z.object({
   areaName: z.string(),
   councils: z.array(z.string()).min(1),
   postcodes: z.array(z.string().regex(/^3\d{3}$/)).min(1),
-  localFacts: z.array(z.object({ text: z.string(), sourceId: reference('sources') })).min(4), // anti-doorway
+  localFacts: z.array(z.object({ text: z.string(), sourceId: reference('sources') })).min(5), // anti-doorway (prompt 27; melbourne rescoped in prompt 39)
   searchDemand: z.object({ monthly: z.number(), source: z.string(), date: z.coerce.date() }).optional(),
   variant: z.enum(['standard', 'multi-town']).default('standard'),   // expansion (prompt 21)
   towns: z.array(z.string()).min(2).optional(),                       // multi-town only; councils optional there
@@ -537,7 +537,7 @@ const areaExtra = z.object({
 });
 ```
 
-Area content must be local and sourced: council name(s) and any council energy or electrification program (link to the council page), housing age or heating mix if published (ABS/council), climate note from BoM, gas distributor if confirmed on an official page, which signed installers cover the postcodes. If four sourced local facts can't be found, the page isn't built.
+Area content must be local and sourced: council name(s) and any council energy or electrification program (link to the council page), housing age or heating mix if published (ABS/council), climate note from BoM, gas distributor if confirmed on an official page, which signed installers cover the postcodes. Table A classification facts count as local only when they differ from inner Melbourne or are listed per postcode (`postcodes.csv` localities and council shares). Every area page requires at least five sourced local facts (prompt 27).
 
 ### 5.5 `faqs`, `installers`
 
@@ -545,7 +545,8 @@ Area content must be local and sourced: council name(s) and any council energy o
 const faqs = z.object({
   question: z.string(),
   answer: z.string(),          // restricted Markdown: plain text + [anchor](/path/) internal links only (no HTML, no images, no $ amounts); rendered as sanitised HTML visibly and plain anchor text in FAQPage JSON-LD (prompt 26)
-  pages: z.array(z.string()),  // slugs where it's shown
+  canonicalPage: z.string(),   // single canonical URL (e.g. "/victoria/renters/") where the Q&A renders in full (#faq-<id>) and enters FAQPage JSON-LD (prompt 27)
+  alsoLinkFrom: z.array(z.string()).default([]), // other page URLs where the Q&A renders only as a one-line link ("Question →" to canonicalPage#faq-<id>), omitted from FAQPage JSON-LD
   state: State,
   checkedOn: z.coerce.date(),
 });
@@ -1144,7 +1145,7 @@ Access: a dedicated `deploy` user, SSH key only, owner of the two release trees,
 | `Organization` | every page | `@id: https://householdrebates.com.au/#publisher`, `name: "Agenor Services Pty Ltd"`, `alternateName: "Household Rebates"`, `url`, `logo`, `identifier` (ABN as `PropertyValue`), `sameAs` (agenorit.com.au, LinkedIn) |
 | `WebSite` | every page | `@id …/#website`, `name: "Household Rebates"`, `publisher: {"@id": "…/#publisher"}`, `inLanguage: "en-AU"` (no SearchAction: no site search) |
 | `BreadcrumbList` | every page except home | matches visible breadcrumbs |
-| `FAQPage` | only where the same Q&As are visible on the page. Expansion: every new page has a visible FAQ (3–5), so every new page has `FAQPage` | answers carry no dollar figures |
+| `FAQPage` | only where the same Q&As are visible in full on their `canonicalPage` (prompt 27: 3–5 unique canonical FAQs per FAQ-bearing page; `alsoLinkFrom` one-line links are excluded from `FAQPage`; `check-faqs` and `check-overlap` enforce `< 25%` 6-word shingle Jaccard overlap) | answers carry no dollar figures |
 | `HowTo` | `/how-quotes-work/` and `/victoria/how-long-does-an-upgrade-take/` (genuine step-by-steps); `/victoria/gas-cooktop-to-induction/` only if its buy-then-claim steps are a genuine list | no `estimatedCost`, no `totalTime`, no money |
 | never | — | `LocalBusiness`, `Offer`, `PriceSpecification`, `Product` with prices, `GovernmentService`, `AggregateRating` |
 

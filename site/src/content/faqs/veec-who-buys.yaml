@@ -1,6 +1,5 @@
 question: "Who buys Victorian Energy Efficiency Certificates (VEECs)?"
 answer: "Accredited persons create VEECs after an eligible energy upgrade is completed, and energy retailers buy and surrender those certificates each year to meet annual emissions targets enforced by the Essential Services Commission."
-pages:
-  - what-is-a-veec
+canonicalPage: /victoria/what-is-a-veec/
 state: vic
 checkedOn: 2026-11-13

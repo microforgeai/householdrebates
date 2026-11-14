@@ -1,6 +1,5 @@
 question: "Can I get a VEU discount to replace a broken solar hot water system?"
 answer: "Energy Victoria lists broken, out-of-warranty electric-boosted or gas-boosted solar water heaters among the systems that can be replaced with an approved heat pump or new solar-boosted water heater, and also notes that some older solar heaters count as inefficient systems. Your accredited provider checks your existing model before quoting."
-pages:
-  - solar-hot-water-rebate
+canonicalPage: /victoria/solar-hot-water-rebate/
 state: vic
 checkedOn: 2026-11-13

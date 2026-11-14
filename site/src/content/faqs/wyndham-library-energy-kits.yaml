@@ -2,7 +2,6 @@ question: Can Wyndham residents borrow a home energy efficiency kit?
 answer: Yes. Wyndham City makes My Home Energy and Water Efficiency Kits
   available to borrow through local Wyndham libraries so households can check
   appliance power draw, room temperatures, and water flow rates at home.
-pages:
-  - wyndham
+canonicalPage: /victoria/wyndham/
 state: vic
 checkedOn: 2026-11-13

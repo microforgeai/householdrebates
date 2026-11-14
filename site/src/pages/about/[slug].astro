@@ -22,7 +22,14 @@ import { isAuthorBioReady } from '../../lib/people';
 import { assertEntryEnabled } from '../../lib/rollout';
 
 export async function getStaticPaths() {
-  const aboutChildPages = await getCollection('pages', (p) => p.data.parent === 'about');
+  const authorReady = isAuthorBioReady();
+  const aboutChildPages = await getCollection('pages', (p) => {
+    if (p.data.parent !== 'about') return false;
+    if (p.data.slug === 'gurinder-singh' && (!authorReady || p.data.noindex)) {
+      return false;
+    }
+    return true;
+  });
   for (const p of aboutChildPages) {
     assertEntryEnabled(p.data.mapRow, `/about/${p.data.slug}/`);
   }

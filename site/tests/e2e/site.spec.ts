@@ -299,34 +299,29 @@ test.describe('Household Rebates static site e2e', () => {
     ).toBeVisible();
   });
 
-  test('renders /about/gurinder-singh/ as noindex without << placeholders, byline links, reviewedBy, or Person schema while bio is unfilled, and emits Article + WebApplication JSON-LD', async ({
+  test('excludes /about/gurinder-singh/, Person schema, byline name, and author links from public output while bio is unfilled, while emitting Article + WebApplication JSON-LD', async ({
     page,
   }) => {
-    await page.goto('/about/gurinder-singh/');
-    const robots = await page.locator('meta[name="robots"]').getAttribute('content');
-    expect(robots).toContain('noindex');
-    const html = await page.content();
-    expect(html).not.toContain('<<');
-    expect(html).not.toContain('"@type":"Person"');
-    expect(html).not.toContain('"@type":"ProfilePage"');
-    await expect(page.locator('[data-author-profile]')).toHaveCount(0);
-    await expect(page.locator('[data-reviewed-by]')).toHaveCount(0);
+    const authorRes = await page.goto('/about/gurinder-singh/');
+    expect(authorRes?.status()).toBe(404);
 
-    const axe = await new AxeBuilder({ page }).analyze();
-    expect(
-      axe.violations,
-      `axe violations on /about/gurinder-singh/: ${JSON.stringify(axe.violations, null, 2)}`,
-    ).toEqual([]);
+    await page.goto('/about/');
+    const aboutHtml = await page.content();
+    expect(aboutHtml).not.toContain('Gurinder');
+    expect(aboutHtml).not.toContain('/about/gurinder-singh/');
+    expect(aboutHtml).not.toContain('"@type":"Person"');
 
     await page.goto('/victoria/air-conditioner-rebate/');
     await expect(page.locator('a[href="/about/gurinder-singh/"]')).toHaveCount(0);
     await expect(page.locator('[data-reviewed-by]')).toHaveCount(0);
+    await expect(page.locator('.byline')).not.toContainText('Gurinder');
+    await expect(page.locator('.byline')).toContainText('Published by Agenor Services Pty Ltd');
     const guideScripts = await page.locator('script[type="application/ld+json"]').allTextContents();
     const guideTypes = guideScripts.flatMap((s) =>
       (JSON.parse(s)['@graph'] ?? []).map((n: Record<string, unknown>) => n['@type']),
     );
     expect(guideTypes).toContain('Article');
-    expect(guideTypes).toContain('Person');
+    expect(guideTypes).not.toContain('Person');
     expect(guideTypes).toContain('WebPage');
 
     for (const toolUrl of ['/victoria/eligibility-checker/', '/victoria/postcode/']) {

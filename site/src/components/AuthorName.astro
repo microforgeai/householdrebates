@@ -4,23 +4,31 @@ import { ensureTrailingSlash } from '../lib/urls';
 
 export interface Props {
   name?: string;
+  fallback?: string;
   currentPath?: string;
   strong?: boolean;
 }
 
-const { name = 'Gurinder Singh', currentPath = '', strong = false } = Astro.props;
+const {
+  name = 'Gurinder Singh',
+  fallback = 'Agenor Services Pty Ltd',
+  currentPath = '',
+  strong = false,
+} = Astro.props;
+const authorReady = isAuthorBioReady();
 const cleanCurrent = currentPath ? ensureTrailingSlash(currentPath) : '';
-const shouldLink = isAuthorBioReady() && cleanCurrent !== '/about/gurinder-singh/';
+const shouldLink = authorReady && cleanCurrent !== '/about/gurinder-singh/';
+const displayText = authorReady ? name : fallback;
 ---
 
 {shouldLink ? (
   strong ? (
-    <strong><a href="/about/gurinder-singh/">{name}</a></strong>
+    <strong><a href="/about/gurinder-singh/">{displayText}</a></strong>
   ) : (
-    <a href="/about/gurinder-singh/">{name}</a>
+    <a href="/about/gurinder-singh/">{displayText}</a>
   )
 ) : strong ? (
-  <strong>{name}</strong>
+  <strong>{displayText}</strong>
 ) : (
-  name
+  displayText
 )}

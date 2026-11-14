@@ -78,7 +78,7 @@ describe('JSON-LD Schema Builder and Validator', () => {
     ]);
   });
 
-  it('builds guide Article + WebPage + Person without author page URL while bio is a placeholder', () => {
+  it('builds guide Article + WebPage with Organization author (and 0 Person nodes) while bio is unfilled', () => {
     const graph = buildJsonLdGraph({
       pathname: '/victoria/air-conditioner-rebate/',
       breadcrumbs: [
@@ -99,6 +99,7 @@ describe('JSON-LD Schema Builder and Validator', () => {
     const serialized = JSON.stringify(graph);
     expect(serialized).not.toContain('<<');
     expect(serialized).not.toContain('/about/gurinder-singh/');
+    expect(serialized).not.toContain('person-gurinder-singh');
     expect(serialized).not.toContain('reviewedBy');
 
     const nodes = graph['@graph'] as Record<string, unknown>[];
@@ -107,7 +108,6 @@ describe('JSON-LD Schema Builder and Validator', () => {
       'WebSite',
       'BreadcrumbList',
       'WebPage',
-      'Person',
       'Article',
     ]);
 
@@ -116,7 +116,7 @@ describe('JSON-LD Schema Builder and Validator', () => {
       '@id': 'https://householdrebates.com.au/victoria/air-conditioner-rebate/#webpage',
     });
     expect(article.author).toEqual({
-      '@id': 'https://householdrebates.com.au/#person-gurinder-singh',
+      '@id': 'https://householdrebates.com.au/#publisher',
     });
   });
 

@@ -1,5 +1,6 @@
 import rolloutConfig from '../data/rollout.json' with { type: 'json' };
 import urlMapRows from '../data/url-map.json' with { type: 'json' };
+import { isAuthorBioReady } from './people';
 
 export interface UrlMapRow {
   row: number;
@@ -50,6 +51,7 @@ export function getEnabledRowNumbers(): Set<number> {
     const row = ROW_BY_NUM.get(rowNum);
     if (!row) continue;
     if (row.gated && !isGatedRowApproved(row, gatedOk)) continue;
+    if (row.url === '/about/gurinder-singh/' && !isAuthorBioReady()) continue;
     enabled.add(rowNum);
   }
   return enabled;

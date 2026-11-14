@@ -12,7 +12,7 @@ const distDir = path.join(siteRoot, 'dist');
 
 const leadsEnabled = process.env.PUBLIC_LEADS_ENABLED === 'true';
 const alertsEnabled = process.env.PUBLIC_ALERTS_ENABLED === 'true';
-const authorPublishRequested = process.env.PUBLIC_AUTHOR_LIVE === 'true';
+const authorPublishEnv = process.env.PUBLIC_AUTHOR_LIVE === 'true';
 const legalSlugs = ['privacy', 'terms'];
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -131,54 +131,60 @@ if (alertsEnabled) {
   }
 }
 
-// Prompt 32 author bio & signed-reviewer publishing gates:
-// Never allow placeholder author bio or placeholder/unsigned reviewer entries to publish.
+// Prompt 32 author-page & signed-reviewer publishing gates:
+// Missing bio MUST NOT block a normal site deploy — it ONLY blocks publishing the author page itself
+// (or emitting Person / author links / unsigned reviewers into public output).
 const people = JSON.parse(fs.readFileSync(peoplePath, 'utf8'));
 const peopleBlockers = [];
 
 const author = people?.['gurinder-singh'];
-if (!author || typeof author !== 'object') {
-  peopleBlockers.push('people.json is missing the "gurinder-singh" author object');
-} else {
-  if (typeof author.name !== 'string' || !author.name.trim() || hasPlaceholder(author.name)) {
-    peopleBlockers.push(
-      'people.json["gurinder-singh"].name is missing or holds a <<...>> placeholder',
-    );
-  }
-  if (typeof author.role !== 'string' || !author.role.trim() || hasPlaceholder(author.role)) {
-    peopleBlockers.push(
-      'people.json["gurinder-singh"].role is missing or holds a <<...>> placeholder',
-    );
-  }
-}
-
 const bioReady =
   Boolean(author) &&
   typeof author.bio === 'string' &&
   author.bio.trim().length > 0 &&
   !hasPlaceholder(author.bio);
 
-if (authorPublishRequested && !bioReady) {
-  peopleBlockers.push(
-    'Refusing PUBLIC_AUTHOR_LIVE=true: people.json["gurinder-singh"].bio still holds a <<...>> placeholder (Guri must supply his bio first)',
-  );
-}
+const authorMdxPath = path.join(pagesDir, 'about-gurinder-singh.mdx');
+const authorMdxRaw = fs.existsSync(authorMdxPath) ? fs.readFileSync(authorMdxPath, 'utf8') : '';
+const authorFmMatch = authorMdxRaw.match(/^---\n([\s\S]*?)\n---/);
+const authorFm = authorFmMatch ? YAML.parse(authorFmMatch[1]) : { noindex: true };
+const attemptingAuthorPagePublish = authorPublishEnv || authorFm.noindex === false;
 
-if (bioReady && author) {
-  if (author.credentials !== undefined && hasPlaceholder(author.credentials)) {
-    peopleBlockers.push(
-      'people.json["gurinder-singh"].credentials still holds a <<...>> placeholder; Guri must supply credentials or remove the field before publishing /about/gurinder-singh/',
-    );
-  }
-  if (author.image !== undefined && hasPlaceholder(author.image)) {
-    peopleBlockers.push(
-      'people.json["gurinder-singh"].image still holds a <<...>> placeholder; Guri must supply a photo path or remove the field before publishing /about/gurinder-singh/',
-    );
-  }
-  if (Array.isArray(author.sameAs) && hasPlaceholder(author.sameAs)) {
-    peopleBlockers.push(
-      'people.json["gurinder-singh"].sameAs still holds a <<...>> placeholder; Guri must supply profile URLs or set sameAs to [] before publishing /about/gurinder-singh/',
-    );
+if (attemptingAuthorPagePublish) {
+  if (!author || typeof author !== 'object') {
+    peopleBlockers.push('people.json is missing the "gurinder-singh" author object');
+  } else {
+    if (typeof author.name !== 'string' || !author.name.trim() || hasPlaceholder(author.name)) {
+      peopleBlockers.push(
+        'people.json["gurinder-singh"].name is missing or holds a <<...>> placeholder',
+      );
+    }
+    if (typeof author.role !== 'string' || !author.role.trim() || hasPlaceholder(author.role)) {
+      peopleBlockers.push(
+        'people.json["gurinder-singh"].role is missing or holds a <<...>> placeholder',
+      );
+    }
+    if (!bioReady) {
+      peopleBlockers.push(
+        'Refusing to publish /about/gurinder-singh/: people.json["gurinder-singh"].bio is missing or holds a <<...>> placeholder (keep noindex: true in about-gurinder-singh.mdx and PUBLIC_AUTHOR_LIVE unset until Guri supplies his bio)',
+      );
+    } else {
+      if (author.credentials !== undefined && hasPlaceholder(author.credentials)) {
+        peopleBlockers.push(
+          'people.json["gurinder-singh"].credentials still holds a <<...>> placeholder; supply credentials or remove the field before publishing /about/gurinder-singh/',
+        );
+      }
+      if (author.image !== undefined && hasPlaceholder(author.image)) {
+        peopleBlockers.push(
+          'people.json["gurinder-singh"].image still holds a <<...>> placeholder; supply a photo path or remove the field before publishing /about/gurinder-singh/',
+        );
+      }
+      if (Array.isArray(author.sameAs) && hasPlaceholder(author.sameAs)) {
+        peopleBlockers.push(
+          'people.json["gurinder-singh"].sameAs still holds a <<...>> placeholder; supply profile URLs or set sameAs to [] before publishing /about/gurinder-singh/',
+        );
+      }
+    }
   }
 }
 
@@ -188,7 +194,7 @@ if (!Array.isArray(people?.reviewers)) {
   people.reviewers.forEach((rev, idx) => {
     if (hasPlaceholder(rev)) {
       peopleBlockers.push(
-        `people.json.reviewers[${idx}] contains <<...>> placeholder values; keep reviewers: [] until Guri supplies a real reviewer who has signed in writing`,
+        `people.json.reviewers[${idx}] contains <<...>> placeholder values; keep reviewers: [] until a real reviewer signs in writing`,
       );
     } else if (!isValidSignedReviewer(rev)) {
       peopleBlockers.push(
@@ -203,44 +209,42 @@ if (fs.existsSync(distDir)) {
   const sitemapPath = path.join(distDir, 'sitemap-0.xml');
   const llmsPath = path.join(distDir, 'llms.txt');
 
-  if (fs.existsSync(authorHtmlPath)) {
-    const authorHtml = fs.readFileSync(authorHtmlPath, 'utf8');
-    const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml);
-    if (!bioReady && !hasNoindex) {
+  if (!bioReady) {
+    if (fs.existsSync(authorHtmlPath)) {
       peopleBlockers.push(
-        'Refusing to publish /about/gurinder-singh/ without noindex while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
+        'Refusing to publish /about/gurinder-singh/ in dist/ while people.json["gurinder-singh"].bio is unfilled',
       );
     }
-    if (/<<|>>|&lt;&lt;|&gt;&gt;/.test(authorHtml)) {
-      peopleBlockers.push(
-        'dist/about/gurinder-singh/index.html contains unresolved <<...>> placeholder text',
-      );
+    if (fs.existsSync(sitemapPath)) {
+      const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
+      if (sitemapXml.includes('/about/gurinder-singh/')) {
+        peopleBlockers.push(
+          'Refusing build: sitemap-0.xml lists /about/gurinder-singh/ while bio is unfilled',
+        );
+      }
     }
-  }
-
-  if (!bioReady && fs.existsSync(sitemapPath)) {
-    const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
-    if (sitemapXml.includes('/about/gurinder-singh/')) {
-      peopleBlockers.push(
-        'Refusing build: sitemap-0.xml lists /about/gurinder-singh/ while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
-      );
-    }
-  }
-
-  if (!bioReady && fs.existsSync(llmsPath)) {
-    const llmsTxt = fs.readFileSync(llmsPath, 'utf8');
-    if (llmsTxt.includes('/about/gurinder-singh/')) {
-      peopleBlockers.push(
-        'Refusing build: llms.txt lists /about/gurinder-singh/ while people.json["gurinder-singh"].bio holds a <<...>> placeholder',
-      );
+    if (fs.existsSync(llmsPath)) {
+      const llmsTxt = fs.readFileSync(llmsPath, 'utf8');
+      if (llmsTxt.includes('/about/gurinder-singh/')) {
+        peopleBlockers.push(
+          'Refusing build: llms.txt lists /about/gurinder-singh/ while bio is unfilled',
+        );
+      }
     }
   }
 
-  if (Array.isArray(people?.reviewers) && people.reviewers.length === 0) {
-    for (const htmlFile of walkHtml(distDir)) {
-      const html = fs.readFileSync(htmlFile, 'utf8');
+  for (const htmlFile of walkHtml(distDir)) {
+    const html = fs.readFileSync(htmlFile, 'utf8');
+    const rel = path.relative(siteRoot, htmlFile);
+    if (!bioReady) {
+      if (html.includes('#person-gurinder-singh') || html.includes('/about/gurinder-singh/')) {
+        peopleBlockers.push(
+          `${rel} outputs #person-gurinder-singh or /about/gurinder-singh/ while bio is unfilled`,
+        );
+      }
+    }
+    if (Array.isArray(people?.reviewers) && people.reviewers.length === 0) {
       if (html.includes('data-reviewed-by') || html.includes('"reviewedBy"')) {
-        const rel = path.relative(siteRoot, htmlFile);
         peopleBlockers.push(
           `${rel} renders reviewedBy / data-reviewed-by while people.json.reviewers is empty`,
         );
@@ -251,10 +255,10 @@ if (fs.existsSync(distDir)) {
 
 if (peopleBlockers.length > 0) {
   throw new Error(
-    `Refusing build (author bio / reviewer publishing check failed):\n  - ${peopleBlockers.join('\n  - ')}`,
+    `Refusing build (author page / reviewer publishing check failed):\n  - ${peopleBlockers.join('\n  - ')}`,
   );
 }
 
 console.log(
-  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}, authorBioReady=${bioReady}, signedReviewers=${people.reviewers.length}).`,
+  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}, authorPagePublished=${attemptingAuthorPagePublish && bioReady}, signedReviewers=${people.reviewers.length}).`,
 );

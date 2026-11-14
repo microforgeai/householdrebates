@@ -44,12 +44,21 @@ function parseRowRange(spec) {
 
 const rollout = JSON.parse(fs.readFileSync(path.join(srcDir, 'data/rollout.json'), 'utf8'));
 const urlMap = JSON.parse(fs.readFileSync(path.join(srcDir, 'data/url-map.json'), 'utf8'));
+const peoplePath = path.join(srcDir, 'data/people.json');
+const people = fs.existsSync(peoplePath) ? JSON.parse(fs.readFileSync(peoplePath, 'utf8')) : null;
+const authorBio = people?.['gurinder-singh']?.bio;
+const authorBioReady =
+  typeof authorBio === 'string' && authorBio.trim().length > 0 && !/<<|>>/.test(authorBio);
+const authorMdxPath = path.join(srcDir, 'content/pages/about-gurinder-singh.mdx');
+const authorMdxRaw = fs.existsSync(authorMdxPath) ? fs.readFileSync(authorMdxPath, 'utf8') : '';
+const authorMdxNoindex = /\nnoindex:\s*true\b/.test(authorMdxRaw);
 const rawEnabledRows = parseRowRange(rollout.enabledRows);
 const gatedApproved = new Set(rollout.gatedApproved ?? []);
 const enabledUrls = new Set();
 for (const row of urlMap) {
   if (!rawEnabledRows.has(row.row)) continue;
   if (row.gated && !gatedApproved.has(row.row) && !gatedApproved.has(row.url)) continue;
+  if (row.url === '/about/gurinder-singh/' && (!authorBioReady || authorMdxNoindex)) continue;
   enabledUrls.add(row.url);
 }
 

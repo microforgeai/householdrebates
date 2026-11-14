@@ -1,7 +1,7 @@
 ---
 import AuthorName from './AuthorName.astro';
 import { formatAuDate } from '../lib/dates';
-import { getSignedPageReviews } from '../lib/people';
+import { getSignedPageReviews, isAuthorBioReady } from '../lib/people';
 
 export interface Props {
   author: string;
@@ -12,11 +12,18 @@ export interface Props {
 }
 
 const { author, checkedOn, updatedOn, pathname, variant = 'victoria' } = Astro.props;
+const authorReady = isAuthorBioReady();
 const signedReviews = getSignedPageReviews(pathname);
 ---
 
 <div class="byline">
-  By <AuthorName name={author} currentPath={pathname} />, Agenor ·{' '}
+  {authorReady ? (
+    <>
+      By <AuthorName name={author} currentPath={pathname} />, Agenor ·{' '}
+    </>
+  ) : (
+    <>Published by Agenor Services Pty Ltd · </>
+  )}
   {variant === 'short' ? (
     <>Checked on {formatAuDate(checkedOn)} · Updated {formatAuDate(updatedOn)}</>
   ) : (

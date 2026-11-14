@@ -139,41 +139,60 @@ for (const htmlFile of htmlFiles) {
   }
 }
 
-// Prompt 32 Step 4: placeholder bio ⇔ noindex present on /about/gurinder-singh/ ⇔ not in sitemap-0.xml
+// Prompt 32 Step 4: while bio is unfilled/placeholder, about-gurinder-singh.mdx stays noindex,
+// is excluded from public dist/ output, and is absent from sitemap-0.xml.
 const peoplePath = path.join(siteRoot, 'src/data/people.json');
 const people = JSON.parse(fs.readFileSync(peoplePath, 'utf8'));
 const authorBio = people?.['gurinder-singh']?.bio ?? '';
 const bioIsPlaceholder =
   typeof authorBio !== 'string' || !authorBio.trim() || /<<|>>/.test(authorBio);
 
+const authorMdxPath = path.join(contentDir, 'pages/about-gurinder-singh.mdx');
+const authorMdxRaw = fs.readFileSync(authorMdxPath, 'utf8');
+const authorFmMatch = authorMdxRaw.match(/^---\n([\s\S]*?)\n---/);
+const authorFm = authorFmMatch ? YAML.parse(authorFmMatch[1]) : {};
+
 const authorHtmlPath = path.join(distDir, 'about/gurinder-singh/index.html');
 const sitemapPath = path.join(distDir, 'sitemap-0.xml');
 
-if (fs.existsSync(authorHtmlPath) && fs.existsSync(sitemapPath)) {
-  const authorHtml = fs.readFileSync(authorHtmlPath, 'utf8');
+if (fs.existsSync(sitemapPath)) {
   const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
-  const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml);
   const inSitemap = sitemapXml.includes('https://householdrebates.com.au/about/gurinder-singh/');
 
-  if (bioIsPlaceholder && !hasNoindex) {
-    throw new Error(
-      'dist/about/gurinder-singh/index.html must carry noindex while people.json["gurinder-singh"].bio is a placeholder',
-    );
-  }
-  if (!bioIsPlaceholder && hasNoindex) {
-    throw new Error(
-      'dist/about/gurinder-singh/index.html still carries noindex after people.json["gurinder-singh"].bio was supplied',
-    );
-  }
-  if (hasNoindex && inSitemap) {
-    throw new Error(
-      'dist/sitemap-0.xml must not include /about/gurinder-singh/ while the page carries noindex',
-    );
-  }
-  if (!hasNoindex && !inSitemap) {
-    throw new Error(
-      'dist/sitemap-0.xml must include /about/gurinder-singh/ once noindex is lifted',
-    );
+  if (bioIsPlaceholder) {
+    if (authorFm.noindex !== true) {
+      throw new Error(
+        'about-gurinder-singh.mdx must keep noindex: true while people.json["gurinder-singh"].bio is unfilled',
+      );
+    }
+    if (fs.existsSync(authorHtmlPath)) {
+      throw new Error(
+        'dist/about/gurinder-singh/index.html must not be emitted into public output while bio is unfilled',
+      );
+    }
+    if (inSitemap) {
+      throw new Error(
+        'dist/sitemap-0.xml must not include /about/gurinder-singh/ while bio is unfilled',
+      );
+    }
+  } else if (authorFm.noindex !== true) {
+    if (!fs.existsSync(authorHtmlPath)) {
+      throw new Error(
+        'dist/about/gurinder-singh/index.html must exist once bio is supplied and noindex is false',
+      );
+    }
+    const authorHtml = fs.readFileSync(authorHtmlPath, 'utf8');
+    const hasNoindex = /<meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml);
+    if (hasNoindex) {
+      throw new Error(
+        'dist/about/gurinder-singh/index.html still carries noindex after bio was supplied and noindex set to false',
+      );
+    }
+    if (!inSitemap) {
+      throw new Error(
+        'dist/sitemap-0.xml must include /about/gurinder-singh/ once bio is supplied and noindex is false',
+      );
+    }
   }
 }
 

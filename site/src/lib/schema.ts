@@ -221,16 +221,19 @@ export function buildJsonLdGraph(options: SchemaGraphOptions): Record<string, un
 
       if (ps.kind === 'guide') {
         const author = resolveAuthorProfile(peopleData);
-        const personNode: Record<string, unknown> = {
-          '@type': 'Person',
-          '@id': `${SITE.origin}/#person-gurinder-singh`,
-          name: author.name,
-          ...(author.role ? { jobTitle: author.role } : {}),
-          worksFor: { '@id': `${SITE.origin}/#publisher` },
-        };
+        let articleAuthorId = `${SITE.origin}/#publisher`;
+
         if (author.bioReady) {
-          personNode.url = `${SITE.origin}/about/gurinder-singh/`;
-          if (author.bio) personNode.description = author.bio;
+          articleAuthorId = `${SITE.origin}/#person-gurinder-singh`;
+          const personNode: Record<string, unknown> = {
+            '@type': 'Person',
+            '@id': articleAuthorId,
+            name: author.name,
+            url: `${SITE.origin}/about/gurinder-singh/`,
+            ...(author.role ? { jobTitle: author.role } : {}),
+            ...(author.bio ? { description: author.bio } : {}),
+            worksFor: { '@id': `${SITE.origin}/#publisher` },
+          };
           if (author.image) {
             personNode.image = author.image.startsWith('http')
               ? author.image
@@ -239,8 +242,8 @@ export function buildJsonLdGraph(options: SchemaGraphOptions): Record<string, un
           if (author.sameAs.length > 0) {
             personNode.sameAs = author.sameAs;
           }
+          graph.push(personNode);
         }
-        graph.push(personNode);
 
         graph.push({
           '@type': 'Article',
@@ -250,7 +253,7 @@ export function buildJsonLdGraph(options: SchemaGraphOptions): Record<string, un
           image: `${SITE.origin}/og-default.png`,
           ...(datePublished ? { datePublished } : {}),
           ...(dateModified ? { dateModified } : {}),
-          author: { '@id': `${SITE.origin}/#person-gurinder-singh` },
+          author: { '@id': articleAuthorId },
           publisher: { '@id': `${SITE.origin}/#publisher` },
           inLanguage: 'en-AU',
           mainEntityOfPage: { '@id': `${pageUrl}#webpage` },

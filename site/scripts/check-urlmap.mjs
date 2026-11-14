@@ -132,25 +132,13 @@ if (missingBuilt.length > 0) {
   throw new Error(`missing built URL(s) expected from rollout.json: ${missingBuilt.join(', ')}`);
 }
 
-// Row 73 (/about/gurinder-singh/) when enabled with placeholder bio: must exist on disk as noindex and carry its row links
+// Row 73 (/about/gurinder-singh/) when bio is not supplied: must stay out of public dist/ output
 if (enabledRowNums.has(73) && !authorBioReady) {
   const authorDistPath = path.join(distDir, 'about/gurinder-singh/index.html');
-  if (!fs.existsSync(authorDistPath)) {
-    throw new Error('missing built dist/about/gurinder-singh/index.html for enabled row 73');
-  }
-  const authorHtml = fs.readFileSync(authorDistPath, 'utf8');
-  if (!/meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(authorHtml)) {
-    throw new Error('/about/gurinder-singh/ must carry noindex while people.json bio is a placeholder');
-  }
-  const authorMainMatch = authorHtml.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i);
-  const authorRow = rowByUrl.get('/about/gurinder-singh/');
-  if (authorMainMatch && authorRow?.internalLinks?.length) {
-    const authorMainHrefs = extractHrefs(authorMainMatch[1]);
-    for (const reqTarget of authorRow.internalLinks) {
-      if (expectedUrls.has(reqTarget) && !authorMainHrefs.has(reqTarget)) {
-        throw new Error(`missing link on /about/gurinder-singh/ -> ${reqTarget}`);
-      }
-    }
+  if (fs.existsSync(authorDistPath)) {
+    throw new Error(
+      'dist/about/gurinder-singh/index.html must not be emitted into public output while people.json bio is unfilled',
+    );
   }
 }
 

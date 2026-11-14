@@ -416,6 +416,67 @@ li {
   font-size: var(--text-sm);
 }
 
+/* Rule-change email alerts sign-up island */
+.alert-signup__heading {
+  margin-top: 0;
+  margin-bottom: var(--space-2);
+}
+
+.alert-signup--checker {
+  margin-top: var(--space-6);
+  margin-bottom: 0;
+  background: var(--bg-subtle);
+}
+
+.alert-signup__intro {
+  margin-top: 0;
+  margin-bottom: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.alert-signup__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.alert-signup__consent-row {
+  align-items: flex-start;
+}
+
+.alert-signup__consent-row input[type="checkbox"] {
+  margin-top: 0.2rem;
+}
+
+.alert-signup__notice {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.alert-signup__form-error {
+  margin-bottom: var(--space-3);
+}
+
+.alert-signup__success {
+  margin: var(--space-3) 0 0;
+}
+
+.alert-signup__success p {
+  margin: 0;
+  font-weight: 600;
+}
+
+.alert-signup__privacy-note {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
 /* Interactive Eligibility Checker Cascade & Result Screen */
 .checker-island {
   margin-top: var(--space-4);
@@ -1064,6 +1125,7 @@ li {
   .checker-actions,
   .checker-step-nav,
   .checker-share-box,
+  .alert-signup,
   .faq-list,
   .related-links {
     display: none !important;

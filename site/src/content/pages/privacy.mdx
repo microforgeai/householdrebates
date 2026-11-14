@@ -9,8 +9,8 @@ mapRow: 5
 answer: "Because Household Rebates discloses enquiry details to named participating installers for a lead fee when our quote form is open, Agenor Services Pty Ltd (ABN 29 644 447 263) treats the Australian Privacy Principles (APPs) under the Privacy Act 1988 (Cth) as applying in full, and only discloses your personal information with your express prior consent. We do not use tracking cookies or third-party advertising pixels on this website."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
-updatedOn: 2026-11-13
-checkedOn: 2026-11-13
+updatedOn: 2026-11-14
+checkedOn: 2026-11-14
 sources:
   - oaic-trading
   - oaic-small-business
@@ -26,10 +26,11 @@ related:
   - how-quotes-work
   - terms
 legalReviewed: false
+alertsLegalReviewed: false
 ---
 
-<Callout type="caution" title="Draft pending legal review before quote form activation">
-  This Privacy Policy and APP 5 Collection Notice is our complete operational draft (`version: 2026-11-13-v1`). Our quote request form remains switched off until a qualified Australian privacy and consumer law practitioner reviews and signs off on this wording.
+<Callout type="caution" title="Draft pending legal review before form or email alert activation">
+  This Privacy Policy and APP 5 Collection Notice is our complete operational draft (`version: 2026-11-13-v1`, updated 14 November 2026 for rule-change email alerts). Both our quote request form and our rule-change email alert sign-up remain switched off until a qualified Australian privacy and consumer law practitioner reviews and signs off on this wording.
 </Callout>
 
 ## 1. Who we are
@@ -55,24 +56,39 @@ In accordance with the Essential Services Commission's rules under the VEU code 
 - Your express prior consent to be contacted by the named installer lasts for **3 months** from the date you submit the form, unless you withdraw it earlier.
 - **How to withdraw consent:** You can withdraw your consent at any time by replying to your confirmation email or emailing `privacy@householdrebates.com.au` with your email address or reference number (`HR-XXXXXX`). When you withdraw consent, we record your withdrawal timestamp and notify each installer who received your enquiry to cease contact immediately.
 
-## 4. Cookies, analytics, and server logs
+## 4. Email alerts (rule-change notifications)
+
+When our rule-change email alert sign-up is active and you choose to subscribe:
+
+- **Single purpose:** We collect your email address (together with your unticked consent snapshot, the page path you subscribed from, and temporary anti-abuse metadata) solely to email you when official Victorian or federal energy rebate rules change.
+- **Legal basis and double opt-in:** Processing is based on your express consent (`alerts-v1`) under the *Spam Act 2003* (Cth) (<SourceLink id="acma-spam" label="ACMA — Avoid sending spam" />). Submitting the form sends one confirmation email with a link valid for **72 hours**. No rule-change alert emails are sent unless you click that confirmation link, and unconfirmed sign-ups are deleted once the 72-hour window expires.
+- **Checker answers stay private:** If you subscribe from the Eligibility Checker result screen, the alert form sends only your email address and consent. Your checker answers stay in your browser and are never transmitted with the alert sign-up.
+- **No sharing with installers:** Alert subscriber addresses are stored in a dedicated database separate from quote enquiries and are never shared with participating installers, Victorian Energy Upgrades accredited providers, or commercial sponsors.
+- **Email service provider and overseas storage:** Transactional confirmation emails and rule-change alerts are sent for us by our configured email service provider named in the APP 5 collection notice directly above the sign-up button. Where our configured provider may store or process delivery data outside Australia, that overseas disclosure is stated in the collection notice before you submit the form.
+- **Unsubscribing:** Every alert email includes a one-step unsubscribe link and mail-client one-click unsubscribe support that take effect immediately, or you can reply to an email or write to `privacy@householdrebates.com.au` (processed promptly and always within 5 business days). When you unsubscribe or ask for erasure, we keep only a non-reversible keyed cryptographic hash (`HMAC-SHA256`) of your email address on a suppression list so your address cannot be re-added.
+
+## 5. Cookies, analytics, and server logs
 
 - **No tracking cookies:** We do not set analytics or advertising cookies in your browser, and we do not load third-party tracking scripts.
-- **Eligibility Checker:** Your answers in the Eligibility Checker stay in your browser (`sessionStorage` only if you proceed to the form on the same visit).
+- **Eligibility Checker:** Your answers in the Eligibility Checker stay in your browser (`sessionStorage` only if you proceed to the quote form on the same visit).
 - **Server logs and rate limiting:** Our web server records standard access logs (kept for 30 days) and a separate AI-referrer log that excludes IP addresses (kept for 180 days). When you submit a form, we store a one-way cryptographic hash (`HMAC-SHA256`) of your IP address solely to enforce anti-spam rate limits; your raw IP address is never stored in our database.
 
-## 5. Data storage, security, and retention periods
+## 6. Data storage, security, and retention periods
 
-All enquiry and consent records are stored in an access-restricted SQLite database on our Australian-managed server environment with encrypted daily backups (`age` encryption).
+All enquiry, alert, and consent records are stored in access-restricted SQLite databases on our Australian-managed server environment with encrypted daily backups (`age` encryption).
 
 | Record category | Retention period | Action at end of period |
 |---|---|---|
-| Personal contact details (name, email, phone, message) | 12 months from creation | Permanently nulled by our automated nightly purge job (`status = purged`) |
-| `ip_hash` and `user_agent` on enquiries | 30 days from creation | Nulled by our automated nightly purge job |
-| Consent audit record (version, SHA-256 hash, snapshot, scopes, timestamps) | 24 months after expiry or withdrawal | Deleted after the VEU audit window closes |
+| Quote enquiry contact details (name, email, phone, message) | 12 months from creation | Permanently nulled by our automated nightly purge job (`status = purged`) |
+| `ip_hash` and `user_agent` on enquiries and alert sign-ups | 30 days from creation | Nulled by our automated nightly purge jobs |
+| Quote consent audit record (version, SHA-256 hash, snapshot, scopes, timestamps) | 24 months after expiry or withdrawal | Deleted after the VEU audit window closes |
 | Delivery and invoicing metadata (installer ID, timestamp, fee) | 7 years | Retained for Australian taxation compliance (contains no personal contact details after purge) |
+| Confirmed email alert subscriber (`email`, `email_hash`, timestamps) | Until you unsubscribe or request erasure | Unsubscribe marks `status = unsubscribed` and adds `email_hash` to our suppression list; erasure nulls `email`, `ip_hash`, and `user_agent` |
+| Unconfirmed email alert sign-up (`pending` or `expired`) | 72 hours from sign-up | Deleted by our automated nightly alert purge job |
+| Email alert consent audit record (`alerts-v1` snapshot, SHA-256 hash, timestamps) | 24 months after unsubscribe | Deleted by our automated nightly alert purge job |
+| Email alert suppression list (`HMAC-SHA256` email hash only) | Indefinitely | Non-reversible hash retained permanently so unsubscribed or erased addresses are never emailed again |
 
-## 6. Access, correction, deletion, and complaints
+## 7. Access, correction, deletion, and complaints
 
 You may request access to, correction of, or erasure of your personal information held by us at any time by emailing `privacy@householdrebates.com.au`. We respond to all privacy requests within 30 days.
 

@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Confirmation Link Expired"
+  description="That email alert confirmation link has expired or has already been used. Return to our Victorian energy rebate guides to subscribe again."
+  pathname="/alerts/expired/"
+  noindex={true}
+>
+  <article class="prose-container">
+    <h1>Confirmation link expired</h1>
+    <p>
+      That confirmation link has expired or has already been used, so no rule-change alert emails will be sent to that address.
+    </p>
+    <p>
+      <a class="btn" href="/victoria/">Browse Victorian energy rebates</a>
+    </p>
+  </article>
+</BaseLayout>

@@ -166,9 +166,11 @@ const pageBase = z.object({
     })
     .optional(),
   leadForm: z.union([z.literal(false), z.enum(['rcac', 'hotwater', 'either'])]).default(false),
+  alertSignup: z.boolean().default(false),
   noindex: z.boolean().default(false),
   related: z.array(z.string()).default([]),
   legalReviewed: z.boolean().default(false),
+  alertsLegalReviewed: z.boolean().default(false),
 });
 
 const guides = defineCollection({

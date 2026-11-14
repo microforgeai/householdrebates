@@ -4,9 +4,10 @@ import { fileURLToPath } from 'node:url';
 import zlib from 'node:zlib';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const astroDir = path.resolve(__dirname, '../dist/_astro');
+const astroDir = path.resolve(__dirname, process.env.ASTRO_DIST_DIR || '../dist', '_astro');
 
 const MAX_ISLAND_GZIP_BYTES = 15_360; // 15 KB gzipped cap (solution-design §11)
+const MAX_ALERT_SIGNUP_GZIP_BYTES = 3_072; // 3 KB gzipped cap (Prompt 29b step 1)
 
 // Framework runtime vendor chunks shared across Preact/Astro islands (excluded from app logic budget)
 const VENDOR_PREFIXES = ['preact.', 'signals.', 'client.'];
@@ -18,6 +19,11 @@ const ISLAND_SPECS = [
   { name: 'HwSizeGuide', prefix: 'HwSizeGuide.' },
   { name: 'RunningCostsPicker', prefix: 'RunningCostsPicker.' },
   { name: 'LeadForm', prefix: 'LeadForm.' },
+  {
+    name: 'AlertSignup',
+    prefix: 'AlertSignupIsland.',
+    maxGzipBytes: MAX_ALERT_SIGNUP_GZIP_BYTES,
+  },
 ];
 
 if (!fs.existsSync(astroDir)) {
@@ -57,9 +63,14 @@ function collectAppChunks(entryFile) {
 const errors = [];
 const summaries = [];
 
+let checkedIslands = 0;
+
 for (const spec of ISLAND_SPECS) {
   const matches = allJsFiles.filter((f) => f.startsWith(spec.prefix));
   if (matches.length === 0) {
+    if (spec.optional) {
+      continue;
+    }
     errors.push(`${spec.name}: no built entry chunk matching ${spec.prefix}*.js in dist/_astro`);
     continue;
   }
@@ -68,6 +79,8 @@ for (const spec of ISLAND_SPECS) {
     continue;
   }
 
+  checkedIslands++;
+  const capBytes = spec.maxGzipBytes ?? MAX_ISLAND_GZIP_BYTES;
   const chunks = collectAppChunks(matches[0]);
   if (spec.requireShared && !chunks.some((c) => c.startsWith(spec.requireShared))) {
     const fallbackShared = allJsFiles.find((f) => f.startsWith(spec.requireShared));
@@ -84,15 +97,17 @@ for (const spec of ISLAND_SPECS) {
   const sumGz = perChunkGz.reduce((acc, item) => acc + item.gz, 0);
   const concatGz = zlib.gzipSync(Buffer.concat(buffers), { level: 9 }).length;
 
-  if (sumGz >= MAX_ISLAND_GZIP_BYTES || concatGz >= MAX_ISLAND_GZIP_BYTES) {
+  if (sumGz >= capBytes || concatGz >= capBytes) {
     errors.push(
-      `${spec.name} exceeds ${MAX_ISLAND_GZIP_BYTES} B gzipped cap: combined chunks sum=${sumGz} B, concat=${concatGz} B (${perChunkGz.map((c) => `${c.short}=${c.gz}B`).join(' + ')})`,
+      `${spec.name} exceeds ${capBytes} B gzipped cap: combined chunks sum=${sumGz} B, concat=${concatGz} B (${perChunkGz.map((c) => `${c.short}=${c.gz}B`).join(' + ')})`,
     );
   }
 
   if (spec.name === 'Checker' || spec.name === 'PostcodeLookup') {
     const parts = perChunkGz.map((c) => `${c.short} ${c.gz} B`).join(' + ');
-    summaries.push(`${spec.name}+shared ${sumGz}/${MAX_ISLAND_GZIP_BYTES} B gz (concat ${concatGz} B; ${parts})`);
+    summaries.push(`${spec.name}+shared ${sumGz}/${capBytes} B gz (concat ${concatGz} B; ${parts})`);
+  } else if (spec.name === 'AlertSignup') {
+    summaries.push(`${spec.name} ${sumGz}/${capBytes} B gz`);
   }
 }
 
@@ -105,5 +120,5 @@ if (errors.length > 0) {
 }
 
 console.log(
-  `check-bundles: ${summaries.join(', ')}; ${ISLAND_SPECS.length}/${ISLAND_SPECS.length} islands < ${MAX_ISLAND_GZIP_BYTES} B`,
+  `check-bundles: ${summaries.join(', ')}; ${checkedIslands}/${checkedIslands} built islands within gzipped caps`,
 );

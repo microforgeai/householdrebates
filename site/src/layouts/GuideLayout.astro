@@ -5,6 +5,7 @@ import AnswerBlock from '../components/AnswerBlock.astro';
 import AnswerText from '../components/AnswerText.astro';
 import HeroBlock, { type HeroValue } from '../components/HeroBlock.astro';
 import RuleStatusNotice from '../components/RuleStatusNotice.astro';
+import AlertSignup from '../components/AlertSignup.astro';
 import Toc, { type HeadingItem } from '../components/Toc.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
@@ -35,6 +36,7 @@ export interface Props {
       faq: (string | { id: string })[];
       howTo?: { name: string; steps: { name: string; text: string }[] };
       leadForm: false | 'rcac' | 'hotwater' | 'either';
+      alertSignup?: boolean;
       noindex: boolean;
       related: string[];
       ruleStatus?: 'election-watch';
@@ -84,6 +86,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         By {d.author}, Agenor · Figures checked on {formatAuDate(d.checkedOn)} against official Victorian sources · Updated{' '}
         {formatAuDate(d.updatedOn)}
       </div>
+      {d.alertSignup && <AlertSignup placement="guide" />}
 
       {d.howTo && (
         <section aria-labelledby="howto-heading">

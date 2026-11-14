@@ -27,9 +27,15 @@ Displayed next to an **unticked** checkbox (`required`, never pre-selected). Exa
 
 ## 3. APP 5 Collection Notice Draft (Displayed Directly Above Submit Button)
 
-Because Agenor Services Pty Ltd treats itself as covered by the Australian Privacy Principles (APPs) under *Privacy Act 1988* (Cth) s 6D(4)(c), the sign-up component displays this APP 5 collection notice immediately above the submit button (with `<<...>>` placeholders resolved from build/runtime configuration in Prompt 29b once the email provider and data residency are selected; build fails if any placeholder is unresolved):
+Because Agenor Services Pty Ltd treats itself as covered by the Australian Privacy Principles (APPs) under *Privacy Act 1988* (Cth) s 6D(4)(c), the sign-up component (`site/src/components/AlertSignupIsland.astro`) displays this APP 5 collection notice immediately above the submit button. Placeholders resolve at build time via `resolveAlertsApp5Notice` (`site/src/lib/alerts.ts`) from `SITE.publisher.abn`, `PUBLIC_ALERTS_PROVIDER`, and `PUBLIC_ALERTS_OVERSEAS_NOTE` (use `"none"` if the chosen provider stores all data in Australia, or `"; it may store data outside Australia"` if overseas processing applies). Both environment variables are required before `PUBLIC_ALERTS_ENABLED=true`, and the build fails if either is unset or contains unresolved `<<...>>` placeholders:
 
 > Household Rebates (Agenor Services Pty Ltd, ABN `<<ABN>>`) collects your email address only to send rule-change alerts you've asked for. If you don't give it, we can't send them. We don't share it with installers or anyone else, except our email service provider, `<<provider>>`, which sends the emails for us`<<; it may store data outside Australia>>`. Our [privacy policy](/privacy/) explains how to access or correct your details and how to complain. We're not a government website.
+
+On the Eligibility Checker result screen (`/victoria/eligibility-checker/`), the component also displays directly beneath the form:
+
+> This only signs you up for rule-change emails. Your checker answers aren't sent.
+
+Approved placements (per Guri's Prompt 29b decision): the Eligibility Checker result screen (below result lines and CTAs), `/victoria/gas-to-electric-hot-water-2027/` (after the answer block and election-watch notice), and `/victoria/battery-rebate/` (added in Prompt 30). There is no site-wide footer placement, no pop-up, no interstitial, and no pre-ticked checkbox.
 
 ---
 
@@ -64,10 +70,40 @@ Individual APP 12 access and APP erasure requests are served via `npm run -w api
 
 ---
 
-## 6. Questions for Legal Sign-Off
+## 6. Privacy Policy Section (`site/src/content/pages/privacy.mdx`)
+
+Section 4 (*Email alerts (rule-change notifications)*) and the Section 6 retention schedule in `privacy.mdx` document:
+- Single purpose (rule-change update emails only) and express consent legal basis (`alerts-v1`) + `72`-hour double opt-in confirmation window;
+- Checker privacy separation (checker answers stay in `sessionStorage` in the browser and are never sent with the alert sign-up);
+- Strict non-disclosure to installers, VEU accredited providers, or commercial sponsors;
+- Named email service provider and overseas data-storage disclosure (matching the APP 5 collection notice);
+- Immediate link / RFC 8058 one-click unsubscription + `<= 5` business-day email unsubscription and permanent keyed `HMAC-SHA256` suppression hash;
+- Retention periods (`confirmed` until unsubscribe/erasure; `72` h unconfirmed purge; `30` d `ip_hash` / `user_agent` nulling; `24` m post-unsubscribe consent retention; indefinite suppression hash).
+
+Both `legalReviewed` and `alertsLegalReviewed` in `privacy.mdx` remain `false` until legal sign-off.
+
+---
+
+## 7. Questions for Legal Sign-Off
 
 1. Does the `alerts-v1` checkbox wording + double opt-in flow satisfy express consent under the *Spam Act 2003* (Cth) and *Spam Regulations 2021*?
-2. Does the APP 5 collection notice draft (once `<<provider>>` and any overseas disclosure clause under APP 8 / APP 5.2(i)–(j) are populated in Prompt 29b) cover all required matters under APP 5.2?
-3. Are the retention periods in §5 appropriate under APP 11.2 and *Spam Act* consent-evidence obligations (in particular, 24 months post-unsubscribe for `alert_consents` and indefinite retention of keyed HMAC hashes in `alert_suppression`)?
+2. Does the APP 5 collection notice draft (once `PUBLIC_ALERTS_PROVIDER` and `PUBLIC_ALERTS_OVERSEAS_NOTE` under APP 8 / APP 5.2(i)–(j) are populated) cover all required matters under APP 5.2?
+3. Are the retention periods in §5 and `privacy.mdx` §6 appropriate under APP 11.2 and *Spam Act* consent-evidence obligations (in particular, 24 months post-unsubscribe for `alert_consents` and indefinite retention of keyed HMAC hashes in `alert_suppression`)?
 
-**Unlocking Go-Live After Review:** Once legal review comments are incorporated, Gurinder Singh records sign-off in `ALERTS_REVIEWED_BY` (e.g. `Gurinder Singh — reviewed with <firm> YYYY-MM-DD`). While `ALERTS_REVIEWED_BY` is unset, the API server refuses to start with `ALERTS_ENABLED=true` and `alerts:send --confirm` refuses all live sends.
+---
+
+## 8. Two-Stage Go-Live Gate & Checklist (STOP 1 vs STOP 2)
+
+### STOP 1 — Site deploy with the form hidden (`PUBLIC_ALERTS_ENABLED=false`)
+- Requires Guri's explicit **yes** for site deployment (`./ops/deploy-site.sh` with `PUBLIC_LEADS_ENABLED=false` and `PUBLIC_ALERTS_ENABLED=false`).
+- `AlertSignup` emits zero HTML or JS into the deployed pages; the three `noindex` utility pages (`/alerts/confirmed/`, `/alerts/expired/`, `/alerts/unsubscribed/`) are excluded from `sitemap-0.xml` and `llms.txt`.
+
+### STOP 2 — Going live (separate explicit `yes, alerts live` from Guri — never bundled with STOP 1)
+All of the following must be true before `PUBLIC_ALERTS_ENABLED=true`:
+1. **Lawyer sign-off recorded:** Qualified Australian legal review completed on the `alerts-v1` consent wording, APP 5 collection notice, `privacy.mdx` Email alerts section (`legalReviewed: true` and `alertsLegalReviewed: true`, plus `terms.mdx` `legalReviewed: true`), and email templates; Gurinder Singh sets `ALERTS_REVIEWED_BY` on the API.
+2. **Post-election re-check completed:** `site/src/data/rule-status.json` `electionWatch.status` updated from `"pending"` after the post-election verification pass (`check-legal.mjs` blocks `PUBLIC_ALERTS_ENABLED=true` while `status === "pending"`).
+3. **Provider & data-residency configured:** `PUBLIC_ALERTS_PROVIDER` and `PUBLIC_ALERTS_OVERSEAS_NOTE` set for the site build, and matching `ALERTS_MAIL_TRANSPORT`, `ALERTS_FROM`, and `ALERTS_SENDER_*` values configured in `/etc/householdrebates/api.env`.
+4. **API deployed and verified (its own server STOP):** Prompt 29a's `api/` deployed with `ALERTS_ENABLED=true` and `ALERTS_SEND_ENABLED=false`.
+5. **End-to-end live test by Guri:** Guri subscribes, confirms within TTL, and unsubscribes using his own email address, verifying `/alerts/confirmed/`, `/alerts/unsubscribed/`, and permanent suppression.
+6. **Site rebuilt and deployed:** Only after steps 1–5 pass and Guri replies **`yes, alerts live`**, rebuild with `PUBLIC_ALERTS_ENABLED=true` (`npm run check` passes `check-legal.mjs`) and deploy.
+7. **Per-send approval gate:** Every real rule-change broadcast requires its own separate approval — run `alerts:draft` + dry-run test send first, show Guri the draft text and its SHA-256 digest, wait for Guri to reply **`yes, send <sha256>`**, and only then run `ALERTS_SEND_ENABLED=true npm run -w api alerts:send -- --draft <path> --confirm <sha256>`.

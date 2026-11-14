@@ -1,0 +1,26 @@
+[
+  {
+    "id": "vic-election-2026",
+    "date": "2026-11-28",
+    "dateLabel": "28 Nov 2026",
+    "label": "Victorian election result"
+  },
+  {
+    "id": "fed-battery-2027",
+    "date": "2027-01-01",
+    "dateLabel": "1 Jan 2027",
+    "label": "federal battery discount change"
+  },
+  {
+    "id": "vic-gas-hw-2027",
+    "date": "2027-03-01",
+    "dateLabel": "1 Mar 2027",
+    "label": "gas hot water replacement rule"
+  },
+  {
+    "id": "vic-solar-veu-2027",
+    "date": "2027-07-01",
+    "dateLabel": "1 Jul 2027",
+    "label": "solar moving into VEU"
+  }
+]

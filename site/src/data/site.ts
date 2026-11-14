@@ -16,6 +16,7 @@ export const SITE = {
   },
   flags: {
     leadsEnabled: process.env.PUBLIC_LEADS_ENABLED === 'true',
+    alertsEnabled: process.env.PUBLIC_ALERTS_ENABLED === 'true',
     solarSectionEnabled: process.env.SOLAR_SECTION_ENABLED === 'true',
     maxFigureAgeDays: Number(process.env.MAX_FIGURE_AGE_DAYS || 45),
   },

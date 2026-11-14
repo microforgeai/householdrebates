@@ -1,0 +1,12 @@
+---
+import AlertSignupIsland from './AlertSignupIsland.astro';
+
+export interface Props {
+  placement: 'checker' | 'guide';
+}
+
+const { placement } = Astro.props;
+const alertsEnabled = process.env.PUBLIC_ALERTS_ENABLED === 'true';
+---
+
+{alertsEnabled && <AlertSignupIsland placement={placement} />}

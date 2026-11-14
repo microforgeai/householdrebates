@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import AlertSignup from './AlertSignup.astro';
 import Checker from './Checker.astro';
 import type { CheckerBootstrapPayload } from './CheckerApp';
 import { assertFigureNotStale } from '../lib/dates';
@@ -156,4 +157,9 @@ const bootstrapPayload: CheckerBootstrapPayload = {
   />
 
   <Checker />
+  {process.env.PUBLIC_ALERTS_ENABLED === 'true' && (
+    <div data-checker-alert-mount hidden>
+      <AlertSignup placement="checker" />
+    </div>
+  )}
 </section>

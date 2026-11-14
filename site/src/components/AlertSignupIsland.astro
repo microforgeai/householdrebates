@@ -1,0 +1,145 @@
+---
+import { ALERTS_CONSENT_TEMPLATES, ALERTS_CONSENT_VERSION_V1 } from '../data/consent/alerts-v1';
+import {
+  formatAlertTopicsIntro,
+  getUpcomingAlertTopics,
+  resolveAlertsApp5Notice,
+} from '../lib/alerts';
+
+export interface Props {
+  placement: 'checker' | 'guide';
+}
+
+const { placement } = Astro.props;
+const prefix = `alert-signup-${placement}`;
+const HeadingTag = placement === 'checker' ? 'h3' : 'h2';
+
+const upcomingTopics = getUpcomingAlertTopics();
+const topicsIntro = formatAlertTopicsIntro(upcomingTopics);
+const notice = resolveAlertsApp5Notice(process.env);
+const consentText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V1];
+---
+
+<section
+  class={`form-card alert-signup alert-signup--${placement}`}
+  data-alert-signup
+  data-alert-placement={placement}
+  aria-labelledby={`${prefix}-heading`}
+>
+  <HeadingTag id={`${prefix}-heading`} class="alert-signup__heading">
+    Get email updates when rules change
+  </HeadingTag>
+  <p class="alert-signup__intro" data-alert-topics-intro>
+    {topicsIntro}
+  </p>
+
+  <form
+    action="/api/alerts/subscribe"
+    method="POST"
+    data-alert-form
+    novalidate
+  >
+    <input
+      type="hidden"
+      name="consentVersion"
+      value={ALERTS_CONSENT_VERSION_V1}
+      data-alert-consent-version
+    />
+    <input
+      type="hidden"
+      name="formToken"
+      value=""
+      data-alert-form-token
+    />
+
+    <div class="alert-signup__hp" aria-hidden="true">
+      <label for={`${prefix}-website`}>Website (leave blank)</label>
+      <input
+        type="text"
+        id={`${prefix}-website`}
+        name="website"
+        tabindex="-1"
+        autocomplete="off"
+        data-alert-website
+      />
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for={`${prefix}-email`}>
+        Email address *
+      </label>
+      <input
+        id={`${prefix}-email`}
+        name="email"
+        type="email"
+        maxlength="254"
+        autocomplete="email"
+        aria-describedby={`${prefix}-email-error`}
+        required
+        data-alert-email
+      />
+      <p
+        id={`${prefix}-email-error`}
+        class="field-error"
+        data-alert-email-error
+        hidden
+      ></p>
+    </div>
+
+    <div class="field-group">
+      <label class="option-row alert-signup__consent-row" for={`${prefix}-consent`}>
+        <input
+          type="checkbox"
+          id={`${prefix}-consent`}
+          name="consent"
+          value="true"
+          aria-describedby={`${prefix}-consent-error`}
+          required
+          data-alert-consent
+        />
+        <span data-alert-consent-text>{consentText}</span>
+      </label>
+      <p
+        id={`${prefix}-consent-error`}
+        class="field-error"
+        data-alert-consent-error
+        hidden
+      ></p>
+    </div>
+
+    <p class="consent-box alert-signup__notice" data-alert-collection-notice>
+      {notice.beforeLink}
+      <a href={notice.linkHref}>{notice.linkLabel}</a>
+      {notice.afterLink}
+    </p>
+
+    <p
+      class="field-error alert-signup__form-error"
+      role="alert"
+      data-alert-form-error
+      hidden
+    ></p>
+
+    <button type="submit" class="btn" data-alert-submit>
+      Email me rule-change updates
+    </button>
+  </form>
+
+  <div
+    class="callout callout--info alert-signup__success"
+    role="status"
+    tabindex="-1"
+    data-alert-success
+    hidden
+  >
+    <p>Check your inbox to confirm. Nothing is sent until you click the link.</p>
+  </div>
+
+  {placement === 'checker' && (
+    <p class="alert-signup__privacy-note" data-alert-checker-note>
+      This only signs you up for rule-change emails. Your checker answers aren't sent.
+    </p>
+  )}
+</section>
+
+<script src="./alert-signup.client.ts"></script>

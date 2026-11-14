@@ -1,4 +1,5 @@
 import { SITE } from '../data/site';
+import { renderFaqAnswerPlainText } from './faq-markdown';
 import { canonicalUrl } from './urls';
 
 export interface BreadcrumbItem {
@@ -80,7 +81,7 @@ export function buildJsonLdGraph(options: SchemaGraphOptions): Record<string, un
         name: f.question,
         acceptedAnswer: {
           '@type': 'Answer',
-          text: f.answer,
+          text: renderFaqAnswerPlainText(f.answer),
         },
       })),
     });

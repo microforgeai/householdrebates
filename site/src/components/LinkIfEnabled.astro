@@ -9,8 +9,10 @@ export interface Props {
 const { href } = Astro.props;
 const [basePath, hash] = href.split('#');
 const cleanBase = ensureTrailingSlash(basePath);
+const currentPath = ensureTrailingSlash(Astro.url.pathname);
 const fullHref = hash ? `${cleanBase}#${hash}` : cleanBase;
-const enabled = isUrlEnabled(cleanBase);
+const isSelfWithoutHash = !hash && cleanBase === currentPath;
+const enabled = isUrlEnabled(cleanBase) && !isSelfWithoutHash;
 ---
 
 {enabled ? <a href={fullHref}><slot /></a> : <slot />}

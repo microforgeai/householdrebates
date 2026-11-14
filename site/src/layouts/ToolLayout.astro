@@ -15,12 +15,14 @@ import Faq from '../components/Faq.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
+import { ensureTrailingSlash } from '../lib/urls';
 import type { BreadcrumbItem } from '../lib/schema';
 
 export interface Props {
   entry: {
     data: {
       title: string;
+      h1?: string;
       description: string;
       slug: string;
       answer: string;
@@ -53,10 +55,11 @@ const faqEntries = await Promise.all(
   }),
 );
 const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
+const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
 ---
 
 <BaseLayout
-  title={`${d.title} | Household Rebates`}
+  title={d.title}
   description={d.description}
   pathname={pathname}
   noindex={d.noindex}
@@ -66,7 +69,7 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
 >
   <Breadcrumbs items={breadcrumbs} />
   <article class="prose-container">
-    <h1>{d.title}</h1>
+    <h1>{d.h1 ?? d.title}</h1>
     <AnswerBlock>
       <AnswerText text={d.answer} />
       <HeroBlock hero={d.hero} />
@@ -89,7 +92,7 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
     {typeof d.leadForm === 'string' ? (
       <LeadForm activity={d.leadForm} />
     ) : (
-      d.slug !== 'eligibility-checker' && (
+      !isCheckerPage && (
         <section class="form-card" aria-labelledby="tool-checker-cta">
           <h2 id="tool-checker-cta">Check your household eligibility</h2>
           <p>
@@ -100,7 +103,7 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
       )
     )}
 
-    <Faq items={validFaqs} />
+    <Faq items={validFaqs} pathname={pathname} />
     <SourceList ids={d.sources} />
     <RelatedLinks pathname={pathname} slugs={d.related} />
   </article>

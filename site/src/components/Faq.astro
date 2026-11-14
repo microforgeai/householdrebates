@@ -1,4 +1,6 @@
 ---
+import { renderFaqAnswerHtml } from '../lib/faq-markdown';
+
 export interface FaqItem {
   question: string;
   answer: string;
@@ -7,9 +9,10 @@ export interface FaqItem {
 export interface Props {
   items: FaqItem[];
   heading?: string;
+  pathname?: string;
 }
 
-const { items, heading = 'Frequently asked questions' } = Astro.props;
+const { items, heading = 'Frequently asked questions', pathname = Astro.url.pathname } = Astro.props;
 ---
 
 {items.length > 0 && (
@@ -18,7 +21,7 @@ const { items, heading = 'Frequently asked questions' } = Astro.props;
     {items.map((item) => (
       <div class="faq-item">
         <h3>{item.question}</h3>
-        <p>{item.answer}</p>
+        <p set:html={renderFaqAnswerHtml(item.answer, pathname)} />
       </div>
     ))}
   </section>

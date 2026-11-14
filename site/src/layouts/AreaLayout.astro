@@ -12,7 +12,7 @@ import LeadForm from '../components/LeadForm.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
-import { entryToPathname } from '../lib/urls';
+import { entryToPathname, ensureTrailingSlash } from '../lib/urls';
 import { getEnabledUrls } from '../lib/rollout';
 import type { BreadcrumbItem } from '../lib/schema';
 import postcodesJson from '../data/postcodes.json';
@@ -21,6 +21,7 @@ export interface Props {
   entry: {
     data: {
       title: string;
+      h1?: string;
       description: string;
       slug: string;
       answer: string;
@@ -166,10 +167,11 @@ const contextSubLabel =
     : d.councils && d.councils.length > 0
       ? d.councils.join(', ')
       : '';
+const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
 ---
 
 <BaseLayout
-  title={`${d.title} | Household Rebates`}
+  title={d.title}
   description={d.description}
   pathname={pathname}
   noindex={d.noindex}
@@ -180,7 +182,7 @@ const contextSubLabel =
   <Breadcrumbs items={breadcrumbs} />
   <div class={hasToc ? 'page-grid page-grid--with-toc' : 'page-grid'}>
     <article class="prose-container">
-      <h1>{d.title}</h1>
+      <h1>{d.h1 ?? d.title}</h1>
       <AnswerBlock>
         <AnswerText text={d.answer} />
         <HeroBlock hero={d.hero} />
@@ -326,20 +328,22 @@ const contextSubLabel =
         )}
       </section>
 
-      <Faq items={validFaqs} />
+      <Faq items={validFaqs} pathname={pathname} />
 
       {d.leadForm !== false && coveringInstallers.length > 0 ? (
         <LeadForm activity={d.leadForm} areaSlug={d.slug} />
       ) : d.leadForm !== false ? (
         <LeadForm activity="either" areaSlug={d.slug} />
       ) : (
-        <section class="form-card" aria-labelledby="area-checker-cta">
-          <h2 id="area-checker-cta">Check your {d.areaName} upgrade scenario</h2>
-          <p>
-            Enter your postcode and existing appliances in our Victoria Eligibility Checker to see which VEU scenarios and co-payments apply.
-          </p>
-          <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
-        </section>
+        !isCheckerPage && (
+          <section class="form-card" aria-labelledby="area-checker-cta">
+            <h2 id="area-checker-cta">Check your {d.areaName} upgrade scenario</h2>
+            <p>
+              Enter your postcode and existing appliances in our Victoria Eligibility Checker to see which VEU scenarios and co-payments apply.
+            </p>
+            <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
+          </section>
+        )
       )}
 
       <SourceList ids={d.sources} />

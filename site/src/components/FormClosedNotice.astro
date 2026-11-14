@@ -1,4 +1,8 @@
 ---
+import { ensureTrailingSlash } from '../lib/urls';
+
+const currentPath = ensureTrailingSlash(Astro.url.pathname);
+const isCheckerPage = currentPath === '/victoria/eligibility-checker/';
 ---
 
 <section class="form-card" id="quote-form" aria-labelledby="form-closed-heading">
@@ -26,8 +30,10 @@
       </a>
     </li>
   </ul>
-  <p>
-    Not sure which scenario applies to your home? Try our{' '}
-    <a href="/victoria/eligibility-checker/">Victoria VEU Eligibility Checker</a> first.
-  </p>
+  {!isCheckerPage && (
+    <p>
+      Not sure which scenario applies to your home? Try our{' '}
+      <a href="/victoria/eligibility-checker/">Victoria VEU Eligibility Checker</a> first.
+    </p>
+  )}
 </section>

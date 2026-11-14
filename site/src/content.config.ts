@@ -1,6 +1,7 @@
 import { defineCollection, reference } from 'astro:content';
 import { glob, file } from 'astro/loaders';
 import { z } from 'astro/zod';
+import { validateFaqAnswerMarkdown } from './lib/faq-markdown';
 
 export const State = z.enum(['vic', 'nsw', 'qld', 'sa', 'wa', 'tas', 'act', 'nt', 'national']);
 export const Section = z.enum(['rebates', 'areas', 'tools', 'trust', 'solar-battery']);
@@ -130,7 +131,8 @@ export const HeroConfig = z.union([
 
 const pageBase = z.object({
   title: z.string().max(60),
-  description: z.string().min(70).max(160),
+  h1: z.string().min(1).optional(),
+  description: z.string().min(70).max(155),
   state: State,
   section: Section,
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -225,7 +227,19 @@ const faqs = defineCollection({
   loader: glob({ pattern: '**/*.yaml', base: './src/content/faqs' }),
   schema: z.object({
     question: z.string(),
-    answer: z.string(),
+    answer: z.string().refine(
+      (val) => {
+        try {
+          return validateFaqAnswerMarkdown(val);
+        } catch {
+          return false;
+        }
+      },
+      {
+        message:
+          'FAQ answer must be plain text with optional [anchor](/internal-path/) links only (no HTML, no images, no dollar amounts).',
+      },
+    ),
     pages: z.array(z.string()),
     state: State,
     checkedOn: z.coerce.date(),

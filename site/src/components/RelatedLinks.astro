@@ -1,6 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
-import { entryToPathname, resolveSlugToPath } from '../lib/urls';
+import { entryToPathname, ensureTrailingSlash, resolveSlugToPath } from '../lib/urls';
 import { getEnabledUrls, getMapRowByUrl } from '../lib/rollout';
 
 export interface Props {
@@ -9,6 +9,7 @@ export interface Props {
 }
 
 const { pathname, slugs = [] } = Astro.props;
+const currentPath = ensureTrailingSlash(pathname || Astro.url.pathname);
 const enabledUrls = getEnabledUrls();
 
 const [guides, areas, pages] = await Promise.all([
@@ -40,15 +41,15 @@ const targetUrls: string[] = [];
 const seen = new Set<string>();
 
 const addUrl = (u: string) => {
-  if (!u || u === '*' || u === pathname) return;
+  if (!u || u === '*' || u === currentPath) return;
   if (!enabledUrls.has(u)) return;
   if (seen.has(u)) return;
   seen.add(u);
   targetUrls.push(u);
 };
 
-if (pathname) {
-  const row = getMapRowByUrl(pathname);
+if (currentPath) {
+  const row = getMapRowByUrl(currentPath);
   if (row) {
     for (const u of row.internalLinks) {
       addUrl(u);

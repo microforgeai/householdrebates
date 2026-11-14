@@ -84,7 +84,7 @@ for (const file of walkMdx(contentDir)) {
   if (!enabledUrls.has(url)) continue;
   entries.push({
     url,
-    title: fm.title,
+    title: fm.h1 ?? fm.title,
     description: fm.description,
     navGroup: fm.navGroup,
     mapRow: fm.mapRow ?? 999,

@@ -74,10 +74,10 @@ for (const file of files) {
       }
       if (
         typeof fm.description === 'string' &&
-        (fm.description.length < 70 || fm.description.length > 160)
+        (fm.description.length < 70 || fm.description.length > 155)
       ) {
         throw new Error(
-          `${rel}: description must be 70–160 chars (got ${fm.description.length}): "${fm.description}"`,
+          `${rel}: description must be 70–155 chars (got ${fm.description.length}): "${fm.description}"`,
         );
       }
     }

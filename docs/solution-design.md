@@ -497,8 +497,9 @@ Other data files under the same freshness rule: `src/data/vic-veu-postcodes.json
 
 ```ts
 const pageBase = z.object({
-  title: z.string().max(60),
-  description: z.string().min(70).max(160),
+  title: z.string().max(60),                   // bare title (no "Household Rebates"); SeoHead appends " | Household Rebates" when <= 60 chars
+  h1: z.string().max(90).optional(),           // optional H1 override when frontmatter title is shortened for SERP width (prompt 26)
+  description: z.string().min(70).max(155),    // unique across the site, 70–155 chars (prompt 26)
   state: State,
   section: Section,
   slug: z.string().regex(/^[a-z0-9-]+$/),
@@ -543,7 +544,7 @@ Area content must be local and sourced: council name(s) and any council energy o
 ```ts
 const faqs = z.object({
   question: z.string(),
-  answer: z.string(),          // no $ amounts — link to the guide instead
+  answer: z.string(),          // restricted Markdown: plain text + [anchor](/path/) internal links only (no HTML, no images, no $ amounts); rendered as sanitised HTML visibly and plain anchor text in FAQPage JSON-LD (prompt 26)
   pages: z.array(z.string()),  // slugs where it's shown
   state: State,
   checkedOn: z.coerce.date(),
@@ -1126,8 +1127,9 @@ Access: a dedicated `deploy` user, SSH key only, owner of the two release trees,
 
 ### 10.1 On-page
 
-- Title ≤ 60 chars, e.g. `Air Conditioner Rebate Victoria: 2026 Guide | Household Rebates`. No dollar amounts in titles or meta descriptions.
-- Meta description 70–160 chars.
+- Title ≤ 60 chars rendered (`{title} | Household Rebates` when ≤ 60 chars, otherwise `{title}`; frontmatter `title` never contains `"Household Rebates"`). No dollar amounts in titles or meta descriptions (`check-seo`).
+- Meta description 70–155 chars and unique across every page (`check-seo`).
+- Visible text inside `<main>` has no raw internal URL paths, no doubled 1–3 word phrases or doubled `"including GST"` / `"at least"` qualifiers within 120 chars, no self-links (except `#fragment` anchors), and no placeholder tokens (`check-text`).
 - Canonical: absolute, https, apex, trailing slash: `<link rel="canonical" href="https://householdrebates.com.au/victoria/air-conditioner-rebate/">`. Utility pages `noindex,follow`.
 - Open Graph and Twitter tags from the same data; one default OG image.
 - `<html lang="en-AU">`; dates like "13 Nov 2026".

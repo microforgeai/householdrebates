@@ -1,5 +1,6 @@
 ---
 import { SITE } from '../../data/site';
+import { formatRenderedTitle } from '../../lib/seo';
 import { canonicalUrl } from '../../lib/urls';
 
 export interface Props {
@@ -10,13 +11,14 @@ export interface Props {
 }
 
 const { title, description, pathname, noindex = false } = Astro.props;
+const renderedTitle = formatRenderedTitle(title);
 const canonical = canonicalUrl(pathname);
 const releaseMeta = process.env.RELEASE_ID || 'local-dev';
 ---
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>{title}</title>
+<title>{renderedTitle}</title>
 <meta name="description" content={description} />
 <link rel="canonical" href={canonical} />
 <meta name="robots" content={noindex ? 'noindex,follow' : 'index,follow'} />
@@ -26,7 +28,7 @@ const releaseMeta = process.env.RELEASE_ID || 'local-dev';
 <!-- Open Graph -->
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content={SITE.name} />
-<meta property="og:title" content={title} />
+<meta property="og:title" content={renderedTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content="en_AU" />
@@ -34,6 +36,6 @@ const releaseMeta = process.env.RELEASE_ID || 'local-dev';
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content={title} />
+<meta name="twitter:title" content={renderedTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={`${SITE.origin}/og-default.png`} />

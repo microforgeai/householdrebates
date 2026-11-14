@@ -1,6 +1,6 @@
-question: "What minimum co-payment applies to split and multi-split upgrades from 30 September 2026?"
-answer: "Under VEU Specifications version 25.0 (Part 6), the mandatory minimum customer co-payment depends on whether you install individual single split systems or a multi-split system, and whether total rated cooling capacity is below 10 kW or 10 kW and above. Check the exact GST-inclusive co-payment table on /victoria/ducted-gas-to-split-systems/."
+question: What minimum co-payment applies to split and multi-split upgrades from 30 September 2026?
+answer: Under VEU Specifications version 25.0 (Part 6), the mandatory minimum customer co-payment depends on whether you install individual single split systems or a multi-split system, and whether total rated cooling capacity is below 10 kW or 10 kW and above. Check the GST-inclusive co-payment table above for each tier.
 pages:
   - ducted-gas-to-split-systems
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

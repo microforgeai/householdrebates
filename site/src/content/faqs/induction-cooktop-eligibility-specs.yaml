@@ -1,6 +1,6 @@
-question: "Which induction cooktops qualify for the Victorian Energy Upgrades discount?"
-answer: "To be eligible on Energy Victoria's current rules, the induction cooktop must replace an existing gas cooktop in a home built at least two years ago, have not been previously claimed at that home, be a built-in or freestanding unit (not portable), measure at least 550 mm by 380 mm, have three or more cooking zones, and carry at least a two-year warranty."
+question: Which induction cooktops qualify for the Victorian Energy Upgrades discount?
+answer: To be eligible on Energy Victoria's current rules, the induction cooktop must replace an existing gas cooktop in a home more than two years old, have no prior claim at that address, be a built-in or freestanding unit (not portable) measuring at least 550 mm by 380 mm with three or more cooking zones, and carry a minimum two-year warranty.
 pages:
   - gas-cooktop-to-induction
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

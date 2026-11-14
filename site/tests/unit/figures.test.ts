@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   assertValidBlockLabel,
   formatAud,
+  formatFigure,
   formatFigureAmount,
   formatUnitValue,
   isHistoricalFigure,
@@ -93,6 +94,13 @@ describe('figures formatting and validation helpers', () => {
     expect(() =>
       assertValidBlockLabel('vic-veu-insulation-est-regional-mild', 'Regional mild ceiling insulation', true),
     ).toThrow(/containing "estimate"/);
+  });
+
+  it('renders "at least" once and "including GST" once in formatFigure for minimum + gstIncluded', () => {
+    const out = formatFigure({ qualifier: 'minimum', amountMax: 3000, gstIncluded: true });
+    expect(out).toBe('at least $3,000 (including GST)');
+    expect([...out.matchAll(/\bat least\b/gi)]).toHaveLength(1);
+    expect([...out.matchAll(/\bincluding GST\b/gi)]).toHaveLength(1);
   });
 });
 

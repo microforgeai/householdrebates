@@ -1,11 +1,11 @@
-const MELBOURNE_FORMATTER = new Intl.DateTimeFormat('en-AU', {
+const MELBOURNE_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-AU', {
   day: 'numeric',
   month: 'short',
   year: 'numeric',
   timeZone: 'Australia/Melbourne',
 });
 
-const MELBOURNE_DAY_MONTH_FORMATTER = new Intl.DateTimeFormat('en-AU', {
+const MELBOURNE_DAY_MONTH_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-AU', {
   day: 'numeric',
   month: 'short',
   timeZone: 'Australia/Melbourne',

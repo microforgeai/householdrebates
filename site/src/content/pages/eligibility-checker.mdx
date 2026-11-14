@@ -1,48 +1,71 @@
 ---
-title: "Victoria Rebate Eligibility Checker (VEU 2026)"
-description: "Check whether heating and cooling, hot water, ceiling insulation, induction cooktops, or draught proofing fits Victoria's VEU discount rules."
+title: "Victoria Rebate Eligibility Checker"
+h1: "Victoria Rebate Eligibility Checker for Homes and Businesses"
+description: "Check Victorian home and business eligibility across VEU discounts, Solar Homes rebates and the federal battery discount by postcode."
 state: vic
 section: tools
 slug: eligibility-checker
 navGroup: tools
 mapRow: 9
-answer: "Use this interactive checker to match your upgrade against Victorian Energy Upgrades (VEU) rules—for example, replacing a room gas heater with one 3 to 9 kW split system lists an indicative <Money id=\"vic-veu-rcac-room-gas\" /> off. Your answers stay in your browser and nothing is sent anywhere unless you later use an open quote form. Every figure is indicative, and an accredited provider confirms your eligibility and actual discount in your written quote before work starts."
+answer: "Use this interactive checker to match your Victorian home or business against Victorian Energy Upgrades (VEU) discounts, Solar Homes rebates, and the federal battery discount by postcode—for example, replacing a room gas heater with one 3 to 9 kW split system lists an indicative <Money id=\"vic-veu-rcac-room-gas\" /> off. Start by choosing Residential or Business, enter your postcode to see your VEU area and climate zone, and answer only the questions for the upgrades you select. Your answers stay in your browser, and an accredited provider confirms your eligibility and actual discount in a written quote before work starts."
 author: "Gurinder Singh"
 publishedOn: 2026-11-13
 updatedOn: 2026-11-14
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14
 sources:
+  - vic-veu-spec-v25
   - energyvic-heating-cooling
   - energyvic-hot-water
   - energyvic-insulation
   - energyvic-induction
   - energyvic-weather-sealing
+  - energyvic-window-glazing
+  - energyvic-veu-products
+  - energyvic-businesses
   - energyvic-about-veu
   - energyvic-electrification
-  - vic-veu-spec-v25
+  - solarvic-hot-water-rebate
+  - solarvic-pv-rebate
+  - solarvic-apartments
+  - dcceew-cheaper-home-batteries
   - cav-renter-changes
 figures:
   - vic-veu-rcac-room-gas
   - vic-veu-rcac-ducted-gas-22kw
+  - vic-veu-copay-ducted
   - vic-veu-hw-electric-to-heatpump
   - vic-veu-hw-gas-to-heatpump
   - vic-veu-hw-min-contribution
-  - vic-veu-copay-ducted
   - vic-veu-insulation-metro
   - vic-veu-insulation-regional
   - vic-veu-induction
   - vic-veu-sealing-house-5yr
+  - vic-solar-homes-hw-rebate
+  - vic-solar-homes-pv-rebate
+  - fed-battery-discount-pct
 faq:
   - checker-postcode-privacy
   - checker-upgrades-covered
   - checker-indicative-vs-quote
-leadForm: either
+howTo:
+  name: How to check Victorian energy upgrade eligibility
+  steps:
+    - name: Choose Residential or Business
+      text: Select whether you are checking a Victorian residential home or a commercial, industrial, agricultural, or owners corporation premises.
+    - name: Enter your Victorian postcode
+      text: Enter your four-digit postcode to look up your VEU area, reticulated gas status, climate region, and heat pump zone from VEU Specifications version 25.0 Table A.
+    - name: Select upgrades and current appliances
+      text: Pick the upgrades you want to check and answer the follow-up questions about your property, tenure, and existing equipment.
+    - name: Review indicative results and official sources
+      text: Read the Likely, Possibly, and Not eligible lines alongside minimum customer co-payments, official source links, and next-step guides before requesting written quotes.
+leadForm: false
 noindex: false
 related:
-  - home
+  - victoria
   - air-conditioner-rebate
   - heat-pump-rebate
-  - gas-to-electric-hot-water-2027
+  - ceiling-insulation-rebate
+  - veu-minimum-co-payment
   - how-quotes-work
 hero:
   id: vic-veu-rcac-room-gas
@@ -51,10 +74,26 @@ hero:
 
 ## How this checker works
 
-Our checker applies the household eligibility rules published by Energy Victoria and the VEU Specifications v25.0:
+Our cascade applies the household and business rules published by Energy Victoria, Solar Victoria, the Clean Energy Regulator, DCCEEW, and VEU Specifications v25.0:
 
-- **Heating and cooling:** Checks whether your building is more than 2 years old when replacing an existing heater, maps your existing heater and preferred upgrade to Energy Victoria's room split (<Money id="vic-veu-rcac-room-gas" />) or 22.4 kW ducted (<Money id="vic-veu-rcac-ducted-gas-22kw" />) scenarios, and shows the minimum customer co-payment rules from 30 September 2026 (including <Money id="vic-veu-copay-ducted" /> for any ducted system).
-- **Hot water:** Checks that you are replacing an existing system in a building at least 2 years old and that fewer than 2 hot water systems have been upgraded under VEU at your address. Shows Energy Victoria's electric-to-heat-pump (<Money id="vic-veu-hw-electric-to-heatpump" />) and mains-gas-to-heat-pump (<Money id="vic-veu-hw-gas-to-heatpump" />) figures alongside the <Money id="vic-veu-hw-min-contribution" /> minimum customer co-payment, and flags bottled LPG for provider confirmation.
-- **Ceiling insulation:** Uses the VEU Specifications v25.0 postcode table locally in your browser to compare Energy Victoria's metropolitan mild (<Money id="vic-veu-insulation-metro" />) and regional cold (<Money id="vic-veu-insulation-regional" />) examples, checks ceiling depth and halogen downlight safety exclusions, and notes mandatory pre-installation electrical and installer safety checks.
-- **Induction cooktops:** Checks that you are replacing a gas cooktop in a home more than 2 years old with an eligible built-in or freestanding 3-zone unit (<Money id="vic-veu-induction" /> per product) and explains Energy Victoria's buy-first invoice process.
-- **Draught proofing (weather sealing):** Checks for indoor open-flued or flueless gas heaters and open-flued gas water heaters (which are excluded due to carbon monoxide risk) and shows Energy Victoria's warranty-based examples (such as <Money id="vic-veu-sealing-house-5yr" /> for a house with 5-year warranty products).
+- **Step 1 — Residential or Business:** Routes your answers down either the household path (homes, units, apartments, and rentals) or the business path (commercial, industrial, agricultural, and apartment common areas).
+- **Step 2 — Postcode lookup ("Your area" card):** Matches your four-digit Victorian postcode against the 719 postcodes in VEU Specifications v25.0 Table A to show your localities, council share, Metropolitan or Regional classification, reticulated mains gas status, climate region, and heat pump zone.
+- **Residential VEU discounts:** Checks replacement and building-age rules across heating and cooling (such as <Money id="vic-veu-rcac-room-gas" /> for a room gas heater to split system, or <Money id="vic-veu-rcac-ducted-gas-22kw" /> for a 22.4 kW ducted swap alongside the <Money id="vic-veu-copay-ducted" /> ducted minimum co-payment), hot water (<Money id="vic-veu-hw-gas-to-heatpump" /> replacing mains gas or <Money id="vic-veu-hw-electric-to-heatpump" /> replacing electric storage, with a <Money id="vic-veu-hw-min-contribution" /> minimum customer co-payment), ceiling insulation (<Money id="vic-veu-insulation-metro" /> in metropolitan mild zones, <Money id="vic-veu-insulation-regional" /> in regional cold zones, or our clearly labelled Part 48 estimate in mixed zones), induction cooktops (<Money id="vic-veu-induction" /> per eligible product), weather sealing (such as <Money id="vic-veu-sealing-house-5yr" /> for a house with 5-year warranty products), window glazing, clothes dryers, showerheads, and retail appliances.
+- **Business VEU discounts:** Checks ESC Scheduled Activity Premises exclusions and maps selected commercial activities—heating and cooling, commercial or household-size hot water, LED lighting, cold rooms and refrigeration, commercial solar PV, electric motors, pre-rinse spray valves, and commercial appliances—to Energy Victoria's published business rules and minimum co-payments.
+- **State Solar Homes and federal battery support:** Checks Victorian Solar Homes hot water (<Money id="vic-solar-homes-hw-rebate" /> standard rebate) and solar panel (<Money id="vic-solar-homes-pv-rebate" />) thresholds, Solar for Apartments rules, and the federal Cheaper Home Batteries Program (<Money id="fed-battery-discount-pct" /> off upfront cost for eligible solar-connected batteries).
+
+## What this checker does not do
+
+- **Does not store or send your answers:** Every step runs in your browser. If you are a renter and click "Share this result with your landlord", your answers are encoded into the `#a=` part of the page link on your device—nothing is sent to or stored on our servers.
+- **Does not replace an on-site assessment or written quote:** VEU discounts vary with certificate prices, product sizing, switchboard or flue work, and provider fees. Only an accredited provider (or a licensed installer working with one) confirms your actual point-of-sale discount in writing before installation starts—see [how VEU quotes work](/how-quotes-work/).
+- **Does not lodge pre-approval or collect quote enquiries:** Solar Victoria rebates require pre-approval through an authorised retailer before installation starts, and our quote enquiry form is closed.
+
+## Browse the upgrade guides directly
+
+If you have JavaScript turned off or prefer to read the rules page by page, start with our Victorian guides below:
+
+- <LinkIfEnabled href="/victoria/postcode/">Victorian VEU postcode and climate zone lookup</LinkIfEnabled> and the [Victoria energy rebates hub](/victoria/)
+- **Heating and cooling:** [Air conditioner VEU discounts](/victoria/air-conditioner-rebate/), [ducted gas to ducted reverse-cycle](/victoria/ducted-gas-to-ducted-reverse-cycle/), [ducted gas to split systems](/victoria/ducted-gas-to-split-systems/), [room gas heater to split system](/victoria/gas-room-heater-to-split-system/), and [electric heater to reverse-cycle](/victoria/electric-heater-to-reverse-cycle/)
+- **Hot water:** [Heat pump hot water discounts](/victoria/heat-pump-rebate/), [gas hot water to heat pump](/victoria/gas-hot-water-to-heat-pump/), [electric hot water to heat pump](/victoria/electric-hot-water-to-heat-pump/), and [solar hot water discounts](/victoria/solar-hot-water-rebate/)
+- **Building shell and cooking:** [Ceiling insulation discounts](/victoria/ceiling-insulation-rebate/), [draught proofing (weather sealing)](/victoria/draught-proofing-rebate/), and [gas cooktop to induction](/victoria/gas-cooktop-to-induction/)
+- **Rules, co-payments, and audiences:** [VEU minimum customer co-payments](/victoria/veu-minimum-co-payment/), [VEU vs Solar Homes](/victoria/veu-vs-solar-homes/), [renters guide](/victoria/renters/), [apartments and units](/victoria/apartments-and-units/), [find an accredited provider](/victoria/find-an-accredited-provider/), and <LinkIfEnabled href="/victoria/business-energy-upgrades/">Victorian business energy upgrades</LinkIfEnabled>

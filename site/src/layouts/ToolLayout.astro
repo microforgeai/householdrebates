@@ -18,7 +18,7 @@ import { getCheckerReferencedFigureIds } from '../lib/checker/rules';
 import { formatAuDate } from '../lib/dates';
 import { resolvePageFaqs } from '../lib/faqs';
 import { ensureTrailingSlash } from '../lib/urls';
-import type { BreadcrumbItem } from '../lib/schema';
+import type { BreadcrumbItem, HowToSchemaInput } from '../lib/schema';
 
 export interface Props {
   entry: {
@@ -36,6 +36,7 @@ export interface Props {
       sources: (string | { id: string })[];
       figures: string[];
       faq: (string | { id: string })[];
+      howTo?: HowToSchemaInput;
       leadForm?: false | 'rcac' | 'hotwater' | 'either';
       noindex: boolean;
       related: string[];
@@ -71,6 +72,7 @@ if (isCheckerPage) {
   noindex={d.noindex}
   breadcrumbs={breadcrumbs}
   faqs={canonicalFaqs}
+  howTo={d.howTo}
   ruleStatus={d.ruleStatus}
 >
   <Breadcrumbs items={breadcrumbs} />

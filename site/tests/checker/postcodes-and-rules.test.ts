@@ -1,9 +1,26 @@
 import { describe, expect, it } from 'vitest';
 import {
   evaluate,
+  FIELDS_META,
   getDefaultCheckerContext,
+  LINKS_DATA,
   lookupPostcode,
+  MESSAGES,
+  RULES_META,
+  type CheckerAnswers,
+  type MessageId,
 } from '../../src/lib/checker';
+import {
+  evaluateWithCatalog,
+  FIELD_HOOKS,
+  hydrateFields,
+  hydrateRules,
+  pruneHiddenAnswersFromList,
+  RULE_HOOKS,
+} from '../../src/lib/checker/client';
+import { hydrateCompactPostcodes } from '../../src/lib/checker/postcode-client';
+import { buildCompactPostcodeArtifact } from '../../src/lib/checker/postcode-compact';
+import { decodeAnswersFromHash, encodeAnswersToHash } from '../../src/lib/checker/share';
 
 describe('Postcode validation and 719-row coverage', () => {
   const ctx = getDefaultCheckerContext();
@@ -219,5 +236,82 @@ describe('Rule tests beyond the 6 spec examples', () => {
     );
     const gasNoEnabled = resWithLpgRow.banners.find((b) => b.ruleId === 'GAS-NO')!;
     expect(gasNoEnabled.links[0].href).toBe('/victoria/lpg-homes/');
+  });
+
+  it('client bootstrap hydration, compact postcodes, and #a= share hash match server evaluate() identically', () => {
+    const compactArtifact = buildCompactPostcodeArtifact();
+    const hydratedPostcodes = hydrateCompactPostcodes(JSON.parse(compactArtifact.json));
+    expect(Object.keys(hydratedPostcodes.rows)).toHaveLength(719);
+
+    const rules = hydrateRules(JSON.parse(JSON.stringify(RULES_META)), RULE_HOOKS);
+    const fields = hydrateFields(JSON.parse(JSON.stringify(FIELDS_META)), FIELD_HOOKS);
+    const catalog = {
+      rules,
+      rulesById: new Map(rules.map((r) => [r.id, r])),
+      messagesById: new Map(MESSAGES.map((m) => [m.id as MessageId, m])),
+      links: JSON.parse(JSON.stringify(LINKS_DATA)),
+    };
+
+    const sampleAnswers: CheckerAnswers[] = [
+      {
+        S1: 'residential',
+        R2: '3427',
+        R3: 'own-and-live',
+        R4: 'house-or-townhouse',
+        R5: 'yes',
+        R6: ['heating-cooling', 'hot-water'],
+        H1: 'ducted-gas-heater',
+        H2: 'ducted-reverse-cycle',
+        W1: 'gas-mains',
+        W2: 'no',
+        W3: 'heat-pump',
+        W4: 'yes',
+        SH1: 'yes',
+        SH2: 'yes',
+        SH3: 'no',
+      },
+      {
+        S1: 'business',
+        B2: '3064',
+        B3: 'warehouse-factory-industrial',
+        B4: 'no',
+        B5: 'yes',
+        B6: ['lighting', 'solar-panels'],
+        BL1: ['outdoor-carpark-sports'],
+        BP1: '50-to-100-kw',
+        BP1ExactKw: 100,
+      },
+    ];
+
+    for (const ans of sampleAnswers) {
+      const pc = ans.S1 === 'business' ? ans.B2! : ans.R2!;
+      const pruned = pruneHiddenAnswersFromList(
+        fields,
+        ans,
+        hydratedPostcodes.rows[pc],
+        ctx.solsticePostcodes,
+      );
+      const hash = encodeAnswersToHash(pruned);
+      expect(hash.startsWith('#a=')).toBe(true);
+      const decoded = decodeAnswersFromHash(hash);
+      expect(decoded).toEqual(pruned);
+
+      const clientRes = evaluateWithCatalog(
+        decoded!,
+        {
+          postcodes: hydratedPostcodes,
+          figures: ctx.figures,
+          sources: ctx.sources,
+          enabledUrls: ctx.enabledUrls,
+          solsticePostcodes: ctx.solsticePostcodes,
+        },
+        catalog,
+      );
+      expect(clientRes).toEqual(evaluate(ans));
+    }
+
+    expect(decodeAnswersFromHash('')).toBeNull();
+    expect(decodeAnswersFromHash('#faq-something')).toBeNull();
+    expect(decodeAnswersFromHash('#a=not-valid-json!')).toBeNull();
   });
 });

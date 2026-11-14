@@ -16,15 +16,20 @@ export {
   METRO_HUB_BY_LGA,
   BUSINESS_RESULT_LINKS,
   LINK_CATALOG,
+  LINKS_DATA,
   resolveInternalUrl,
   resolveLinkKey,
   resolveAreaLink,
+  type LinksCatalogData,
 } from './links';
 export {
   FIELDS,
+  FIELDS_META,
   getVisibleFields,
+  pruneHiddenAnswers,
   shouldShowSh1,
   type FieldDefinition,
+  type FieldMeta,
   type FieldOption,
 } from './fields';
 export {
@@ -35,11 +40,13 @@ export {
 } from './messages';
 export {
   RULES,
+  RULES_META,
   RULES_BY_ID,
   SPEC_SECTION_9_UNVERIFIED_RULE_IDS,
   hasAnyGatingNotSure,
   getCheckerReferencedFigureIds,
   type RuleDefinition,
+  type RuleMeta,
 } from './rules';
 export {
   computeOldestCheckerCheckedOn,

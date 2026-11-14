@@ -57,25 +57,25 @@ export interface FigureData {
   groupNote?: string;
 }
 
-const AUD_FORMATTER = new Intl.NumberFormat('en-AU', {
+const AUD_FORMATTER = /*#__PURE__*/ new Intl.NumberFormat('en-AU', {
   style: 'currency',
   currency: 'AUD',
   maximumFractionDigits: 0,
   minimumFractionDigits: 0,
 });
 
-const AUD_CENTS_FORMATTER = new Intl.NumberFormat('en-AU', {
+const AUD_CENTS_FORMATTER = /*#__PURE__*/ new Intl.NumberFormat('en-AU', {
   style: 'currency',
   currency: 'AUD',
   maximumFractionDigits: 2,
   minimumFractionDigits: 2,
 });
 
-const COUNT_FORMATTER = new Intl.NumberFormat('en-AU', {
+const COUNT_FORMATTER = /*#__PURE__*/ new Intl.NumberFormat('en-AU', {
   maximumFractionDigits: 0,
 });
 
-const COUNT_DECIMAL_FORMATTER = new Intl.NumberFormat('en-AU', {
+const COUNT_DECIMAL_FORMATTER = /*#__PURE__*/ new Intl.NumberFormat('en-AU', {
   maximumFractionDigits: 2,
 });
 

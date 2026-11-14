@@ -12,11 +12,46 @@ test.describe('Household Rebates static site e2e', () => {
 
   test('evaluates scenarios in the Victoria Eligibility Checker', async ({ page }) => {
     await page.goto('/victoria/eligibility-checker/');
-    await page.uncheck('#chk-q2-rcac');
-    await page.check('#chk-q2-hotwater');
-    await page.selectOption('#chk-q8a', 'mains-gas');
-    await page.click('button[type="submit"]');
-    const output = page.locator('[data-checker-output]');
+    await page.locator('input[data-option-id="residential"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('[data-postcode-input]').fill('3000');
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="own-and-live"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="house-or-townhouse"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="yes"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="hot-water"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="gas-mains"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="no"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="heat-pump"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="yes"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="yes"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="yes"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    await page.locator('input[data-option-id="no"]').check();
+    await page.locator('[data-checker-next]').click();
+
+    const output = page.locator('[data-checker-result]');
     await expect(output).toBeVisible();
     await expect(output).toContainText('$560');
   });

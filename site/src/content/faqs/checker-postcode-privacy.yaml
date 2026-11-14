@@ -1,5 +1,5 @@
-question: "Why does the checker ask for my postcode?"
-answer: "When you check ceiling insulation, the VEU postcode table sets whether your postcode is listed as metropolitan or regional and its climatic region. Your postcode stays in your browser and nothing is sent anywhere."
+question: "Why does the checker ask for my postcode, and is anything stored?"
+answer: "Your four-digit postcode sets your VEU area (Metropolitan or Regional), reticulated mains gas status, climate region, and heat pump zone from VEU Specifications version 25.0 Table A. Your postcode and answers stay in your browser—even if a renter generates a landlord share link, the answers live only in the URL hash and nothing is sent to or stored on a server."
 canonicalPage: /victoria/eligibility-checker/
 state: vic
-checkedOn: 2026-11-13
+checkedOn: 2026-11-14

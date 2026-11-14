@@ -1,5 +1,5 @@
-import rolloutConfig from '../data/rollout.json';
-import urlMapRows from '../data/url-map.json';
+import rolloutConfig from '../data/rollout.json' with { type: 'json' };
+import urlMapRows from '../data/url-map.json' with { type: 'json' };
 
 export interface UrlMapRow {
   row: number;

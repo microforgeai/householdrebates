@@ -3,6 +3,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
+import preact from '@astrojs/preact';
 import sitemap from '@astrojs/sitemap';
 import YAML from 'yaml';
 
@@ -82,10 +83,20 @@ export default defineConfig({
   vite: {
     build: {
       assetsInlineLimit: 0,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules/preact/')) {
+              return 'preact';
+            }
+          },
+        },
+      },
     },
   },
   integrations: [
     mdx(),
+    preact(),
     sitemap({
       filter: (page) => enabledSitemapSet.has(page),
       serialize(item) {

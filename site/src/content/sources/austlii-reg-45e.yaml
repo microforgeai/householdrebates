@@ -7,3 +7,6 @@ state: vic
 checkedOn: 2026-11-13
 mapKey: REG45E
 kind: legislation
+manualCheck: true
+primarySourceId: legvic-bpar-2025
+notes: Manual-check secondary HTML mirror of SR 140/2025 reg 6 (primary official source is legvic-bpar-2025 on legislation.vic.gov.au); classic.austlii.edu.au blocks scripted HTTP fetch with 403.

@@ -711,7 +711,7 @@ export const RULES: readonly RuleDefinition[] = [
     when: (a) => hasResUpgrade(a, 'hot-water') && a.W1 === 'gas-mains' && a.W2 === 'yes',
     status: 'info',
     figureIds: [],
-    sourceIds: ['energyvic-hot-water', 'austlii-reg-45e'],
+    sourceIds: ['energyvic-hot-water', 'legvic-bpar-2025', 'austlii-reg-45e'],
     why: 'Under rules currently legislated from 1 March 2027, a failed mains-gas water heater in an existing home must be replaced with an electric system; before then you can still choose.',
     links: ['gas-hw-broken-2027', 'gas-hw-ban-exemptions'],
     isNoteOnly: true,

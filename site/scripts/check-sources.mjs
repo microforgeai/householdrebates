@@ -122,8 +122,11 @@ for (let i = 0; i < files.length; i++) {
   checked++;
   if (outcome.kind === 'ok') {
     console.log(`OK ${outcome.status} ${file} -> ${url}`);
-  } else if (outcome.kind === 'challenge') {
-    console.log(`CHALLENGE ${url} (check by hand) [${file}]`);
+  } else if (outcome.kind === 'challenge' || data.manualCheck === true) {
+    const label = data.manualCheck
+      ? `manual-check${data.primarySourceId ? `; primary=${data.primarySourceId}` : ''}`
+      : 'check by hand';
+    console.log(`CHALLENGE ${url} (${label}) [${file}]`);
     challenges.push(url);
   } else {
     console.error(`FAIL ${file} -> ${url}: ${outcome.reason}`);

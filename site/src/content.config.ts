@@ -56,6 +56,8 @@ const sources = defineCollection({
     kind: SourceKind.optional(),
     attribution: z.string().optional(),
     notes: z.string().optional(),
+    manualCheck: z.boolean().optional(),
+    primarySourceId: z.string().optional(),
   }),
 });
 

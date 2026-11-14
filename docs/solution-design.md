@@ -372,7 +372,7 @@ The map needs **no** redirects. The mechanism exists for later renames and for t
 1. `IndependenceNotice` (thin bar, every page): "Independent guide run by Agenor Services Pty Ltd. Not a government website. Installers may pay us for enquiries — how we're paid."
 2. Visible breadcrumbs (match BreadcrumbList).
 3. One H1.
-4. `AnswerBlock`: 2–4 sentences that answer the query outright and stand alone when quoted. Any dollar figure in it uses `<Money variant="block">`, so the checked-on line and source link sit directly under it.
+4. `AnswerBlock`: 2–4 sentences that answer the query outright and stand alone when quoted; where the page has a hero figure, the first sentence names the scenario and `<Money id="..." />` amount together, followed by a labelled `<Money variant="block" label="...">` or `<MoneyPair>` hero (`<figure>` with `<figcaption>` label, visible `kind` tag, amount, and checked-on source link).
 5. Byline: "By Gurinder Singh, Agenor · Figures checked on 13 Nov 2026 against Energy Victoria · Updated 13 Nov 2026".
 6. TOC for pages over ~800 words.
 7. Body: short sections, scenario `FigureTable`s, a `Callout` for "talk to an accredited provider before any work starts".
@@ -385,7 +385,8 @@ The map needs **no** redirects. The mechanism exists for later renames and for t
 
 | Component | Props | Rules |
 |---|---|---|
-| `Money` | `id`, `variant?: 'inline' \| 'block'` | Renders the qualifier and amount ("up to $5,530", "$630 to $1,610"). Inline adds a superscript link to the source; block adds "Checked on {date} · {publisher} ↗". Build fails if the id doesn't exist or `checkedOn` is older than `MAX_FIGURE_AGE_DAYS` (default 45). |
+| `Money` | `id`, `variant?: 'inline' \| 'block'`, `label?: string` | Renders the qualifier and amount ("up to $5,530", "$630 to $1,610"). Inline adds a superscript link to the source; `variant="block"` requires `label` (concise plain words, no `$`, no digits except `kW`, `m²`, `L` or years) and renders `<figure>` with `<figcaption>` label, visible `kind` tag (`discount` → "Indicative discount (the provider confirms)", `payment` → "Minimum you pay", `threshold` → "A limit, not money you receive", `rate` → "Rate", `saving` → "Estimated yearly saving", `count` → "Count"), amount, estimate note (when `basis: 'estimate'`), and "Checked on {date} · {publisher} ↗". Build fails if the id doesn't exist, `label` is missing/invalid, or `checkedOn` is older than `MAX_FIGURE_AGE_DAYS` (default 45). |
+| `MoneyPair` | `ids: [string, string]`, `labels: [string, string]` | Renders two `<Money variant="block">` heroes side by side (stacked vertically under 480 px), e.g. mains gas vs electric storage to heat pump. |
 | `FigureTable` | `group` | Table from figures data. Caption: checked-on, source link, "Indicative. The accredited provider confirms the final amount in your quote." |
 | `CheckedOn` | `date`, `sourceId` | "13 Nov 2026", Australia/Melbourne. |
 | `SourceList` | `ids` | Publisher, title, link, checked-on, page last updated. |
@@ -471,7 +472,7 @@ Expansion: 65 sources after prompt 15 (13 + 52 from the map's source index; not 
   checkedOn: 2026-11-13
 ```
 
-Schema: `id`, `group`, `state`, `program`, `activity`, `audience: 'household' | 'business'`, `scenario`, `qualifier: 'up-to' | 'range' | 'exact' | 'about' | 'about-range' | 'minimum' | 'more-than' | 'almost'`, `unit: 'AUD' | 'percent' | 'count'` (default AUD), `display: 'standard' | 'cents' | 'compact'`, `gstIncluded?`, `effectiveFrom?`, `effectiveTo?` + `supersededBy?` (historical figures may only appear next to their replacement), `amountMin?`, `amountMax`, `currency: 'AUD'` (money only), `sourceId: reference('sources')` (must resolve to `official: true`), `checkedOn`, `conditions?: string[]`. Refinements: `amountMin <= amountMax`; `qualifier === 'range'` requires `amountMin`; `checkedOn <= today`.
+Schema: `id`, `group`, `state`, `program`, `activity`, `audience: 'household' | 'business'`, `scenario`, `qualifier: 'up-to' | 'range' | 'exact' | 'about' | 'about-range' | 'minimum' | 'more-than' | 'almost'`, `unit: 'AUD' | 'percent' | 'count'` (default AUD), `display: 'standard' | 'cents' | 'compact'`, `basis: 'official' | 'estimate'` (default `official`), `kind: 'discount' | 'payment' | 'threshold' | 'rate' | 'saving' | 'count'` (required, prompt 25), `method?` + `basedOn?` (required when `basis === 'estimate'`), `gstIncluded?`, `effectiveFrom?`, `effectiveTo?` + `supersededBy?` (historical figures may only appear next to their replacement), `amountMin?`, `amountMax`, `currency: 'AUD'` (money only), `sourceId: reference('sources')` (must resolve to `official: true`), `checkedOn`, `conditions?: string[]`. Refinements: `amountMin <= amountMax`; `qualifier === 'range'` requires `amountMin`; `checkedOn <= today`; `basis === 'estimate'` requires `method`, `basedOn` and `kind === 'discount'`.
 
 Rendering: `minimum` → "at least $3,000 (including GST)", `more-than` → "more than $400", `almost` → "almost 60%", `about-range` → "about $350 to $400", `cents` → "$171.60", `compact` → "$3 million". Percentages and volatile counts (provider counts, rebate counts) are figures too, so they share the 45-day freshness rule. Scenario strings never contain a `$` amount. Business figures are allowed only on `/victoria/veu-minimum-co-payment/`.
 

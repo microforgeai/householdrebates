@@ -77,7 +77,7 @@ const figures = defineCollection({
       unit: z.enum(['AUD', 'percent', 'count']).default('AUD'),
       display: z.enum(['standard', 'cents', 'compact']).default('standard'),
       basis: z.enum(['official', 'estimate']).default('official'),
-      kind: z.enum(['discount', 'payment', 'threshold', 'rate', 'saving', 'count']).optional(),
+      kind: z.enum(['discount', 'payment', 'threshold', 'rate', 'saving', 'count']),
       method: z.string().optional(),
       basedOn: z
         .union([reference('sources'), z.array(reference('sources')).min(1)])
@@ -114,6 +114,20 @@ const figures = defineCollection({
     ),
 });
 
+export const FigureKind = z.enum(['discount', 'payment', 'threshold', 'rate', 'saving', 'count']);
+
+export const HeroConfig = z.union([
+  z.literal(false),
+  z.object({
+    id: z.string().min(1),
+    label: z.string().min(1),
+  }),
+  z.object({
+    ids: z.tuple([z.string().min(1), z.string().min(1)]),
+    labels: z.tuple([z.string().min(1), z.string().min(1)]),
+  }),
+]);
+
 const pageBase = z.object({
   title: z.string().max(60),
   description: z.string().min(70).max(160),
@@ -125,6 +139,7 @@ const pageBase = z.object({
   reviewBy: z.coerce.date().optional(),
   ruleStatus: z.enum(['election-watch']).optional(),
   answer: z.string(),
+  hero: HeroConfig.optional(),
   author: z.literal('Gurinder Singh'),
   publishedOn: z.coerce.date(),
   updatedOn: z.coerce.date(),

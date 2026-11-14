@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import AnswerText from '../components/AnswerText.astro';
 import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import { formatAuDate } from '../lib/dates';
@@ -48,7 +49,7 @@ const sourceIds =
   <article class="prose-container">
     <h1>{d.title}</h1>
     <AnswerBlock>
-      <p>{d.answer}</p>
+      <AnswerText text={d.answer} />
     </AnswerBlock>
     <div class="byline">
       By {d.author}, Agenor · Checked on {formatAuDate(d.checkedOn)} · Updated {formatAuDate(d.updatedOn)}

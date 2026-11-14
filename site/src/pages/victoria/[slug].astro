@@ -4,6 +4,7 @@ import GuideLayout from '../../layouts/GuideLayout.astro';
 import AreaLayout from '../../layouts/AreaLayout.astro';
 import ToolLayout from '../../layouts/ToolLayout.astro';
 import Money from '../../components/Money.astro';
+import MoneyPair from '../../components/MoneyPair.astro';
 import FigureTable from '../../components/FigureTable.astro';
 import Callout from '../../components/Callout.astro';
 import SourceLink from '../../components/SourceLink.astro';
@@ -84,7 +85,7 @@ const breadcrumbs = hubEnabled
       { name: entry.data.title, path: pathname },
     ];
 
-const mdxComponents = { Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
+const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
 ---
 
 {kind === 'guide' && (

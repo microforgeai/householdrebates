@@ -51,6 +51,53 @@ for (const file of sourceFiles) {
 }
 
 // 2. Load and validate figures/vic-veu.yaml
+const KIND_TAGS = {
+  discount: 'Indicative discount (the provider confirms)',
+  payment: 'Minimum you pay',
+  threshold: 'A limit, not money you receive',
+  rate: 'Rate',
+  saving: 'Estimated yearly saving',
+  count: 'Count',
+};
+const VALID_KINDS = new Set(Object.keys(KIND_TAGS));
+
+function decodeHtmlEntities(str) {
+  return String(str ?? '')
+    .replace(/&#39;|&apos;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&nbsp;/g, ' ');
+}
+
+function validateHeroLabelString(context, label, isEstimate = false) {
+  const trimmed = String(label ?? '').trim();
+  if (!trimmed) {
+    unlabelledHeroes++;
+    throw new Error(`${context}: missing or empty hero/block label`);
+  }
+  if (trimmed.includes('$')) {
+    unlabelledHeroes++;
+    throw new Error(`${context}: label "${trimmed}" must not contain "$"`);
+  }
+  const strippedAllowedDigits = trimmed
+    .replace(/\b\d+(?:[.–-]\d+)?\s*(?:kW\b|m²|L\b)/g, '')
+    .replace(/\b(?:19|20)\d{2}\b/g, '')
+    .replace(/\b\d+-year\b/gi, '');
+  if (/\d/.test(strippedAllowedDigits)) {
+    unlabelledHeroes++;
+    throw new Error(
+      `${context}: label "${trimmed}" contains disallowed digits (only kW, m², L, or years allowed)`,
+    );
+  }
+  if (isEstimate && !/\bestimate\b/i.test(trimmed)) {
+    unlabelledHeroes++;
+    throw new Error(`${context}: estimate hero label "${trimmed}" must contain "estimate"`);
+  }
+  return trimmed;
+}
+
 const figuresPath = path.join(srcDir, 'content/figures/vic-veu.yaml');
 const figuresList = YAML.parse(fs.readFileSync(figuresPath, 'utf8'));
 const figuresById = new Map();
@@ -58,12 +105,20 @@ const figuresByGroup = new Map();
 let staleCount = 0;
 let estimateCount = 0;
 let unlabelledHeroes = 0;
+let figuresWithoutKind = 0;
 
 for (const fig of figuresList) {
   if (figuresById.has(fig.id)) {
     throw new Error(`Duplicate figure ID "${fig.id}" in vic-veu.yaml`);
   }
   figuresById.set(fig.id, fig);
+
+  if (!fig.kind || !VALID_KINDS.has(fig.kind)) {
+    figuresWithoutKind++;
+    throw new Error(
+      `Figure "${fig.id}" is missing a valid "kind" (got "${fig.kind}"; expected one of ${[...VALID_KINDS].join(', ')})`,
+    );
+  }
 
   const groupArr = figuresByGroup.get(fig.group) ?? [];
   groupArr.push(fig.id);
@@ -272,6 +327,59 @@ for (const file of mdxFiles) {
   const declared = new Set(fm.figures ?? []);
 
   const usedInBody = new Set();
+
+  // Check frontmatter answer for inline <Money id="..." />
+  if (typeof fm.answer === 'string') {
+    for (const am of fm.answer.matchAll(/<Money\s+([^>]*?)\/?>/g)) {
+      const idMatch = am[1].match(/\bid=["']([^"']+)["']/);
+      if (!idMatch) continue;
+      const id = idMatch[1];
+      if (!figuresById.has(id)) {
+        throw new Error(`${rel}: answer <Money id="${id}"> does not exist`);
+      }
+      usedInBody.add(id);
+    }
+  }
+
+  // Check frontmatter hero contract
+  if (declared.size > 0 && fm.hero === undefined) {
+    unlabelledHeroes++;
+    throw new Error(
+      `${rel}: declares figures without an explicit frontmatter "hero" config (use { id, label }, { ids, labels }, or false)`,
+    );
+  }
+  if (fm.hero && fm.hero !== false) {
+    if (Array.isArray(fm.hero.ids) || Array.isArray(fm.hero.labels)) {
+      if (
+        !Array.isArray(fm.hero.ids) ||
+        fm.hero.ids.length !== 2 ||
+        !Array.isArray(fm.hero.labels) ||
+        fm.hero.labels.length !== 2
+      ) {
+        unlabelledHeroes++;
+        throw new Error(`${rel}: MoneyPair hero must define two ids and two labels`);
+      }
+      for (let i = 0; i < 2; i++) {
+        const hid = fm.hero.ids[i];
+        const fig = figuresById.get(hid);
+        if (!fig) {
+          throw new Error(`${rel}: hero figure "${hid}" does not exist`);
+        }
+        validateHeroLabelString(`${rel} hero[${i}] (${hid})`, fm.hero.labels[i], fig.basis === 'estimate');
+        usedInBody.add(hid);
+      }
+    } else {
+      const hid = fm.hero.id;
+      const fig = figuresById.get(hid);
+      if (!hid || !fig) {
+        unlabelledHeroes++;
+        throw new Error(`${rel}: hero figure "${hid}" does not exist`);
+      }
+      validateHeroLabelString(`${rel} hero (${hid})`, fm.hero.label, fig.basis === 'estimate');
+      usedInBody.add(hid);
+    }
+  }
+
   for (const m of body.matchAll(/<Money\s+([^>]*?)\/?>/g)) {
     const attrs = m[1];
     const idMatch = attrs.match(/\bid=["']([^"']+)["']/);
@@ -281,14 +389,9 @@ for (const file of mdxFiles) {
     if (!fig) {
       throw new Error(`${rel}: <Money id="${id}"> does not exist`);
     }
-    if (fig.basis === 'estimate' && /\bvariant=["']block["']/.test(attrs)) {
+    if (/\bvariant=["']block["']/.test(attrs)) {
       const labelMatch = attrs.match(/\blabel=["']([^"']*)["']/);
-      if (!labelMatch || !/\bestimate\b/i.test(labelMatch[1])) {
-        unlabelledHeroes++;
-        throw new Error(
-          `${rel}: estimate hero <Money id="${id}" variant="block"> must include a label containing "estimate"`,
-        );
-      }
+      validateHeroLabelString(`${rel} <Money id="${id}" variant="block">`, labelMatch?.[1], fig.basis === 'estimate');
     }
     usedInBody.add(id);
   }
@@ -421,6 +524,84 @@ if (fs.existsSync(distDir)) {
       .replace(/<script[\s\S]*?<\/script>/gi, '')
       .replace(/<style[\s\S]*?<\/style>/gi, '');
 
+    // Inspect [data-answer] hero blocks specifically for single non-discount hero rule
+    const answerSecMatch = html.match(/<section\b[^>]*\bdata-answer\b[^>]*>([\s\S]*?)<\/section>/i);
+    if (answerSecMatch) {
+      const answerBlocks = extractBalancedElementsWithAttr(
+        answerSecMatch[1],
+        'figure',
+        /\bdata-money-block\b/i,
+      ).extracted;
+      if (answerBlocks.length === 1) {
+        const onlyHero = answerBlocks[0];
+        const kindAttrMatch = onlyHero.openTag.match(/\bdata-kind=["']([^"']*)["']/i);
+        const heroKind = kindAttrMatch?.[1] ?? '';
+        const figCapMatch = onlyHero.fullHtml.match(
+          /<figcaption\b[^>]*\bdata-money-label\b[^>]*>([\s\S]*?)<\/figcaption>/i,
+        );
+        const capText = decodeHtmlEntities((figCapMatch ? figCapMatch[1] : '').replace(/<[^>]+>/g, '')).trim();
+        const kindSpanMatch = onlyHero.fullHtml.match(
+          /<span\b[^>]*\bdata-money-kind\b[^>]*>([\s\S]*?)<\/span>/i,
+        );
+        const kindText = decodeHtmlEntities((kindSpanMatch ? kindSpanMatch[1] : '').replace(/<[^>]+>/g, '')).trim();
+
+        if (heroKind === 'payment' || heroKind === 'threshold' || heroKind === 'rate') {
+          if (!kindText || kindText !== KIND_TAGS[heroKind]) {
+            unlabelledHeroes++;
+            throw new Error(
+              `${rel}: single ${heroKind} hero is missing visible kind tag "${KIND_TAGS[heroKind]}"`,
+            );
+          }
+          const saysWhatItIs =
+            (heroKind === 'payment' && /\b(minimum|pay|co-payment|contribution)\b/i.test(capText)) ||
+            (heroKind === 'threshold' && /\b(cap|limit|threshold|maximum|above|under)\b/i.test(capText)) ||
+            (heroKind === 'rate' && /\b(rate|price|share|percent|not a discount)\b/i.test(capText));
+          if (!saysWhatItIs) {
+            unlabelledHeroes++;
+            throw new Error(
+              `${rel}: single ${heroKind} hero label "${capText}" must explicitly state that it is a ${heroKind}`,
+            );
+          }
+        }
+      }
+    }
+
+    // Verify every [data-money-block] across built HTML
+    const allMoneyBlocks = extractBalancedElementsWithAttr(
+      stripped,
+      'figure',
+      /\bdata-money-block\b/i,
+    ).extracted;
+    for (const blk of allMoneyBlocks) {
+      const kindMatch = blk.openTag.match(/\bdata-kind=["']([^"']*)["']/i);
+      if (!kindMatch || !VALID_KINDS.has(kindMatch[1])) {
+        figuresWithoutKind++;
+        throw new Error(`${rel}: [data-money-block] is missing a valid data-kind attribute`);
+      }
+      const capMatch = blk.fullHtml.match(
+        /<figcaption\b[^>]*\bdata-money-label\b[^>]*>([\s\S]*?)<\/figcaption>/i,
+      );
+      if (!capMatch) {
+        unlabelledHeroes++;
+        throw new Error(`${rel}: [data-money-block] is missing <figcaption data-money-label>`);
+      }
+      const capText = decodeHtmlEntities(capMatch[1].replace(/<[^>]+>/g, '')).trim();
+      validateHeroLabelString(`${rel} [data-money-block]`, capText);
+
+      const kindSpanMatch = blk.fullHtml.match(
+        /<span\b[^>]*\bdata-money-kind\b[^>]*>([\s\S]*?)<\/span>/i,
+      );
+      const renderedKindTag = decodeHtmlEntities(
+        (kindSpanMatch ? kindSpanMatch[1] : '').replace(/<[^>]+>/g, ''),
+      ).trim();
+      if (renderedKindTag !== KIND_TAGS[kindMatch[1]]) {
+        unlabelledHeroes++;
+        throw new Error(
+          `${rel}: [data-money-block] expected visible kind tag "${KIND_TAGS[kindMatch[1]]}", got "${renderedKindTag}"`,
+        );
+      }
+    }
+
     // Verify rendered estimate figures and strip balanced data-figure elements
     const trRes = extractBalancedElementsWithAttr(stripped, 'tr', /\bdata-figure=["'][^"']+["']/i);
     stripped = trRes.stripped;
@@ -484,7 +665,7 @@ if (fs.existsSync(distDir)) {
 }
 
 console.log(
-  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts, ${unlabelledHeroes} unlabelled heroes, ${estimateCount} estimates, every estimate labelled`,
+  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts, ${unlabelledHeroes} unlabelled heroes, ${figuresWithoutKind} figures without kind, ${estimateCount} estimates, every estimate labelled`,
 );
 console.log(
   `tool data: ${toolFileCount} ${toolFileCount === 1 ? 'file' : 'files'}, ${toolStaleCount} stale`,

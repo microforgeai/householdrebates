@@ -1,0 +1,27 @@
+---
+import Money from './Money.astro';
+import MoneyPair from './MoneyPair.astro';
+
+export type HeroValue =
+  | false
+  | { id: string; label: string }
+  | { ids: [string, string]; labels: [string, string] };
+
+export interface Props {
+  hero?: HeroValue;
+}
+
+const { hero } = Astro.props;
+---
+
+{hero && 'id' in hero && (
+  <div class="hero-figure-wrap">
+    <Money id={hero.id} variant="block" label={hero.label} />
+  </div>
+)}
+
+{hero && 'ids' in hero && (
+  <div class="hero-figure-wrap">
+    <MoneyPair ids={hero.ids} labels={hero.labels} />
+  </div>
+)}

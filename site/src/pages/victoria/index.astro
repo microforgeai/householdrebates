@@ -2,6 +2,7 @@
 import { getEntry, render } from 'astro:content';
 import GuideLayout from '../../layouts/GuideLayout.astro';
 import Money from '../../components/Money.astro';
+import MoneyPair from '../../components/MoneyPair.astro';
 import FigureTable from '../../components/FigureTable.astro';
 import Callout from '../../components/Callout.astro';
 import SourceLink from '../../components/SourceLink.astro';
@@ -30,5 +31,5 @@ const breadcrumbs = [
   headings={headings}
   variant="hub"
 >
-  <Content components={{ Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled }} />
+  <Content components={{ Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled }} />
 </GuideLayout>

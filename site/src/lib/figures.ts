@@ -34,7 +34,7 @@ export interface FigureData {
   unit?: FigureUnit;
   display?: FigureDisplay;
   basis?: FigureBasis;
-  kind?: FigureKind;
+  kind: FigureKind;
   method?: string;
   basedOn?: string | { id: string } | (string | { id: string })[];
   amountMin?: number;
@@ -184,4 +184,50 @@ export function isStale(
 
 export function getFigureSourceId(fig: FigureData): string {
   return typeof fig.sourceId === 'string' ? fig.sourceId : fig.sourceId.id;
+}
+
+export const KIND_TAGS: Record<FigureKind, string> = {
+  discount: 'Indicative discount (the provider confirms)',
+  payment: 'Minimum you pay',
+  threshold: 'A limit, not money you receive',
+  rate: 'Rate',
+  saving: 'Estimated yearly saving',
+  count: 'Count',
+};
+
+export function assertValidBlockLabel(
+  figId: string,
+  label: string | undefined,
+  isEstimate = false,
+): string {
+  const trimmed = (label ?? '').trim();
+  if (!trimmed) {
+    throw new Error(`<Money id="${figId}" variant="block" /> requires a non-empty label.`);
+  }
+  if (trimmed.includes('$')) {
+    throw new Error(
+      `<Money id="${figId}" variant="block" /> label "${trimmed}" must not contain "$".`,
+    );
+  }
+  const strippedAllowedDigits = trimmed
+    .replace(/\b\d+(?:[.–-]\d+)?\s*(?:kW\b|m²|L\b)/g, '')
+    .replace(/\b(?:19|20)\d{2}\b/g, '')
+    .replace(/\b\d+-year\b/gi, '');
+  if (/\d/.test(strippedAllowedDigits)) {
+    throw new Error(
+      `<Money id="${figId}" variant="block" /> label "${trimmed}" contains disallowed digits (only kW, m², L, or years are permitted).`,
+    );
+  }
+  const words = trimmed.match(/[A-Za-z0-9²]+(?:['’-][A-Za-z0-9²]+)*/g) ?? [];
+  if (words.length < 3 || words.length > 15) {
+    throw new Error(
+      `<Money id="${figId}" variant="block" /> label "${trimmed}" must be concise plain words (got ${words.length} words).`,
+    );
+  }
+  if (isEstimate && !/\bestimate\b/i.test(trimmed)) {
+    throw new Error(
+      `Estimate figure "${figId}" used with variant="block" must provide a label containing "estimate".`,
+    );
+  }
+  return trimmed;
 }

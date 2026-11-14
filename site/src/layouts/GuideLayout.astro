@@ -3,8 +3,9 @@ import { getEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import AnswerText from '../components/AnswerText.astro';
+import HeroBlock, { type HeroValue } from '../components/HeroBlock.astro';
 import RuleStatusNotice from '../components/RuleStatusNotice.astro';
-import Money from '../components/Money.astro';
 import Toc, { type HeadingItem } from '../components/Toc.astro';
 import Steps from '../components/Steps.astro';
 import Faq from '../components/Faq.astro';
@@ -21,6 +22,7 @@ export interface Props {
       description: string;
       slug: string;
       answer: string;
+      hero?: HeroValue;
       author: string;
       publishedOn: Date;
       updatedOn: Date;
@@ -38,7 +40,6 @@ export interface Props {
   pathname: string;
   breadcrumbs: BreadcrumbItem[];
   headings?: HeadingItem[];
-  leadFigureId?: string;
   variant?: 'default' | 'hub';
 }
 
@@ -47,7 +48,6 @@ const {
   pathname,
   breadcrumbs,
   headings = [],
-  leadFigureId,
   variant = 'default',
 } = Astro.props;
 const d = entry.data;
@@ -61,7 +61,7 @@ const faqEntries = await Promise.all(
 );
 const validFaqs = faqEntries.filter((f): f is { question: string; answer: string } => Boolean(f));
 const hasToc = variant !== 'hub' && headings.filter((h) => h.depth === 2).length >= 3;
-const primaryHeroFigure = variant === 'hub' ? undefined : (leadFigureId ?? d.figures[0]);
+const heroValue = variant === 'hub' ? false : d.hero;
 ---
 
 <BaseLayout
@@ -79,12 +79,8 @@ const primaryHeroFigure = variant === 'hub' ? undefined : (leadFigureId ?? d.fig
     <article class="prose-container">
       <h1>{d.title}</h1>
       <AnswerBlock>
-        <p>{d.answer}</p>
-        {primaryHeroFigure && (
-          <div>
-            <Money id={primaryHeroFigure} variant="block" />
-          </div>
-        )}
+        <AnswerText text={d.answer} />
+        <HeroBlock hero={heroValue} />
       </AnswerBlock>
       {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
       <div class="byline">

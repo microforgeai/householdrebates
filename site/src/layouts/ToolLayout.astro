@@ -3,8 +3,9 @@ import { getEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import AnswerText from '../components/AnswerText.astro';
+import HeroBlock, { type HeroValue } from '../components/HeroBlock.astro';
 import RuleStatusNotice from '../components/RuleStatusNotice.astro';
-import Money from '../components/Money.astro';
 import EligibilityChecker from '../components/EligibilityChecker.astro';
 import RunningCostsPicker from '../components/RunningCostsPicker.astro';
 import HwSizeGuide from '../components/HwSizeGuide.astro';
@@ -23,6 +24,7 @@ export interface Props {
       description: string;
       slug: string;
       answer: string;
+      hero?: HeroValue;
       author: string;
       publishedOn: Date;
       updatedOn: Date;
@@ -66,12 +68,8 @@ const validFaqs = faqEntries.filter((f): f is { question: string; answer: string
   <article class="prose-container">
     <h1>{d.title}</h1>
     <AnswerBlock>
-      <p>{d.answer}</p>
-      {d.figures[0] && (
-        <div>
-          <Money id={d.figures[0]} variant="block" />
-        </div>
-      )}
+      <AnswerText text={d.answer} />
+      <HeroBlock hero={d.hero} />
     </AnswerBlock>
     {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
     <div class="byline">

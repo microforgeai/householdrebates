@@ -3,8 +3,9 @@ import { getEntry, getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
+import AnswerText from '../components/AnswerText.astro';
+import HeroBlock, { type HeroValue } from '../components/HeroBlock.astro';
 import RuleStatusNotice from '../components/RuleStatusNotice.astro';
-import Money from '../components/Money.astro';
 import Toc, { type HeadingItem } from '../components/Toc.astro';
 import Faq from '../components/Faq.astro';
 import LeadForm from '../components/LeadForm.astro';
@@ -23,6 +24,7 @@ export interface Props {
       description: string;
       slug: string;
       answer: string;
+      hero?: HeroValue;
       author: string;
       publishedOn: Date;
       updatedOn: Date;
@@ -158,7 +160,6 @@ const otherAreas = allAreas
   }));
 
 const hasToc = headings.filter((h) => h.depth === 2).length >= 3;
-const primaryHeroFigure = d.figures[0];
 const contextSubLabel =
   d.variant === 'multi-town' && d.towns && d.towns.length > 0
     ? d.towns.join(', ')
@@ -181,12 +182,8 @@ const contextSubLabel =
     <article class="prose-container">
       <h1>{d.title}</h1>
       <AnswerBlock>
-        <p>{d.answer}</p>
-        {primaryHeroFigure && (
-          <div>
-            <Money id={primaryHeroFigure} variant="block" />
-          </div>
-        )}
+        <AnswerText text={d.answer} />
+        <HeroBlock hero={d.hero} />
       </AnswerBlock>
       {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
       <div class="byline">

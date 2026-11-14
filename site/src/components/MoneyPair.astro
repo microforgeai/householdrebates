@@ -1,0 +1,18 @@
+---
+import Money from './Money.astro';
+
+export interface Props {
+  ids: [string, string];
+  labels: [string, string];
+}
+
+const { ids, labels } = Astro.props;
+if (!Array.isArray(ids) || ids.length !== 2 || !Array.isArray(labels) || labels.length !== 2) {
+  throw new Error('<MoneyPair /> requires two ids and two labels.');
+}
+---
+
+<div class="money-pair" data-money-pair>
+  <Money id={ids[0]} variant="block" label={labels[0]} />
+  <Money id={ids[1]} variant="block" label={labels[1]} />
+</div>

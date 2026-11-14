@@ -1,10 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
+  assertValidBlockLabel,
   formatAud,
   formatFigureAmount,
   formatUnitValue,
   isHistoricalFigure,
   isStale,
+  KIND_TAGS,
 } from '../../src/lib/figures';
 
 describe('figures formatting and validation helpers', () => {
@@ -66,6 +68,31 @@ describe('figures formatting and validation helpers', () => {
     expect(isHistoricalFigure({ effectiveTo: '2026-09-29' }, now)).toBe(true);
     expect(isHistoricalFigure({ effectiveTo: '2027-06-30' }, now)).toBe(false);
     expect(isHistoricalFigure({}, now)).toBe(false);
+  });
+
+  it('validates block figure labels and maps all six figure kinds to visible tags', () => {
+    expect(KIND_TAGS).toEqual({
+      discount: 'Indicative discount (the provider confirms)',
+      payment: 'Minimum you pay',
+      threshold: 'A limit, not money you receive',
+      rate: 'Rate',
+      saving: 'Estimated yearly saving',
+      count: 'Count',
+    });
+
+    expect(
+      assertValidBlockLabel('vic-veu-rcac-room-gas', 'Room gas heater → one split system (3–9 kW)'),
+    ).toBe('Room gas heater → one split system (3–9 kW)');
+    expect(
+      assertValidBlockLabel('vic-veu-insulation-metro', 'Metro Melbourne, mild climate (150 m²)'),
+    ).toBe('Metro Melbourne, mild climate (150 m²)');
+    expect(() => assertValidBlockLabel('casey-diy-draught-rebate', '')).toThrow(/non-empty label/);
+    expect(() =>
+      assertValidBlockLabel('casey-diy-draught-rebate', 'Casey DIY rebate up to $200'),
+    ).toThrow(/must not contain "\$"/);
+    expect(() =>
+      assertValidBlockLabel('vic-veu-insulation-est-regional-mild', 'Regional mild ceiling insulation', true),
+    ).toThrow(/containing "estimate"/);
   });
 });
 

@@ -4,6 +4,20 @@ import Money from './Money.astro';
 import { formatAuDate } from '../lib/dates';
 import { RUNNING_COST_SCENARIOS } from '../lib/tools';
 
+const PICKER_BLOCK_LABELS: Record<string, string> = {
+  'vic-running-gas-to-electric-hw':
+    'Yearly bill saving, gas → electric hot water (Energy Victoria estimate)',
+  'vic-running-room-gas-to-rcac':
+    'Yearly bill saving, room gas heater → split system (Energy Victoria)',
+  'vic-running-ducted-gas-to-rcac':
+    'Yearly bill saving, ducted gas → ducted reverse-cycle (Energy Victoria)',
+  'vic-existing-home-electric-saving':
+    'Existing home going all-electric without solar (Energy Victoria estimate)',
+  'vic-existing-home-electric-solar-saving':
+    'Existing home going all-electric with solar (Energy Victoria estimate)',
+  'vic-gas-supply-saving': 'Gas supply charges avoided once all gas is removed',
+};
+
 const allFigures = await getCollection('figures');
 const allSources = await getCollection('sources');
 const sourceById = new Map(allSources.map((s) => [s.id, s.data]));
@@ -75,7 +89,7 @@ const serializedFigures = allFigures
         <h3 style="margin-top: 0;">{sc.label}</h3>
         {sc.figureIds.map((fid) => (
           <div style="margin-bottom: 0.75rem;">
-            <Money id={fid} variant="block" />
+            <Money id={fid} variant="block" label={PICKER_BLOCK_LABELS[fid]} />
           </div>
         ))}
         <p style="margin-bottom: 0;">

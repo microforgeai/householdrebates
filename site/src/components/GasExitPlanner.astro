@@ -4,6 +4,13 @@ import Money from './Money.astro';
 import { formatAuDate } from '../lib/dates';
 import { GAS_PLANNER_STEPS } from '../lib/tools';
 
+const STEP_BLOCK_LABELS: Record<string, string> = {
+  'vic-veu-hw-gas-to-heatpump': 'Mains gas → heat pump',
+  'vic-veu-rcac-room-gas': 'Room gas heater → one split system (3–9 kW)',
+  'vic-veu-rcac-ducted-gas-22kw': 'Ducted gas → 22.4 kW ducted reverse-cycle system',
+  'vic-veu-induction': 'Gas cooktop → induction cooktop',
+};
+
 const allFigures = await getCollection('figures');
 const allSources = await getCollection('sources');
 const sourceById = new Map(allSources.map((s) => [s.id, s.data]));
@@ -87,7 +94,7 @@ const serializedFigures = allFigures
       >
         <h3 style="margin-top: 0;">{step.label}</h3>
         <div style="margin-bottom: 0.65rem;">
-          <Money id={step.figureId} variant="block" />
+          <Money id={step.figureId} variant="block" label={STEP_BLOCK_LABELS[step.figureId]} />
         </div>
         <p style="margin-bottom: 0.5rem;">{step.detail}</p>
         <p style="margin-bottom: 0;">
@@ -104,7 +111,11 @@ const serializedFigures = allFigures
   >
     <h3 style="margin-top: 0;">Once your last gas appliance goes: supply-charge saving and abolishment</h3>
     <div style="margin-bottom: 0.75rem;">
-      <Money id="vic-gas-supply-saving" variant="block" />
+      <Money
+        id="vic-gas-supply-saving"
+        variant="block"
+        label="Gas supply charges avoided once all gas is removed"
+      />
     </div>
     <p>
       Once every gas appliance at your property is disconnected, you can request permanent gas meter abolishment so daily gas supply charges stop:

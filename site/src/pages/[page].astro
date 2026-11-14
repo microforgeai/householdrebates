@@ -3,6 +3,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import GuideLayout from '../layouts/GuideLayout.astro';
 import LegalLayout from '../layouts/LegalLayout.astro';
 import Money from '../components/Money.astro';
+import MoneyPair from '../components/MoneyPair.astro';
 import FigureTable from '../components/FigureTable.astro';
 import Callout from '../components/Callout.astro';
 import SourceLink from '../components/SourceLink.astro';
@@ -47,7 +48,7 @@ const isLegalOrTrust =
   entry.data.slug === 'about' ||
   entry.data.slug === 'sources';
 
-const mdxComponents = { Money, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
+const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
 ---
 
 {isLegalOrTrust ? (

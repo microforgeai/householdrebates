@@ -1,0 +1,29 @@
+---
+import Money from './Money.astro';
+
+export interface Props {
+  text: string;
+}
+
+const { text } = Astro.props;
+
+type Token = { kind: 'text'; value: string } | { kind: 'money'; id: string };
+const tokens: Token[] = [];
+const re = /<Money\s+id=["']([^"']+)["']\s*\/>/g;
+let lastIndex = 0;
+let m: RegExpExecArray | null;
+while ((m = re.exec(text)) !== null) {
+  if (m.index > lastIndex) {
+    tokens.push({ kind: 'text', value: text.slice(lastIndex, m.index) });
+  }
+  tokens.push({ kind: 'money', id: m[1] });
+  lastIndex = m.index + m[0].length;
+}
+if (lastIndex < text.length) {
+  tokens.push({ kind: 'text', value: text.slice(lastIndex) });
+}
+---
+
+<p>
+  {tokens.map((tok) => (tok.kind === 'money' ? <Money id={tok.id} /> : tok.value))}
+</p>

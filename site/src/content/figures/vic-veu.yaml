@@ -6,6 +6,7 @@
   audience: household
   scenario: "Replace a non-ducted (room) gas heater with a single split system (3 to 9 kW)"
   qualifier: range
+  kind: discount
   amountMin: 630
   amountMax: 1610
   currency: AUD
@@ -23,6 +24,7 @@
   audience: household
   scenario: "Replace a ducted gas heater with 4 single split systems"
   qualifier: up-to
+  kind: discount
   amountMax: 2520
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -36,6 +38,7 @@
   audience: household
   scenario: "Replace a ducted gas heater with a multi-split reverse-cycle system"
   qualifier: up-to
+  kind: discount
   amountMax: 2940
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -49,6 +52,7 @@
   audience: household
   scenario: "Replace a hard-wired electric room heater (such as slab or wall panel) with a split system"
   qualifier: up-to
+  kind: discount
   amountMax: 840
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -62,6 +66,7 @@
   audience: household
   scenario: "Replace an existing non-ducted reverse-cycle air conditioner with a new high-efficiency split system"
   qualifier: exact
+  kind: discount
   amountMax: 210
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -75,6 +80,7 @@
   audience: household
   scenario: "Install a room reverse-cycle split system without decommissioning an existing heater"
   qualifier: range
+  kind: discount
   amountMin: 70
   amountMax: 140
   currency: AUD
@@ -89,6 +95,7 @@
   audience: household
   scenario: "Replace a ducted gas heater with a 10 kW ducted reverse-cycle system"
   qualifier: up-to
+  kind: discount
   amountMax: 2520
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -102,6 +109,7 @@
   audience: household
   scenario: "Replace a ducted gas heater with a 16 kW ducted reverse-cycle system"
   qualifier: up-to
+  kind: discount
   amountMax: 4200
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -115,6 +123,7 @@
   audience: household
   scenario: "Replace a ducted gas heater with a 22.4 kW ducted reverse-cycle system"
   qualifier: up-to
+  kind: discount
   amountMax: 5530
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -128,6 +137,7 @@
   audience: household
   scenario: "Replace a central electric resistance ducted heater with a ducted reverse-cycle system"
   qualifier: up-to
+  kind: discount
   amountMax: 5460
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -141,6 +151,7 @@
   audience: household
   scenario: "Replace an existing ducted reverse-cycle system with a new 10 kW ducted system"
   qualifier: up-to
+  kind: discount
   amountMax: 490
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -154,6 +165,7 @@
   audience: household
   scenario: "Replace an existing ducted reverse-cycle system with a new 16 kW ducted system"
   qualifier: up-to
+  kind: discount
   amountMax: 770
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -167,6 +179,7 @@
   audience: household
   scenario: "Replace an existing ducted reverse-cycle system with a new 22.4 kW ducted system"
   qualifier: up-to
+  kind: discount
   amountMax: 910
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -180,6 +193,7 @@
   audience: household
   scenario: "Install a ducted reverse-cycle system without decommissioning an existing heater"
   qualifier: up-to
+  kind: discount
   amountMax: 410
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -193,6 +207,7 @@
   audience: household
   scenario: "Replace an inefficient electric hot water system with a heat pump"
   qualifier: exact
+  kind: discount
   amountMax: 630
   currency: AUD
   sourceId: energyvic-hot-water
@@ -206,6 +221,7 @@
   audience: household
   scenario: "Replace an inefficient gas hot water heater with a heat pump"
   qualifier: exact
+  kind: discount
   amountMax: 560
   currency: AUD
   sourceId: energyvic-hot-water
@@ -219,6 +235,7 @@
   audience: household
   scenario: "Replace an inefficient electric hot water system with a solar-boosted hot water system"
   qualifier: exact
+  kind: discount
   amountMax: 910
   currency: AUD
   sourceId: energyvic-hot-water
@@ -232,6 +249,7 @@
   audience: household
   scenario: "Replace an inefficient gas hot water heater with a solar-boosted hot water system"
   qualifier: exact
+  kind: discount
   amountMax: 700
   currency: AUD
   sourceId: energyvic-hot-water
@@ -245,6 +263,7 @@
   audience: household
   scenario: "Combined VEU discount and Solar Homes hot water rebate (eligible standard product)"
   qualifier: up-to
+  kind: discount
   amountMax: 1560
   currency: AUD
   sourceId: energyvic-hot-water
@@ -258,6 +277,7 @@
   audience: household
   scenario: "Combined VEU discount and Solar Homes hot water rebate (with eligible locally made product)"
   qualifier: up-to
+  kind: discount
   amountMax: 1960
   currency: AUD
   sourceId: energyvic-hot-water
@@ -271,6 +291,7 @@
   audience: household
   scenario: "Minimum customer co-contribution required for a VEU hot water upgrade"
   qualifier: exact
+  kind: payment
   amountMax: 200
   currency: AUD
   sourceId: energyvic-hot-water
@@ -286,6 +307,7 @@
   audience: household
   scenario: "Estimated annual energy bill saving when replacing a room gas heater with a split-system air conditioner"
   qualifier: up-to
+  kind: saving
   amountMax: 460
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -299,6 +321,7 @@
   audience: household
   scenario: "Estimated annual energy bill saving when replacing a ducted gas heater with a ducted reverse-cycle system"
   qualifier: up-to
+  kind: saving
   amountMax: 1140
   currency: AUD
   sourceId: energyvic-heating-cooling
@@ -312,6 +335,7 @@
   audience: household
   scenario: "Estimated annual energy bill saving when switching from gas to an efficient electric hot water system"
   qualifier: about
+  kind: saving
   amountMax: 400
   currency: AUD
   sourceId: energyvic-hot-water
@@ -343,7 +367,7 @@
   scenario: "Ducted reverse-cycle, before 30 Sep 2026"
   qualifier: minimum
   unit: AUD
-  kind: threshold
+  kind: payment
   amountMax: 1000
   currency: AUD
   gstIncluded: true
@@ -461,6 +485,7 @@
   scenario: "Average 150 m² house, metro Melbourne (mild climate zone)"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 1500
   currency: AUD
   sourceId: energyvic-insulation
@@ -475,6 +500,7 @@
   scenario: "Average 150 m² house, regional Victoria (cold climate zone)"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 2100
   currency: AUD
   sourceId: energyvic-insulation
@@ -489,6 +515,7 @@
   scenario: "Solar Homes hot water rebate"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 1000
   currency: AUD
   sourceId: solarvic-hot-water-rebate
@@ -503,6 +530,7 @@
   scenario: "Solar Homes hot water rebate, eligible locally made product"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 1400
   currency: AUD
   sourceId: solarvic-hot-water-rebate
@@ -517,6 +545,7 @@
   scenario: "Share of the product price the rebate covers"
   qualifier: exact
   unit: percent
+  kind: rate
   amountMax: 50
   sourceId: solarvic-hot-water-rebate
   checkedOn: 2026-11-13
@@ -530,6 +559,7 @@
   scenario: "Combined household taxable income cap"
   qualifier: exact
   unit: AUD
+  kind: threshold
   amountMax: 150000
   currency: AUD
   effectiveFrom: 2026-07-01
@@ -545,6 +575,7 @@
   scenario: "Income cap before 1 Jul 2026"
   qualifier: exact
   unit: AUD
+  kind: threshold
   amountMax: 210000
   currency: AUD
   effectiveTo: 2026-06-30
@@ -561,6 +592,7 @@
   scenario: "Property value cap"
   qualifier: exact
   unit: AUD
+  kind: threshold
   display: compact
   amountMax: 3000000
   currency: AUD
@@ -576,6 +608,7 @@
   scenario: "Induction cooktop replacing a gas cooktop, per product"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 140
   currency: AUD
   sourceId: energyvic-induction
@@ -590,6 +623,7 @@
   scenario: "Certificate price Energy Victoria's induction figure is based on"
   qualifier: exact
   unit: AUD
+  kind: rate
   amountMax: 70
   currency: AUD
   sourceId: energyvic-induction
@@ -694,6 +728,7 @@
   scenario: "Gas supply charges avoided once every gas appliance is removed, per year"
   qualifier: about-range
   unit: AUD
+  kind: saving
   amountMin: 350
   amountMax: 400
   currency: AUD
@@ -709,6 +744,7 @@
   scenario: "Expected cut to the installed cost"
   qualifier: about-range
   unit: percent
+  kind: rate
   amountMin: 30
   amountMax: 50
   sourceId: energyvic-insulation
@@ -723,6 +759,7 @@
   scenario: "Bill saving per year"
   qualifier: more-than
   unit: AUD
+  kind: saving
   amountMax: 400
   currency: AUD
   sourceId: energyvic-insulation
@@ -737,6 +774,7 @@
   scenario: "Victorian homes with no or too little ceiling insulation"
   qualifier: almost
   unit: percent
+  kind: rate
   amountMax: 60
   sourceId: energyvic-insulation
   checkedOn: 2026-11-13
@@ -750,6 +788,7 @@
   scenario: "Electricity use vs a standard electric storage system"
   qualifier: up-to
   unit: percent
+  kind: rate
   amountMax: 75
   sourceId: energyvic-hot-water
   checkedOn: 2026-11-13
@@ -763,6 +802,7 @@
   scenario: "Larger commercial and industrial upgrades"
   qualifier: minimum
   unit: AUD
+  kind: payment
   amountMax: 10000
   currency: AUD
   sourceId: energyvic-hot-water
@@ -777,6 +817,7 @@
   scenario: "Solar Homes solar panel (PV) rebate, plus an optional interest-free loan"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 1400
   currency: AUD
   sourceId: solarvic-pv-rebate
@@ -791,6 +832,7 @@
   scenario: "Extra hot water rebates in 2026–27"
   qualifier: exact
   unit: count
+  kind: count
   amountMax: 27000
   sourceId: solarvic-income-cap-news
   checkedOn: 2026-11-13
@@ -804,6 +846,7 @@
   scenario: "Plumbing work value above which a compliance certificate is required"
   qualifier: more-than
   unit: AUD
+  kind: threshold
   amountMax: 750
   currency: AUD
   sourceId: bpc-plumbing-compliance
@@ -819,6 +862,7 @@
   scenario: "Annual electricity concession, share of usage and service costs"
   qualifier: exact
   unit: percent
+  kind: rate
   amountMax: 17.5
   sourceId: dffh-electricity-concession
   checkedOn: 2026-11-13
@@ -832,6 +876,7 @@
   scenario: "First part of the yearly electricity bill the concession does not apply to"
   qualifier: exact
   unit: AUD
+  kind: threshold
   display: cents
   amountMax: 171.60
   currency: AUD
@@ -847,6 +892,7 @@
   scenario: "Winter gas concession (1 May to 31 Oct), share of costs"
   qualifier: exact
   unit: percent
+  kind: rate
   amountMax: 17.5
   sourceId: dffh-winter-gas-concession
   checkedOn: 2026-11-13
@@ -860,6 +906,7 @@
   scenario: "First part of the gas bill the winter concession does not apply to"
   qualifier: exact
   unit: AUD
+  kind: threshold
   display: cents
   amountMax: 62.40
   currency: AUD
@@ -875,6 +922,7 @@
   scenario: "New all-electric home, Energy Victoria's estimated yearly saving"
   qualifier: exact
   unit: AUD
+  kind: saving
   amountMax: 990
   currency: AUD
   sourceId: energyvic-new-buildings
@@ -889,6 +937,7 @@
   scenario: "New all-electric home with solar, estimated yearly saving"
   qualifier: exact
   unit: AUD
+  kind: saving
   amountMax: 1920
   currency: AUD
   sourceId: energyvic-new-buildings
@@ -903,6 +952,7 @@
   scenario: "Solar for Apartments, per apartment"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 2800
   currency: AUD
   sourceId: solarvic-apartments
@@ -917,6 +967,7 @@
   scenario: "Solar for Apartments, per property"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 140000
   currency: AUD
   sourceId: solarvic-apartments
@@ -931,6 +982,7 @@
   scenario: "Example: double glazing, per 10 m²"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 210
   currency: AUD
   sourceId: energyvic-window-glazing
@@ -945,6 +997,7 @@
   scenario: "Example: secondary glazing, per 10 m²"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 140
   currency: AUD
   sourceId: energyvic-window-glazing
@@ -959,6 +1012,7 @@
   scenario: "City of Casey rebate for DIY draught-proofing products, one per household"
   qualifier: up-to
   unit: AUD
+  kind: discount
   amountMax: 200
   currency: AUD
   sourceId: casey-home-energy-rebates
@@ -974,6 +1028,7 @@
   scenario: "Existing home going all-electric, Energy Victoria's estimated yearly saving"
   qualifier: about
   unit: AUD
+  kind: saving
   amountMax: 1900
   currency: AUD
   sourceId: energyvic-electrification
@@ -988,6 +1043,7 @@
   scenario: "Existing home going all-electric with solar, estimated yearly saving"
   qualifier: about
   unit: AUD
+  kind: saving
   amountMax: 2230
   currency: AUD
   sourceId: energyvic-electrification
@@ -1003,6 +1059,7 @@
   scenario: "Accredited providers listed for hot water, Grampians region"
   qualifier: exact
   unit: count
+  kind: count
   amountMax: 31
   sourceId: energyvic-hot-water
   checkedOn: 2026-11-13
@@ -1016,6 +1073,7 @@
   scenario: "Accredited providers listed for heating and cooling, Grampians region"
   qualifier: exact
   unit: count
+  kind: count
   amountMax: 46
   sourceId: energyvic-heating-cooling
   checkedOn: 2026-11-13
@@ -1029,6 +1087,7 @@
   scenario: "Accredited providers listed for hot water, Loddon Mallee region"
   qualifier: exact
   unit: count
+  kind: count
   amountMax: 26
   sourceId: energyvic-hot-water
   checkedOn: 2026-11-13
@@ -1042,6 +1101,7 @@
   scenario: "Accredited providers listed for heating and cooling, Loddon Mallee region"
   qualifier: exact
   unit: count
+  kind: count
   amountMax: 42
   sourceId: energyvic-heating-cooling
   checkedOn: 2026-11-13
@@ -1055,6 +1115,7 @@
   scenario: "Solar Victoria top-up for Solstice customers who do not meet the VEU criteria"
   qualifier: exact
   unit: AUD
+  kind: discount
   amountMax: 600
   currency: AUD
   sourceId: solarvic-solstice

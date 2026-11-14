@@ -2,7 +2,7 @@
 import { getEntry } from 'astro:content';
 import { SITE } from '../data/site';
 import { assertFigureNotStale, formatAuDate } from '../lib/dates';
-import { formatFigureAmount } from '../lib/figures';
+import { assertValidBlockLabel, formatFigureAmount, KIND_TAGS } from '../lib/figures';
 
 export interface Props {
   id: string;
@@ -24,26 +24,29 @@ if (!sourceEntry || !sourceEntry.data.official) {
   throw new Error(`Figure "${fig.id}" must reference an official source.`);
 }
 
-const isEstimate = fig.basis === 'estimate';
-if (isEstimate && variant === 'block' && (!label || !/\bestimate\b/i.test(label))) {
-  throw new Error(
-    `Estimate figure "${fig.id}" used with variant="block" must provide a label containing "estimate".`,
-  );
+if (!fig.kind || !(fig.kind in KIND_TAGS)) {
+  throw new Error(`Figure "${fig.id}" is missing a valid kind.`);
 }
 
+const isEstimate = fig.basis === 'estimate';
+const validLabel = variant === 'block' ? assertValidBlockLabel(fig.id, label, isEstimate) : undefined;
+const kindTag = KIND_TAGS[fig.kind];
 const formattedAmount = formatFigureAmount(fig);
 const checkedStr = formatAuDate(fig.checkedOn);
 ---
 
 {variant === 'block' ? (
-  <span
+  <figure
     class="money-block"
+    data-money-block
     data-figure={fig.id}
     data-figure-id={fig.id}
     data-figure-basis={fig.basis ?? 'official'}
-    data-money-label={label || undefined}
+    data-kind={fig.kind}
+    data-money-label={validLabel}
   >
-    {label && <span class="money-block__label">{label}</span>}
+    <figcaption class="money-block__label" data-money-label>{validLabel}</figcaption>
+    <span class="money-block__kind" data-money-kind>{kindTag}</span>
     <span class="money-block__amount">{formattedAmount}</span>
     {isEstimate && (
       <span class="money-block__estimate-note">
@@ -56,7 +59,7 @@ const checkedStr = formatAuDate(fig.checkedOn);
         {sourceEntry.data.publisher} ↗
       </a>
     </span>
-  </span>
+  </figure>
 ) : (
   <span
     class="money-inline"

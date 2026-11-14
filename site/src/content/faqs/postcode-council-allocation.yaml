@@ -1,0 +1,5 @@
+question: Which local council is my postcode in?
+answer: Because VEU Table A lists postcodes without council names, we match each postcode to its local government area using Australian Bureau of Statistics ASGS Edition 3 mesh-block allocation files weighted by 2021 Census dwellings. Where a postcode crosses council boundaries, the card shows each council's dwelling share, and the 25 non-residential PO-box postcodes with zero dwellings show an indicative council—see [what each postcode column means](/victoria/postcode/#what-each-column-means).
+canonicalPage: /victoria/postcode/
+state: vic
+checkedOn: 2026-11-14

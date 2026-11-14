@@ -54,6 +54,10 @@ export function resolveSlugToPath(slug: string): { path: string; label: string }
       path: '/victoria/eligibility-checker/',
       label: 'Victoria Rebate Eligibility Checker (VEU 2026)',
     },
+    postcode: {
+      path: '/victoria/postcode/',
+      label: 'Victorian VEU Postcode & Mains Gas Lookup',
+    },
     melbourne: {
       path: '/victoria/melbourne/',
       label: 'Melbourne VEU Heating, Cooling & Hot Water Discounts',

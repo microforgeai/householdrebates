@@ -1,0 +1,237 @@
+---
+import { getCollection } from 'astro:content';
+import PostcodeLookupIsland from './PostcodeLookupIsland.astro';
+import type { PostcodeLookupBootstrapPayload } from './PostcodeLookupApp';
+import postcodesJson from '../data/postcodes.json';
+import { assertFigureNotStale, formatAuDate } from '../lib/dates';
+import { formatFigureAmount, KIND_TAGS } from '../lib/figures';
+import { getEnabledUrls } from '../lib/rollout';
+import {
+  LINKS_DATA,
+  MESSAGES_BY_ID,
+  RULES_META,
+  type SourceMeta,
+} from '../lib/checker';
+import { buildCompactPostcodeArtifact } from '../lib/checker/postcode-compact';
+
+interface RawPostcodeRow {
+  postcode: string;
+  veu_area: 'Metropolitan' | 'Regional';
+  reticulated_gas: boolean;
+  veu_climatic_region: 'Mild' | 'Cold' | 'Hot';
+  heat_pump_zone: 4 | 5;
+  dwellings_2021: number;
+}
+
+const maxAgeDays = Number(process.env.MAX_FIGURE_AGE_DAYS || 45);
+const postcodesCheckedDate = new Date(`${postcodesJson.checkedOn}T00:00:00Z`);
+assertFigureNotStale('postcodes.json', postcodesCheckedDate, maxAgeDays);
+
+const allRows = Object.values(
+  postcodesJson.rows as Record<string, RawPostcodeRow>,
+).sort((a, b) => a.postcode.localeCompare(b.postcode));
+
+const totalPostcodes = allRows.length;
+const metroCount = allRows.filter((r) => r.veu_area === 'Metropolitan').length;
+const regionalCount = allRows.filter((r) => r.veu_area === 'Regional').length;
+const gasYesCount = allRows.filter((r) => r.reticulated_gas).length;
+const gasNoCount = allRows.filter((r) => !r.reticulated_gas).length;
+const mildCount = allRows.filter((r) => r.veu_climatic_region === 'Mild').length;
+const coldCount = allRows.filter((r) => r.veu_climatic_region === 'Cold').length;
+const hotCount = allRows.filter((r) => r.veu_climatic_region === 'Hot').length;
+const zone4Count = allRows.filter((r) => r.heat_pump_zone === 4).length;
+const zone5Count = allRows.filter((r) => r.heat_pump_zone === 5).length;
+const poBoxCount = allRows.filter((r) => r.dwellings_2021 === 0).length;
+
+const COMBO_ORDER: readonly {
+  area: 'Metropolitan' | 'Regional';
+  climate: 'Mild' | 'Cold' | 'Hot';
+  slug: string;
+}[] = [
+  { area: 'Metropolitan', climate: 'Mild', slug: 'metropolitan-mild' },
+  { area: 'Regional', climate: 'Cold', slug: 'regional-cold' },
+  { area: 'Regional', climate: 'Mild', slug: 'regional-mild' },
+  { area: 'Metropolitan', climate: 'Cold', slug: 'metropolitan-cold' },
+  { area: 'Regional', climate: 'Hot', slug: 'regional-hot' },
+];
+
+const groupedPostcodes = COMBO_ORDER.map((combo) => {
+  const codes = allRows
+    .filter(
+      (r) => r.veu_area === combo.area && r.veu_climatic_region === combo.climate,
+    )
+    .map((r) => r.postcode);
+  return {
+    ...combo,
+    codes,
+  };
+}).filter((g) => g.codes.length > 0);
+
+const INSULATION_FIGURE_IDS = new Set([
+  'vic-veu-insulation-metro',
+  'vic-veu-insulation-regional',
+  'vic-veu-insulation-est-regional-mild',
+  'vic-veu-insulation-est-metro-cold',
+  'vic-veu-insulation-est-regional-hot',
+]);
+
+const insulationEntries = await getCollection('figures', (f) =>
+  INSULATION_FIGURE_IDS.has(f.id),
+);
+const allSources = await getCollection('sources');
+const sourceEntryById = new Map(allSources.map((s) => [s.id, s]));
+const referencedSourceIds = new Set<string>();
+
+const serializedFigures = insulationEntries.map((f) => {
+  assertFigureNotStale(`figure:${f.id}`, f.data.checkedOn, maxAgeDays);
+  const srcId =
+    typeof f.data.sourceId === 'string' ? f.data.sourceId : f.data.sourceId.id;
+  referencedSourceIds.add(srcId);
+  return {
+    id: f.data.id,
+    formatted: formatFigureAmount(f.data),
+    scenario: f.data.scenario,
+    kindTag: KIND_TAGS[f.data.kind],
+    basis: f.data.basis ?? 'official',
+    method: f.data.method,
+    sourceId: srcId,
+    checkedOn: f.data.checkedOn.toISOString().slice(0, 10),
+  };
+});
+
+const serializedSources: SourceMeta[] = [];
+for (const sid of referencedSourceIds) {
+  const entry = sourceEntryById.get(sid);
+  if (!entry) {
+    throw new Error(`PostcodeLookup missing source "${sid}"`);
+  }
+  serializedSources.push({
+    id: entry.id,
+    title: entry.data.title,
+    publisher: entry.data.publisher,
+    url: entry.data.url,
+    official: Boolean(entry.data.official),
+    checkedOn: entry.data.checkedOn.toISOString().slice(0, 10),
+  });
+}
+
+const x1Message = MESSAGES_BY_ID.get('X1');
+const gasNoRule = RULES_META.find((r) => r.id === 'GAS-NO');
+const hpz5Rule = RULES_META.find((r) => r.id === 'HPZ-5');
+
+if (!x1Message || !gasNoRule || !hpz5Rule) {
+  throw new Error('PostcodeLookup missing X1, GAS-NO, or HPZ-5 metadata');
+}
+
+const artifact = buildCompactPostcodeArtifact();
+
+const bootstrapPayload: PostcodeLookupBootstrapPayload = {
+  postcodesUrl: artifact.url,
+  figures: serializedFigures,
+  sources: serializedSources,
+  enabledUrls: [...getEnabledUrls()],
+  links: LINKS_DATA,
+  x1Message,
+  gasNoText: gasNoRule.why,
+  hpz5Text: hpz5Rule.why,
+};
+---
+
+<section
+  class="checker-card postcode-lookup-card"
+  id="postcode-search"
+  aria-labelledby="postcode-search-heading"
+  data-postcode-lookup-root
+>
+  <h2 id="postcode-search-heading">Look up your Victorian postcode</h2>
+
+  <script
+    type="application/json"
+    id="postcode-lookup-bootstrap"
+    set:html={JSON.stringify(bootstrapPayload)}
+  />
+
+  <PostcodeLookupIsland />
+
+  <p class="postcode-source-caption" data-postcode-source-caption>
+    From VEU Specifications v25.0 Table A; councils from ABS ASGS Edition 3 allocation files, weighted by 2021 Census dwellings. Checked {formatAuDate(postcodesCheckedDate)}.
+  </p>
+</section>
+
+<section
+  class="postcode-summary-section"
+  id="statewide-postcode-counts"
+  aria-labelledby="statewide-counts-heading"
+  data-postcode-statewide-counts
+>
+  <h2 id="statewide-counts-heading">
+    Statewide VEU Table A summary ({totalPostcodes} Victorian postcodes)
+  </h2>
+  <p>
+    Every postcode in Victoria&apos;s VEU Specifications version 25.0 Table A sits in one area category, gas network status, climatic region, and heat pump zone:
+  </p>
+
+  <div class="figure-table-wrap">
+    <table class="figure-table">
+      <caption>
+        Built from VEU Specifications v25.0 Table A and ABS ASGS Edition 3 allocation files · Checked {formatAuDate(postcodesCheckedDate)}
+      </caption>
+      <thead>
+        <tr>
+          <th scope="col">Table A classification</th>
+          <th scope="col">Victorian postcode counts ({totalPostcodes} total)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>VEU area</td>
+          <td>
+            <strong>{metroCount}</strong> Metropolitan · <strong>{regionalCount}</strong> Regional
+          </td>
+        </tr>
+        <tr>
+          <td>Reticulated (mains) gas</td>
+          <td>
+            <strong>{gasYesCount}</strong> with reticulated gas · <strong>{gasNoCount}</strong> without reticulated gas
+          </td>
+        </tr>
+        <tr>
+          <td>VEU climatic region</td>
+          <td>
+            <strong>{mildCount}</strong> Mild · <strong>{coldCount}</strong> Cold · <strong>{hotCount}</strong> Hot
+          </td>
+        </tr>
+        <tr>
+          <td>Heat pump hot water zone</td>
+          <td>
+            <strong>{zone4Count}</strong> in zone 4 · <strong>{zone5Count}</strong> in zone 5
+          </td>
+        </tr>
+        <tr>
+          <td>Council (LGA) dwelling weighting</td>
+          <td>
+            Weighted by 2021 Census dwellings across ABS mesh blocks (<strong>{poBoxCount}</strong> PO-box or non-residential postcodes have zero dwellings and show an indicative council)
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="postcode-fallback-lists" data-postcode-fallback-lists>
+    <h3>Browse all {totalPostcodes} postcodes by VEU area and climate (works without JavaScript)</h3>
+    <p class="field-hint">
+      Expand any VEU area and climate pairing below to check plain 4-digit postcodes when JavaScript is turned off.
+    </p>
+    {groupedPostcodes.map((group) => (
+      <details
+        class="postcode-group-details"
+        data-postcode-group={group.slug}
+      >
+        <summary>
+          {group.area} · {group.climate} climate ({group.codes.length} postcodes)
+        </summary>
+        <p class="postcode-group-details__list">{group.codes.join(', ')}</p>
+      </details>
+    ))}
+  </div>
+</section>

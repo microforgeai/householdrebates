@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { AreaCardView, renderResolvedLink } from './AreaCardView';
 import { formatAuDate } from '../lib/dates';
 import { formatAud, KIND_TAGS, type FigureData } from '../lib/figures';
 import {
@@ -13,7 +14,6 @@ import {
   pruneHiddenAnswersFromList,
   renderMessageFromMap,
   RULE_HOOKS,
-  type AreaCard,
   type CheckerAnswers,
   type CheckerCatalogRuntime,
   type CheckerEvaluationContext,
@@ -31,10 +31,7 @@ import {
   type RuleStatus,
   type SourceMeta,
 } from '../lib/checker/client';
-import {
-  hydrateCompactPostcodes,
-  type CompactPostcodePayload,
-} from '../lib/checker/postcode-client';
+import { fetchCompactPostcodesOnce } from '../lib/checker/postcode-client';
 import { decodeAnswersFromHash, encodeAnswersToHash } from '../lib/checker/share';
 
 export interface CheckerElectionNoticeBootstrap {
@@ -72,22 +69,6 @@ const STATUS_LABELS: Readonly<Record<RuleStatus, string>> = {
   info: 'Info',
 };
 
-let postcodesFetchPromise: Promise<PostcodesDataset> | null = null;
-
-function fetchPostcodesOnce(url: string): Promise<PostcodesDataset> {
-  if (!postcodesFetchPromise) {
-    postcodesFetchPromise = fetch(url).then(async (res) => {
-      if (!res.ok) {
-        postcodesFetchPromise = null;
-        throw new Error(`Failed to load postcode table (${res.status})`);
-      }
-      const compact = (await res.json()) as CompactPostcodePayload;
-      return hydrateCompactPostcodes(compact);
-    });
-  }
-  return postcodesFetchPromise;
-}
-
 function readSessionAnswers(): { answers: CheckerAnswers; savedStep: string | null } {
   try {
     const raw = sessionStorage.getItem(SESSION_ANSWERS_KEY);
@@ -115,81 +96,16 @@ function clearSessionState(): void {
   } catch {}
 }
 
-function renderLinkAnchor(link: ResolvedLink, className?: string) {
-  if (link.external) {
-    return (
-      <a
-        href={link.href}
-        class={className}
-        target="_blank"
-        rel={link.rel ?? 'noopener noreferrer'}
-      >
-        {link.label} ↗
-      </a>
-    );
-  }
-  return (
-    <a href={link.href} class={className}>
-      {link.label}
-    </a>
-  );
-}
-
 function InlineLinks({ links }: { links: ResolvedLink[] }) {
   return (
     <>
       {links.map((lnk, idx) => (
         <span key={`${lnk.specHref}|${lnk.href}`}>
           {idx > 0 ? ' · ' : ''}
-          {renderLinkAnchor(lnk)}
+          {renderResolvedLink(lnk)}
         </span>
       ))}
     </>
-  );
-}
-
-function AreaCardView({ card }: { card: AreaCard }) {
-  return (
-    <section
-      class="checker-area-card"
-      aria-label={`Your area for postcode ${card.postcode}`}
-      data-area-card
-      data-area-postcode={card.postcode}
-    >
-      <div class="checker-area-card__header">
-        <h3 class="checker-area-card__title">Your area — Postcode {card.postcode}</h3>
-        <span class="checker-area-card__badge">{card.veuArea}</span>
-      </div>
-      <p class="checker-area-card__summary" data-area-summary>
-        {card.summaryText}
-      </p>
-      <dl class="checker-area-card__grid">
-        <div>
-          <dt>Localities</dt>
-          <dd>{card.localitiesDisplay}</dd>
-        </div>
-        <div>
-          <dt>Council (LGA)</dt>
-          <dd>{card.lgaDisplay}</dd>
-        </div>
-        <div>
-          <dt>Mains gas</dt>
-          <dd>{card.reticulatedGas ? 'Yes (reticulated gas)' : 'No reticulated mains gas'}</dd>
-        </div>
-        <div>
-          <dt>Climate &amp; heat pump zone</dt>
-          <dd>
-            {card.climaticRegion} · Heat pump zone {card.heatPumpZone}
-          </dd>
-        </div>
-      </dl>
-      <div class="checker-area-card__footer">
-        <span class="checker-area-card__meta">
-          From VEU Specifications v25.0 Table A · Checked {formatAuDate(card.specCheckedOn)}
-        </span>
-        <span data-area-link>{renderLinkAnchor(card.areaLink, 'checker-area-card__link')}</span>
-      </div>
-    </section>
   );
 }
 
@@ -302,7 +218,7 @@ function LineCard({
       {line.links.length > 0 && (
         <ul class="checker-line__links">
           {line.links.map((lnk) => (
-            <li key={`${lnk.specHref}|${lnk.href}`}>{renderLinkAnchor(lnk)}</li>
+            <li key={`${lnk.specHref}|${lnk.href}`}>{renderResolvedLink(lnk)}</li>
           ))}
         </ul>
       )}
@@ -376,7 +292,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
 
   const prefetchPostcodesSilently = () => {
     if (postcodesData) return;
-    void fetchPostcodesOnce(bootstrap.postcodesUrl)
+    void fetchCompactPostcodesOnce(bootstrap.postcodesUrl)
       .then((loaded) => setPostcodesData(loaded))
       .catch(() => {});
   };
@@ -386,7 +302,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     setPostcodesLoading(true);
     setLoadError(null);
     try {
-      const loaded = await fetchPostcodesOnce(bootstrap.postcodesUrl);
+      const loaded = await fetchCompactPostcodesOnce(bootstrap.postcodesUrl);
       setPostcodesData(loaded);
       return loaded;
     } catch {
@@ -398,7 +314,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     }
   };
 
-  // Restore from #a= URL hash first, else from sessionStorage
+  // Restore from #a= URL hash first, then ?pc= pre-fill (starts at S1), else sessionStorage
   useEffect(() => {
     const applyHashIfPresent = (): boolean => {
       const decoded = decodeAnswersFromHash(window.location.hash);
@@ -412,16 +328,27 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     };
 
     if (!applyHashIfPresent()) {
-      const { answers: savedAnswers, savedStep } = readSessionAnswers();
-      if (Object.keys(savedAnswers).length > 0) {
-        answersRef.current = savedAnswers;
-        setAnswers(savedAnswers);
-        if (savedStep === 'result') {
-          setPendingHashRestore(true);
-        } else if (savedStep && /^\d+$/.test(savedStep)) {
-          setStepIndex(Number(savedStep));
-          if (savedAnswers.S1) {
-            prefetchPostcodesSilently();
+      const queryPc = new URLSearchParams(window.location.search).get('pc')?.trim() ?? '';
+      if (/^3\d{3}$/.test(queryPc)) {
+        const prefilled: CheckerAnswers = { R2: queryPc, B2: queryPc };
+        answersRef.current = prefilled;
+        setAnswers(prefilled);
+        setStepIndex(0);
+        setMode('questions');
+        writeSessionState(prefilled, '0');
+        prefetchPostcodesSilently();
+      } else {
+        const { answers: savedAnswers, savedStep } = readSessionAnswers();
+        if (Object.keys(savedAnswers).length > 0) {
+          answersRef.current = savedAnswers;
+          setAnswers(savedAnswers);
+          if (savedStep === 'result') {
+            setPendingHashRestore(true);
+          } else if (savedStep && /^\d+$/.test(savedStep)) {
+            setStepIndex(Number(savedStep));
+            if (savedAnswers.S1) {
+              prefetchPostcodesSilently();
+            }
           }
         }
       }
@@ -926,14 +853,14 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
           {result.ctas.primary.length > 0 && (
             <div class="checker-ctas__primary" data-cta-tier="primary">
               {result.ctas.primary.map((cta, idx) =>
-                renderLinkAnchor(cta, idx === 0 ? 'btn' : 'btn btn--secondary'),
+                renderResolvedLink(cta, idx === 0 ? 'btn' : 'btn btn--secondary'),
               )}
             </div>
           )}
           {result.ctas.secondary.length > 0 && (
             <ul class="checker-ctas__secondary" data-cta-tier="secondary">
               {result.ctas.secondary.map((cta) => (
-                <li key={`${cta.specHref}|${cta.href}`}>{renderLinkAnchor(cta)}</li>
+                <li key={`${cta.specHref}|${cta.href}`}>{renderResolvedLink(cta)}</li>
               ))}
             </ul>
           )}
@@ -1040,10 +967,16 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
           </div>
         )}
 
-        {(currentField.type === 'single' || currentField.type === 'single-with-count') && (
+        {currentField.type !== 'postcode' && (
           <fieldset key={fieldId} class="field-group checker-fieldset" aria-describedby={describedBy}>
             <legend class="field-label checker-legend">{formatFieldLabel(currentField)}</legend>
-            {currentField.helper && (
+            {currentField.type === 'multi' ? (
+              <p id={helperId} class="field-hint">
+                {currentField.id === 'B6' && answers.B4 === 'yes-not-opted-in'
+                  ? 'Sites on the ESC Scheduled Activity Premises register that have not opted in can only check the federal battery option below (or continue to view the VEU notice).'
+                  : 'Choose one or more options.'}
+              </p>
+            ) : currentField.helper ? (
               <p id={helperId} class="field-hint">
                 {currentField.helper}
                 {currentField.id === 'B4' && bizSource ? (
@@ -1055,28 +988,40 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
                   </>
                 ) : null}
               </p>
-            )}
+            ) : null}
             <div class="checker-options">
               {visibleOptions.map((opt) => {
-                const checked = String(answers[currentField.id] ?? '') === opt.id;
+                const isMulti = currentField.type === 'multi';
+                const checked = isMulti
+                  ? Array.isArray(answers[currentField.id]) &&
+                    (answers[currentField.id] as string[]).includes(opt.id)
+                  : String(answers[currentField.id] ?? '') === opt.id;
                 return (
                   <label
                     key={opt.id}
                     class={`option-row ${checked ? 'option-row--selected' : ''}`}
                   >
                     <input
-                      type="radio"
+                      type={isMulti ? 'checkbox' : 'radio'}
                       name={fieldId}
                       value={opt.id}
                       checked={checked}
                       data-option-id={opt.id}
-                      onChange={() => updateAnswer(currentField.id, opt.id as never)}
-                      onKeyDown={(ev) => {
-                        if (ev.key === 'Enter') {
-                          ev.preventDefault();
-                          ev.currentTarget.form?.requestSubmit();
-                        }
-                      }}
+                      onChange={() =>
+                        isMulti
+                          ? toggleMultiOption(currentField.id, opt.id)
+                          : updateAnswer(currentField.id, opt.id as never)
+                      }
+                      onKeyDown={
+                        isMulti
+                          ? undefined
+                          : (ev) => {
+                              if (ev.key === 'Enter') {
+                                ev.preventDefault();
+                                ev.currentTarget.form?.requestSubmit();
+                              }
+                            }
+                      }
                     />
                     <span>{opt.label}</span>
                   </label>
@@ -1137,46 +1082,6 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
                 </div>
               )}
 
-            {stepError && (
-              <p id={errorId} class="field-error" role="alert">
-                {stepError}
-              </p>
-            )}
-          </fieldset>
-        )}
-
-        {currentField.type === 'multi' && (
-          <fieldset key={fieldId} class="field-group checker-fieldset" aria-describedby={describedBy}>
-            <legend class="field-label checker-legend">{formatFieldLabel(currentField)}</legend>
-            <p id={helperId} class="field-hint">
-              {currentField.id === 'B6' && answers.B4 === 'yes-not-opted-in'
-                ? 'Sites on the ESC Scheduled Activity Premises register that have not opted in can only check the federal battery option below (or continue to view the VEU notice).'
-                : 'Choose one or more options.'}
-            </p>
-            <div class="checker-options">
-              {visibleOptions.map((opt) => {
-                const selectedList = Array.isArray(answers[currentField.id])
-                  ? (answers[currentField.id] as string[])
-                  : [];
-                const checked = selectedList.includes(opt.id);
-                return (
-                  <label
-                    key={opt.id}
-                    class={`option-row ${checked ? 'option-row--selected' : ''}`}
-                  >
-                    <input
-                      type="checkbox"
-                      name={fieldId}
-                      value={opt.id}
-                      checked={checked}
-                      data-option-id={opt.id}
-                      onChange={() => toggleMultiOption(currentField.id, opt.id)}
-                    />
-                    <span>{opt.label}</span>
-                  </label>
-                );
-              })}
-            </div>
             {stepError && (
               <p id={errorId} class="field-error" role="alert">
                 {stepError}

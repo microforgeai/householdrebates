@@ -1,0 +1,67 @@
+---
+title: "VEU Postcode & Mains Gas Lookup"
+h1: "Is My Victorian Postcode Metro or Regional for VEU, and Does It Have Mains Gas?"
+description: "Look up any Victorian VEU postcode to check Metropolitan or Regional area, reticulated mains gas, climate region, heat pump zone, and council."
+state: vic
+section: tools
+slug: postcode
+navGroup: tools
+mapRow: 54
+answer: "Victoria's VEU Specifications version 25.0 classify every listed postcode as Metropolitan or Regional, with or without reticulated mains gas, in a Mild, Cold, or Hot climatic region, and in heat pump zone 4 or 5. Those postcode settings change how several Victorian Energy Upgrades discounts are calculated—including ceiling insulation and hot water upgrades—and the accredited provider confirms the final amount in your quote. Enter a 4-digit Victorian postcode or suburb name below to check your area classification."
+hero: false
+author: "Gurinder Singh"
+publishedOn: 2026-11-14
+updatedOn: 2026-11-14
+checkedOn: 2026-11-14
+sources:
+  - vic-veu-spec-v25
+  - abs-asgs-allocation
+  - energyvic-insulation
+figures:
+  - vic-veu-insulation-metro
+  - vic-veu-insulation-regional
+  - vic-veu-insulation-est-regional-mild
+  - vic-veu-insulation-est-metro-cold
+  - vic-veu-insulation-est-regional-hot
+faq:
+  - postcode-climate-region
+  - postcode-heat-pump-zone
+  - postcode-council-allocation
+  - postcode-insulation-figure
+leadForm: false
+noindex: false
+related:
+  - eligibility-checker
+  - ceiling-insulation-rebate
+  - heat-pump-hot-water-size-guide
+  - get-off-gas-planner
+  - lpg-homes
+  - melbourne
+---
+
+<h2 id="what-each-column-means">What each postcode column means</h2>
+
+Every lookup card above reads directly from Table A (`Location Variable List`) of the <SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 PDF" /> and matches suburbs and councils using <SourceLink id="abs-asgs-allocation" label="ABS ASGS Edition 3 allocation files" />:
+
+- **VEU area (`Metropolitan` or `Regional`):** Sets the regional factor in VEU certificate formulas—for example `0.98` for Metropolitan postcodes and `1.04` for Regional postcodes in Part 48 ceiling insulation. Postcodes near Melbourne's outer boundary do not always match council lines, whereas inner postcodes such as <a href="/victoria/melbourne/">inner Melbourne</a> sit uniformly in Metropolitan Mild.
+- **Reticulated (mains) gas (`Yes` or `No`):** Shows whether Table A lists piped mains gas in that postcode. Where Table A records no reticulated mains gas, homes with gas appliances typically run on bottled LPG rather than a street gas main—compare electric upgrade order in our <a href="/victoria/get-off-gas-planner/">Get-Off-Gas Planner</a> or <LinkIfEnabled href="/victoria/lpg-homes/">check our bottled LPG homes guide</LinkIfEnabled>.
+- **VEU climatic region (`Mild`, `Cold`, or `Hot`):** Sets climate-dependent greenhouse gas saving rates across space conditioning and building-shell activities. Under Part 48 ceiling insulation, annual greenhouse gas savings are `0.00576` (Mild), `0.00771` (Cold), or `0.00546` (Hot) tonnes CO₂-e per m² per year.
+- **Heat pump zone (`zone 4` or `zone 5`):** Sets the hot water climate zone used in VEU water heating certificate calculations. Colder zone 5 postcodes experience lower winter ambient temperatures—use our <a href="/victoria/heat-pump-hot-water-size-guide/">Heat Pump Hot Water Sizing Guide</a> when comparing cold-climate tank sizes.
+- **Localities and council (LGA):** Derived from Australian Bureau of Statistics mesh-block allocation files (`POA 2021`, `SAL 2021`, and `LGA 2025`), weighted by 2021 Census dwelling counts. Postcodes that cross council boundaries list each council's dwelling share, and non-residential PO-box postcodes with zero Census dwellings show an indicative council.
+
+<h2 id="insulation-by-postcode">Ceiling insulation figures by postcode type</h2>
+
+Energy Victoria's <SourceLink id="energyvic-insulation" label="Ceiling insulation discounts guide" /> publishes two indicative household examples for an average 150 m² house: <Money id="vic-veu-insulation-metro" /> in mild metropolitan postcodes and <Money id="vic-veu-insulation-regional" /> in cold regional postcodes.
+
+<FigureTable group="vic-veu-insulation-household" captionPrefix="Energy Victoria published ceiling insulation examples (150 m² house)" />
+
+Across Table A, three other area-and-climate pairings also occur: Regional + Mild (<Money id="vic-veu-insulation-est-regional-mild" />), Metropolitan + Cold (<Money id="vic-veu-insulation-est-metro-cold" />), and Regional + Hot (<Money id="vic-veu-insulation-est-regional-hot" />). No Victorian postcode in Table A combines Metropolitan with Hot, and no other pairing receives a figure.
+
+<FigureTable group="vic-veu-insulation-estimates" captionPrefix="Estimated ceiling insulation discounts for other Table A pairings (150 m² house)" />
+
+<details class="postcode-group-details">
+  <summary>Method disclosure: how we calculate the three "(our estimate)" pairings</summary>
+  <p>
+    Under <SourceLink id="vic-veu-spec-v25" label="VEU Specifications v25.0 Part 48" />, ceiling insulation greenhouse gas savings equal the climatic region factor (<code>Mild 0.00576</code>, <code>Cold 0.00771</code>, <code>Hot 0.00546</code> t CO₂-e/m²/yr) multiplied by ceiling area (<code>150 m²</code>), lifetime (<code>25</code>), and the regional factor (<code>Metropolitan 0.98</code>, <code>Regional 1.04</code>). Scaling those certificate totals to Energy Victoria&apos;s two published 150 m² examples (<Money id="vic-veu-insulation-metro" /> and <Money id="vic-veu-insulation-regional" />) produces indicative estimates for the three remaining pairings. Pre-installation electrical and installer safety checks still apply—read our <a href="/victoria/ceiling-insulation-rebate/">Victorian ceiling insulation rebate guide</a> or run the <a href="/victoria/eligibility-checker/">Victoria Rebate Eligibility Checker</a>, and your accredited provider confirms the exact discount in writing.
+  </p>
+</details>

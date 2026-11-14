@@ -74,10 +74,21 @@ describe('Spec §8 acceptance examples (1–6)', () => {
     expect(res.areaCard?.areaLink.href).toBe('/victoria/north-west-corridor/');
     expect(res.ctas.area?.href).toBe('/victoria/north-west-corridor/');
 
-    // Fallback when row 56 is not yet enabled
-    const resFallback = evaluate({ ...answers, R6: [...answers.R6] });
+    // Fallback when row 56 (corridor) and row 62 (melbourne-west) are not yet enabled:
+    // resolves to /victoria/postcode/ when row 54 is enabled, else /victoria/
+    const withoutCorridorOrWest = new Set(
+      [...ctx.enabledUrls].filter(
+        (u) => u !== '/victoria/north-west-corridor/' && u !== '/victoria/melbourne-west/',
+      ),
+    );
+    const resFallback = evaluate(
+      { ...answers, R6: [...answers.R6] },
+      { enabledUrls: withoutCorridorOrWest },
+    );
     expect(resFallback.areaCard?.areaLink.specHref).toBe('/victoria/north-west-corridor/');
-    expect(resFallback.areaCard?.areaLink.href).toBe('/victoria/');
+    expect(resFallback.areaCard?.areaLink.href).toBe(
+      withoutCorridorOrWest.has('/victoria/postcode/') ? '/victoria/postcode/' : '/victoria/',
+    );
 
     // Ordered lines: VEU (RH-2, RW-1), Solar Homes (SH-HW), FEDERAL (FED-STC)
     expect(res.lines.map((l) => l.ruleId)).toEqual(['RH-2', 'RW-1', 'SH-HW', 'FED-STC']);

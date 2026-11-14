@@ -7,6 +7,7 @@ import AnswerText from '../components/AnswerText.astro';
 import HeroBlock, { type HeroValue } from '../components/HeroBlock.astro';
 import RuleStatusNotice from '../components/RuleStatusNotice.astro';
 import EligibilityChecker from '../components/EligibilityChecker.astro';
+import PostcodeLookup from '../components/PostcodeLookup.astro';
 import RunningCostsPicker from '../components/RunningCostsPicker.astro';
 import HwSizeGuide from '../components/HwSizeGuide.astro';
 import GasExitPlanner from '../components/GasExitPlanner.astro';
@@ -89,6 +90,7 @@ if (isCheckerPage) {
     </div>
 
     {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
+    {d.slug === 'postcode' && <PostcodeLookup />}
     {d.slug === 'gas-vs-heat-pump-running-costs' && <RunningCostsPicker />}
     {d.slug === 'heat-pump-hot-water-size-guide' && <HwSizeGuide />}
     {d.slug === 'get-off-gas-planner' && <GasExitPlanner />}

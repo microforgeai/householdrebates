@@ -79,20 +79,34 @@ for (const mdxFile of walkFiles(contentDir, '.mdx')) {
 }
 
 // 1. Collect all indexable built HTML pages in dist/
+// Rule 11 (Prompt 36): /victoria/postcode/ must NEVER emit per-postcode doorway subpaths (even with noindex)
+const postcodeDir = path.join(distDir, 'victoria/postcode');
+if (fs.existsSync(postcodeDir)) {
+  const allPostcodeFiles = fs.readdirSync(postcodeDir, { recursive: true });
+  const extraPostcodePaths = allPostcodeFiles
+    .map((f) => String(f).replace(/\\/g, '/'))
+    .filter((f) => f !== 'index.html');
+  if (extraPostcodePaths.length > 0) {
+    throw new Error(
+      `forbidden path(s) under /victoria/postcode/ (doorway guard): ${extraPostcodePaths.join(', ')}`,
+    );
+  }
+}
+
 const htmlFiles = walkFiles(distDir, '.html');
 const builtIndexableHtml = new Map(); // url -> html
 
 for (const file of htmlFiles) {
-  const rel = path.relative(distDir, file);
+  const rel = path.relative(distDir, file).replace(/\\/g, '/');
   if (rel === '404.html') continue;
+  if (rel.startsWith('victoria/postcode/') && rel !== 'victoria/postcode/index.html') {
+    throw new Error(`forbidden HTML path under /victoria/postcode/: ${rel}`);
+  }
   const html = fs.readFileSync(file, 'utf8');
   if (/meta\s+name=["']robots["']\s+content=["'][^"']*noindex/i.test(html)) {
     continue;
   }
-  const url =
-    rel === 'index.html'
-      ? '/'
-      : `/${rel.replace(/\/index\.html$/, '').replace(/\\/g, '/')}/`;
+  const url = rel === 'index.html' ? '/' : `/${rel.replace(/\/index\.html$/, '')}/`;
   builtIndexableHtml.set(url, html);
 }
 
@@ -209,7 +223,16 @@ if (!fs.existsSync(sitemapPath)) {
   throw new Error('dist/sitemap-0.xml not found');
 }
 const sitemapXml = fs.readFileSync(sitemapPath, 'utf8');
-const sitemapCount = [...sitemapXml.matchAll(/<loc>/g)].length;
+const sitemapLocs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
+const sitemapCount = sitemapLocs.length;
+for (const loc of sitemapLocs) {
+  if (loc.includes('?')) {
+    throw new Error(`sitemap-0.xml contains query-string URL: ${loc}`);
+  }
+  if (/\/victoria\/postcode\/.+/.test(loc)) {
+    throw new Error(`sitemap-0.xml contains per-postcode doorway URL: ${loc}`);
+  }
+}
 if (sitemapCount !== expectedUrls.size) {
   throw new Error(`sitemap <loc> count (${sitemapCount}) !== expected indexable count (${expectedUrls.size})`);
 }

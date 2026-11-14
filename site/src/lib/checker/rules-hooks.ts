@@ -47,6 +47,14 @@ function hasBizActivity(a: CheckerAnswers, item: NonNullable<CheckerAnswers['B6'
   return a.S1 === 'business' && Boolean(a.B6?.includes(item));
 }
 
+const hasHc = (a: CheckerAnswers) => hasResUpgrade(a, 'heating-cooling');
+const hasHw = (a: CheckerAnswers) => hasResUpgrade(a, 'hot-water');
+const hasIns = (a: CheckerAnswers) => hasResUpgrade(a, 'ceiling-insulation');
+const isDryerOnly = (a: CheckerAnswers) =>
+  hasBizActivity(a, 'heat-pump-dryer') &&
+  !hasBizActivity(a, 'household-only-inquiry') &&
+  (a.BResItems?.length ?? 0) === 0;
+
 function isEfficientExistingHw(w1: CheckerAnswers['W1']): boolean {
   return w1 === 'solar-working' || w1 === 'heat-pump-already';
 }
@@ -173,9 +181,7 @@ function resolveBusinessHeatingFigures(a: CheckerAnswers): string[] {
 
 function resolveBusinessHeatingCoPayFigures(a: CheckerAnswers): string[] {
   const bh2 = a.BH2 ?? 'not-sure';
-  if (bh2 === 'room-split-3-to-9-kw') {
-    return ['vic-veu-copay-split-under-10kw'];
-  }
+  if (bh2 === 'room-split-3-to-9-kw') return ['vic-veu-copay-split-under-10kw'];
   if (bh2 === 'several-splits-multi-split') {
     return ['vic-veu-copay-multisplit-under-10kw', 'vic-veu-copay-multisplit-10kw-plus'];
   }
@@ -222,19 +228,19 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
   },
   "RH-1": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'gas-room-heater' &&
       (a.H2 === 'split-one-room' || a.H2 === 'several-splits-or-multi-split')
   },
   "RH-2": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'ducted-gas-heater' &&
       a.H2 === 'ducted-reverse-cycle'
   },
   "RH-3": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'ducted-gas-heater' &&
       (a.H2 === 'several-splits-or-multi-split' || a.H2 === 'split-one-room'),
     "resolveCoPayFigureIds": (a) => {
@@ -245,39 +251,37 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
   },
   "RH-4": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'hard-wired-electric-room-heater' &&
       a.H2 !== 'ducted-reverse-cycle'
   },
   "RH-5": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'central-electric-ducted-heater' &&
       a.H2 === 'ducted-reverse-cycle'
   },
   "RH-6": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'reverse-cycle-split-room-unit' &&
       a.H2 !== 'ducted-reverse-cycle'
   },
   "RH-7": {
     "when": (a) =>
-      hasResUpgrade(a, 'heating-cooling') &&
+      hasHc(a) &&
       a.H1 === 'ducted-reverse-cycle' &&
       a.H2 === 'ducted-reverse-cycle'
   },
   "RH-8": {
     "when": (a) => {
-      if (!hasResUpgrade(a, 'heating-cooling')) return false;
+      if (!hasHc(a)) return false;
       if (a.H1 === 'nothing-portable-only' || a.H1 === 'not-sure') return true;
-      // Fallback combinations not covered by RH-1..RH-7 (e.g. gas room heater -> ducted, split -> ducted)
       if (a.H1 === 'gas-room-heater' && a.H2 === 'ducted-reverse-cycle') return true;
       if (a.H1 === 'hard-wired-electric-room-heater' && a.H2 === 'ducted-reverse-cycle') return true;
       if (a.H1 === 'central-electric-ducted-heater' && a.H2 !== 'ducted-reverse-cycle') return true;
       if (a.H1 === 'reverse-cycle-split-room-unit' && a.H2 === 'ducted-reverse-cycle') return true;
-      if (a.H1 === 'ducted-reverse-cycle' && a.H2 !== 'ducted-reverse-cycle') return true;
-      return false;
+      return a.H1 === 'ducted-reverse-cycle' && a.H2 !== 'ducted-reverse-cycle';
     },
     "resolveFigureIds": (a) => {
       if (a.H2 === 'ducted-reverse-cycle') return ['vic-veu-rcac-ducted-no-decomm'];
@@ -295,53 +299,51 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
     }
   },
   "RH-9": {
-    "when": (a) => hasResUpgrade(a, 'heating-cooling') && a.R3 === 'landlord'
+    "when": (a) => hasHc(a) && a.R3 === 'landlord'
   },
   "RW-1": {
     "when": (a) =>
-      hasResUpgrade(a, 'hot-water') &&
+      hasHw(a) &&
       a.W1 === 'gas-mains' &&
       (a.W3 === 'heat-pump' || a.W3 === 'not-sure' || a.W3 === undefined)
   },
   "RW-2": {
     "when": (a) =>
-      hasResUpgrade(a, 'hot-water') &&
+      hasHw(a) &&
       a.W1 === 'gas-mains' &&
       (a.W3 === 'solar-boosted' || a.W3 === 'not-sure')
   },
   "RW-3": {
     "when": (a) =>
-      hasResUpgrade(a, 'hot-water') &&
+      hasHw(a) &&
       a.W1 === 'electric-storage' &&
       (a.W3 === 'heat-pump' || a.W3 === 'not-sure' || a.W3 === undefined)
   },
   "RW-4": {
     "when": (a) =>
-      hasResUpgrade(a, 'hot-water') &&
+      hasHw(a) &&
       a.W1 === 'electric-storage' &&
       (a.W3 === 'solar-boosted' || a.W3 === 'not-sure')
   },
   "RW-5": {
     "when": (a) =>
-      hasResUpgrade(a, 'hot-water') && (a.W1 === 'solar-broken' || a.W1 === 'not-sure'),
+      hasHw(a) && (a.W1 === 'solar-broken' || a.W1 === 'not-sure'),
     "resolveFigureIds": (a) => {
-      if (a.W3 === 'solar-boosted') {
-        return ['vic-veu-hw-gas-to-solar', 'vic-veu-hw-electric-to-solar'];
-      }
-      return ['vic-veu-hw-gas-to-heatpump', 'vic-veu-hw-electric-to-heatpump'];
+      const target = a.W3 === 'solar-boosted' ? 'solar' : 'heatpump';
+      return [`vic-veu-hw-gas-to-${target}`, `vic-veu-hw-electric-to-${target}`];
     }
   },
   "RW-6": {
-    "when": (a) => hasResUpgrade(a, 'hot-water') && a.W1 === 'lpg'
+    "when": (a) => hasHw(a) && a.W1 === 'lpg'
   },
   "RW-7": {
-    "when": (a) => hasResUpgrade(a, 'hot-water') && isEfficientExistingHw(a.W1)
+    "when": (a) => hasHw(a) && isEfficientExistingHw(a.W1)
   },
   "RW-8": {
-    "when": (a) => hasResUpgrade(a, 'hot-water') && a.W1 === 'gas-mains' && a.W2 === 'yes'
+    "when": (a) => hasHw(a) && a.W1 === 'gas-mains' && a.W2 === 'yes'
   },
   "RW-9": {
-    "when": (a) => hasResUpgrade(a, 'hot-water') && !isEfficientExistingHw(a.W1)
+    "when": (a) => hasHw(a) && !isEfficientExistingHw(a.W1)
   },
   "RC-1": {
     "when": (a) =>
@@ -362,7 +364,7 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
   },
   "RI-1": {
     "when": (a) =>
-      hasResUpgrade(a, 'ceiling-insulation') &&
+      hasIns(a) &&
       a.R4 !== 'apartment' &&
       (a.I1 === 'nothing' || a.I1 === 'thin-or-patchy') &&
       a.I2 !== 'yes',
@@ -373,18 +375,17 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
   },
   "RI-2": {
     "when": (a) =>
-      hasResUpgrade(a, 'ceiling-insulation') &&
+      hasIns(a) &&
       a.R4 !== 'apartment' &&
       (a.I1 === 'nothing' || a.I1 === 'thin-or-patchy' || a.I1 === 'not-sure') &&
       a.I2 === 'yes'
   },
   "RI-3": {
-    "when": (a) =>
-      hasResUpgrade(a, 'ceiling-insulation') && a.R4 !== 'apartment' && a.I1 === 'thick'
+    "when": (a) => hasIns(a) && a.R4 !== 'apartment' && a.I1 === 'thick'
   },
   "RI-4": {
     "when": (a) =>
-      hasResUpgrade(a, 'ceiling-insulation') &&
+      hasIns(a) &&
       a.R4 !== 'apartment' &&
       a.I1 === 'not-sure' &&
       a.I2 !== 'yes',
@@ -394,10 +395,10 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
     }
   },
   "RI-5": {
-    "when": (a) => hasResUpgrade(a, 'ceiling-insulation') && a.R3 === 'landlord'
+    "when": (a) => hasIns(a) && a.R3 === 'landlord'
   },
   "I-APT": {
-    "when": (a) => hasResUpgrade(a, 'ceiling-insulation') && a.R4 === 'apartment'
+    "when": (a) => hasIns(a) && a.R4 === 'apartment'
   },
   "RD-1": {
     "when": (a) => hasResUpgrade(a, 'draughts') && a.R3 !== 'building-it',
@@ -664,24 +665,9 @@ export const RULE_HOOKS: Readonly<Record<string, RuleHooks>> = {
       hasBizActivity(a, 'heat-pump-dryer') ||
       hasBizActivity(a, 'household-only-inquiry') ||
       (a.S1 === 'business' && (a.BResItems?.length ?? 0) > 0),
-    "resolveStatus": (a) =>
-      hasBizActivity(a, 'heat-pump-dryer') &&
-      !hasBizActivity(a, 'household-only-inquiry') &&
-      (a.BResItems?.length ?? 0) === 0
-        ? 'possibly'
-        : 'not-eligible',
-    "resolveFigureIds": (a) =>
-      hasBizActivity(a, 'heat-pump-dryer') &&
-      !hasBizActivity(a, 'household-only-inquiry') &&
-      (a.BResItems?.length ?? 0) === 0
-        ? ['vic-veu-appliance-dryer']
-        : [],
-    "resolveMessageId": (a) =>
-      hasBizActivity(a, 'heat-pump-dryer') &&
-      !hasBizActivity(a, 'household-only-inquiry') &&
-      (a.BResItems?.length ?? 0) === 0
-        ? undefined
-        : 'N-BIZ-RES'
+    "resolveStatus": (a) => (isDryerOnly(a) ? 'possibly' : 'not-eligible'),
+    "resolveFigureIds": (a) => (isDryerOnly(a) ? ['vic-veu-appliance-dryer'] : []),
+    "resolveMessageId": (a) => (isDryerOnly(a) ? undefined : 'N-BIZ-RES')
   },
   "B-OC": {
     "when": (a) => a.S1 === 'business' && a.B3 === 'apartment-common-areas'

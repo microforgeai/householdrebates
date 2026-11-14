@@ -45,3 +45,20 @@ export function hydrateCompactPostcodes(payload: CompactPostcodePayload): Postco
     rows,
   };
 }
+
+let cachedPromise: Promise<PostcodesDataset> | null = null;
+let cachedUrl = '';
+
+export function fetchCompactPostcodesOnce(url: string): Promise<PostcodesDataset> {
+  if (!cachedPromise || cachedUrl !== url) {
+    cachedUrl = url;
+    cachedPromise = fetch(url).then(async (res) => {
+      if (!res.ok) {
+        cachedPromise = null;
+        throw new Error(`Failed to load postcode table (${res.status})`);
+      }
+      return hydrateCompactPostcodes((await res.json()) as CompactPostcodePayload);
+    });
+  }
+  return cachedPromise;
+}

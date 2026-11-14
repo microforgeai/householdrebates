@@ -1,0 +1,5 @@
+question: Which VEU heat pump zone am I in?
+answer: VEU Specifications version 25.0 Table A places 608 Victorian postcodes in heat pump zone 4 and 111 colder postcodes in heat pump zone 5. Your heat pump zone sets the greenhouse gas saving values used in VEU hot water discount calculations—see [what each postcode column means](/victoria/postcode/#what-each-column-means) and our [heat pump hot water sizing guide](/victoria/heat-pump-hot-water-size-guide/).
+canonicalPage: /victoria/postcode/
+state: vic
+checkedOn: 2026-11-14

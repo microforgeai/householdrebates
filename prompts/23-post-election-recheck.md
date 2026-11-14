@@ -125,3 +125,14 @@ Sitemap count: unchanged (52, or 53 if Shepparton was built), unless Guri approv
 ## Done when
 
 The report is complete, Guri has decided on every STOP item, the approved changes are built and deployed after his yes, and the next re-check is in the calendar. Commit `chore(recheck): post-election figure and rule re-check <date>`.
+
+---
+
+## 14 Nov 2026 addendum (from prompts 24 and 34; this overrides the steps above where they differ)
+
+Added after the 74-URL pack and the business review. Guri reviews it like the rest of the prompt.
+
+1. **Election notice (prompt 24).** As part of step 3 item 16 and step 5: (a) re-read the Energy Victoria caretaker banner and the gas, new-homes and rental rule sources; (b) set `site/src/data/rule-status.json` `electionWatch.status` to `rechecked-unchanged` or `rechecked-changed` **only after Guri's yes**; (c) if changed, put each affected sentence on the STOP list. The build fails on `rechecked-changed` until those pages are updated and their `ruleStatus` cleared. The 9 election-watch pages are in the register with `reviewBy: 2026-12-05`.
+2. **postcodes.csv is the master list (prompt 34).** Step 3 item 2 no longer re-runs `extract-veu-postcodes.mjs` as a generator; it's now `scripts/crosscheck-veu-postcodes.mjs`, a cross-check only. Never regenerate `postcodes.csv`. If there's a new VEU Specifications version, **stop**: Guri asks Venture Architect for an updated CSV, then the cross-check runs against the new PDF.
+3. **URL counts.** "52 or 53" throughout this prompt means "the number of enabled rows in `rollout.json`" (the map now has 74 rows; prompts 28–39 enable more).
+4. **Also re-check:** the `basis: estimate` insulation figures (re-run the Part 48 method if v25.0 changed), every `councilPrograms` status (Hume paused; YEF-linked programs; Council Home Energy Program; GMCA Solar Savers; Boroondara Solar Savers ends 31 Dec 2026), the checker's rule sources and its 6 spec examples (`npx vitest run tests/checker`), and the federal battery figures (the STC factor change on 1 Jan 2027, if prompt 30 has run).

@@ -93,3 +93,15 @@ Sitemap count after this prompt: **53** if built (all three waves complete), or 
 ## Done when
 
 Either Part 1 is logged and Guri chose "keep gated" (no site changes), or the page is built with every check passing at 53 URLs and deployed after his yes. Commit `feat(wave3): Shepparton (verified <date>)` or `docs: Shepparton gate check <date>`.
+
+---
+
+## 14 Nov 2026 addendum (from prompt 34; this overrides Parts 1–3 above where they differ)
+
+The map (row 48) and `eligibility-checker-spec.md` §9 were revised on 14 Nov 2026:
+
+1. **Cite GMCA only.** Goulburn Murray Solar Savers is confirmed through the Goulburn Murray Climate Alliance (<https://www.gmca.org.au/>, Feb 2026 notice, checked 14 Nov 2026): vetted providers for solar, batteries, heat pump hot water, split systems, insulation, draught proofing and assessments, open to residents of Shepparton and 6 other GMCA councils. The program source is GMCA (`mapKey: GMCA`, `kind: council-program`, official). Part 1 step 3's "council's own site only" rule is replaced by this.
+2. **The council's own Solar Savers page stays UNVERIFIED** (504 on 13 and 14 Nov 2026). Don't cite or link it, and don't add the `SHEPP` source, even if it loads on the day. If it loads, tell Guri so Venture Architect can update the map. No council-program dollar figure unless the GMCA page itself states one (then use its exact amount and wording, as a figure with the GMCA source); the map gives none.
+3. **Postcodes:** 13 Greater Shepparton postcodes from `postcodes.csv` (all Regional, Cold, zone 4; row 48 lists which have reticulated gas), so the regional cold insulation example applies. Render from the CSV.
+4. **Decision options (Part 2) are now:** (a) release with the GMCA-sourced program; (b) release without it; (c) keep gated. Release is Guri's decision only; it's a one-line `rollout.json` change, then the deploy STOP.
+5. Inbound links when released: `/victoria/bendigo/`, `/victoria/mitchell/` and `/victoria/solstice-gas-shutdown-towns/` (map row 48 note).

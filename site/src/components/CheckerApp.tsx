@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { AreaCardView, renderResolvedLink } from './AreaCardView';
 import { formatAuDate } from '../lib/dates';
-import { formatAud, KIND_TAGS, type FigureData } from '../lib/figures';
+import type { FigureData, FigureKind } from '../lib/figures';
 import {
   buildAreaCardFromData,
   computeOldestCheckerCheckedOnFromRules,
@@ -52,6 +52,7 @@ export interface CheckerBootstrapCatalog {
 export interface CheckerBootstrapPayload {
   postcodesUrl: string;
   figures: FigureData[];
+  kindTags: Record<FigureKind, string>;
   sources: SourceMeta[];
   enabledUrls: string[];
   solsticePostcodes: string[];
@@ -111,9 +112,11 @@ function InlineLinks({ links }: { links: ResolvedLink[] }) {
 
 function CheckerMoneyBlock({
   fig,
+  kindTags,
   sourcesMap,
 }: {
   fig: EvaluatedFigure;
+  kindTags: Record<FigureKind, string>;
   sourcesMap: Map<string, SourceMeta>;
 }) {
   const src = sourcesMap.get(fig.sourceId);
@@ -130,7 +133,7 @@ function CheckerMoneyBlock({
         {fig.scenario}
       </figcaption>
       <span class="money-block__kind" data-money-kind>
-        {KIND_TAGS[fig.kind]}
+        {kindTags[fig.kind]}
       </span>
       <span class="money-block__amount">{fig.formatted}</span>
       {isEstimate && (
@@ -157,9 +160,11 @@ function CheckerMoneyBlock({
 
 function LineCard({
   line,
+  kindTags,
   sourcesMap,
 }: {
   line: EvaluatedLine;
+  kindTags: Record<FigureKind, string>;
   sourcesMap: Map<string, SourceMeta>;
 }) {
   return (
@@ -184,7 +189,7 @@ function LineCard({
       {line.figures.length > 0 && (
         <div class="checker-line__figures" data-line-figures>
           {line.figures.map((fig) => (
-            <CheckerMoneyBlock key={fig.id} fig={fig} sourcesMap={sourcesMap} />
+            <CheckerMoneyBlock key={fig.id} fig={fig} kindTags={kindTags} sourcesMap={sourcesMap} />
           ))}
         </div>
       )}
@@ -192,7 +197,7 @@ function LineCard({
       {line.coPayFigures.length > 0 && (
         <div class="checker-line__copay" data-line-copay>
           {line.coPayFigures.map((fig) => (
-            <CheckerMoneyBlock key={fig.id} fig={fig} sourcesMap={sourcesMap} />
+            <CheckerMoneyBlock key={fig.id} fig={fig} kindTags={kindTags} sourcesMap={sourcesMap} />
           ))}
         </div>
       )}
@@ -424,21 +429,6 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     (mode === 'result' ? resultFocusRef : stepFocusRef).current?.focus();
   }, [mode, safeStepIndex]);
 
-  const formatFieldLabel = (field: FieldDefinition): string => {
-    const capId =
-      field.id === 'SH1'
-        ? 'vic-solar-homes-income-cap'
-        : field.id === 'SH2'
-          ? 'vic-solar-homes-property-cap'
-          : '';
-    const cap = capId ? figuresMap.get(capId) : undefined;
-    if (!cap) return field.label;
-    const capStr = formatAud(cap.amountMax, cap.display ?? 'standard');
-    return field.id === 'SH1'
-      ? `Is the combined taxable income of all owners under ${capStr} a year?`
-      : `Is the property worth less than ${capStr}?`;
-  };
-
   const updateAnswer = <K extends keyof CheckerAnswers>(key: K, value: CheckerAnswers[K]) => {
     setStepError(null);
     if (key === 'R2' || key === 'B2') {
@@ -476,6 +466,8 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     if (!currentField) return;
     const liveAnswers = answersRef.current;
 
+    let areaForNext = currentAreaRecord;
+
     if (currentField.type === 'postcode') {
       const rawVal = String(liveAnswers[currentField.id] ?? '').trim();
       let ds = postcodesData;
@@ -488,78 +480,62 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       }
       const lookup = lookupPostcode(rawVal, ds);
       if (!lookup.ok) {
-        const x1 = renderMessageFromMap(
-          'X1',
-          catalogRuntime.messagesById,
-          catalogRuntime.links,
-          figuresMap,
-          enabledUrlsSet,
-          formatAuDate(oldestCheckedIso),
+        setPostcodeError(
+          renderMessageFromMap(
+            'X1',
+            catalogRuntime.messagesById,
+            catalogRuntime.links,
+            figuresMap,
+            enabledUrlsSet,
+            formatAuDate(oldestCheckedIso),
+          ),
         );
-        setPostcodeError(x1);
         return;
       }
+      areaForNext = lookup.record;
+    } else {
+      const stepOptions = filterOptions(currentField, liveAnswers);
 
-      const nextVisible = getVisibleFieldsFromList(
-        hydratedFields,
-        liveAnswers,
-        lookup.record,
-        solsticeSet,
-      );
-      if (safeStepIndex + 1 < nextVisible.length) {
-        const nextIdx = safeStepIndex + 1;
-        setStepIndex(nextIdx);
-        writeSessionState(liveAnswers, String(nextIdx));
-      } else {
-        setMode('result');
-        writeSessionState(liveAnswers, 'result');
-      }
-      return;
-    }
+      if (currentField.type === 'single' || currentField.type === 'single-with-count') {
+        const val = liveAnswers[currentField.id];
+        const isValidSelection =
+          val !== undefined && stepOptions.some((o) => o.id === String(val));
 
-    const stepOptions = filterOptions(currentField, liveAnswers);
-
-    if (currentField.type === 'single' || currentField.type === 'single-with-count') {
-      const val = liveAnswers[currentField.id];
-      const isValidSelection =
-        val !== undefined && stepOptions.some((o) => o.id === String(val));
-
-      if (currentField.required && !isValidSelection) {
-        setStepError('Choose an option to continue.');
-        return;
-      }
-
-      if (currentField.id === 'BW1' && liveAnswers.BW1 === 'household-size') {
-        const count = Number(liveAnswers.BW1Count ?? 1);
-        if (!Number.isInteger(count) || count < 1 || count > 5) {
-          setStepError('Enter a whole number of hot water units from 1 to 5.');
+        if (currentField.required && !isValidSelection) {
+          setStepError('Choose an option to continue.');
           return;
         }
-      }
 
-      if (currentField.id === 'S1') {
-        prefetchPostcodesSilently();
-      }
-    }
+        if (currentField.id === 'BW1' && liveAnswers.BW1 === 'household-size') {
+          const count = Number(liveAnswers.BW1Count ?? 1);
+          if (!Number.isInteger(count) || count < 1 || count > 5) {
+            setStepError('Enter a whole number of hot water units from 1 to 5.');
+            return;
+          }
+        }
 
-    if (currentField.type === 'multi') {
-      const allowedIds = new Set(stepOptions.map((o) => o.id));
-      const rawSelected = Array.isArray(liveAnswers[currentField.id])
-        ? (liveAnswers[currentField.id] as string[])
-        : [];
-      const activeSelected = rawSelected.filter((id) => allowedIds.has(id));
-      const allowZero = currentField.id === 'B6' && liveAnswers.B4 === 'yes-not-opted-in';
+        if (currentField.id === 'S1') {
+          prefetchPostcodesSilently();
+        }
+      } else {
+        const allowedIds = new Set(stepOptions.map((o) => o.id));
+        const rawSelected = Array.isArray(liveAnswers[currentField.id])
+          ? (liveAnswers[currentField.id] as string[])
+          : [];
+        const activeSelected = rawSelected.filter((id) => allowedIds.has(id));
+        const allowZero = currentField.id === 'B6' && liveAnswers.B4 === 'yes-not-opted-in';
 
-      if (currentField.required && activeSelected.length === 0 && !allowZero) {
-        setStepError('Choose at least one option to continue.');
-        return;
+        if (currentField.required && activeSelected.length === 0 && !allowZero) {
+          setStepError('Choose at least one option to continue.');
+          return;
+        }
       }
     }
 
     const updatedVisible = getVisibleFieldsFromList(
       hydratedFields,
       liveAnswers,
-      currentAreaRecord,
+      areaForNext,
       solsticeSet,
     );
     if (safeStepIndex + 1 < updatedVisible.length) {
@@ -567,7 +543,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       setStepIndex(nextIdx);
       writeSessionState(liveAnswers, String(nextIdx));
     } else {
-      if (!postcodesData) {
+      if (!postcodesData && currentField.type !== 'postcode') {
         try {
           await ensurePostcodes();
         } catch {
@@ -791,7 +767,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
         {result.banners.length > 0 && (
           <div class="checker-banners" data-checker-banners>
             {result.banners.map((banner) => (
-              <LineCard key={banner.ruleId} line={banner} sourcesMap={sourcesMap} />
+              <LineCard key={banner.ruleId} line={banner} kindTags={bootstrap.kindTags} sourcesMap={sourcesMap} />
             ))}
           </div>
         )}
@@ -834,6 +810,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
                   <LineCard
                     key={`${line.ruleId}-${line.title}`}
                     line={line}
+                    kindTags={bootstrap.kindTags}
                     sourcesMap={sourcesMap}
                   />
                 ))}
@@ -921,7 +898,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
         {currentField.type === 'postcode' && (
           <div key={fieldId} class="field-group">
             <label class="field-label checker-legend" for={`checker-input-${fieldId}`}>
-              {formatFieldLabel(currentField)}
+              {currentField.label}
             </label>
             <p id={helperId} class="field-hint">
               Enter a 4-digit Victorian postcode (starting with 3). Stays in your browser.
@@ -969,7 +946,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
 
         {currentField.type !== 'postcode' && (
           <fieldset key={fieldId} class="field-group checker-fieldset" aria-describedby={describedBy}>
-            <legend class="field-label checker-legend">{formatFieldLabel(currentField)}</legend>
+            <legend class="field-label checker-legend">{currentField.label}</legend>
             {currentField.type === 'multi' ? (
               <p id={helperId} class="field-hint">
                 {currentField.id === 'B6' && answers.B4 === 'yes-not-opted-in'

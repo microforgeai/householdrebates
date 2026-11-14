@@ -1,27 +1,47 @@
-import {
-  resolveAreaLinkFromData,
-  type LinksCatalogData,
-} from './links-runtime';
 import type {
   AreaCard,
   PostcodeAreaRecord,
   PostcodesDataset,
+  ResolvedLink,
 } from './types';
 
-export const SPEC_SOLSTICE_POSTCODES = [
-  '3515',
-  '3523',
-  '3585',
-  '3549',
-  '3463',
-  '3579',
-  '3638',
-  '3264',
-  '3909',
-  '3888',
-] as const;
+export interface AreaLinksData {
+  northWestCorridorPostcodes: string[];
+  specificLgaAreaUrls: Record<string, { url: string; label: string }>;
+  metroHubByLga: Record<string, { url: string; label: string }>;
+}
 
-export const SOLSTICE_POSTCODE_SET: ReadonlySet<string> = /*#__PURE__*/ new Set(SPEC_SOLSTICE_POSTCODES);
+export function resolveAreaLinkFromData(
+  record: PostcodeAreaRecord,
+  enabledUrls: Set<string>,
+  data: AreaLinksData,
+): ResolvedLink {
+  const candidates: { url: string; label: string }[] = [];
+
+  if (data.northWestCorridorPostcodes.includes(record.postcode)) {
+    candidates.push({
+      url: '/victoria/north-west-corridor/',
+      label: 'More about the North-West Corridor',
+    });
+  }
+
+  const specific = data.specificLgaAreaUrls[record.primary_lga];
+  if (specific) candidates.push(specific);
+
+  const hub = data.metroHubByLga[record.primary_lga];
+  if (hub && (!specific || specific.url !== hub.url)) candidates.push(hub);
+
+  const specHref = candidates[0]?.url ?? '/victoria/postcode/';
+  for (const cand of candidates) {
+    if (enabledUrls.has(cand.url)) {
+      return { label: cand.label, specHref, href: cand.url, external: false };
+    }
+  }
+
+  return enabledUrls.has('/victoria/postcode/')
+    ? { label: 'Check Victorian VEU postcodes', specHref, href: '/victoria/postcode/', external: false }
+    : { label: 'Browse Victorian rebate guides', specHref, href: '/victoria/', external: false };
+}
 
 const INSULATION_SUFFIX: Readonly<Record<string, string>> = {
   'Metropolitan:Mild': 'metro',
@@ -49,9 +69,9 @@ export function lookupPostcode(
 
 export function isSolsticePostcode(
   postcode: string | undefined,
-  solsticeSet: ReadonlySet<string> = SOLSTICE_POSTCODE_SET,
+  solsticeSet?: ReadonlySet<string>,
 ): boolean {
-  return Boolean(postcode && solsticeSet.has(postcode.trim()));
+  return Boolean(postcode && solsticeSet?.has(postcode.trim()));
 }
 
 export function resolveInsulationFigureId(area: PostcodeAreaRecord | null): string | null {
@@ -106,7 +126,7 @@ export function buildAreaCardFromData(
   record: PostcodeAreaRecord,
   datasetCheckedOn: string,
   enabledUrls: Set<string>,
-  linksData: LinksCatalogData,
+  linksData: AreaLinksData,
 ): AreaCard {
   const localitiesDisplay = formatLocalitiesDisplay(record);
   const lgaDisplay = formatLgaDisplay(record);

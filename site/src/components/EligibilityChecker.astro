@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import Checker from './Checker.astro';
 import type { CheckerBootstrapPayload } from './CheckerApp';
 import { assertFigureNotStale } from '../lib/dates';
-import type { FigureData } from '../lib/figures';
+import { formatAud, formatFigureAmount, KIND_TAGS, type FigureData } from '../lib/figures';
 import { getEnabledUrls } from '../lib/rollout';
 import { resolveElectionWatchNotice } from '../lib/rule-status';
 import {
@@ -62,6 +62,8 @@ const serializedFigures: FigureData[] = allFigures.map((f) => {
     gstIncluded: f.data.gstIncluded,
     sourceId: srcId,
     checkedOn: f.data.checkedOn.toISOString().slice(0, 10),
+    formatted: formatFigureAmount(f.data),
+    amountText: formatAud(f.data.amountMax, f.data.display ?? 'standard'),
   };
 });
 
@@ -94,15 +96,29 @@ for (const sid of referencedSourceIds) {
   });
 }
 
+const serializedFiguresMap = new Map(serializedFigures.map((f) => [f.id, f]));
+const incomeCapStr = serializedFiguresMap.get('vic-solar-homes-income-cap')?.amountText;
+const propertyCapStr = serializedFiguresMap.get('vic-solar-homes-property-cap')?.amountText;
+const serializedFields = FIELDS_META.map((field) => {
+  if (field.id === 'SH1' && incomeCapStr) {
+    return { ...field, label: `Is the combined taxable income of all owners under ${incomeCapStr} a year?` };
+  }
+  if (field.id === 'SH2' && propertyCapStr) {
+    return { ...field, label: `Is the property worth less than ${propertyCapStr}?` };
+  }
+  return field;
+});
+
 const bootstrapPayload: CheckerBootstrapPayload = {
   postcodesUrl: postcodesArtifact.url,
   figures: serializedFigures,
+  kindTags: KIND_TAGS,
   sources: serializedSources,
   enabledUrls: [...getEnabledUrls()],
   solsticePostcodes: loadSolsticePostcodesFromRow53(),
   catalog: {
     rules: [...RULES_META],
-    fields: [...FIELDS_META],
+    fields: serializedFields,
     messages: [...MESSAGES],
     links: LINKS_DATA,
   },

@@ -1,6 +1,5 @@
 export * from './types';
 export {
-  SPEC_SOLSTICE_POSTCODES,
   lookupPostcode,
   buildAreaCardFromData,
 } from './area-runtime';

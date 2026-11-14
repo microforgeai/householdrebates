@@ -8,10 +8,11 @@ import { formatFigureAmount, KIND_TAGS } from '../lib/figures';
 import { getEnabledUrls } from '../lib/rollout';
 import {
   LINKS_DATA,
-  MESSAGES_BY_ID,
+  renderMessage,
   RULES_META,
   type SourceMeta,
 } from '../lib/checker';
+import { resolveLinkKeyFromData } from '../lib/checker/links-runtime';
 import { buildCompactPostcodeArtifact } from '../lib/checker/postcode-compact';
 
 interface RawPostcodeRow {
@@ -115,13 +116,21 @@ for (const sid of referencedSourceIds) {
   });
 }
 
-const x1Message = MESSAGES_BY_ID.get('X1');
+const enabledUrlsSet = getEnabledUrls();
 const gasNoRule = RULES_META.find((r) => r.id === 'GAS-NO');
 const hpz5Rule = RULES_META.find((r) => r.id === 'HPZ-5');
 
-if (!x1Message || !gasNoRule || !hpz5Rule) {
-  throw new Error('PostcodeLookup missing X1, GAS-NO, or HPZ-5 metadata');
+if (!gasNoRule || !hpz5Rule) {
+  throw new Error('PostcodeLookup missing GAS-NO or HPZ-5 metadata');
 }
+
+const rawX1 = renderMessage('X1', new Map(), enabledUrlsSet);
+const x1Message = {
+  ...rawX1,
+  links: rawX1.links.filter((l) => l.href !== '/victoria/postcode/'),
+};
+const gasNoLink = resolveLinkKeyFromData('gas-no-lpg', enabledUrlsSet, LINKS_DATA);
+const hpz5Link = resolveLinkKeyFromData('hw-size-guide', enabledUrlsSet, LINKS_DATA);
 
 const artifact = buildCompactPostcodeArtifact();
 
@@ -129,9 +138,11 @@ const bootstrapPayload: PostcodeLookupBootstrapPayload = {
   postcodesUrl: artifact.url,
   figures: serializedFigures,
   sources: serializedSources,
-  enabledUrls: [...getEnabledUrls()],
+  enabledUrls: [...enabledUrlsSet],
   links: LINKS_DATA,
   x1Message,
+  gasNoLink,
+  hpz5Link,
   gasNoText: gasNoRule.why,
   hpz5Text: hpz5Rule.why,
 };

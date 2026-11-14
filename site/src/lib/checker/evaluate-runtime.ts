@@ -1,9 +1,5 @@
 import { formatAuDate } from '../dates';
-import {
-  formatFigureAmount,
-  getFigureSourceId,
-  type FigureData,
-} from '../figures';
+import type { FigureData } from '../figures';
 import { buildAreaCardFromData, lookupPostcode } from './area-runtime';
 import {
   resolveLinkKeyFromData,
@@ -84,12 +80,12 @@ function mapEvaluatedFigure(id: string, figures: Map<string, FigureData>): Evalu
   }
   return {
     id,
-    formatted: formatFigureAmount(fig),
+    formatted: fig.formatted ?? String(fig.amountMax),
     scenario: fig.scenario,
     kind: fig.kind,
     basis: fig.basis ?? 'official',
     method: fig.method,
-    sourceId: getFigureSourceId(fig),
+    sourceId: typeof fig.sourceId === 'string' ? fig.sourceId : fig.sourceId.id,
     checkedOn: toIsoDateString(fig.checkedOn),
     jurisdiction: fig.jurisdiction,
   };
@@ -548,16 +544,18 @@ export function evaluateWithCatalog(
 
   const rawPostcode = branch === 'business' ? answers.B2 : answers.R2;
   const lookup = lookupPostcode(rawPostcode, context.postcodes);
-
-  if (!lookup.ok) {
-    const postcodeError = renderMessageFromMap(
-      'X1',
+  const renderMsg = (id: MessageId) =>
+    renderMessageFromMap(
+      id,
       messagesById,
       linksData,
       context.figures,
       context.enabledUrls,
       checkedDateFormatted,
     );
+
+  if (!lookup.ok) {
+    const postcodeError = renderMsg('X1');
     return {
       validPostcode: false,
       branch,
@@ -599,6 +597,12 @@ export function evaluateWithCatalog(
   const firedRuleIds: string[] = [...globalFiredIds];
   const banners: EvaluatedLine[] = [];
   const rawOutcomeLines: EvaluatedLine[] = [];
+  const makeLine = (
+    r: RuleDefinition,
+    ov?: Parameters<typeof buildEvaluatedLine>[6],
+  ) => buildEvaluatedLine(r, catalog, answers, area, context, checkedDateFormatted, ov);
+  const makeIneligible = (r: RuleDefinition, messageId: MessageId) =>
+    makeLine(r, { status: 'not-eligible', figureIds: [], coPayFigureIds: [], messageId });
 
   const gAgeActive = globalFiredIds.includes('G-AGE');
   const gSchedActive = globalFiredIds.includes('G-SCHED');
@@ -606,37 +610,25 @@ export function evaluateWithCatalog(
     branch === 'residential' && answers.R2a === 'yes' && answers.R5 === 'no';
 
   for (const rule of rules) {
-    if (rule.section === 'global') continue;
-    if (rule.branch !== branch) continue;
-
-    if (gSchedActive && rule.programGroup === 'veu') {
+    if (
+      rule.section === 'global' ||
+      rule.branch !== branch ||
+      (gSchedActive && rule.programGroup === 'veu') ||
+      (solsticeUnder2Years && rule.isReplacement) ||
+      !rule.when(answers, area)
+    ) {
       continue;
     }
-
-    if (solsticeUnder2Years && rule.isReplacement) {
-      continue;
-    }
-
-    if (!rule.when(answers, area)) continue;
 
     firedRuleIds.push(rule.id);
 
     if (rule.isNoteOnly) {
-      banners.push(
-        buildEvaluatedLine(rule, catalog, answers, area, context, checkedDateFormatted),
-      );
+      banners.push(makeLine(rule));
       continue;
     }
 
     if (gAgeActive && rule.isReplacement) {
-      rawOutcomeLines.push(
-        buildEvaluatedLine(rule, catalog, answers, area, context, checkedDateFormatted, {
-          status: 'not-eligible',
-          figureIds: [],
-          coPayFigureIds: [],
-          messageId: 'N-AGE',
-        }),
-      );
+      rawOutcomeLines.push(makeIneligible(rule, 'N-AGE'));
       continue;
     }
 
@@ -647,15 +639,13 @@ export function evaluateWithCatalog(
         (answers.BResItems?.length ?? 0) > 0)
     ) {
       rawOutcomeLines.push(
-        buildEvaluatedLine(rule, catalog, answers, area, context, checkedDateFormatted, {
+        makeLine(rule, {
           status: 'possibly',
           title: 'Business heat pump clothes dryer',
           figureIds: ['vic-veu-appliance-dryer'],
           messageId: null,
         }),
-      );
-      rawOutcomeLines.push(
-        buildEvaluatedLine(rule, catalog, answers, area, context, checkedDateFormatted, {
+        makeLine(rule, {
           status: 'not-eligible',
           title: 'Household-only VEU activities',
           figureIds: [],
@@ -665,65 +655,29 @@ export function evaluateWithCatalog(
       continue;
     }
 
-    rawOutcomeLines.push(
-      buildEvaluatedLine(rule, catalog, answers, area, context, checkedDateFormatted),
-    );
+    rawOutcomeLines.push(makeLine(rule));
   }
 
-  if (gAgeActive) {
-    const hasReplacementLine = rawOutcomeLines.some((l) => l.message?.id === 'N-AGE');
+  if (gAgeActive && !rawOutcomeLines.some((l) => l.message?.id === 'N-AGE')) {
     const gAgeRule = rulesById.get('G-AGE');
-    if (!hasReplacementLine && gAgeRule) {
-      rawOutcomeLines.push(
-        buildEvaluatedLine(gAgeRule, catalog, answers, area, context, checkedDateFormatted, {
-          status: 'not-eligible',
-          figureIds: [],
-          coPayFigureIds: [],
-          messageId: 'N-AGE',
-        }),
-      );
-    }
+    if (gAgeRule) rawOutcomeLines.push(makeIneligible(gAgeRule, 'N-AGE'));
   }
 
   if (gSchedActive) {
     const gSchedRule = rulesById.get('G-SCHED');
-    if (gSchedRule) {
-      rawOutcomeLines.push(
-        buildEvaluatedLine(
-          gSchedRule,
-          catalog,
-          answers,
-          area,
-          context,
-          checkedDateFormatted,
-          {
-            status: 'not-eligible',
-            figureIds: [],
-            coPayFigureIds: [],
-            messageId: 'N-SCHED',
-          },
-        ),
-      );
-    }
+    if (gSchedRule) rawOutcomeLines.push(makeIneligible(gSchedRule, 'N-SCHED'));
   }
 
   const rd2Banner = banners.find((b) => b.ruleId === 'RD-2');
   if (rd2Banner?.message) {
-    const rd1Line = rawOutcomeLines.find((l) => l.ruleId === 'RD-1');
-    if (rd1Line) {
-      rd1Line.notes.push(rd2Banner.message.text);
-    }
+    rawOutcomeLines.find((l) => l.ruleId === 'RD-1')?.notes.push(rd2Banner.message.text);
   }
 
-  const veuLines = rawOutcomeLines.filter(
-    (l) => l.status !== 'not-eligible' && l.programGroup === 'veu',
-  );
-  const solarHomesLines = rawOutcomeLines.filter(
-    (l) => l.status !== 'not-eligible' && l.programGroup === 'solar-homes',
-  );
-  const federalLines = rawOutcomeLines.filter(
-    (l) => l.status !== 'not-eligible' && l.programGroup === 'federal',
-  );
+  const byProg = (pg: ProgramGroup) =>
+    rawOutcomeLines.filter((l) => l.status !== 'not-eligible' && l.programGroup === pg);
+  const veuLines = byProg('veu');
+  const solarHomesLines = byProg('solar-homes');
+  const federalLines = byProg('federal');
   const ineligibleLines = rawOutcomeLines
     .filter((l) => l.status === 'not-eligible')
     .sort((a, b) => PROGRAM_ORDER[a.programGroup] - PROGRAM_ORDER[b.programGroup]);
@@ -735,19 +689,10 @@ export function evaluateWithCatalog(
     ...ineligibleLines,
   ];
 
-  const hasEligibleOrPossibly = lines.some(
-    (l) => l.status === 'likely' || l.status === 'possibly',
-  );
   const allIneligibleMessage =
-    !hasEligibleOrPossibly && ineligibleLines.length > 0
-      ? renderMessageFromMap(
-          'N-NONE',
-          messagesById,
-          linksData,
-          context.figures,
-          context.enabledUrls,
-          checkedDateFormatted,
-        )
+    !lines.some((l) => l.status === 'likely' || l.status === 'possibly') &&
+    ineligibleLines.length > 0
+      ? renderMsg('N-NONE')
       : undefined;
 
   const ctas = buildCtas(

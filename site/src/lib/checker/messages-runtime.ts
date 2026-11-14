@@ -1,4 +1,4 @@
-import { formatAud, type FigureData } from '../figures';
+import type { FigureData } from '../figures';
 import {
   resolveInternalUrl,
   resolveLinkKeyFromData,
@@ -37,7 +37,7 @@ export function renderMessageFromMap(
   if (def.figurePlaceholders) {
     for (const [token, figId] of Object.entries(def.figurePlaceholders)) {
       const fig = figures.get(figId);
-      const formatted = fig ? formatAud(fig.amountMax, fig.display ?? 'standard') : figId;
+      const formatted = fig ? (fig.amountText ?? String(fig.amountMax)) : figId;
       text = text.replace(`{${token}}`, formatted);
     }
   }

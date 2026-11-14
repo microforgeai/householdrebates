@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import YAML from 'yaml';
-import type { FigureData } from '../figures';
+import { formatAud, formatFigureAmount, type FigureData } from '../figures';
 import { getEnabledUrls } from '../rollout';
 import { SPEC_SOLSTICE_POSTCODES } from './area';
 import { evaluateWithData } from './evaluate';
@@ -46,7 +46,16 @@ export function loadSolsticePostcodesFromRow53(): string[] {
 export function loadFiguresMap(): Map<string, FigureData> {
   const figuresPath = path.join(siteRoot, 'src/content/figures/vic-veu.yaml');
   const parsed = YAML.parse(fs.readFileSync(figuresPath, 'utf8')) as FigureData[];
-  return new Map(parsed.map((f) => [f.id, f]));
+  return new Map(
+    parsed.map((f) => [
+      f.id,
+      {
+        ...f,
+        formatted: formatFigureAmount(f),
+        amountText: formatAud(f.amountMax, f.display ?? 'standard'),
+      },
+    ]),
+  );
 }
 
 export function loadSourcesMap(): Map<string, SourceMeta> {

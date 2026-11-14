@@ -52,27 +52,19 @@ export function AreaCardView({
         {card.summaryText}
       </p>
       <dl class="checker-area-card__grid">
-        <div>
-          <dt>Localities</dt>
-          <dd>{card.localitiesDisplay}</dd>
-        </div>
-        <div>
-          <dt>Council (LGA)</dt>
-          <dd>
-            {card.lgaDisplay}
-            {councilSuffix ?? ''}
-          </dd>
-        </div>
-        <div>
-          <dt>Mains gas</dt>
-          <dd>{card.reticulatedGas ? 'Yes (reticulated gas)' : 'No reticulated mains gas'}</dd>
-        </div>
-        <div>
-          <dt>Climate &amp; heat pump zone</dt>
-          <dd>
-            {card.climaticRegion} · Heat pump zone {card.heatPumpZone}
-          </dd>
-        </div>
+        {(
+          [
+            ['Localities', card.localitiesDisplay],
+            ['Council (LGA)', `${card.lgaDisplay}${councilSuffix ?? ''}`],
+            ['Mains gas', card.reticulatedGas ? 'Yes (reticulated gas)' : 'No reticulated mains gas'],
+            ['Climate & heat pump zone', `${card.climaticRegion} · Heat pump zone ${card.heatPumpZone}`],
+          ] as const
+        ).map(([dt, dd]) => (
+          <div key={dt}>
+            <dt>{dt}</dt>
+            <dd>{dd}</dd>
+          </div>
+        ))}
       </dl>
       {children}
       <div class="checker-area-card__footer">

@@ -1,4 +1,7 @@
-import type { LinkKey, PostcodeAreaRecord, ResolvedLink } from './types';
+import { resolveAreaLinkFromData, type AreaLinksData } from './area-runtime';
+import type { LinkKey, ResolvedLink } from './types';
+
+export { resolveAreaLinkFromData, type AreaLinksData };
 
 export interface LinkCatalogEntry {
   label: string;
@@ -8,10 +11,7 @@ export interface LinkCatalogEntry {
   rel?: string;
 }
 
-export interface LinksCatalogData {
-  northWestCorridorPostcodes: string[];
-  specificLgaAreaUrls: Record<string, { url: string; label: string }>;
-  metroHubByLga: Record<string, { url: string; label: string }>;
+export interface LinksCatalogData extends AreaLinksData {
   businessResultLinks: Record<string, { label: string; url: string }>;
   residentialGuideByRule: Record<string, LinkKey>;
   largeCopayIds: string[];
@@ -95,65 +95,6 @@ export function resolveLinkKeyFromData(
     key,
     label: catalog['victoria-hub'].label,
     specHref: entry.specHref,
-    href: '/victoria/',
-    external: false,
-  };
-}
-
-export function resolveAreaLinkFromData(
-  record: PostcodeAreaRecord,
-  enabledUrls: Set<string>,
-  data: LinksCatalogData,
-): ResolvedLink {
-  const candidates: { url: string; label: string }[] = [];
-
-  if (data.northWestCorridorPostcodes.includes(record.postcode)) {
-    candidates.push({
-      url: '/victoria/north-west-corridor/',
-      label: 'More about the North-West Corridor',
-    });
-  }
-
-  const specific = data.specificLgaAreaUrls[record.primary_lga];
-  if (specific) {
-    candidates.push(specific);
-  }
-
-  const hub = data.metroHubByLga[record.primary_lga];
-  if (hub && (!specific || specific.url !== hub.url)) {
-    candidates.push(hub);
-  }
-
-  const specCandidate =
-    candidates[0] ??
-    ({
-      url: '/victoria/postcode/',
-      label: 'Check Victorian VEU postcodes',
-    } as const);
-
-  for (const cand of candidates) {
-    if (enabledUrls.has(cand.url)) {
-      return {
-        label: cand.label,
-        specHref: specCandidate.url,
-        href: cand.url,
-        external: false,
-      };
-    }
-  }
-
-  if (enabledUrls.has('/victoria/postcode/')) {
-    return {
-      label: 'Check Victorian VEU postcodes',
-      specHref: specCandidate.url,
-      href: '/victoria/postcode/',
-      external: false,
-    };
-  }
-
-  return {
-    label: 'Browse Victorian rebate guides',
-    specHref: specCandidate.url,
     href: '/victoria/',
     external: false,
   };

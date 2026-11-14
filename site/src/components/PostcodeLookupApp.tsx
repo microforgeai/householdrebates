@@ -5,18 +5,10 @@ import {
   buildAreaCardFromData,
   lookupPostcode,
 } from '../lib/checker/area-runtime';
-import {
-  resolveLinkKeyFromData,
-  type LinksCatalogData,
-} from '../lib/checker/links-runtime';
-import {
-  renderMessageFromMap,
-  type MessageDefinition,
-} from '../lib/checker/messages-runtime';
+import type { LinksCatalogData } from '../lib/checker/links-runtime';
 import { fetchCompactPostcodesOnce } from '../lib/checker/postcode-client';
 import type {
   EvaluatedMessage,
-  MessageId,
   PostcodeAreaRecord,
   PostcodesDataset,
   ResolvedLink,
@@ -40,7 +32,9 @@ export interface PostcodeLookupBootstrapPayload {
   sources: SourceMeta[];
   enabledUrls: string[];
   links: LinksCatalogData;
-  x1Message: MessageDefinition;
+  x1Message: EvaluatedMessage;
+  gasNoLink: ResolvedLink;
+  hpz5Link: ResolvedLink;
   gasNoText: string;
   hpz5Text: string;
 }
@@ -107,10 +101,6 @@ export function PostcodeLookupApp({
     () => new Set(bootstrap.enabledUrls),
     [bootstrap.enabledUrls],
   );
-  const messagesById = useMemo(
-    () => new Map<MessageId, MessageDefinition>([[bootstrap.x1Message.id, bootstrap.x1Message]]),
-    [bootstrap.x1Message],
-  );
 
   const [query, setQuery] = useState<string>('');
   const [dataset, setDataset] = useState<PostcodesDataset | null>(null);
@@ -140,21 +130,6 @@ export function PostcodeLookupApp({
     }
   };
 
-  const buildX1 = (): EvaluatedMessage => {
-    const raw = renderMessageFromMap(
-      'X1',
-      messagesById,
-      bootstrap.links,
-      new Map(),
-      enabledUrlsSet,
-      '',
-    );
-    return {
-      ...raw,
-      links: raw.links.filter((l) => l.href !== '/victoria/postcode/'),
-    };
-  };
-
   const evaluateFourDigit = (val: string, ds: PostcodesDataset) => {
     const res = lookupPostcode(val, ds);
     if (res.ok) {
@@ -163,7 +138,7 @@ export function PostcodeLookupApp({
       setDropdownOpen(false);
     } else {
       setSelectedRecord(null);
-      setNotFoundError(buildX1());
+      setNotFoundError(bootstrap.x1Message);
       setDropdownOpen(false);
     }
   };
@@ -209,7 +184,7 @@ export function PostcodeLookupApp({
 
     if (/^\d+$/.test(trimmed)) {
       setSelectedRecord(null);
-      setNotFoundError(trimmed.length > 4 ? buildX1() : null);
+      setNotFoundError(trimmed.length > 4 ? bootstrap.x1Message : null);
       setDropdownOpen(false);
       return;
     }
@@ -245,7 +220,7 @@ export function PostcodeLookupApp({
 
     if (/^\d+$/.test(trimmed)) {
       setSelectedRecord(null);
-      setNotFoundError(buildX1());
+      setNotFoundError(bootstrap.x1Message);
       setDropdownOpen(false);
       return;
     }
@@ -261,7 +236,7 @@ export function PostcodeLookupApp({
     }
 
     setSelectedRecord(null);
-    setNotFoundError(buildX1());
+    setNotFoundError(bootstrap.x1Message);
     setDropdownOpen(false);
   };
 
@@ -310,14 +285,7 @@ export function PostcodeLookupApp({
     ? sourcesById.get(insulationFigure.sourceId) ?? null
     : null;
 
-  const gasNoLink = useMemo(
-    () => resolveLinkKeyFromData('gas-no-lpg', enabledUrlsSet, bootstrap.links),
-    [enabledUrlsSet, bootstrap.links],
-  );
-  const hpz5Link = useMemo(
-    () => resolveLinkKeyFromData('hw-size-guide', enabledUrlsSet, bootstrap.links),
-    [enabledUrlsSet, bootstrap.links],
-  );
+  const { gasNoLink, hpz5Link } = bootstrap;
 
   const showSuggestions = dropdownOpen && suggestions.length > 0;
   const listboxId = 'postcode-lookup-listbox';

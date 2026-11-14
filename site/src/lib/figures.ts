@@ -55,6 +55,8 @@ export interface FigureData {
   checkedOn: Date | string;
   conditions?: string[];
   groupNote?: string;
+  formatted?: string;
+  amountText?: string;
 }
 
 const AUD_FORMATTER = /*#__PURE__*/ new Intl.NumberFormat('en-AU', {

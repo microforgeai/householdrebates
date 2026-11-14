@@ -1,5 +1,5 @@
 ---
-import { ALERTS_CONSENT_TEMPLATES, ALERTS_CONSENT_VERSION_V1 } from '../data/consent/alerts-v1';
+import { ALERTS_CONSENT_VERSION_V2 } from '../data/consent/alerts-v1';
 import {
   formatAlertTopicsIntro,
   getUpcomingAlertTopics,
@@ -17,7 +17,6 @@ const HeadingTag = placement === 'checker' ? 'h3' : 'h2';
 const upcomingTopics = getUpcomingAlertTopics();
 const topicsIntro = formatAlertTopicsIntro(upcomingTopics);
 const notice = resolveAlertsApp5Notice(process.env);
-const consentText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V1];
 ---
 
 <section
@@ -42,7 +41,7 @@ const consentText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V1];
     <input
       type="hidden"
       name="consentVersion"
-      value={ALERTS_CONSENT_VERSION_V1}
+      value={ALERTS_CONSENT_VERSION_V2}
       data-alert-consent-version
     />
     <input
@@ -97,7 +96,11 @@ const consentText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V1];
           required
           data-alert-consent
         />
-        <span data-alert-consent-text>{consentText}</span>
+        <span data-alert-consent-text>
+          Email me when the rules for Victorian and federal home energy rebates change, including after the 28 November
+          2026 state election and around the changes currently scheduled for 1 January, 1 March and 1 July 2027.
+          Household Rebates will email me only about rule changes, and I can unsubscribe at any time from any email.
+        </span>
       </label>
       <p
         id={`${prefix}-consent-error`}

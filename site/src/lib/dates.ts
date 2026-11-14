@@ -5,6 +5,13 @@ const MELBOURNE_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-AU', {
   timeZone: 'Australia/Melbourne',
 });
 
+const MELBOURNE_LONG_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-AU', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'Australia/Melbourne',
+});
+
 const MELBOURNE_DAY_MONTH_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-AU', {
   day: 'numeric',
   month: 'short',
@@ -14,6 +21,11 @@ const MELBOURNE_DAY_MONTH_FORMATTER = /*#__PURE__*/ new Intl.DateTimeFormat('en-
 export function formatAuDate(dateInput: Date | string): string {
   const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
   return MELBOURNE_FORMATTER.format(d);
+}
+
+export function formatAuLongDate(dateInput: Date | string): string {
+  const d = typeof dateInput === 'string' ? new Date(dateInput) : dateInput;
+  return MELBOURNE_LONG_FORMATTER.format(d);
 }
 
 export function formatAuDayMonth(dateInput: Date | string): string {

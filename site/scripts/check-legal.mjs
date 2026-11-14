@@ -12,6 +12,7 @@ const distDir = path.join(siteRoot, 'dist');
 
 const leadsEnabled = process.env.PUBLIC_LEADS_ENABLED === 'true';
 const alertsEnabled = process.env.PUBLIC_ALERTS_ENABLED === 'true';
+const productionBuild = Boolean(process.env.RELEASE_ID && process.env.RELEASE_ID.trim());
 const authorPublishEnv = process.env.PUBLIC_AUTHOR_LIVE === 'true';
 const legalSlugs = ['privacy', 'terms'];
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -21,6 +22,11 @@ function hasPlaceholder(val) {
   if (Array.isArray(val)) return val.some(hasPlaceholder);
   if (val && typeof val === 'object') return Object.values(val).some(hasPlaceholder);
   return false;
+}
+
+function findPlaceholdersInText(str) {
+  const matches = [...String(str || '').matchAll(/<<[^>]*>>|<<|>>/g)].map((m) => m[0]);
+  return [...new Set(matches)];
 }
 
 function isValidSignedReviewer(rev) {
@@ -76,17 +82,91 @@ for (const slug of legalSlugs) {
   }
   const fm = YAML.parse(fmMatch[1]);
   parsedBySlug.set(slug, { raw, fm });
-
-  if (leadsEnabled && fm.legalReviewed !== true) {
-    throw new Error(
-      `Refusing build with PUBLIC_LEADS_ENABLED=true: ${slug}.mdx has legalReviewed=${fm.legalReviewed}. A lawyer must review and sign off first.`,
-    );
-  }
 }
 
 const privacyEntry = parsedBySlug.get('privacy');
 if (!privacyEntry || !/^##\s+\d+\.\s+Email alerts\b/m.test(privacyEntry.raw)) {
   throw new Error('privacy.mdx is missing the required "Email alerts" section.');
+}
+
+const ruleStatusRaw = JSON.parse(fs.readFileSync(ruleStatusPath, 'utf8'));
+const ewStatus = ruleStatusRaw?.electionWatch?.status;
+const electionPending =
+  ewStatus === 'pending' || !['rechecked-unchanged', 'rechecked-changed'].includes(ewStatus);
+
+// Collect any unresolved <<...>> placeholders across legal MDX pages and built HTML
+const legalPagePlaceholders = [];
+for (const slug of legalSlugs) {
+  const entry = parsedBySlug.get(slug);
+  const found = findPlaceholdersInText(entry.raw);
+  if (found.length > 0) {
+    legalPagePlaceholders.push(`${slug}.mdx contains unresolved placeholder(s): ${found.join(', ')}`);
+  }
+}
+if (fs.existsSync(distDir)) {
+  for (const htmlFile of walkHtml(distDir)) {
+    const html = fs.readFileSync(htmlFile, 'utf8');
+    const found = findPlaceholdersInText(html.replace(/&lt;/g, '<').replace(/&gt;/g, '>'));
+    if (found.length > 0) {
+      const rel = path.relative(siteRoot, htmlFile);
+      legalPagePlaceholders.push(`${rel} contains unresolved placeholder(s): ${found.join(', ')}`);
+    }
+  }
+}
+
+if (productionBuild && legalPagePlaceholders.length > 0) {
+  throw new Error(
+    `Refusing production build (RELEASE_ID=${process.env.RELEASE_ID}):\n  - ${legalPagePlaceholders.join('\n  - ')}`,
+  );
+}
+
+if (leadsEnabled) {
+  const blockers = [];
+
+  for (const slug of legalSlugs) {
+    const entry = parsedBySlug.get(slug);
+    if (entry.fm.legalReviewed !== true) {
+      blockers.push(
+        `${slug}.mdx has legalReviewed=${entry.fm.legalReviewed} (lawyer review required)`,
+      );
+    }
+  }
+
+  if (electionPending) {
+    blockers.push(
+      `rule-status.json has electionWatch.status="${ewStatus}" (post-election re-check must complete before enabling PUBLIC_LEADS_ENABLED=true)`,
+    );
+  }
+
+  const serverCountry = (
+    process.env.PUBLIC_SERVER_COUNTRY ??
+    process.env.SERVER_COUNTRY ??
+    ''
+  ).trim();
+  if (!serverCountry || /<<|>>/.test(serverCountry)) {
+    blockers.push(
+      'PUBLIC_SERVER_COUNTRY is unset or contains <<SERVER_COUNTRY>> / <<...>> placeholders',
+    );
+  }
+
+  const leadsEmailNote = (
+    process.env.PUBLIC_LEADS_EMAIL_PROVIDER_NOTE ??
+    process.env.LEADS_EMAIL_PROVIDER_NOTE ??
+    ''
+  ).trim();
+  if (!leadsEmailNote || /<<|>>/.test(leadsEmailNote)) {
+    blockers.push(
+      'PUBLIC_LEADS_EMAIL_PROVIDER_NOTE is unset or contains <<EMAIL_PROVIDER_AND_COUNTRY>> / <<...>> placeholders',
+    );
+  }
+
+  blockers.push(...legalPagePlaceholders);
+
+  if (blockers.length > 0) {
+    throw new Error(
+      `Refusing build with PUBLIC_LEADS_ENABLED=true:\n  - ${blockers.join('\n  - ')}`,
+    );
+  }
 }
 
 if (alertsEnabled) {
@@ -105,11 +185,20 @@ if (alertsEnabled) {
     );
   }
 
-  const ruleStatusRaw = JSON.parse(fs.readFileSync(ruleStatusPath, 'utf8'));
-  const ewStatus = ruleStatusRaw?.electionWatch?.status;
-  if (ewStatus === 'pending' || !['rechecked-unchanged', 'rechecked-changed'].includes(ewStatus)) {
+  if (electionPending) {
     blockers.push(
       `rule-status.json has electionWatch.status="${ewStatus}" (post-election re-check must complete before enabling PUBLIC_ALERTS_ENABLED=true)`,
+    );
+  }
+
+  const serverCountry = (
+    process.env.PUBLIC_SERVER_COUNTRY ??
+    process.env.SERVER_COUNTRY ??
+    ''
+  ).trim();
+  if (!serverCountry || /<<|>>/.test(serverCountry)) {
+    blockers.push(
+      'PUBLIC_SERVER_COUNTRY is unset or contains <<SERVER_COUNTRY>> / <<...>> placeholders',
     );
   }
 
@@ -120,9 +209,15 @@ if (alertsEnabled) {
   }
   if (!overseasNote || /<<|>>/.test(overseasNote)) {
     blockers.push(
-      'PUBLIC_ALERTS_OVERSEAS_NOTE is unset or contains unresolved <<...>> placeholders (set "; it may store data outside Australia" or "none")',
+      'PUBLIC_ALERTS_OVERSEAS_NOTE is unset or contains unresolved <<...>> placeholders (set for example "; it stores data in the United States and Ireland", or "none")',
+    );
+  } else if (/outside\s+australia/i.test(overseasNote)) {
+    blockers.push(
+      'PUBLIC_ALERTS_OVERSEAS_NOTE must name specific countries (for example "; it stores data in the United States and Ireland", or "none"), not a vague "outside Australia"',
     );
   }
+
+  blockers.push(...legalPagePlaceholders);
 
   if (blockers.length > 0) {
     throw new Error(
@@ -260,5 +355,5 @@ if (peopleBlockers.length > 0) {
 }
 
 console.log(
-  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}, authorPagePublished=${attemptingAuthorPagePublish && bioReady}, signedReviewers=${people.reviewers.length}).`,
+  `check-legal: OK (PUBLIC_LEADS_ENABLED=${leadsEnabled}, PUBLIC_ALERTS_ENABLED=${alertsEnabled}, productionBuild=${productionBuild}, authorPagePublished=${attemptingAuthorPagePublish && bioReady}, signedReviewers=${people.reviewers.length}).`,
 );

@@ -1,8 +1,25 @@
 import { z } from 'zod';
 import rawRuleStatus from '../data/rule-status.json';
-import { assertFigureNotStale, daysBetween, formatAuDate, formatAuDayMonth } from './dates';
+import { assertFigureNotStale, daysBetween, formatAuDate, formatAuLongDate } from './dates';
 
 const ISO_DATE = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Expected YYYY-MM-DD');
+
+export const VIC_ELECTION_FIGURE_PROGRAMS = new Set([
+  'VEU',
+  'Solar Homes',
+  'VEU + Solar Homes',
+  'Residential Electrification Grants',
+  'Energy Victoria',
+]);
+
+export function hasVicElectionFigure(figurePrograms: Iterable<string>): boolean {
+  for (const program of figurePrograms) {
+    if (VIC_ELECTION_FIGURE_PROGRAMS.has(program)) {
+      return true;
+    }
+  }
+  return false;
+}
 
 export const RuleStatusSchema = z.object({
   electionWatch: z.object({
@@ -28,14 +45,23 @@ export interface ResolvedElectionNotice {
   checkedOnFormatted: string;
 }
 
-export function buildPendingNoticeText(ew: Pick<ElectionWatchData, 'electionDate' | 'caretakerFrom'>): string {
-  return `Victorian election ${formatAuDate(ew.electionDate)}. Official sites are in caretaker mode from ${formatAuDayMonth(ew.caretakerFrom)}. These rules are currently legislated; we'll re-check them after the result.`;
+export function isElectionBannerPending(input: unknown = rawRuleStatus): boolean {
+  return RuleStatusSchema.parse(input).electionWatch.status === 'pending';
+}
+
+export function buildPendingNoticeText(
+  ew: Pick<ElectionWatchData, 'electionDate' | 'checkedOn'>,
+  pageCheckedOn?: Date | string,
+): string {
+  const checkedStr = formatAuDate(pageCheckedOn ?? ew.checkedOn);
+  return `The Victorian election on ${formatAuLongDate(ew.electionDate)} may change these rules. Figures are as checked on ${checkedStr}; we'll update this page once the new government confirms its policy.`;
 }
 
 export function resolveElectionWatchNotice(
   input: unknown = rawRuleStatus,
   referenceDate: Date = new Date(),
   maxAgeDays = Number(process.env.MAX_FIGURE_AGE_DAYS || 45),
+  pageCheckedOn?: Date | string,
 ): ResolvedElectionNotice {
   const parsed = RuleStatusSchema.parse(input);
   const ew = parsed.electionWatch;
@@ -67,7 +93,7 @@ export function resolveElectionWatchNotice(
     };
   }
 
-  const dateRenderedText = buildPendingNoticeText(ew);
+  const dateRenderedText = buildPendingNoticeText(ew, pageCheckedOn);
   return {
     visible: true,
     message: dateRenderedText,

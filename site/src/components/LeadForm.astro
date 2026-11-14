@@ -1,7 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
 import { SITE } from '../data/site';
-import { CONSENT_VERSIONS } from '../data/consent/vic-v1';
+import {
+  CONSENT_VERSIONS,
+  formatActivityLabel,
+  formatApList,
+  formatChannelList,
+  formatInstallerList,
+  formatInstallerNames,
+  resolveLeadConsentEnv,
+} from '../data/consent/vic-v1';
 import FormClosedNotice from './FormClosedNotice.astro';
 
 export interface Props {
@@ -24,14 +32,13 @@ const activeInstallers = allInstallers
 const showLiveForm = SITE.flags.leadsEnabled && activeInstallers.length > 0;
 const defaultActivity = activity === 'either' ? 'rcac' : activity;
 const defaultConsentVersion = CONSENT_VERSIONS[defaultActivity];
+const defaultActivityLabel = formatActivityLabel(defaultActivity);
+const defaultChannelList = formatChannelList([]);
 const recipientIdsValue = activeInstallers.map((i) => i.id).join(',');
-const installerSummary = activeInstallers
-  .map(
-    (i) =>
-      `${i.tradingName} (works with VEU accredited provider ${i.accreditedProvider})`,
-  )
-  .join('; ');
-const installerNames = activeInstallers.map((i) => i.tradingName).join(' and ');
+const installerList = formatInstallerList(activeInstallers);
+const installerNames = formatInstallerNames(activeInstallers);
+const apList = formatApList(activeInstallers);
+const { serverCountry, emailProviderAndCountry } = resolveLeadConsentEnv();
 ---
 
 {!showLiveForm ? (
@@ -202,29 +209,47 @@ const installerNames = activeInstallers.map((i) => i.tradingName).join(' and ');
       </div>
 
       <div class="consent-box">
-        <p>
+        <p data-consent-who>
           <strong>Who gets your details.</strong> If you tick the box and send this form, {SITE.name} (run by{' '}
-          {SITE.publisher.legalName}, ABN {SITE.publisher.abn}) will send your name, phone, email, postcode and answers to{' '}
-          <strong data-installer-list>{installerSummary}</strong>. The installer pays us a fee for each enquiry. We're not a
-          government website and we don't work for the Victorian Energy Upgrades program, the Essential Services Commission or
-          the Victorian Government.
+          {SITE.publisher.legalName}, ABN {SITE.publisher.abn},{' '}
+          <a href={`mailto:${SITE.publisher.privacyEmail}`}>{SITE.publisher.privacyEmail}</a>) will send your name,
+          phone, email, postcode and answers to <strong data-installer-list>{installerList}</strong> so they can
+          contact you about a quote, and the installer may share your details with its accredited provider,{' '}
+          <strong data-ap-list>{apList}</strong>, only to create the VEU certificates for your installation. The
+          installer pays us a fee for each enquiry. If you don't send the form, we can't pass on your enquiry, but you
+          can still use the site. Your details are stored on our server in{' '}
+          <span data-server-country>{serverCountry}</span> and sent by email through{' '}
+          <span data-email-provider-country>{emailProviderAndCountry}</span>. Our{' '}
+          <a href="/privacy/">privacy policy</a> explains how to access or correct your details and how to complain. We
+          are not a government website and we are not affiliated with, endorsed by, or representing the Victorian
+          Government, Energy Victoria, Solar Victoria, the Department of Energy, Environment and Climate Action
+          (DEECA), the Essential Services Commission (ESC), the Australian Government, the Clean Energy Regulator or
+          any council.
         </p>
         <label class="option-row" for="lf-consent">
           <input type="checkbox" id="lf-consent" name="consent" value="true" required />
-          <span>
+          <span data-consent-checkbox-text>
             I agree to {SITE.name} sending my details to <strong data-installer-names>{installerNames}</strong>, and to{' '}
-            <strong data-installer-names>{installerNames}</strong> contacting me about a quote under the Victorian Energy Upgrades
-            program by the channel(s) I ticked above. This consent lasts 3 months unless I withdraw it sooner by replying to any
-            email from {SITE.name} or emailing <a href={`mailto:${SITE.publisher.privacyEmail}`}>{SITE.publisher.privacyEmail}</a>.
-            I've read the <a href="/privacy/">collection notice and privacy policy</a>.
+            <strong data-installer-names>{installerNames}</strong> contacting me about a quote for{' '}
+            <span data-activity-label>{defaultActivityLabel}</span> under the Victorian Energy Upgrades program by:{' '}
+            <span data-channel-list>{defaultChannelList}</span>. This consent lasts 3 months unless I withdraw it
+            sooner by replying to any email from {SITE.name} or emailing{' '}
+            <a href={`mailto:${SITE.publisher.privacyEmail}`}>{SITE.publisher.privacyEmail}</a>.
           </span>
         </label>
-        <p style="margin-bottom:0;font-size:var(--text-xs);color:var(--text-secondary);">
-          A quote doesn't guarantee a discount. The accredited provider checks eligibility and confirms any discount in your
-          quote. Read your rights under the VEU code of conduct and the VEET scheme consumer factsheet{' '}
-          <a href="/how-quotes-work/#your-rights">here</a>.
+        <p
+          style="margin-bottom:0;font-size:var(--text-xs);color:var(--text-secondary);"
+          data-consent-disclaimer
+        >
+          A quote does not guarantee a discount. The accredited provider checks eligibility and confirms any discount
+          in your quote. Read your rights under the{' '}
+          <a href="/how-quotes-work/#your-rights">VEU code of conduct and the VEET scheme consumer factsheet</a>.
         </p>
       </div>
+
+      <p class="consent-read-notice" data-consent-read-notice>
+        Before you send, please read our collection notice above and our <a href="/privacy/">privacy policy</a>.
+      </p>
 
       <button type="submit" class="btn">Send quote enquiry</button>
     </form>

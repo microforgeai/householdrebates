@@ -101,7 +101,7 @@ function initAlertForms(): void {
       const payload = {
         email: rawEmail,
         consent: true,
-        consentVersion: versionInput?.value ?? 'alerts-v1',
+        consentVersion: versionInput?.value ?? 'alerts-v2',
         formToken: tokenInput?.value ?? '',
         website: websiteInput?.value ?? '',
       };

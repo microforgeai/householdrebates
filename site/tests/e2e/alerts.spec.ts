@@ -37,8 +37,9 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
         ...process.env,
         PUBLIC_LEADS_ENABLED: 'false',
         PUBLIC_ALERTS_ENABLED: 'true',
+        PUBLIC_SERVER_COUNTRY: 'Malaysia',
         PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it may store data outside Australia',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it stores data in the United States and Ireland',
       },
       stdio: 'pipe',
     });
@@ -174,9 +175,12 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
 
     // APP 5 collection notice resolved from config directly above submit button
     const noticeEl = card.locator('[data-alert-collection-notice]');
-    await expect(noticeEl).toContainText('Agenor Services Pty Ltd, ABN 29 644 447 263');
+    await expect(noticeEl).toContainText(
+      'Agenor Services Pty Ltd, ABN 29 644 447 263, privacy@householdrebates.com.au',
+    );
+    await expect(noticeEl).toContainText('Your email address is stored on our server in Malaysia.');
     await expect(noticeEl).toContainText('Example Mail Pty Ltd');
-    await expect(noticeEl).toContainText('it may store data outside Australia');
+    await expect(noticeEl).toContainText('it stores data in the United States and Ireland');
     await expect(noticeEl.locator('a[href="/privacy/"]')).toHaveText('privacy policy');
 
     const emailInput = card.locator('[data-alert-email]');
@@ -225,7 +229,7 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
     expect(capturedBodies[0]).toEqual({
       email: 'resident@example.com.au',
       consent: true,
-      consentVersion: 'alerts-v1',
+      consentVersion: 'alerts-v2',
       formToken: 'signed-token-29b',
       website: '',
     });

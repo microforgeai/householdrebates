@@ -98,13 +98,6 @@ export class AlertsRepository {
     ).toISOString();
 
     const tx = this.db.transaction((): SubscribeOutcome => {
-      const suppressed = this.db
-        .prepare('SELECT email_hash FROM alert_suppression WHERE email_hash = ?')
-        .get(emailHash) as { email_hash: string } | undefined;
-      if (suppressed) {
-        return { action: 'suppressed' };
-      }
-
       const existing = this.db
         .prepare('SELECT id, status FROM alert_subscribers WHERE email_hash = ?')
         .get(emailHash) as { id: number; status: string } | undefined;
@@ -112,9 +105,6 @@ export class AlertsRepository {
       if (existing) {
         if (existing.status === 'confirmed') {
           return { action: 'already_confirmed' };
-        }
-        if (existing.status === 'unsubscribed' || existing.status === 'erased') {
-          return { action: 'suppressed' };
         }
         if (existing.status === 'pending') {
           const activeToken = this.db
@@ -131,7 +121,9 @@ export class AlertsRepository {
           }
         }
 
-        // Previously expired unconfirmed row (never confirmed and not suppressed): refresh pending state
+        // Previously expired, unsubscribed, or erased row: issue a fresh double opt-in
+        // confirmation token (#23). Any existing alert_suppression row remains active until
+        // confirmByToken succeeds on this fresh token, so zero alert emails can be sent before confirm.
         const { rawToken, tokenHash } = generateAlertToken();
         this.db
           .prepare(
@@ -277,21 +269,22 @@ export class AlertsRepository {
         return { outcome: 'invalid' };
       }
 
-      const suppressed = this.db
-        .prepare('SELECT email_hash FROM alert_suppression WHERE email_hash = ?')
-        .get(sub.email_hash) as { email_hash: string } | undefined;
-      if (suppressed) {
-        return { outcome: 'invalid' };
-      }
-
       this.db
         .prepare('UPDATE alert_tokens SET used_at_utc = ? WHERE token_hash = ?')
         .run(nowUtc, tokenHash);
 
+      // Fresh confirmed double opt-in clears any prior suppression row (#23)
+      this.db
+        .prepare('DELETE FROM alert_suppression WHERE email_hash = ?')
+        .run(sub.email_hash);
+
       this.db
         .prepare(
           `UPDATE alert_subscribers
-           SET status = 'confirmed', confirmed_at_utc = ?
+           SET status = 'confirmed',
+               confirmed_at_utc = ?,
+               unsubscribed_at_utc = NULL,
+               unsubscribe_method = NULL
            WHERE id = ?`,
         )
         .run(nowUtc, sub.id);
@@ -369,6 +362,13 @@ export class AlertsRepository {
         )
         .run(nowUtc, tokenHash);
 
+      this.db
+        .prepare(
+          `DELETE FROM alert_tokens
+           WHERE subscriber_id = ? AND kind = 'confirm' AND used_at_utc IS NULL`,
+        )
+        .run(sub.id);
+
       if (sub.status !== 'erased') {
         this.db
           .prepare(
@@ -409,6 +409,14 @@ export class AlertsRepository {
         .get(emailHash) as { id: number; status: string } | undefined;
 
       let subscriberUpdated = false;
+      if (sub) {
+        this.db
+          .prepare(
+            `DELETE FROM alert_tokens
+             WHERE subscriber_id = ? AND kind = 'confirm' AND used_at_utc IS NULL`,
+          )
+          .run(sub.id);
+      }
       if (sub && sub.status !== 'erased') {
         this.db
           .prepare(
@@ -519,6 +527,18 @@ export class AlertsRepository {
     const nowUtc = now.toISOString();
 
     const tx = this.db.transaction(() => {
+      const sub = this.db
+        .prepare('SELECT id FROM alert_subscribers WHERE email_hash = ?')
+        .get(emailHash) as { id: number } | undefined;
+      if (sub) {
+        this.db
+          .prepare(
+            `DELETE FROM alert_tokens
+             WHERE subscriber_id = ? AND kind = 'confirm' AND used_at_utc IS NULL`,
+          )
+          .run(sub.id);
+      }
+
       const res = this.db
         .prepare(
           `UPDATE alert_subscribers
@@ -588,15 +608,33 @@ export class AlertsRepository {
       // 1. Purge unconfirmed (pending / expired) subscribers past the confirmation TTL
       const staleUnconfirmed = this.db
         .prepare(
-          `SELECT id FROM alert_subscribers
+          `SELECT id, unsubscribed_at_utc FROM alert_subscribers
            WHERE status IN ('pending', 'expired') AND created_at_utc < ?`,
         )
-        .all(minusTtl) as { id: number }[];
+        .all(minusTtl) as { id: number; unsubscribed_at_utc: string | null }[];
 
       for (const s of staleUnconfirmed) {
-        this.db.prepare('DELETE FROM alert_tokens WHERE subscriber_id = ?').run(s.id);
-        this.db.prepare('DELETE FROM alert_consents WHERE subscriber_id = ?').run(s.id);
-        this.db.prepare('DELETE FROM alert_subscribers WHERE id = ?').run(s.id);
+        if (s.unsubscribed_at_utc !== null) {
+          // Abandoned re-signup on a previously unsubscribed row: drop only the unconfirmed
+          // confirm token(s) and unconfirmed consent(s) while preserving the 24-month audit record.
+          this.db
+            .prepare(`DELETE FROM alert_tokens WHERE subscriber_id = ? AND kind = 'confirm'`)
+            .run(s.id);
+          this.db
+            .prepare(`DELETE FROM alert_consents WHERE subscriber_id = ? AND given_at_utc > ?`)
+            .run(s.id, s.unsubscribed_at_utc);
+          this.db
+            .prepare(
+              `UPDATE alert_subscribers
+               SET status = CASE WHEN email IS NULL THEN 'erased' ELSE 'unsubscribed' END
+               WHERE id = ?`,
+            )
+            .run(s.id);
+        } else {
+          this.db.prepare('DELETE FROM alert_tokens WHERE subscriber_id = ?').run(s.id);
+          this.db.prepare('DELETE FROM alert_consents WHERE subscriber_id = ?').run(s.id);
+          this.db.prepare('DELETE FROM alert_subscribers WHERE id = ?').run(s.id);
+        }
       }
 
       // Also clean up expired one-time confirm tokens on remaining rows

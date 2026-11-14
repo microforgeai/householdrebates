@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
-import { ALERTS_CONSENT_TEMPLATES, ALERTS_CONSENT_VERSION_V1 } from '../../src/data/consent/alerts-v1';
+import { ALERTS_CONSENT_TEMPLATES, ALERTS_CONSENT_VERSION_V2 } from '../../src/data/consent/alerts-v1';
 import {
   ALERT_TOPICS,
   formatAlertTopicsIntro,
@@ -16,8 +16,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, '../..');
 const repoRoot = path.resolve(siteRoot, '..');
 
-describe('Rule-change email alerts (Prompt 29b)', () => {
-  it('renders the consent checkbox unticked by default in AlertSignupIsland.astro and matches API alerts-v1 SHA-256', () => {
+describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => {
+  it('renders the consent checkbox unticked by default in AlertSignupIsland.astro and matches API alerts-v2 SHA-256', () => {
     const islandPath = path.join(siteRoot, 'src/components/AlertSignupIsland.astro');
     const islandMarkup = fs.readFileSync(islandPath, 'utf8');
 
@@ -27,8 +27,13 @@ describe('Rule-change email alerts (Prompt 29b)', () => {
 
     const apiConsentPath = path.join(repoRoot, 'api/src/alerts/consent.ts');
     const apiConsentRaw = fs.readFileSync(apiConsentPath, 'utf8');
-    const siteText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V1];
+    const siteText = ALERTS_CONSENT_TEMPLATES[ALERTS_CONSENT_VERSION_V2];
     expect(apiConsentRaw).toContain(siteText);
+
+    const spanMatch = islandMarkup.match(/<span\b[^>]*\bdata-alert-consent-text\b[^>]*>([\s\S]*?)<\/span>/);
+    expect(spanMatch).not.toBeNull();
+    const renderedSpanText = spanMatch![1].replace(/\s+/g, ' ').trim();
+    expect(renderedSpanText).toBe(siteText);
 
     const sha = crypto.createHash('sha256').update(siteText, 'utf8').digest('hex');
     expect(sha).toHaveLength(64);
@@ -73,19 +78,21 @@ describe('Rule-change email alerts (Prompt 29b)', () => {
     );
   });
 
-  it('resolves APP 5 collection notice placeholders from config and fails closed when unset or unresolved', () => {
+  it('resolves APP 5 collection notice placeholders (#8a/b/c) and rejects missing server country or vague "outside Australia"', () => {
     const withOverseas = resolveAlertsApp5Notice(
       {
+        PUBLIC_SERVER_COUNTRY: 'Malaysia',
         PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it may store data outside Australia',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it stores data in the United States and Ireland',
       },
       '29 644 447 263',
     );
 
     expect(withOverseas.markdownText).toBe(
-      "Household Rebates (Agenor Services Pty Ltd, ABN 29 644 447 263) collects your email address only to send rule-change alerts you've asked for. " +
+      "Household Rebates (Agenor Services Pty Ltd, ABN 29 644 447 263, privacy@householdrebates.com.au) collects your email address only to send rule-change alerts you've asked for. " +
         "If you don't give it, we can't send them. " +
-        'We don\'t share it with installers or anyone else, except our email service provider, Example Mail Pty Ltd, which sends the emails for us; it may store data outside Australia. ' +
+        'Your email address is stored on our server in Malaysia. ' +
+        "We don't share it with installers or anyone else, except our email service provider, Example Mail Pty Ltd, which sends the emails for us; it stores data in the United States and Ireland. " +
         "Our [privacy policy](/privacy/) explains how to access or correct your details and how to complain. We're not a government website.",
     );
     expect(withOverseas.fullText).not.toMatch(/<<|>>/);
@@ -93,55 +100,67 @@ describe('Rule-change email alerts (Prompt 29b)', () => {
 
     const auOnly = resolveAlertsApp5Notice(
       {
+        PUBLIC_SERVER_COUNTRY: 'Australia',
         PUBLIC_ALERTS_PROVIDER: 'AU Mail Pty Ltd',
         PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
       },
       '29 644 447 263',
     );
     expect(auOnly.markdownText).toContain(
-      'except our email service provider, AU Mail Pty Ltd, which sends the emails for us. Our [privacy policy](/privacy/)',
+      'Your email address is stored on our server in Australia. We don\'t share it with installers or anyone else, except our email service provider, AU Mail Pty Ltd, which sends the emails for us. Our [privacy policy](/privacy/)',
     );
     expect(auOnly.fullText).not.toMatch(/<<|>>/);
 
+    // Missing PUBLIC_SERVER_COUNTRY -> fails closed
     expect(() =>
       resolveAlertsApp5Notice({
+        PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
+      }),
+    ).toThrow(/PUBLIC_SERVER_COUNTRY/);
+
+    // Vague "outside Australia" -> rejected (#8b)
+    expect(() =>
+      resolveAlertsApp5Notice({
+        PUBLIC_SERVER_COUNTRY: 'Malaysia',
+        PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it may store data outside Australia',
+      }),
+    ).toThrow(/specific countries/);
+
+    expect(() =>
+      resolveAlertsApp5Notice({
+        PUBLIC_SERVER_COUNTRY: 'Malaysia',
         PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
       }),
     ).toThrow(/PUBLIC_ALERTS_PROVIDER/);
 
     expect(() =>
       resolveAlertsApp5Notice({
+        PUBLIC_SERVER_COUNTRY: 'Malaysia',
         PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-      }),
-    ).toThrow(/PUBLIC_ALERTS_OVERSEAS_NOTE/);
-
-    expect(() =>
-      resolveAlertsApp5Notice({
-        PUBLIC_ALERTS_PROVIDER: '<<provider>>',
-        PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
-      }),
-    ).toThrow(/PUBLIC_ALERTS_PROVIDER/);
-
-    expect(() =>
-      resolveAlertsApp5Notice({
-        PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-        PUBLIC_ALERTS_OVERSEAS_NOTE: '<<; it may store data outside Australia>>',
       }),
     ).toThrow(/PUBLIC_ALERTS_OVERSEAS_NOTE/);
   });
 
-  it('check-legal passes when PUBLIC_ALERTS_ENABLED=false and blocks PUBLIC_ALERTS_ENABLED=true while unreviewed or pre-election', () => {
+  it('check-legal passes with flags off and blocks PUBLIC_LEADS_ENABLED=true, PUBLIC_ALERTS_ENABLED=true, and RELEASE_ID while <<SERVER_COUNTRY>> / <<...>> or pending election status remain', () => {
     const checkLegalScript = path.join(siteRoot, 'scripts/check-legal.mjs');
 
     const okOut = execFileSync(process.execPath, [checkLegalScript], {
       cwd: siteRoot,
-      env: { ...process.env, PUBLIC_LEADS_ENABLED: 'false', PUBLIC_ALERTS_ENABLED: 'false' },
+      env: {
+        ...process.env,
+        PUBLIC_LEADS_ENABLED: 'false',
+        PUBLIC_ALERTS_ENABLED: 'false',
+        RELEASE_ID: '',
+      },
       encoding: 'utf8',
     });
     expect(okOut).toContain('check-legal: OK');
 
-    let failed = false;
-    let stderrText = '';
+    // Alerts enabled -> blocked by lawyer flags, pending election, and <<SERVER_COUNTRY>> / <<...>> placeholders
+    let alertsFailed = false;
+    let alertsStderr = '';
     try {
       execFileSync(process.execPath, [checkLegalScript], {
         cwd: siteRoot,
@@ -156,12 +175,57 @@ describe('Rule-change email alerts (Prompt 29b)', () => {
         stdio: 'pipe',
       });
     } catch (err: unknown) {
-      failed = true;
-      stderrText = String((err as { stderr?: string }).stderr ?? '');
+      alertsFailed = true;
+      alertsStderr = String((err as { stderr?: string }).stderr ?? '');
     }
+    expect(alertsFailed).toBe(true);
+    expect(alertsStderr).toContain('alertsLegalReviewed=false');
+    expect(alertsStderr).toContain('electionWatch.status="pending"');
+    expect(alertsStderr).toContain('<<SERVER_COUNTRY>>');
 
-    expect(failed).toBe(true);
-    expect(stderrText).toContain('alertsLegalReviewed=false');
-    expect(stderrText).toContain('electionWatch.status="pending"');
+    // Leads enabled -> blocked by lawyer flags, pending election (#11), and <<SERVER_COUNTRY>> / <<...>> placeholders (#1)
+    let leadsFailed = false;
+    let leadsStderr = '';
+    try {
+      execFileSync(process.execPath, [checkLegalScript], {
+        cwd: siteRoot,
+        env: {
+          ...process.env,
+          PUBLIC_LEADS_ENABLED: 'true',
+          PUBLIC_ALERTS_ENABLED: 'false',
+        },
+        encoding: 'utf8',
+        stdio: 'pipe',
+      });
+    } catch (err: unknown) {
+      leadsFailed = true;
+      leadsStderr = String((err as { stderr?: string }).stderr ?? '');
+    }
+    expect(leadsFailed).toBe(true);
+    expect(leadsStderr).toContain('legalReviewed=false');
+    expect(leadsStderr).toContain('electionWatch.status="pending"');
+    expect(leadsStderr).toContain('<<SERVER_COUNTRY>>');
+
+    // Production deploy (RELEASE_ID set) -> blocked while <<SERVER_COUNTRY>> is in privacy.mdx (#1)
+    let prodFailed = false;
+    let prodStderr = '';
+    try {
+      execFileSync(process.execPath, [checkLegalScript], {
+        cwd: siteRoot,
+        env: {
+          ...process.env,
+          PUBLIC_LEADS_ENABLED: 'false',
+          PUBLIC_ALERTS_ENABLED: 'false',
+          RELEASE_ID: '20261115-prod-test',
+        },
+        encoding: 'utf8',
+        stdio: 'pipe',
+      });
+    } catch (err: unknown) {
+      prodFailed = true;
+      prodStderr = String((err as { stderr?: string }).stderr ?? '');
+    }
+    expect(prodFailed).toBe(true);
+    expect(prodStderr).toContain('<<SERVER_COUNTRY>>');
   });
 });

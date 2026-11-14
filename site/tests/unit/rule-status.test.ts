@@ -1,22 +1,45 @@
 import { describe, expect, it } from 'vitest';
 import rawRuleStatus from '../../src/data/rule-status.json';
-import { buildPendingNoticeText, resolveElectionWatchNotice } from '../../src/lib/rule-status';
+import {
+  buildPendingNoticeText,
+  hasVicElectionFigure,
+  resolveElectionWatchNotice,
+} from '../../src/lib/rule-status';
 
 describe('rule-status (election watch)', () => {
-  it('renders the exact acceptance wording from date fields when pending', () => {
-    const rendered = buildPendingNoticeText({
+  it('renders the exact Prompt 40 #11 election banner wording with page checkedOn date when pending', () => {
+    const renderedDefault = buildPendingNoticeText({
       electionDate: '2026-11-28',
-      caretakerFrom: '2026-11-03',
+      checkedOn: '2026-11-14',
     });
-    expect(rendered).toBe(
-      "Victorian election 28 Nov 2026. Official sites are in caretaker mode from 3 Nov. These rules are currently legislated; we'll re-check them after the result.",
+    expect(renderedDefault).toBe(
+      "The Victorian election on 28 November 2026 may change these rules. Figures are as checked on 14 Nov 2026; we'll update this page once the new government confirms its policy.",
     );
-    expect(rendered).toBe(rawRuleStatus.electionWatch.text);
+    expect(renderedDefault).toBe(rawRuleStatus.electionWatch.text);
 
-    const resolved = resolveElectionWatchNotice(rawRuleStatus, new Date('2026-11-14T00:00:00Z'));
+    const renderedPageDate = buildPendingNoticeText(
+      {
+        electionDate: '2026-11-28',
+        checkedOn: '2026-11-15',
+      },
+      '2026-11-13',
+    );
+    expect(renderedPageDate).toBe(
+      "The Victorian election on 28 November 2026 may change these rules. Figures are as checked on 13 Nov 2026; we'll update this page once the new government confirms its policy.",
+    );
+
+    const resolved = resolveElectionWatchNotice(rawRuleStatus, new Date('2026-11-15T00:00:00Z'));
     expect(resolved.visible).toBe(true);
     expect(resolved.message).toBe(rawRuleStatus.electionWatch.text);
     expect(resolved.sourceId).toBe('energyvic-caretaker-banner');
+  });
+
+  it('flags pages carrying VEU or Solar Homes figures for the election banner while ignoring federal-only figures', () => {
+    expect(hasVicElectionFigure(['VEU'])).toBe(true);
+    expect(hasVicElectionFigure(['Solar Homes'])).toBe(true);
+    expect(hasVicElectionFigure(['VEU + Solar Homes'])).toBe(true);
+    expect(hasVicElectionFigure(['Cheaper Home Batteries'])).toBe(false);
+    expect(hasVicElectionFigure([])).toBe(false);
   });
 
   it('shows rechecked-unchanged notice for 30 days and hides it after 30 days', () => {
@@ -58,6 +81,6 @@ describe('rule-status (election watch)', () => {
         checkedOn: '2026-09-20',
       },
     };
-    expect(() => resolveElectionWatchNotice(stale, new Date('2026-11-14T00:00:00Z'))).toThrow(/stale/i);
+    expect(() => resolveElectionWatchNotice(stale, new Date('2026-11-15T00:00:00Z'))).toThrow(/stale/i);
   });
 });

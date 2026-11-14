@@ -1,3 +1,14 @@
+import {
+  CONSENT_VERSIONS,
+  formatActivityLabel,
+  formatApList,
+  formatChannelList,
+  formatInstallerList,
+  formatInstallerNames,
+  type ConsentChannel,
+  type ConsentRecipient,
+} from '../data/consent/vic-v1';
+
 const STORAGE_KEY = 'hr_checker_prefill_v1';
 
 function initLeadForms(): void {
@@ -65,26 +76,55 @@ function initLeadForms(): void {
       updateLandlordVisibility();
     }
 
-    // 4. Dynamic routing lookup when postcode or activity changes
-    const postcodeInput = form.querySelector<HTMLInputElement>('[data-lf-postcode]');
+    // 4. Keep on-screen consent snapshot synchronized with selected activity & channels
     const activitySelect = form.querySelector<HTMLSelectElement>('[data-lf-activity]');
+    const versionInput = form.querySelector<HTMLInputElement>('[data-consent-version]');
+    const channelInputs = form.querySelectorAll<HTMLInputElement>('input[name="contactPrefs"]');
+
+    const syncConsentActivityAndChannels = () => {
+      const act = activitySelect?.value === 'hotwater' ? 'hotwater' : 'rcac';
+      if (versionInput) {
+        versionInput.value = CONSENT_VERSIONS[act];
+      }
+      const actLabel = formatActivityLabel(act);
+      form.querySelectorAll<HTMLElement>('[data-activity-label]').forEach((el) => {
+        el.textContent = actLabel;
+      });
+
+      const tickedChannels: ConsentChannel[] = [];
+      channelInputs.forEach((cb) => {
+        if (cb.checked && (cb.value === 'phone' || cb.value === 'email' || cb.value === 'site_visit')) {
+          tickedChannels.push(cb.value);
+        }
+      });
+      const channelText = formatChannelList(tickedChannels);
+      form.querySelectorAll<HTMLElement>('[data-channel-list]').forEach((el) => {
+        el.textContent = channelText;
+      });
+    };
+
+    channelInputs.forEach((cb) => {
+      cb.addEventListener('change', syncConsentActivityAndChannels);
+    });
+    activitySelect?.addEventListener('change', syncConsentActivityAndChannels);
+    syncConsentActivityAndChannels();
+
+    // 5. Dynamic routing lookup when postcode or activity changes
+    const postcodeInput = form.querySelector<HTMLInputElement>('[data-lf-postcode]');
     const updateRouting = () => {
       const postcode = postcodeInput?.value.trim() ?? '';
-      const activity = activitySelect?.value ?? 'rcac';
+      const activity = activitySelect?.value === 'hotwater' ? 'hotwater' : 'rcac';
       if (!/^3\d{3}$/.test(postcode)) return;
 
       fetch(`/api/routing?postcode=${encodeURIComponent(postcode)}&activity=${encodeURIComponent(activity)}`)
         .then((r) => (r.ok ? r.json() : null))
         .then((data) => {
           if (!data || !Array.isArray(data.installers) || data.installers.length === 0) return;
-          const ids = data.installers.map((i: { id: string }) => i.id).join(',');
-          const listStr = data.installers
-            .map(
-              (i: { tradingName: string; accreditedProvider: string }) =>
-                `${i.tradingName}, which works with Victorian Energy Upgrades accredited provider ${i.accreditedProvider}`,
-            )
-            .join('; ');
-          const namesStr = data.installers.map((i: { tradingName: string }) => i.tradingName).join(' and ');
+          const recipients = data.installers as ConsentRecipient[];
+          const ids = recipients.map((i) => i.id).join(',');
+          const listStr = formatInstallerList(recipients);
+          const namesStr = formatInstallerNames(recipients);
+          const apStr = formatApList(recipients);
 
           const recipInput = form.querySelector<HTMLInputElement>('[data-recipient-ids]');
           if (recipInput) recipInput.value = ids;
@@ -94,6 +134,9 @@ function initLeadForms(): void {
           });
           form.querySelectorAll<HTMLElement>('[data-installer-names]').forEach((el) => {
             el.textContent = namesStr;
+          });
+          form.querySelectorAll<HTMLElement>('[data-ap-list]').forEach((el) => {
+            el.textContent = apStr;
           });
         })
         .catch(() => {

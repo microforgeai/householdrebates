@@ -92,13 +92,30 @@ let selfLinks = 0;
 let tokens = 0;
 const errors = [];
 
+const isDraftLegalBuild =
+  process.env.PUBLIC_LEADS_ENABLED !== 'true' &&
+  process.env.PUBLIC_ALERTS_ENABLED !== 'true' &&
+  !(process.env.RELEASE_ID && process.env.RELEASE_ID.trim());
+
+function stripAllowedDraftLegalPlaceholders(str, pageUrl) {
+  if (!isDraftLegalBuild || (pageUrl !== '/privacy/' && pageUrl !== '/terms/')) {
+    return str;
+  }
+  return str
+    .replace(/<<[A-Z0-9_]+>>/g, 'DRAFT_LEGAL_PLACEHOLDER')
+    .replace(/&lt;&lt;[A-Z0-9_]+&gt;&gt;/g, 'DRAFT_LEGAL_PLACEHOLDER');
+}
+
 for (const file of htmlFiles) {
   const rel = path.relative(distDir, file);
   const pageUrl = htmlRelToUrl(rel);
   const html = fs.readFileSync(file, 'utf8');
 
   // 0. Full-document placeholder guard (HTML head/body/attributes and JSON-LD scripts)
-  for (const m of html.matchAll(/<<[^>]*>>|<<|&lt;&lt;/g)) {
+  // Draft legal placeholders (<<SERVER_COUNTRY>> etc.) are allowed ONLY on /privacy/ and /terms/
+  // when leads/alerts flags and RELEASE_ID are unset; check-legal.mjs blocks live/production builds.
+  const htmlForPlaceholderScan = stripAllowedDraftLegalPlaceholders(html, pageUrl);
+  for (const m of htmlForPlaceholderScan.matchAll(/<<[^>]*>>|<<|&lt;&lt;/g)) {
     tokens++;
     errors.push(`${pageUrl}: unresolved placeholder "${m[0]}" in built HTML or JSON-LD`);
   }
@@ -173,7 +190,8 @@ for (const file of htmlFiles) {
       }
     }
 
-    for (const m of text.matchAll(TOKEN_RE)) {
+    const textForTokenScan = stripAllowedDraftLegalPlaceholders(text, pageUrl);
+    for (const m of textForTokenScan.matchAll(TOKEN_RE)) {
       tokens++;
       errors.push(`${pageUrl}: placeholder token "${m[0]}" in visible text: "${text.slice(0, 140)}"`);
     }

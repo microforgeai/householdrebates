@@ -216,6 +216,8 @@ export async function buildServer(opts: BuildServerOptions = {}): Promise<{
       activity: d.activity,
       recipients: toPublicSummaries(routed),
       channels: d.contactPrefs,
+      serverCountry: config.serverCountry,
+      emailProviderAndCountry: config.leadsEmailProviderNote,
     });
 
     const now = new Date();

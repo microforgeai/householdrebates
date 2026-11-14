@@ -69,11 +69,21 @@ export function resolveAlertsApp5Notice(
   abn: string = SITE.publisher.abn,
 ): AlertsApp5Notice {
   const cleanAbn = (abn ?? '').trim();
+  const rawServerCountry = (
+    env.PUBLIC_SERVER_COUNTRY ??
+    env.SERVER_COUNTRY ??
+    '<<SERVER_COUNTRY>>'
+  ).trim();
   const rawProvider = (env.PUBLIC_ALERTS_PROVIDER ?? '').trim();
   const rawOverseas = (env.PUBLIC_ALERTS_OVERSEAS_NOTE ?? '').trim();
 
   if (!cleanAbn || PLACEHOLDER_RE.test(cleanAbn)) {
     throw new Error('APP 5 collection notice requires a resolved ABN without placeholders.');
+  }
+  if (!rawServerCountry || PLACEHOLDER_RE.test(rawServerCountry)) {
+    throw new Error(
+      'PUBLIC_SERVER_COUNTRY must be set (without <<...>> placeholders) before building or enabling rule-change alerts.',
+    );
   }
   if (!rawProvider || PLACEHOLDER_RE.test(rawProvider)) {
     throw new Error(
@@ -82,7 +92,12 @@ export function resolveAlertsApp5Notice(
   }
   if (!rawOverseas || PLACEHOLDER_RE.test(rawOverseas)) {
     throw new Error(
-      'PUBLIC_ALERTS_OVERSEAS_NOTE must be set (for example "; it may store data outside Australia", or "none" when data stays in Australia, without <<...>> placeholders) before building or enabling rule-change alerts.',
+      'PUBLIC_ALERTS_OVERSEAS_NOTE must be set (for example "; it stores data in the United States and Ireland", or "none" when data stays in Australia, without <<...>> placeholders) before building or enabling rule-change alerts.',
+    );
+  }
+  if (/outside\s+australia/i.test(rawOverseas)) {
+    throw new Error(
+      'PUBLIC_ALERTS_OVERSEAS_NOTE must name the specific countries where data is stored (for example "; it stores data in the United States and Ireland", or "none" when data stays in Australia), not a vague "outside Australia".',
     );
   }
 
@@ -98,8 +113,9 @@ export function resolveAlertsApp5Notice(
   }
 
   const beforeLink =
-    `Household Rebates (Agenor Services Pty Ltd, ABN ${cleanAbn}) collects your email address only to send rule-change alerts you've asked for. ` +
+    `Household Rebates (Agenor Services Pty Ltd, ABN ${cleanAbn}, ${SITE.publisher.privacyEmail}) collects your email address only to send rule-change alerts you've asked for. ` +
     `If you don't give it, we can't send them. ` +
+    `Your email address is stored on our server in ${rawServerCountry}. ` +
     `We don't share it with installers or anyone else, except our email service provider, ${rawProvider}, which sends the emails for us${overseasClause}. Our `;
   const linkLabel = 'privacy policy';
   const linkHref = '/privacy/';

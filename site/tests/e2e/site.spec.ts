@@ -69,8 +69,8 @@ test.describe('Household Rebates static site e2e', () => {
 
     await expect(notice).toHaveCount(1);
     await expect(notice).toHaveAttribute('role', 'note');
-    await expect(notice).toContainText('Victorian election 28 Nov 2026.');
-    await expect(notice).toContainText('currently legislated');
+    await expect(notice).toContainText('The Victorian election on 28 November 2026 may change these rules.');
+    await expect(notice).toContainText('Figures are as checked on');
     await expect(notice.locator('a')).toContainText('Energy Victoria');
 
     const answerBox = await answer.boundingBox();
@@ -90,6 +90,12 @@ test.describe('Household Rebates static site e2e', () => {
       () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
     );
     expect(overflow).toBe(false);
+
+    // Every page showing VEU / Solar Homes figures also renders the election banner while pending (#11)
+    await page.goto('/victoria/heat-pump-rebate/');
+    await expect(page.locator('[data-rule-status-notice]')).toContainText(
+      'The Victorian election on 28 November 2026 may change these rules.',
+    );
   });
 
   test('renders captioned MoneyPair on heat-pump-rebate (gas first, stacked at 320px) and DOM order on co-payment hero', async ({

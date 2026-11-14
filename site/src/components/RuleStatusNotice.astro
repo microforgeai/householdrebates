@@ -3,7 +3,17 @@ import { getEntry } from 'astro:content';
 import { assertFigureNotStale } from '../lib/dates';
 import { resolveElectionWatchNotice } from '../lib/rule-status';
 
-const notice = resolveElectionWatchNotice();
+export interface Props {
+  checkedOn?: Date | string;
+}
+
+const { checkedOn } = Astro.props;
+const notice = resolveElectionWatchNotice(
+  undefined,
+  new Date(),
+  Number(process.env.MAX_FIGURE_AGE_DAYS || 45),
+  checkedOn,
+);
 const sourceEntry = await getEntry('sources', notice.sourceId);
 
 if (!sourceEntry) {

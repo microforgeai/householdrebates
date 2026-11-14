@@ -39,8 +39,10 @@ function makeTestConfig(overrides: Partial<ApiConfig> = {}): ApiConfig {
     mailTransport: 'memory',
     mailFrom: 'Household Rebates <quotes@householdrebates.com.au>',
     leadsNotifyTo: 'guri@householdrebates.com.au',
-    privacyPolicyVersion: '2026-11-13-v1',
+    privacyPolicyVersion: '2026-11-15-v2',
     consentReviewedBy: 'Victorian Legal Counsel',
+    serverCountry: 'Malaysia',
+    leadsEmailProviderNote: 'Postmark (United States)',
     installersPath: 'installers.json',
     ...overrides,
   };
@@ -63,6 +65,25 @@ describe('Lead Handler API & Startup Guards', () => {
         installers: [MOCK_INSTALLER],
       }),
     ).rejects.toThrow(/CONSENT_REVIEWED_BY must be set/);
+  });
+
+  it('refuses to start with LEADS_ENABLED=true when SERVER_COUNTRY or LEADS_EMAIL_PROVIDER_NOTE contains <<...>> placeholders', async () => {
+    await expect(
+      buildServer({
+        config: makeTestConfig({ leadsEnabled: true, serverCountry: '<<SERVER_COUNTRY>>' }),
+        installers: [MOCK_INSTALLER],
+      }),
+    ).rejects.toThrow(/SERVER_COUNTRY must be set without <<\.\.\.>> placeholders/);
+
+    await expect(
+      buildServer({
+        config: makeTestConfig({
+          leadsEnabled: true,
+          leadsEmailProviderNote: '<<EMAIL_PROVIDER_AND_COUNTRY>>',
+        }),
+        installers: [MOCK_INSTALLER],
+      }),
+    ).rejects.toThrow(/LEADS_EMAIL_PROVIDER_NOTE must be set without <<\.\.\.>> placeholders/);
   });
 
   it('returns 503 (JSON) or 303 redirect (HTML) when LEADS_ENABLED=false', async () => {
@@ -162,7 +183,7 @@ describe('Lead Handler API & Startup Guards', () => {
       message: 'Looking to replace wall gas heater in living room.',
       howHeard: 'ChatGPT',
       consent: true,
-      consentVersion: 'vic-rcac-v1',
+      consentVersion: 'vic-rcac-v2',
       recipientIds: ['inst-bayside-01'],
       formToken: validToken,
       website: '',
@@ -191,9 +212,14 @@ describe('Lead Handler API & Startup Guards', () => {
     expect(lead.status).toBe('new');
 
     const consent = db.prepare('SELECT * FROM consents WHERE lead_id = ?').get(lead.id) as Record<string, any>;
-    expect(consent.version).toBe('vic-rcac-v1');
+    expect(consent.version).toBe('vic-rcac-v2');
     expect(consent.text_snapshot).toContain('Bayside Electrification Pty Ltd');
     expect(consent.text_snapshot).toContain('VEU Certifiers Victoria Pty Ltd');
+    expect(consent.text_snapshot).toContain('only to create the VEU certificates for your installation');
+    expect(consent.text_snapshot).toContain('Your details are stored on our server in Malaysia and sent by email through Postmark (United States).');
+    expect(consent.text_snapshot).toContain('Solar Victoria');
+    expect(consent.text_snapshot).toContain('Clean Energy Regulator');
+    expect(consent.text_snapshot).not.toContain('I have read');
 
     const scopes = db.prepare('SELECT * FROM consent_scopes WHERE consent_id = ?').all(consent.id) as any[];
     expect(scopes.length).toBe(2);

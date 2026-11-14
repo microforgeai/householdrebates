@@ -1,4 +1,5 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Breadcrumbs from '../components/seo/Breadcrumbs.astro';
 import AnswerBlock from '../components/AnswerBlock.astro';
@@ -14,6 +15,7 @@ import SourceList from '../components/SourceList.astro';
 import RelatedLinks from '../components/RelatedLinks.astro';
 import Byline from '../components/Byline.astro';
 import { resolvePageFaqs } from '../lib/faqs';
+import { hasVicElectionFigure, isElectionBannerPending } from '../lib/rule-status';
 import { ensureTrailingSlash } from '../lib/urls';
 import type { BreadcrumbItem, PageSchemaKind } from '../lib/schema';
 
@@ -68,6 +70,13 @@ const schemaKind: PageSchemaKind =
     : cleanPath === '/faq/'
       ? 'trust'
       : 'guide';
+
+const figIdSet = new Set(d.figures ?? []);
+const matchedFigs =
+  figIdSet.size > 0 ? await getCollection('figures', (f) => figIdSet.has(f.id)) : [];
+const showRuleStatusNotice =
+  d.ruleStatus === 'election-watch' ||
+  (isElectionBannerPending() && hasVicElectionFigure(matchedFigs.map((f) => f.data.program)));
 ---
 
 <BaseLayout
@@ -95,7 +104,7 @@ const schemaKind: PageSchemaKind =
         <AnswerText text={d.answer} />
         <HeroBlock hero={heroValue} />
       </AnswerBlock>
-      {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
+      {showRuleStatusNotice && <RuleStatusNotice checkedOn={d.checkedOn} />}
       <Byline
         author={d.author}
         checkedOn={d.checkedOn}

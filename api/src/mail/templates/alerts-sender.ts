@@ -4,11 +4,13 @@ export interface AlertsSenderInfo {
   contactEmail: string;
 }
 
+// IMPORTANT (#22): When setting ALERTS_SENDER_ADDRESS, use a PO box or Agenor's registered office
+// (never a private family home address). Details must remain accurate for at least 30 days after each send.
 export const ALERTS_SENDER_TEMPLATE =
   'Household Rebates is run by Agenor Services Pty Ltd, ABN <<ABN>>, <<postal or contact address>>, <<contact email>>.';
 
 export const ALERTS_INDEPENDENCE_LINE =
-  "We're not a government website and we don't work for the Victorian Energy Upgrades program, the Essential Services Commission or the Victorian Government.";
+  "We're not a government website and we are not affiliated with, endorsed by, or representing the Victorian Government, Energy Victoria, Solar Victoria, the Department of Energy, Environment and Climate Action (DEECA), the Essential Services Commission (ESC), the Australian Government, the Clean Energy Regulator or any council.";
 
 export function escapeHtml(value: string): string {
   return value

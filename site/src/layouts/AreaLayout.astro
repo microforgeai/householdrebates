@@ -14,6 +14,7 @@ import RelatedLinks from '../components/RelatedLinks.astro';
 import Byline from '../components/Byline.astro';
 import { formatAuDate } from '../lib/dates';
 import { resolvePageFaqs } from '../lib/faqs';
+import { hasVicElectionFigure, isElectionBannerPending } from '../lib/rule-status';
 import { entryToPathname, ensureTrailingSlash } from '../lib/urls';
 import { getEnabledUrls } from '../lib/rollout';
 import type { BreadcrumbItem } from '../lib/schema';
@@ -198,6 +199,12 @@ const contextSubLabel =
       ? d.councils.join(', ')
       : '';
 const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-checker/';
+const areaFigIdSet = new Set(d.figures ?? []);
+const matchedAreaFigs =
+  areaFigIdSet.size > 0 ? await getCollection('figures', (f) => areaFigIdSet.has(f.id)) : [];
+const showRuleStatusNotice =
+  d.ruleStatus === 'election-watch' ||
+  (isElectionBannerPending() && hasVicElectionFigure(matchedAreaFigs.map((f) => f.data.program)));
 ---
 
 <BaseLayout
@@ -224,7 +231,7 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
         <AnswerText text={d.answer} />
         <HeroBlock hero={d.hero} />
       </AnswerBlock>
-      {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
+      {showRuleStatusNotice && <RuleStatusNotice checkedOn={d.checkedOn} />}
       <Byline
         author={d.author}
         checkedOn={d.checkedOn}

@@ -31,4 +31,4 @@
 
 ## 4. Audit Records and Termination
 4.1 Either party may suspend or terminate lead delivery immediately by written notice.
-4.2 The Publisher retains the non-personal Consent Audit Record for 24 months following consent expiry or withdrawal to assist with any Essential Services Commission (ESC) audit enquiry.
+4.2 The Publisher retains the Consent Audit Record (which contains personal information) for 24 months following consent expiry or withdrawal to assist with any Essential Services Commission (ESC) audit enquiry, and handles it under its privacy policy.

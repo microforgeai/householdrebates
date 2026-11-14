@@ -126,8 +126,9 @@ function extractMainWords(html, pageUrl) {
     .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
     .replace(/<style\b[\s\S]*?<\/style>/gi, ' ');
 
-  // Exclude generated VEU postcode table so area/hub prose carries local facts on its own
+  // Exclude generated VEU postcode table and site-wide election-watch rule status banner so area/hub prose carries local facts on its own
   inner = stripBalancedAttrSection(inner, 'section', /\bdata-postcode-table\b/i);
+  inner = stripBalancedAttrSection(inner, 'div', /\bdata-rule-status-notice\b/i);
 
   const plain = decodeEntities(inner.replace(/<[^>]+>/g, ' '))
     .replace(/[’‘]/g, "'")

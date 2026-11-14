@@ -47,7 +47,7 @@ export function buildAlertsRuleChangeEmail(input: AlertsRuleChangeEmailInput): {
     '',
     ALERTS_INDEPENDENCE_LINE,
     '',
-    'Unsubscribe at any time:',
+    "Don't want these emails? Unsubscribe in one click:",
     input.unsubscribeUrl,
     ['Privacy policy: ', privacyUrl].join(''),
     '',
@@ -72,11 +72,11 @@ export function buildAlertsRuleChangeEmail(input: AlertsRuleChangeEmailInput): {
     ['<p>', escapeHtml(ALERTS_INDEPENDENCE_LINE), '</p>'].join(''),
     '<hr/>',
     [
-      '<p><small><a href="',
+      '<p>Don&#39;t want these emails? <a href="',
       safeUnsubUrl,
-      '">Unsubscribe from rule-change alerts</a> &middot; <a href="',
+      '">Unsubscribe in one click</a>. &middot; <a href="',
       safePrivacyUrl,
-      '">Privacy policy</a></small></p>',
+      '">Privacy policy</a></p>',
     ].join(''),
     ['<p><small>', safeSenderBlock, '</small></p>'].join(''),
   ].join('\n');

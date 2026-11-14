@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 import { signFormToken } from '../src/antispam.js';
 import { loadAlertsConfig, type AlertsConfig } from '../src/alerts/config.js';
-import { ALERTS_CONSENT_VERSION_V1 } from '../src/alerts/consent.js';
+import { ALERTS_CONSENT_VERSION_V2 } from '../src/alerts/consent.js';
 import { writeAlertDraft } from '../src/alerts/drafts.js';
 import { sendAlertDraft } from '../src/alerts/send.js';
 import type { ApiConfig } from '../src/config.js';
@@ -29,8 +29,10 @@ function makeBaseApiConfig(overrides: Partial<ApiConfig> = {}): ApiConfig {
     mailTransport: 'memory',
     mailFrom: 'Household Rebates <quotes@householdrebates.com.au>',
     leadsNotifyTo: 'info@householdrebates.com.au',
-    privacyPolicyVersion: '2026-11-13-v1',
+    privacyPolicyVersion: '2026-11-15-v2',
     consentReviewedBy: '',
+    serverCountry: 'Malaysia',
+    leadsEmailProviderNote: 'Postmark (United States)',
     installersPath: 'installers.json',
     ...overrides,
   };
@@ -42,8 +44,8 @@ function makeLiveAlertsConfig(overrides: Partial<AlertsConfig> = {}): AlertsConf
     alertsEnabled: true,
     alertsSendEnabled: false,
     alertsDbPath: ':memory:',
-    alertsConsentVersion: ALERTS_CONSENT_VERSION_V1,
-    privacyPolicyVersion: '2026-11-13-v1',
+    alertsConsentVersion: ALERTS_CONSENT_VERSION_V2,
+    privacyPolicyVersion: '2026-11-15-v2',
     alertsReviewedBy: 'Gurinder Singh (after legal review 2026-12-01)',
     alertsFrom: 'Household Rebates <alerts@householdrebates.com.au>',
     alertsReplyTo: 'privacy@householdrebates.com.au',
@@ -85,6 +87,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
     expect(cfg.alertsMailTransport).toBe('memory');
     expect(cfg.alertsReviewedBy).toBe('');
     expect(cfg.alertsFrom).toBe('');
+    expect(cfg.sender.postalOrContactAddress).toBe('<<ALERTS_SENDER_ADDRESS>>');
   });
 
   it('returns 503 and stores/sends nothing when ALERTS_ENABLED=false', async () => {
@@ -107,7 +110,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'person@example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
       },
     });
     expect(subRes.statusCode).toBe(503);
@@ -186,7 +189,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'reader@example.com.au',
         consent: false,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: '',
       },
@@ -204,7 +207,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'bot@example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: 'https://spam.example',
       },
@@ -223,7 +226,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'Reader@Example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: '',
         sourcePage: '/victoria/gas-to-electric-hot-water-2027/',
@@ -263,7 +266,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'reader@example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: '',
       },
@@ -309,7 +312,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'reader@example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: '',
       },
@@ -318,7 +321,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
     expect(alreadyConfirmedRes.body).toBe(firstRes.body);
     expect(alertsMail.sentMessages?.length).toBe(1);
 
-    // 7. Suppressed address -> identical 202 and sends nothing
+    // 7. Suppressed address re-signing up (#23): issues 1 fresh confirmation email while keeping suppression active until confirmed
     alertsRepo.unsubscribeByEmail('suppressed-user@example.com.au', 'cli');
     const suppressedRes = await app.inject({
       method: 'POST',
@@ -330,14 +333,36 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       payload: {
         email: 'suppressed-user@example.com.au',
         consent: true,
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         formToken: validFormToken,
         website: '',
       },
     });
     expect(suppressedRes.statusCode).toBe(202);
     expect(suppressedRes.body).toBe(firstRes.body);
-    expect(alertsMail.sentMessages?.length).toBe(1);
+    expect(alertsMail.sentMessages?.length).toBe(2);
+    expect(alertsMail.sentMessages![1].to).toBe('suppressed-user@example.com.au');
+
+    // Still suppressed before clicking the fresh confirmation link -> only reader@example.com.au is eligible
+    expect(alertsRepo.listConfirmedUnsuppressedRecipients().map((r) => r.email)).toEqual([
+      'reader@example.com.au',
+    ]);
+
+    // Confirming the fresh link clears suppression (#23)
+    const reSubConfirmToken = extractTokenFromUrl(
+      alertsMail.sentMessages![1].text,
+      '/api/alerts/confirm',
+    );
+    const reSubConfirmRes = await app.inject({
+      method: 'GET',
+      url: `/api/alerts/confirm?t=${encodeURIComponent(reSubConfirmToken)}`,
+    });
+    expect(reSubConfirmRes.statusCode).toBe(303);
+    expect(reSubConfirmRes.headers.location).toBe('/alerts/confirmed/');
+    expect(alertsRepo.listConfirmedUnsuppressedRecipients().map((r) => r.email)).toEqual([
+      'reader@example.com.au',
+      'suppressed-user@example.com.au',
+    ]);
 
     fs.rmSync(tmpDir, { recursive: true, force: true });
     await app.close();
@@ -355,7 +380,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip1',
       userAgent: 'vitest',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: t0,
@@ -391,7 +416,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip2',
       userAgent: 'vitest',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: pastT0,
@@ -440,7 +465,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
         sourcePage: '/victoria/eligibility-checker/',
         ipHash: 'ip-seed',
         userAgent: 'vitest',
-        consentVersion: ALERTS_CONSENT_VERSION_V1,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
         privacyVersion: '2026-11-13-v1',
         confirmTtlHours: 72,
       });
@@ -522,6 +547,11 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
         'Household Rebates is run by Agenor Services Pty Ltd, ABN 29 644 447 263, PO Box 100, Melbourne VIC 3000, privacy@householdrebates.com.au.',
       );
       expect(msg.text).toContain("We're not a government website");
+      expect(msg.text).toContain('Solar Victoria');
+      expect(msg.text).toContain('Clean Energy Regulator');
+      expect(msg.text).toContain("Don't want these emails? Unsubscribe in one click:");
+      expect(msg.html).toContain('>Unsubscribe in one click</a>');
+      expect(msg.html).not.toMatch(/<small>[^<]*<a[^>]*>Unsubscribe/i);
       expect(msg.text).toContain('/api/alerts/unsubscribe?t=');
       expect(msg.headers?.['List-Unsubscribe']).toMatch(
         /^<mailto:privacy@householdrebates\.com\.au\?subject=unsubscribe>, <https:\/\/householdrebates\.com\.au\/api\/alerts\/unsubscribe-one-click\?t=[^>]+>$/,
@@ -600,30 +630,42 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
     expect(alertsMail.sentMessages?.length).toBe(1);
     expect(alertsMail.sentMessages![0].to).toBe('u4-stays@example.com.au');
 
-    // 7. Re-subscribing any of the unsubscribed/suppressed addresses returns 202 and sends nothing
+    // 7. Re-subscribing an unsubscribed/suppressed address (#23): sends 1 confirmation email,
+    // keeps suppression active until confirmed, and clears suppression once the fresh link is clicked
     alertsMail.sentMessages!.length = 0;
-    for (const unsubEmail of [
+    const reSubU1 = await app.inject({
+      method: 'POST',
+      url: '/api/alerts/subscribe',
+      headers: {
+        origin: 'https://householdrebates.com.au',
+        'content-type': 'application/json',
+      },
+      payload: {
+        email: 'u1-link@example.com.au',
+        consent: true,
+        consentVersion: ALERTS_CONSENT_VERSION_V2,
+        website: '',
+      },
+    });
+    expect(reSubU1.statusCode).toBe(202);
+    expect(alertsMail.sentMessages?.length).toBe(1);
+    expect(alertsRepo.listConfirmedUnsuppressedRecipients().map((r) => r.email)).toEqual([
+      'u4-stays@example.com.au',
+    ]);
+    const u1FreshToken = extractTokenFromUrl(
+      alertsMail.sentMessages![0].text,
+      '/api/alerts/confirm',
+    );
+    const u1ReConfirm = await app.inject({
+      method: 'GET',
+      url: `/api/alerts/confirm?t=${encodeURIComponent(u1FreshToken)}`,
+    });
+    expect(u1ReConfirm.statusCode).toBe(303);
+    expect(u1ReConfirm.headers.location).toBe('/alerts/confirmed/');
+    expect(alertsRepo.listConfirmedUnsuppressedRecipients().map((r) => r.email)).toEqual([
       'u1-link@example.com.au',
-      'u2-oneclick@example.com.au',
-      'u3-cli@example.com.au',
-    ]) {
-      const reSub = await app.inject({
-        method: 'POST',
-        url: '/api/alerts/subscribe',
-        headers: {
-          origin: 'https://householdrebates.com.au',
-          'content-type': 'application/json',
-        },
-        payload: {
-          email: unsubEmail,
-          consent: true,
-          consentVersion: ALERTS_CONSENT_VERSION_V1,
-          website: '',
-        },
-      });
-      expect(reSub.statusCode).toBe(202);
-    }
-    expect(alertsMail.sentMessages?.length).toBe(0);
+      'u4-stays@example.com.au',
+    ]);
 
     // Verify alert_sends audit table recorded the two live sends
     const sendRows = alertsDb.prepare('SELECT * FROM alert_sends ORDER BY id ASC').all() as {
@@ -651,7 +693,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip-p',
       userAgent: 'ua-p',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: t0,
@@ -663,7 +705,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip-c',
       userAgent: 'ua-c',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: t0,
@@ -677,7 +719,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip-u',
       userAgent: 'ua-u',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: t0,
@@ -691,7 +733,7 @@ describe('Rule-Change Email Alerts Backend (Prompt 29a)', () => {
       sourcePage: '/',
       ipHash: 'ip-e',
       userAgent: 'ua-e',
-      consentVersion: ALERTS_CONSENT_VERSION_V1,
+      consentVersion: ALERTS_CONSENT_VERSION_V2,
       privacyVersion: '2026-11-13-v1',
       confirmTtlHours: 72,
       now: t0,

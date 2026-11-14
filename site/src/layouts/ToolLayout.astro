@@ -18,6 +18,7 @@ import RelatedLinks from '../components/RelatedLinks.astro';
 import Byline from '../components/Byline.astro';
 import { getCheckerReferencedFigureIds } from '../lib/checker/rules';
 import { resolvePageFaqs } from '../lib/faqs';
+import { hasVicElectionFigure, isElectionBannerPending } from '../lib/rule-status';
 import { ensureTrailingSlash } from '../lib/urls';
 import type { BreadcrumbItem, HowToSchemaInput } from '../lib/schema';
 
@@ -64,6 +65,13 @@ if (isCheckerPage) {
     }
   }
 }
+
+const toolFigIdSet = new Set(d.figures ?? []);
+const matchedToolFigs =
+  toolFigIdSet.size > 0 ? await getCollection('figures', (f) => toolFigIdSet.has(f.id)) : [];
+const showRuleStatusNotice =
+  d.ruleStatus === 'election-watch' ||
+  (isElectionBannerPending() && hasVicElectionFigure(matchedToolFigs.map((f) => f.data.program)));
 ---
 
 <BaseLayout
@@ -90,7 +98,7 @@ if (isCheckerPage) {
       <AnswerText text={d.answer} />
       <HeroBlock hero={d.hero} />
     </AnswerBlock>
-    {d.ruleStatus === 'election-watch' && <RuleStatusNotice />}
+    {showRuleStatusNotice && <RuleStatusNotice checkedOn={effectiveCheckedOn} />}
     <Byline
       author={d.author}
       checkedOn={effectiveCheckedOn}

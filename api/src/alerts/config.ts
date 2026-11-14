@@ -94,7 +94,7 @@ export function loadAlertsConfig(
     alertsDraftsDir: env.ALERTS_DRAFTS_DIR || path.resolve(process.cwd(), 'drafts'),
     sender: {
       abn: env.ALERTS_SENDER_ABN ?? '29 644 447 263',
-      postalOrContactAddress: env.ALERTS_SENDER_ADDRESS ?? 'Melbourne VIC, Australia',
+      postalOrContactAddress: env.ALERTS_SENDER_ADDRESS ?? '<<ALERTS_SENDER_ADDRESS>>',
       contactEmail: senderEmail,
     },
   };
@@ -204,6 +204,8 @@ export function createAlertsMailDriver(alertsCfg: AlertsConfig, baseCfg?: ApiCon
     leadsNotifyTo: baseCfg?.leadsNotifyTo || '',
     privacyPolicyVersion: alertsCfg.privacyPolicyVersion,
     consentReviewedBy: '',
+    serverCountry: baseCfg?.serverCountry || '',
+    leadsEmailProviderNote: baseCfg?.leadsEmailProviderNote || '',
     installersPath: baseCfg?.installersPath || 'installers.json',
   };
 

@@ -8,6 +8,15 @@ const siteDir = path.resolve(__dirname, '..');
 const distDir = path.resolve(siteDir, 'dist');
 const ruleStatusPath = path.resolve(siteDir, 'src/data/rule-status.json');
 const sourcesDir = path.resolve(siteDir, 'src/content/sources');
+const figuresPath = path.resolve(siteDir, 'src/content/figures/vic-veu.yaml');
+
+const VIC_ELECTION_FIGURE_PROGRAMS = new Set([
+  'VEU',
+  'Solar Homes',
+  'VEU + Solar Homes',
+  'Residential Electrification Grants',
+  'Energy Victoria',
+]);
 
 const MAX_AGE_DAYS = Number(process.env.MAX_FIGURE_AGE_DAYS || 45);
 const MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -94,12 +103,54 @@ if (!sourceDoc?.official) {
 assertFresh(`sources/${ew.sourceId}.yaml`, sourceDoc.checkedOn);
 
 // Also check MDX frontmatter directly in case status was flipped to rechecked-changed without rebuilding
+const figuresRaw = fs.existsSync(figuresPath)
+  ? YAML.parse(fs.readFileSync(figuresPath, 'utf8'))
+  : [];
+const vicElectionFigureIds = new Set(
+  (Array.isArray(figuresRaw) ? figuresRaw : [])
+    .filter((fig) => fig && VIC_ELECTION_FIGURE_PROGRAMS.has(fig.program))
+    .map((fig) => fig.id),
+);
+
+function mdxFrontmatterToUrl(filePath, fmData) {
+  const rel = path.relative(path.resolve(siteDir, 'src/content'), filePath).replace(/\\/g, '/');
+  const collection = rel.split('/')[0];
+  const slug = String(fmData?.slug || '').trim();
+  if (!slug) return null;
+  if (collection === 'guides' || collection === 'areas') {
+    return fmData.state === 'vic' ? `/victoria/${slug}/` : `/${slug}/`;
+  }
+  if (collection === 'solar-battery') {
+    return slug === 'solar-battery' ? '/solar-battery/' : `/solar-battery/${slug}/`;
+  }
+  if (collection === 'pages') {
+    if (slug === 'home') return '/';
+    if (slug === 'victoria') return '/victoria/';
+    if (fmData.state === 'vic' && fmData.section === 'tools') return `/victoria/${slug}/`;
+    if (fmData.parent) return `/${fmData.parent}/${slug}/`;
+    return `/${slug}/`;
+  }
+  return null;
+}
+
 const mdxFiles = walkFiles(path.resolve(siteDir, 'src/content'), '.mdx');
-const mdxFlagged = mdxFiles.filter((f) => {
+const mdxFlagged = [];
+const pendingVicFigureUrls = new Set();
+
+for (const f of mdxFiles) {
   const txt = fs.readFileSync(f, 'utf8');
   const fm = /^---\r?\n([\s\S]*?)\r?\n---/.exec(txt);
-  return fm && /^\s*ruleStatus:\s*election-watch\b/m.test(fm[1]);
-});
+  if (!fm) continue;
+  if (/^\s*ruleStatus:\s*election-watch\b/m.test(fm[1])) {
+    mdxFlagged.push(f);
+  }
+  const fmData = YAML.parse(fm[1]) || {};
+  const figs = Array.isArray(fmData.figures) ? fmData.figures : [];
+  if (figs.some((id) => vicElectionFigureIds.has(id))) {
+    const u = mdxFrontmatterToUrl(f, fmData);
+    if (u) pendingVicFigureUrls.add(u);
+  }
+}
 
 if (ew.status === 'rechecked-changed' && mdxFlagged.length > 0) {
   throw new Error(
@@ -225,6 +276,17 @@ for (const file of htmlFiles) {
       }
     }
   } else if (!isNoindex) {
+    if (ew.status === 'pending' && pendingVicFigureUrls.has(urlPath)) {
+      flaggedPages++;
+      const hasNotice = /\bdata-rule-status-notice\b/.test(html);
+      if (!hasNotice) {
+        missingNotices++;
+        errors.push(
+          `${urlPath}: page shows VEU / gas-rule / Solar Homes figures while electionWatch.status is "pending" but is missing [data-rule-status-notice]`,
+        );
+      }
+    }
+
     // Guard against a primary 2027 rule page missing ruleStatus
     const h1Match = html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i);
     const h1Text = h1Match ? stripTags(h1Match[1]) : '';

@@ -46,6 +46,9 @@ const checkedStr = formatAuDate(fig.checkedOn);
     data-money-label={validLabel}
   >
     <figcaption class="money-block__label" data-money-label>{validLabel}</figcaption>
+    {fig.jurisdiction === 'federal' && (
+      <span class="money-block__federal" data-money-federal>FEDERAL</span>
+    )}
     <span class="money-block__kind" data-money-kind>{kindTag}</span>
     <span class="money-block__amount">{formattedAmount}</span>
     {isEstimate && (

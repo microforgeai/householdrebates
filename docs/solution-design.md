@@ -574,7 +574,7 @@ const installers = z.object({
 ### 5.6 Room for other states and the solar/battery section
 
 - `state` is on every entry. `src/data/states.ts` lists enabled states. Adding NSW = NSW `sources`, `figures/nsw-*.yaml`, `guides/nsw/*`, enable `nsw` → `/nsw/…` routes, sitemap and llms.txt entries appear. Home stays Victoria-first until another state has content.
-- `/solar-battery/` is reserved: `section: 'solar-battery'`, `activity: 'solar' | 'battery'` exist in the enums, and `figures` supports national programs (`state: 'national'`, `program: 'Cheaper Home Batteries'`). The calculator will be a static island like the checker. `SOLAR_SECTION_ENABLED=false` keeps it out of the build, sitemap and llms.txt. It needs its own short design note before work (ACCC rebate-claim guidance, Solar Accreditation Australia wording, STC factors that change each year).
+- `/solar-battery/` is reserved: `section: 'solar-battery'`, `activity: 'solar' | 'battery'` exist in the enums, and `figures` supports national programs (`state: 'national'`, `program: 'Cheaper Home Batteries'`). Victorian solar PV and home battery guidance are published as flat guides at `/victoria/solar-panel-rebate/` and `/victoria/battery-rebate/` (prompt 30) rather than a separate `/solar-battery/` sub-site, so `SOLAR_SECTION_ENABLED=false` remains off and keeps `/solar-battery/` out of the build, sitemap and llms.txt until a multi-state calculator warrants its own design note (ACCC rebate-claim guidance, Solar Accreditation Australia wording, STC factors that change each year).
 
 ---
 

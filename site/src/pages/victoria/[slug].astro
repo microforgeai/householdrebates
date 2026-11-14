@@ -10,6 +10,7 @@ import Callout from '../../components/Callout.astro';
 import SourceLink from '../../components/SourceLink.astro';
 import HubIndex from '../../components/HubIndex.astro';
 import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
+import AlertSignup from '../../components/AlertSignup.astro';
 import { shouldBuildEntry, isUrlEnabled } from '../../lib/rollout';
 
 export async function getStaticPaths() {
@@ -85,7 +86,7 @@ const breadcrumbs = hubEnabled
       { name: entry.data.title, path: pathname },
     ];
 
-const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled };
+const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled, AlertSignup };
 ---
 
 {kind === 'guide' && (

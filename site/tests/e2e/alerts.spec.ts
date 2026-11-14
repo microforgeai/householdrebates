@@ -92,6 +92,7 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
     for (const checkPath of [
       '/',
       '/victoria/gas-to-electric-hot-water-2027/',
+      '/victoria/battery-rebate/',
       '/victoria/eligibility-checker/',
     ]) {
       await page.goto(checkPath);
@@ -346,8 +347,19 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
     expect(capturedRawStrings[0]).not.toContain('gas-mains');
     expect(capturedRawStrings[0]).not.toContain('own-and-live');
 
-    // Confirm Home has no AlertSignup when PUBLIC_ALERTS_ENABLED=true (only the 2 approved placements)
+    // Confirm Home has no AlertSignup when PUBLIC_ALERTS_ENABLED=true, while /victoria/battery-rebate/ renders its placement after the 1 January 2027 section
     await page.goto(`${enabledOrigin}/`);
     await expect(page.locator('[data-alert-signup]')).toHaveCount(0);
+
+    await page.goto(`${enabledOrigin}/victoria/battery-rebate/`);
+    const batteryCard = page.locator('[data-alert-signup]');
+    await expect(batteryCard).toHaveCount(1);
+    const jan2027Heading = page.locator('h2#what-changes-on-1-january-2027');
+    await expect(jan2027Heading).toBeVisible();
+    const janBox = await jan2027Heading.boundingBox();
+    const batteryCardBox = await batteryCard.boundingBox();
+    expect(janBox).not.toBeNull();
+    expect(batteryCardBox).not.toBeNull();
+    expect(batteryCardBox!.y).toBeGreaterThan(janBox!.y);
   });
 });

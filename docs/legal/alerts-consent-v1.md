@@ -35,7 +35,7 @@ On the Eligibility Checker result screen (`/victoria/eligibility-checker/`), the
 
 > This only signs you up for rule-change emails. Your checker answers aren't sent.
 
-Approved placements (per Guri's Prompt 29b decision): the Eligibility Checker result screen (below result lines and CTAs), `/victoria/gas-to-electric-hot-water-2027/` (after the answer block and election-watch notice), and `/victoria/battery-rebate/` (added in Prompt 30). There is no site-wide footer placement, no pop-up, no interstitial, and no pre-ticked checkbox.
+Approved placements (per Guri's Prompt 29b and Prompt 30 decisions): the Eligibility Checker result screen (below result lines and CTAs), `/victoria/gas-to-electric-hot-water-2027/` (after the answer block and election-watch notice), and `/victoria/battery-rebate/` (wired in Prompt 30 after the 1 January 2027 section). There is no site-wide footer placement, no pop-up, no interstitial, and no pre-ticked checkbox.
 
 ---
 

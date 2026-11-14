@@ -1975,3 +1975,63 @@
   checkedOn: 2026-11-14
   conditions:
     - "Competitive grant for large agricultural demonstration projects; closes 11 December 2026"
+
+- id: vic-electrification-grants-pv
+  group: vic-electrification-grants
+  state: vic
+  program: "Residential Electrification Grants"
+  activity: solar
+  audience: household
+  scenario: "Residential Electrification Grants solar PV rebate via approved project providers"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1400
+  currency: AUD
+  sourceId: solarvic-electrification-grants
+  checkedOn: 2026-11-14
+
+- id: vic-electrification-grants-hw
+  group: vic-electrification-grants
+  state: vic
+  program: "Residential Electrification Grants"
+  activity: hotwater
+  audience: household
+  scenario: "Residential Electrification Grants hot water rebate via approved project providers"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1400
+  currency: AUD
+  sourceId: solarvic-electrification-grants
+  checkedOn: 2026-11-14
+
+- id: vic-hw-combined-solarvic-other
+  group: vic-solarvic-hotwater-combined
+  state: vic
+  program: "VEU + Solar Homes"
+  activity: hotwater
+  audience: household
+  scenario: "Combined Solar Homes hot water rebate and VEU discount, other eligible hot water system (Solar Victoria)"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1630
+  currency: AUD
+  sourceId: solarvic-hot-water-rebate
+  checkedOn: 2026-11-14
+
+- id: vic-hw-combined-solarvic-local
+  group: vic-solarvic-hotwater-combined
+  state: vic
+  program: "VEU + Solar Homes"
+  activity: hotwater
+  audience: household
+  scenario: "Combined Solar Homes hot water rebate and VEU discount, locally made hot water system (Solar Victoria)"
+  qualifier: up-to
+  unit: AUD
+  kind: discount
+  amountMax: 1960
+  currency: AUD
+  sourceId: solarvic-hot-water-rebate
+  checkedOn: 2026-11-14

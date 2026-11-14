@@ -154,6 +154,21 @@ li {
   color: var(--text-primary);
 }
 
+.money-block__federal {
+  align-self: flex-start;
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-primary);
+  margin: 2px 0;
+}
+
 .money-block__kind {
   font-size: var(--text-xs);
   font-weight: 600;

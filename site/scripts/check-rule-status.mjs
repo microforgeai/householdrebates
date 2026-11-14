@@ -244,9 +244,11 @@ for (const file of htmlFiles) {
         RULE_DATE_RE.test(candidate) ||
         /What changes in Victoria in 2027\?/i.test(candidate)
       ) {
-        // Allow meta-directory summary on /faq/ and explicit exemption summary on /victoria/apartments-and-units/
+        // Allow meta-directory summary on /faq/, explicit exemption summary on /victoria/apartments-and-units/,
+        // and Australian Government Cheaper Home Batteries 1 January 2027 STC step-down (federal, not Victorian state election).
         if (/\bask about\b/i.test(candidate)) continue;
         if (/\bare exempt from the 1 (?:March|Mar) 2027\b/i.test(candidate)) continue;
+        if (/\bCheaper Home Batteries\b/i.test(candidate) && !/\b(?:all-electric|gas hot water|rental|Solar Homes)\b/i.test(candidate)) continue;
         errors.push(`${urlPath}: 2027 rule date without ruleStatus ("${candidate}")`);
       }
     }

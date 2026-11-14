@@ -1,0 +1,9 @@
+title: Victorian Midday Power Saver
+publisher: Energy Victoria (DEECA)
+url: https://www.energy.vic.gov.au/households/save-energy-and-money/victorian-midday-power-saver
+official: true
+state: vic
+checkedOn: 2026-11-14
+mapKey: EVMIDDAY
+kind: department
+notes: Cloudflare Turnstile challenge on scripted fetch; check by hand.

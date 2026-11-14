@@ -204,7 +204,7 @@
   state: vic
   program: VEU
   activity: hotwater
-  audience: household
+  audience: both
   scenario: "Replace an inefficient electric hot water system with a heat pump"
   qualifier: exact
   kind: discount
@@ -218,7 +218,7 @@
   state: vic
   program: VEU
   activity: hotwater
-  audience: household
+  audience: both
   scenario: "Replace an inefficient gas hot water heater with a heat pump"
   qualifier: exact
   kind: discount
@@ -232,7 +232,7 @@
   state: vic
   program: VEU
   activity: hotwater
-  audience: household
+  audience: both
   scenario: "Replace an inefficient electric hot water system with a solar-boosted hot water system"
   qualifier: exact
   kind: discount
@@ -246,7 +246,7 @@
   state: vic
   program: VEU
   activity: hotwater
-  audience: household
+  audience: both
   scenario: "Replace an inefficient gas hot water heater with a solar-boosted hot water system"
   qualifier: exact
   kind: discount
@@ -288,7 +288,7 @@
   state: vic
   program: VEU
   activity: hotwater
-  audience: household
+  audience: both
   scenario: "Minimum customer co-contribution required for a VEU hot water upgrade"
   qualifier: exact
   kind: payment
@@ -346,7 +346,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Any ducted reverse-cycle air conditioner, per installed product (activities 6A–6C)"
   qualifier: minimum
   unit: AUD
@@ -363,7 +363,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Ducted reverse-cycle, before 30 Sep 2026"
   qualifier: minimum
   unit: AUD
@@ -381,7 +381,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Multi-split, total rated cooling capacity 10 kW or more"
   qualifier: minimum
   unit: AUD
@@ -398,7 +398,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Multi-split, total rated cooling capacity below 10 kW"
   qualifier: minimum
   unit: AUD
@@ -415,7 +415,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Single non-ducted system, 10 kW or more"
   qualifier: minimum
   unit: AUD
@@ -432,7 +432,7 @@
   state: vic
   program: VEU
   activity: rcac
-  audience: household
+  audience: both
   scenario: "Single non-ducted split system, below 10 kW"
   qualifier: minimum
   unit: AUD
@@ -1956,3 +1956,22 @@
   effectiveFrom: 2027-01-01
   sourceId: dcceew-cheaper-home-batteries
   checkedOn: 2026-11-14
+
+- id: vic-onfarm-demo-grant-range
+  group: vic-onfarm-demo-grant
+  state: vic
+  program: Agriculture Victoria
+  activity: motors
+  audience: business
+  scenario: "On-Farm Energy and Electrification Demonstration Program grant per large demonstration project"
+  qualifier: range
+  unit: AUD
+  kind: discount
+  amountMin: 200000
+  amountMax: 750000
+  currency: AUD
+  expiresOn: 2026-12-11
+  sourceId: businessgov-onfarm-demonstration-vic
+  checkedOn: 2026-11-14
+  conditions:
+    - "Competitive grant for large agricultural demonstration projects; closes 11 December 2026"

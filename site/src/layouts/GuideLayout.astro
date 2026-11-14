@@ -23,6 +23,7 @@ export interface Props {
       h1?: string;
       description: string;
       slug: string;
+      navGroup?: string;
       answer: string;
       hero?: HeroValue;
       author: string;
@@ -102,9 +103,15 @@ const isCheckerPage = ensureTrailingSlash(pathname) === '/victoria/eligibility-c
       ) : (
         !isCheckerPage && (
           <section class="form-card" aria-labelledby="checker-cta-heading">
-            <h2 id="checker-cta-heading">Check which VEU scenario fits your home</h2>
+            <h2 id="checker-cta-heading">
+              {d.navGroup === 'business'
+                ? 'Check which VEU scenario fits your business'
+                : 'Check which VEU scenario fits your home'}
+            </h2>
             <p>
-              Use our Victoria Eligibility Checker to see whether heating and cooling, hot water, ceiling insulation, an induction cooktop, or draught proofing fits the current VEU household rules.
+              {d.navGroup === 'business'
+                ? 'Use the Business path in our Victoria Eligibility Checker to check commercial heating and cooling, LED lighting, cold rooms, hot water, motors, solar PV, and minimum co-payments.'
+                : 'Use our Victoria Eligibility Checker to see whether heating and cooling, hot water, ceiling insulation, an induction cooktop, or draught proofing fits the current VEU household rules.'}
             </p>
             <a class="btn" href="/victoria/eligibility-checker/">Open the Victoria Eligibility Checker</a>
           </section>

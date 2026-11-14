@@ -353,6 +353,17 @@ test.describe('Prompt 35b: Victoria Eligibility Checker v2 cascade & result scre
     await page.locator('[data-checker-result]').screenshot({
       path: path.join(SCREENSHOT_DIR, 'example-5-business-result.png'),
     });
+
+    // Verify topic link and hub section anchor link land on live built pages/sections (Prompt 28)
+    const ledLink = page.locator('[data-rule-id="BL-2"] a[href="/victoria/business-led-lighting/"]');
+    await expect(ledLink).toBeVisible();
+    const solarAnchorLink = page.locator(
+      '[data-rule-id="BP-1"] a[href="/victoria/business-energy-upgrades/#business-solar-30-200-kw"]',
+    );
+    await expect(solarAnchorLink).toBeVisible();
+    await solarAnchorLink.click();
+    await expect(page).toHaveURL(/\/victoria\/business-energy-upgrades\/#business-solar-30-200-kw$/);
+    await expect(page.locator('#business-solar-30-200-kw')).toBeVisible();
   });
 
   test('Example 6 (3064 Business on ESC Scheduled Activity Premises register, not opted in) restricts B6 to battery and renders FEDERAL BB-1 + N-SCHED', async ({
@@ -392,6 +403,15 @@ test.describe('Prompt 35b: Victoria Eligibility Checker v2 cascade & result scre
     await page.locator('[data-checker-next]').click();
 
     await assertRenderedMatchesEvaluation(page, evaluate(ex6Answers));
+
+    // Verify N-SCHED link lands on #scheduled-premises on the business hub (Prompt 28)
+    const schedLink = page.locator(
+      '[data-rule-id="G-SCHED"] a[href="/victoria/business-energy-upgrades/#scheduled-premises"]',
+    );
+    await expect(schedLink).toBeVisible();
+    await schedLink.click();
+    await expect(page).toHaveURL(/\/victoria\/business-energy-upgrades\/#scheduled-premises$/);
+    await expect(page.locator('#scheduled-premises')).toBeVisible();
   });
 
   test('shows X1 error on postcode 2000, preserves answers across Back navigation, and clears everything on Start again', async ({

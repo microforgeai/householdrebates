@@ -1,5 +1,8 @@
 ---
 import { SITE } from '../data/site';
+import { isUrlEnabled } from '../lib/rollout';
+
+const businessHubEnabled = isUrlEnabled('/victoria/business-energy-upgrades/');
 ---
 
 <footer class="site-footer">
@@ -24,6 +27,14 @@ import { SITE } from '../data/site';
         <li><a href="/victoria/mornington-peninsula/">Mornington Peninsula</a></li>
       </ul>
     </div>
+    {businessHubEnabled && (
+      <div>
+        <h2>Business</h2>
+        <ul>
+          <li><a href="/victoria/business-energy-upgrades/">Business Energy Upgrades</a></li>
+        </ul>
+      </div>
+    )}
     <div>
       <h2>About & Consumer Rights</h2>
       <ul>

@@ -306,6 +306,34 @@ describe('Spec §8 acceptance examples (1–6)', () => {
     expect(res.ctas.primary.map((c) => c.href)).toContain(
       '/victoria/business-energy-upgrades/',
     );
+    expect(bl2.links.map((l) => l.href)).toEqual([
+      '/victoria/business-energy-upgrades/',
+      '/victoria/business-led-lighting/',
+    ]);
+    expect(bp1.links.map((l) => l.href)).toEqual([
+      '/victoria/business-energy-upgrades/',
+      '/victoria/business-energy-upgrades/#business-solar-30-200-kw',
+    ]);
+
+    // Also verify default live rollout (rows 55 and 65-68 enabled) resolves directly without overrides
+    const liveRes = evaluate({
+      S1: 'business',
+      B2: '3064',
+      B3: 'warehouse-factory-industrial',
+      B4: 'no',
+      B5: 'yes',
+      B6: ['lighting', 'solar-panels'],
+      BL1: ['outdoor-carpark-sports'],
+      BP1: '50-to-100-kw',
+      BP1ExactKw: 100,
+    });
+    expect(liveRes.ctas.primary.map((c) => c.href)).toContain(
+      '/victoria/business-energy-upgrades/',
+    );
+    expect(liveRes.lines.find((l) => l.ruleId === 'BL-2')?.links.map((l) => l.href)).toEqual([
+      '/victoria/business-energy-upgrades/',
+      '/victoria/business-led-lighting/',
+    ]);
   });
 
   it('Example 6: Business on scheduled premises register, not opted in -> N-SCHED; only FEDERAL battery line offered', () => {

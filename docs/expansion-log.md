@@ -9,6 +9,11 @@
 - **Solar for Apartments lot limit (Prompt 19):** The Solar for Apartments program page eligibility section still says 3–50 lots, while the 26 Oct 2026 news release says up to 150 lots and no median property value limit. The page states "Solar Victoria is expanding the program. Check the current eligibility rules on its page" and gives neither lot count until the program page updates.
 - **Get-off-gas planner sequence (Prompt 20):** Row 43's primary question asks "in what order?". No official row source specifies a required sequence. The page answers with sourced facts per appliance and the 1 March 2027 hot water replacement trigger, and states there is no single official order.
 - **Area schema vs multi-town page (Prompt 21; resolved in Prompt 34):** Solution design §5.4 requires `councils` (at least 1) and sourced postcodes. In Prompt 34 (14 Nov 2026), `docs/url-map.csv` and `docs/postcodes.csv` now provide all 10 Solstice postcodes (`3515, 3523, 3585, 3549, 3463, 3579, 3638, 3264, 3909, 3888`) and their 7 ABS primary councils.
+- **On-Farm Energy and Electrification Demonstration Program "$5m" total pool (Prompt 28, row 55):** Prompt 28's hub note mentions `($5m; grants of $200,000–$750,000; closes 11 Dec 2026; business.gov.au/...)`. Re-checking the live `business.gov.au` page on 14 Nov 2026 confirmed `$200,000 to $750,000` per project and the `11 December 2026` closing date, but `$5m` (`$5 million`) does not appear on `business.gov.au` (and the outbound Agriculture Victoria page returned a Cloudflare 403 challenge). Per Rules 1, 2, and 13, only the verified `$200,000 to $750,000` grant range (`vic-onfarm-demo-grant-range`) is published on `/victoria/business-energy-upgrades/`, and `$5m` is omitted until verified on Agriculture Victoria.
+
+## Spec additions
+
+- **`BUSINESS_RESULT_LINKS` per-line topic links (Prompt 28 / Prompt 35, `site/src/lib/checker/links.ts` & `links-data.json`):** `docs/eligibility-checker-spec.md` §7 names `/victoria/business-energy-upgrades/` as the primary CTA for Business results. In addition to that primary hub CTA, each business result line renders a second "Read more" link mapped in one place (`BUSINESS_RESULT_LINKS`): `BH-1..7` -> `/victoria/business-heating-cooling/`, `BL-1..4` -> `/victoria/business-led-lighting/`, `BR-1..4` -> `/victoria/business-cold-rooms-refrigeration/`, `BW-1..3`, `BM-1..2`, `BK-1..2` -> `/victoria/business-hot-water-motors/`, and `BP-1..3`, `BX-1`, `BG-1`, `BB-1`, `B-OC`, `B-RES-ONLY` -> anchored sections on `/victoria/business-energy-upgrades/`.
 
 ## UNVERIFIED (kept off pages)
 
@@ -33,6 +38,8 @@
 - **Greater Shepparton council's own Solar Savers page (`greatershepparton.com.au/.../solar-savers`) (Prompts 22 & 34, row 48):** Returned 504 Gateway Timeout on 13 and 14 Nov 2026; stays UNVERIFIED and is never cited or linked. Goulburn Murray Solar Savers is verified through GMCA (`gmca.org.au`, Feb 2026 notice, checked 14 Nov 2026). Per Guri's decision (option c), `/victoria/shepparton/` is written in source using GMCA only and kept gated (`rollout.json` unchanged at `1-47,49-53`).
 - **ECCV go-electric brochure in 11 languages (Prompt 34, row 72):** Fetch failed on 14 Nov 2026; stays UNVERIFIED until checked.
 - **Victorian state battery rebate / Finder report of further federal battery cuts (Prompt 34, row 69):** Unconfirmed; stays off pages.
+- **On-Farm Demonstration Program "$5m" total funding pool (Prompt 28, row 55):** Not stated on the primary `business.gov.au` grant page (checked 14 Nov 2026) and Agriculture Victoria returned Cloudflare 403; kept off `/victoria/business-energy-upgrades/`.
+- **Commercial refrigeration display cabinets (Part 32), fan motors (Part 33), large C&I heat pumps (Part 44), and custom M&V consumer figures (Prompt 28, rows 55, 67, 68):** No published Energy Victoria consumer dollar examples; pages state "the accredited provider confirms".
 
 ## Shepparton verification (Prompt 22 / 34, 14 Nov 2026)
 
@@ -67,6 +74,7 @@
     - `/victoria/landlords-rental-standards-2027/` (`mapRow: 37`)
     - `/victoria/renters/` (`mapRow: 36`)
     - `/victoria/get-off-gas-planner/` (`mapRow: 43`)
+- **On-Farm Energy and Electrification Demonstration Program closing date (`reviewBy: 2026-12-11`, `expiresOn: 2026-12-11`, Prompt 28):** `/victoria/business-energy-upgrades/` (`mapRow: 55`, `[data-review-by="2026-12-11"]` callout and figure `vic-onfarm-demo-grant-range`). Remove or update after 11 Dec 2026 (`check-figures.mjs` fails the build once `reviewBy` / `expiresOn` passes).
 
 ## Done
 
@@ -83,4 +91,7 @@
 - Prompt 26: Fixed visible text defects (no raw URL paths, doubled words, self-links, `<title> <= 60` chars, meta descriptions `<= 155` chars) and added `check-text.mjs` + `check-seo.mjs` build guards.
 - Prompt 27: Added single-canonical FAQ placement (`canonicalPage` on every FAQ, 3–5 canonical FAQs per page, cross-page FAQ links, 36 new sourced FAQs) and `check-faqs.mjs` + `check-overlap.mjs` (`25%` 5-gram Jaccard hard gate + `25%` containment warning).
 - Prompt 35a: Built pure spec-driven eligibility checker rules engine (`site/src/lib/checker/`) covering all 75 rules in `docs/eligibility-checker-spec.md` §5 and 22 messages in §6, added 12 official sources and 49 business/appliance/federal-battery figures (`129` total figures), wired oldest-figure `checkedOn` on `/victoria/eligibility-checker/`, and added Vitest spec-coverage, 6-example fixture, postcode, and rule-wording tests (`site/tests/checker/`).
+- Prompt 35b: Built Preact `Checker` island (`EligibilityChecker.astro` + `Checker.tsx`) with Residential and Business branches, `#a=` share links, print CSS, JSON bootstrap, and Playwright E2E coverage (`52` indexable URLs).
+- Prompt 36: Added `/victoria/postcode/` VEU postcode lookup page (`mapRow: 54`, `PostcodeLookup.tsx` with postcode + locality typeahead across 719 postcodes, no doorway subpaths) and trimmed combined `Checker + postcode-client` bundle under `15,360` B gz (`53` indexable URLs).
+- Prompt 28: Enabled rows `55` and `65–68` (`58` indexable URLs), added `navGroup: business` (`HubIndex`, `llms.txt`, `Footer`), added `businessgov-onfarm-demonstration-vic` source and `vic-onfarm-demo-grant-range` figure (`130` total figures, shared hot-water and Part-6 co-payments marked `audience: both`), enforced both-way audience, `reviewBy`/`expiresOn`, and 56 kW hero-size-table guards in `check-figures.mjs`, authored `/victoria/business-energy-upgrades/` + 4 Wave 4 business guides + 20 canonical FAQs, and added `business-anchors.test.ts` verifying all hub section anchors.
 

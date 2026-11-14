@@ -416,7 +416,7 @@ Defined in `site/src/content.config.ts` (Astro 6: `defineCollection`, `reference
 const State = z.enum(['vic', 'nsw', 'qld', 'sa', 'wa', 'tas', 'act', 'nt', 'national']);
 const Section = z.enum(['rebates', 'areas', 'tools', 'trust', 'solar-battery']);
 const Activity = z.enum(['rcac', 'hotwater', 'insulation', 'induction', 'sealing', 'glazing', 'solar', 'battery']); // solar/battery reserved; lead form uses rcac|hotwater only
-const NavGroup = z.enum(['hub', 'rebate-guides', 'upgrade-guides', 'question-pages', 'audience', 'tools', 'support-guides', 'areas', 'trust']); // expansion (prompt 17)
+const NavGroup = z.enum(['hub', 'rebate-guides', 'upgrade-guides', 'question-pages', 'audience', 'business', 'tools', 'support-guides', 'areas', 'trust']); // expansion (prompt 17, business added prompt 28)
 ```
 
 ### 5.2 `sources`
@@ -474,7 +474,7 @@ Expansion: 65 sources after prompt 15 (13 + 52 from the map's source index; not 
 
 Schema: `id`, `group`, `state`, `program`, `activity`, `audience: 'household' | 'business'`, `scenario`, `qualifier: 'up-to' | 'range' | 'exact' | 'about' | 'about-range' | 'minimum' | 'more-than' | 'almost'`, `unit: 'AUD' | 'percent' | 'count'` (default AUD), `display: 'standard' | 'cents' | 'compact'`, `basis: 'official' | 'estimate'` (default `official`), `kind: 'discount' | 'payment' | 'threshold' | 'rate' | 'saving' | 'count'` (required, prompt 25), `method?` + `basedOn?` (required when `basis === 'estimate'`), `gstIncluded?`, `effectiveFrom?`, `effectiveTo?` + `supersededBy?` (historical figures may only appear next to their replacement), `amountMin?`, `amountMax`, `currency: 'AUD'` (money only), `sourceId: reference('sources')` (must resolve to `official: true`), `checkedOn`, `conditions?: string[]`. Refinements: `amountMin <= amountMax`; `qualifier === 'range'` requires `amountMin`; `checkedOn <= today`; `basis === 'estimate'` requires `method`, `basedOn` and `kind === 'discount'`.
 
-Rendering: `minimum` → "at least $3,000 (including GST)", `more-than` → "more than $400", `almost` → "almost 60%", `about-range` → "about $350 to $400", `cents` → "$171.60", `compact` → "$3 million". Percentages and volatile counts (provider counts, rebate counts) are figures too, so they share the 45-day freshness rule. Scenario strings never contain a `$` amount. Business figures are allowed only on `/victoria/veu-minimum-co-payment/`.
+Rendering: `minimum` → "at least $3,000 (including GST)", `more-than` → "more than $400", `almost` → "almost 60%", `about-range` → "about $350 to $400", `cents` → "$171.60", `compact` → "$3 million". Percentages and volatile counts (provider counts, rebate counts) are figures too, so they share the 45-day freshness rule. Scenario strings never contain a `$` amount. Business figures (`audience: 'business'`) are allowed only on pages with `navGroup: 'business'` and on `/victoria/veu-minimum-co-payment/`; household-only figures (`audience: 'household'`) are disallowed on `navGroup: 'business'` pages (`check-figures` enforces both ways).
 
 Launch set (all from §1): 6 household room-RCAC rows, 8 ducted-RCAC rows (gas 10 / 16 / 22.4 kW; central electric; RCAC-replaced 10 / 16 / 22.4 kW; no decommissioning), 4 hot water rows, the 2 combined Solar Homes figures and the $200 minimum contribution (21, prompt 03), plus 3 running-cost figures from Energy Victoria added in prompt 05 (room gas → RCAC saves up to $460 a year; ducted up to $1,140; gas → electric hot water around $400). No business rows at launch.
 

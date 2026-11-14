@@ -120,6 +120,10 @@ const SECTIONS = [
     match: (e) => e.navGroup === 'audience',
   },
   {
+    heading: 'Business',
+    match: (e) => e.navGroup === 'business',
+  },
+  {
     heading: 'Tools',
     match: (e) => e.navGroup === 'tools',
   },

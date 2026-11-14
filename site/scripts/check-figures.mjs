@@ -19,10 +19,19 @@ const melbourneTodayParts = new Intl.DateTimeFormat('en-CA', {
 const [melbY, melbM, melbD] = melbourneTodayParts.split('-').map(Number);
 const todayMelbourneUtc = Date.UTC(melbY, melbM - 1, melbD);
 
-function ageDaysMelbourne(checkedOn) {
-  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(checkedOn || '').trim());
+function parseDateUtcMelbourne(val) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(val || '').trim());
   if (m) {
-    const checkedUtc = Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+    return Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+  }
+  const d = new Date(val);
+  if (Number.isNaN(d.getTime())) return null;
+  return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+}
+
+function ageDaysMelbourne(checkedOn) {
+  const checkedUtc = parseDateUtcMelbourne(checkedOn);
+  if (checkedUtc !== null) {
     return Math.floor((todayMelbourneUtc - checkedUtc) / (1000 * 60 * 60 * 24));
   }
   const d = new Date(checkedOn);
@@ -179,6 +188,16 @@ for (const fig of figuresList) {
   if (fig.effectiveTo && !fig.supersededBy) {
     throw new Error(`Figure "${fig.id}" has effectiveTo set without supersededBy`);
   }
+
+  if (fig.expiresOn) {
+    const expUtc = parseDateUtcMelbourne(fig.expiresOn);
+    if (expUtc !== null && todayMelbourneUtc > expUtc) {
+      staleCount++;
+      throw new Error(
+        `Figure "${fig.id}" has passed its expiresOn date (${fig.expiresOn}); remove or update expired content`,
+      );
+    }
+  }
 }
 
 for (const fig of figuresList) {
@@ -324,7 +343,8 @@ for (const file of allSrcFiles) {
   }
 }
 
-// 4. Verify MDX frontmatter `figures`, historical figure rule, and business figure rule
+// 4. Verify MDX frontmatter `figures`, `reviewBy`, historical figure rule, audience rule (both ways), and largest-figure table rule
+let businessOnHousehold = 0;
 const mdxFiles = allSrcFiles.filter((f) => f.endsWith('.mdx'));
 for (const file of mdxFiles) {
   const rel = path.relative(siteRoot, file);
@@ -334,6 +354,16 @@ for (const file of mdxFiles) {
   const fm = YAML.parse(fmMatch[1]);
   const body = fmMatch[2];
   const declared = new Set(fm.figures ?? []);
+
+  if (fm.reviewBy) {
+    const reviewUtc = parseDateUtcMelbourne(fm.reviewBy);
+    if (reviewUtc !== null && todayMelbourneUtc > reviewUtc) {
+      staleCount++;
+      throw new Error(
+        `${rel}: frontmatter reviewBy date (${fm.reviewBy}) has passed; re-check or remove time-limited content`,
+      );
+    }
+  }
 
   const usedInBody = new Set();
 
@@ -456,9 +486,49 @@ for (const file of mdxFiles) {
         }
       }
     }
-    if (fig.audience === 'business' && fm.slug !== 'veu-minimum-co-payment') {
+    if (
+      fig.audience === 'business' &&
+      fm.navGroup !== 'business' &&
+      fm.slug !== 'veu-minimum-co-payment'
+    ) {
+      businessOnHousehold++;
       throw new Error(
-        `${rel}: business figure "${id}" is only allowed on /victoria/veu-minimum-co-payment/.`,
+        `${rel}: business figure "${id}" is only allowed on pages with navGroup: business or /victoria/veu-minimum-co-payment/.`,
+      );
+    }
+    if (fig.audience === 'household' && fm.navGroup === 'business') {
+      throw new Error(
+        `${rel}: household-only figure "${id}" is not allowed on a business page (navGroup: business).`,
+      );
+    }
+  }
+
+  // Largest business ducted figure (56 kW) must never appear as a hero/block figure without the full size table
+  const heroIds =
+    fm.hero && fm.hero !== false
+      ? Array.isArray(fm.hero.ids)
+        ? fm.hero.ids
+        : fm.hero.id
+          ? [fm.hero.id]
+          : []
+      : [];
+  const block56kwInBody = /<Money\b[^>]*\bid=["']vic-veu-biz-rcac-ducted-gas-56kw["'][^>]*\bvariant=["']block["']|<Money\b[^>]*\bvariant=["']block["'][^>]*\bid=["']vic-veu-biz-rcac-ducted-gas-56kw["']/.test(
+    body,
+  );
+  if (heroIds.includes('vic-veu-biz-rcac-ducted-gas-56kw') || block56kwInBody) {
+    const hasBizHeatingTable = /<FigureTable\b[^>]*\bgroup=["']vic-veu-biz-heating["'][^>]*\/>/.test(
+      body,
+    );
+    const requiredDuctedSizes = [
+      'vic-veu-biz-rcac-ducted-gas-16kw',
+      'vic-veu-biz-rcac-ducted-gas-25kw',
+      'vic-veu-biz-rcac-ducted-gas-32kw',
+      'vic-veu-biz-rcac-ducted-gas-56kw',
+    ];
+    const hasAllDuctedSizes = requiredDuctedSizes.every((sid) => usedInBody.has(sid));
+    if (!hasBizHeatingTable || !hasAllDuctedSizes) {
+      throw new Error(
+        `${rel}: largest business ducted figure "vic-veu-biz-rcac-ducted-gas-56kw" cannot be shown as a hero without the full ducted size table (<FigureTable group="vic-veu-biz-heating"> with 16/25/32/56 kW rows).`,
       );
     }
   }
@@ -664,6 +734,16 @@ if (fs.existsSync(distDir)) {
       throw new Error(`Raw dollar amount "${metaDollar[0]}" found in title/meta of ${rel}`);
     }
 
+    for (const rbm of html.matchAll(/\bdata-review-by=["'](\d{4}-\d{2}-\d{2})["']/gi)) {
+      const rbUtc = parseDateUtcMelbourne(rbm[1]);
+      if (rbUtc !== null && todayMelbourneUtc > rbUtc) {
+        staleCount++;
+        throw new Error(
+          `${rel}: dated news item [data-review-by="${rbm[1]}"] has passed its reviewBy date; remove or update it`,
+        );
+      }
+    }
+
     const textOnly = stripped.replace(/<[^>]+>/g, ' ');
     const strayDollar = textOnly.match(/\$\s?\d[\d,]*/);
     if (strayDollar) {
@@ -674,7 +754,7 @@ if (fs.existsSync(distDir)) {
 }
 
 console.log(
-  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts, ${unlabelledHeroes} unlabelled heroes, ${figuresWithoutKind} figures without kind, ${estimateCount} estimates, every estimate labelled`,
+  `check-figures: ${figuresById.size} figures, ${staleCount} stale, ${rawAmounts} raw amounts, ${schemaAmounts} schema amounts, ${unlabelledHeroes} unlabelled heroes, ${figuresWithoutKind} figures without kind, ${businessOnHousehold} business figures on household pages, ${estimateCount} estimates, every estimate labelled`,
 );
 console.log(
   `tool data: ${toolFileCount} ${toolFileCount === 1 ? 'file' : 'files'}, ${toolStaleCount} stale`,

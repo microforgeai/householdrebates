@@ -26,6 +26,7 @@ export const NavGroup = z.enum([
   'upgrade-guides',
   'question-pages',
   'audience',
+  'business',
   'tools',
   'support-guides',
   'areas',

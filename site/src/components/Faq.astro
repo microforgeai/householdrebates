@@ -26,12 +26,19 @@ const isHome = normPath === '/';
 {(items.length > 0 || linkedItems.length > 0 || isHome) && (
   <section class="faq-list" aria-labelledby="faq-heading">
     <h2 id="faq-heading">{heading}</h2>
-    {items.map((item) => (
-      <div class="faq-item" id={`faq-${item.id}`} data-faq-canonical={item.id}>
-        <h3>{item.question}</h3>
-        <p set:html={renderFaqAnswerHtml(item.answer, normPath)} />
-      </div>
-    ))}
+    <div class="faq-accordion">
+      {items.map((item) => (
+        <details class="faq-item" id={`faq-${item.id}`} data-faq-canonical={item.id}>
+          <summary class="faq-item__summary">
+            <h3>{item.question}</h3>
+            <span class="faq-item__icon" aria-hidden="true"></span>
+          </summary>
+          <div class="faq-item__body">
+            <p set:html={renderFaqAnswerHtml(item.answer, normPath)} />
+          </div>
+        </details>
+      ))}
+    </div>
 
     {linkedItems.length > 0 && (
       <div class="faq-also" data-faq-links>

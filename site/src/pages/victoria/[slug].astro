@@ -11,6 +11,8 @@ import SourceLink from '../../components/SourceLink.astro';
 import HubIndex from '../../components/HubIndex.astro';
 import LinkIfEnabled from '../../components/LinkIfEnabled.astro';
 import AlertSignup from '../../components/AlertSignup.astro';
+import VeuFlowDiagram from '../../components/diagrams/VeuFlowDiagram.astro';
+import GasRuleTimelineDiagram from '../../components/diagrams/GasRuleTimelineDiagram.astro';
 import { shouldBuildEntry, isUrlEnabled } from '../../lib/rollout';
 
 export async function getStaticPaths() {
@@ -86,7 +88,18 @@ const breadcrumbs = hubEnabled
       { name: entry.data.title, path: pathname },
     ];
 
-const mdxComponents = { Money, MoneyPair, FigureTable, Callout, SourceLink, HubIndex, LinkIfEnabled, AlertSignup };
+const mdxComponents = {
+  Money,
+  MoneyPair,
+  FigureTable,
+  Callout,
+  SourceLink,
+  HubIndex,
+  LinkIfEnabled,
+  AlertSignup,
+  VeuFlowDiagram,
+  GasRuleTimelineDiagram,
+};
 ---
 
 {kind === 'guide' && (

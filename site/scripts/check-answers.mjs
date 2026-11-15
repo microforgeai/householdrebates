@@ -5,6 +5,16 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '../dist');
 
+// Homepage hero and tool-first pages use a concise 1-sentence AnswerText lead above the fold (Prompt 42 Parts D & E)
+const ONE_SENTENCE_ALLOWED_REL = new Set([
+  'index.html',
+  'victoria/eligibility-checker/index.html',
+  'victoria/postcode/index.html',
+  'victoria/gas-vs-heat-pump-running-costs/index.html',
+  'victoria/heat-pump-hot-water-size-guide/index.html',
+  'victoria/get-off-gas-planner/index.html',
+]);
+
 function walkHtml(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const results = [];
@@ -23,7 +33,7 @@ const htmlFiles = walkHtml(distDir);
 let checkedCount = 0;
 
 for (const file of htmlFiles) {
-  const rel = path.relative(distDir, file);
+  const rel = path.relative(distDir, file).replace(/\\/g, '/');
   const html = fs.readFileSync(file, 'utf8');
 
   // Verify no inline executable <script> tags (only application/ld+json or external src)
@@ -61,14 +71,16 @@ for (const file of htmlFiles) {
     .split(/(?<=[.!?])\s+/)
     .map((s) => s.trim())
     .filter(Boolean);
+  const words = text.split(/\s+/).filter(Boolean);
+  const minSentences = ONE_SENTENCE_ALLOWED_REL.has(rel) ? 1 : 2;
 
-  if (sentences.length < 2 || sentences.length > 4) {
+  if (sentences.length < minSentences || sentences.length > 4 || words.length < 12) {
     throw new Error(
-      `${rel}: AnswerBlock must have 2–4 sentences (found ${sentences.length}): "${text}"`,
+      `${rel}: AnswerBlock must have ${minSentences}–4 sentences and >= 12 words (found ${sentences.length} sentences, ${words.length} words): "${text}"`,
     );
   }
 
   checkedCount++;
 }
 
-console.log(`check-answers: OK (${checkedCount} indexable pages verified for 2–4 sentence AnswerBlock and strict CSP).`);
+console.log(`check-answers: OK (${checkedCount} indexable pages verified for AEO AnswerBlock and strict CSP).`);

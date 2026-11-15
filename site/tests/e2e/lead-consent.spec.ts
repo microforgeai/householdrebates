@@ -171,7 +171,7 @@ test.describe('LeadForm on-screen consent vs stored renderConsentSnapshot() (#6 
       });
     });
 
-    await page.goto(`${enabledOrigin}/`);
+    await page.goto(`${enabledOrigin}/victoria/melbourne/`);
 
     const form = page.locator('form[data-lead-form]');
     await expect(form).toBeVisible();

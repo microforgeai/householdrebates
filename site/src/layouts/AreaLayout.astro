@@ -216,6 +216,7 @@ const showRuleStatusNotice =
   breadcrumbs={breadcrumbs}
   faqs={canonicalFaqs}
   ruleStatus={d.ruleStatus}
+  mobileStickyCta={!isCheckerPage}
   pageSchema={{
     kind: 'area',
     headline: d.h1 ?? d.title,
@@ -239,6 +240,8 @@ const showRuleStatusNotice =
         updatedOn={d.updatedOn}
         pathname={pathname}
       />
+
+      {hasToc && <Toc headings={headings} mode="mobile" />}
 
       <section class="callout callout--info" aria-labelledby="local-facts-heading">
         <strong class="callout__title" id="local-facts-heading">
@@ -433,7 +436,7 @@ const showRuleStatusNotice =
       )}
     </article>
 
-    {hasToc && <Toc headings={headings} />}
+    {hasToc && <Toc headings={headings} mode="desktop" />}
   </div>
   {showPostcodeTable && postcodeTableRows.length > 0 && (
     <script src="../components/postcode-table.client.ts"></script>

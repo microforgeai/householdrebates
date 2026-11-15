@@ -1,0 +1,57 @@
+{
+  "phase": "after",
+  "capturedAt": "2026-11-15T05:22:39.925Z",
+  "homeMobile": {
+    "scrollHeight": 6334,
+    "screensAt812": 7.8,
+    "mainWordCount": 719,
+    "linksInMain": 39,
+    "tablesInMain": 0,
+    "h1TopPx": 157,
+    "h1FontSizePx": 36,
+    "noticeHeightPx": 82,
+    "noticeLines": 4,
+    "noticeText": "Not a government website. Independent guide run by Agenor Services Pty Ltd (ABN 29 644 447 263).Installers pay us for enquiries, and we only show installers who pay us, not every installer in your area. How we're paid.",
+    "headerHeightPx": 59,
+    "chromeShareOfViewportPct": 17.4
+  },
+  "checkerMobile": {
+    "h1TopPx": 223,
+    "firstQuestionTopPx": 471,
+    "firstQuestionBottomPx": 784,
+    "firstQuestionFullyInViewport": true
+  },
+  "homeDesktop": {
+    "h1FontSizePx": 58,
+    "h1TopPx": 150,
+    "headerHeightPx": 59,
+    "noticeHeightPx": 51
+  },
+  "overflow320": {
+    "home": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "hasHorizontalOverflow": false
+    },
+    "checker": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "hasHorizontalOverflow": false
+    },
+    "ac-guide": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "hasHorizontalOverflow": false
+    },
+    "melbourne": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "hasHorizontalOverflow": false
+    },
+    "about": {
+      "scrollWidth": 320,
+      "clientWidth": 320,
+      "hasHorizontalOverflow": false
+    }
+  }
+}

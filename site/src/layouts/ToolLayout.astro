@@ -84,6 +84,7 @@ const showRuleStatusNotice =
   faqs={canonicalFaqs}
   howTo={d.howTo}
   ruleStatus={d.ruleStatus}
+  mainClass="main--tool"
   pageSchema={{
     kind: 'tool',
     headline: d.h1 ?? d.title,
@@ -93,13 +94,24 @@ const showRuleStatusNotice =
   }}
 >
   <Breadcrumbs items={breadcrumbs} />
-  <article class="prose-container">
-    <h1>{d.h1 ?? d.title}</h1>
-    <AnswerBlock>
-      <AnswerText text={d.answer} />
-      <HeroBlock hero={d.hero} />
-    </AnswerBlock>
-    {showRuleStatusNotice && <RuleStatusNotice checkedOn={effectiveCheckedOn} />}
+  <article class="prose-container prose-container--tool">
+    <h1 class="tool-h1">{d.h1 ?? d.title}</h1>
+    <div class="tool-lead">
+      <AnswerBlock>
+        <AnswerText text={d.answer} maxSentences={1} />
+      </AnswerBlock>
+    </div>
+
+    {!isCheckerPage && showRuleStatusNotice && <RuleStatusNotice checkedOn={effectiveCheckedOn} />}
+
+    {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
+    {d.slug === 'postcode' && <PostcodeLookup />}
+    {d.slug === 'gas-vs-heat-pump-running-costs' && <RunningCostsPicker />}
+    {d.slug === 'heat-pump-hot-water-size-guide' && <HwSizeGuide />}
+    {d.slug === 'get-off-gas-planner' && <GasExitPlanner />}
+
+    {isCheckerPage && showRuleStatusNotice && <RuleStatusNotice checkedOn={effectiveCheckedOn} />}
+
     <Byline
       author={d.author}
       checkedOn={effectiveCheckedOn}
@@ -107,11 +119,11 @@ const showRuleStatusNotice =
       pathname={pathname}
     />
 
-    {d.slug === 'eligibility-checker' && <EligibilityChecker state="vic" />}
-    {d.slug === 'postcode' && <PostcodeLookup />}
-    {d.slug === 'gas-vs-heat-pump-running-costs' && <RunningCostsPicker />}
-    {d.slug === 'heat-pump-hot-water-size-guide' && <HwSizeGuide />}
-    {d.slug === 'get-off-gas-planner' && <GasExitPlanner />}
+    {d.hero && (
+      <div class="tool-hero-below">
+        <HeroBlock hero={d.hero} />
+      </div>
+    )}
 
     <div class="page-body" data-body>
       <slot />

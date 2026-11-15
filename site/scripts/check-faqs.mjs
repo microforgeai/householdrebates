@@ -262,10 +262,10 @@ for (const file of htmlFiles) {
     questionToSchemaPages.set(sf.question, qPages);
   }
 
-  // Extract visible canonical FAQ blocks: <div class="faq-item" id="faq-<id>" data-faq-canonical="<id>">
+  // Extract visible canonical FAQ blocks: <details|div class="faq-item" id="faq-<id>" data-faq-canonical="<id>">
   const visibleFaqs = [];
   for (const m of html.matchAll(
-    /<div\b[^>]*\bclass="faq-item"[^>]*\bid="faq-([a-z0-9-]+)"[^>]*\bdata-faq-canonical="\1"[^>]*>([\s\S]*?)<\/div>/gi,
+    /<(?:div|details)\b[^>]*\bclass="faq-item"[^>]*\bid="faq-([a-z0-9-]+)"[^>]*\bdata-faq-canonical="\1"[^>]*>([\s\S]*?)<\/(?:div|details)>/gi,
   )) {
     const faqId = m[1];
     const inner = m[2];

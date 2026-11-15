@@ -2,12 +2,14 @@ import AxeBuilder from '@axe-core/playwright';
 import { test, expect } from '@playwright/test';
 
 test.describe('Household Rebates static site e2e', () => {
-  test('renders home pillar with independence notice, answer block, figure tables, and closed form notice', async ({
+  test('renders home pillar with independence notice, answer block, postcode form, and closed form notice on guides', async ({
     page,
   }) => {
     await page.goto('/');
     await expect(page.locator('.independence-notice')).toContainText('Agenor Services Pty Ltd');
     await expect(page.locator('[data-answer]')).toBeVisible();
+    await expect(page.locator('[data-home-postcode-form]')).toBeVisible();
+    await page.goto('/victoria/air-conditioner-rebate/');
     await expect(page.locator('#form-closed-heading')).toBeVisible();
   });
 
@@ -254,8 +256,10 @@ test.describe('Household Rebates static site e2e', () => {
         expect(typeof entity.acceptedAnswer?.text).toBe('string');
         expect(entity.acceptedAnswer.text.includes('$')).toBe(false);
 
-        const visQ = (await page.locator('[data-faq-canonical]').nth(i).locator('h3').innerText()).trim();
-        const visA = (await page.locator('[data-faq-canonical]').nth(i).locator('p').innerText()).trim();
+        const faqItem = page.locator('[data-faq-canonical]').nth(i);
+        const visQ = (await faqItem.locator('h3').innerText()).trim();
+        await faqItem.locator('summary').click();
+        const visA = (await faqItem.locator('p').innerText()).trim();
         expect(entity.name).toBe(visQ);
         expect(entity.acceptedAnswer.text).toBe(visA);
       }

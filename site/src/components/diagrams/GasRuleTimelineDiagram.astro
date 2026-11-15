@@ -1,0 +1,90 @@
+---
+import ruleStatusJson from '../../data/rule-status.json';
+import { formatAuDate } from '../../lib/dates';
+
+const ew = ruleStatusJson.electionWatch;
+const checkedStr = formatAuDate(new Date(`${ew.checkedOn}T00:00:00Z`));
+const electionStr = formatAuDate(new Date(`${ew.electionDate}T00:00:00Z`));
+const recheckStr = formatAuDate(new Date(`${ew.recheckBy}T00:00:00Z`));
+const ruleStartStr = formatAuDate(new Date('2027-03-01T00:00:00Z'));
+---
+
+<figure class="diagram-card" data-gas-timeline-diagram>
+  <svg
+    class="diagram-svg diagram-svg--desktop"
+    viewBox="0 0 760 176"
+    role="img"
+    aria-labelledby="gas-tl-title-d gas-tl-desc-d"
+  >
+    <title id="gas-tl-title-d">2027 gas hot water rule timeline</title>
+    <desc id="gas-tl-desc-d">
+      Key milestone dates from rule-status.json: Rules checked {checkedStr}; Victorian state election {electionStr}; Post-election policy re-check by {recheckStr}; Currently legislated start date {ruleStartStr} when end-of-life mains gas water heaters switch to electric unless exempt.
+    </desc>
+
+    <!-- Track line -->
+    <line x1="88" y1="54" x2="672" y2="54" class="diagram-track" />
+
+    <!-- Milestone 1 -->
+    <circle cx="96" cy="54" r="9" class="diagram-dot" />
+    <text x="96" y="30" text-anchor="middle" class="diagram-date">{checkedStr}</text>
+    <text x="96" y="86" text-anchor="middle" class="diagram-node-title">Rules checked</text>
+    <text x="96" y="106" text-anchor="middle" class="diagram-node-sub">Caretaker period</text>
+    <text x="96" y="124" text-anchor="middle" class="diagram-node-sub">from {formatAuDate(new Date(`${ew.caretakerFrom}T00:00:00Z`))}</text>
+
+    <!-- Milestone 2 -->
+    <circle cx="284" cy="54" r="9" class="diagram-dot diagram-dot--caution" />
+    <text x="284" y="30" text-anchor="middle" class="diagram-date">{electionStr}</text>
+    <text x="284" y="86" text-anchor="middle" class="diagram-node-title">State election</text>
+    <text x="284" y="106" text-anchor="middle" class="diagram-node-sub">Victorian vote;</text>
+    <text x="284" y="124" text-anchor="middle" class="diagram-node-sub">policy may change</text>
+
+    <!-- Milestone 3 -->
+    <circle cx="472" cy="54" r="9" class="diagram-dot" />
+    <text x="472" y="30" text-anchor="middle" class="diagram-date">By {recheckStr}</text>
+    <text x="472" y="86" text-anchor="middle" class="diagram-node-title">Policy re-check</text>
+    <text x="472" y="106" text-anchor="middle" class="diagram-node-sub">Re-verified once</text>
+    <text x="472" y="124" text-anchor="middle" class="diagram-node-sub">government confirms</text>
+
+    <!-- Milestone 4 -->
+    <circle cx="664" cy="54" r="10" class="diagram-badge" />
+    <text x="664" y="30" text-anchor="middle" class="diagram-date">{ruleStartStr}</text>
+    <text x="664" y="86" text-anchor="middle" class="diagram-node-title">Rule starts</text>
+    <text x="664" y="106" text-anchor="middle" class="diagram-node-sub">Currently legislated</text>
+    <text x="664" y="124" text-anchor="middle" class="diagram-node-sub">end-of-life gas swap</text>
+    <text x="664" y="142" text-anchor="middle" class="diagram-node-sub">(unless exempt)</text>
+  </svg>
+
+  <svg
+    class="diagram-svg diagram-svg--mobile"
+    viewBox="0 0 340 256"
+    role="img"
+    aria-labelledby="gas-tl-title-m gas-tl-desc-m"
+  >
+    <title id="gas-tl-title-m">2027 gas hot water rule timeline</title>
+    <desc id="gas-tl-desc-m">
+      Vertical timeline: {checkedStr} rules checked; {electionStr} Victorian election; by {recheckStr} post-election re-check; {ruleStartStr} currently legislated start date for end-of-life mains gas hot water replacements.
+    </desc>
+
+    <line x1="28" y1="28" x2="28" y2="218" class="diagram-track" />
+
+    <circle cx="28" cy="28" r="7.5" class="diagram-dot" />
+    <text x="48" y="25" class="diagram-date">{checkedStr} · Rules checked</text>
+    <text x="48" y="44" class="diagram-node-sub">Caretaker period from {formatAuDate(new Date(`${ew.caretakerFrom}T00:00:00Z`))}</text>
+
+    <circle cx="28" cy="90" r="7.5" class="diagram-dot diagram-dot--caution" />
+    <text x="48" y="87" class="diagram-date">{electionStr} · Victorian election</text>
+    <text x="48" y="106" class="diagram-node-sub">New government may review rules</text>
+
+    <circle cx="28" cy="152" r="7.5" class="diagram-dot" />
+    <text x="48" y="149" class="diagram-date">By {recheckStr} · Policy re-check</text>
+    <text x="48" y="168" class="diagram-node-sub">Page updated once policy confirmed</text>
+
+    <circle cx="28" cy="214" r="8.5" class="diagram-badge" />
+    <text x="48" y="211" class="diagram-date">{ruleStartStr} · Currently legislated start</text>
+    <text x="48" y="230" class="diagram-node-sub">End-of-life mains gas swaps to electric (unless exempt)</text>
+  </svg>
+
+  <figcaption class="diagram-caption">
+    <strong>2027 gas hot water rule timeline:</strong> Figures and rules checked {checkedStr} → Victorian state election on {electionStr} → post-election policy re-check by {recheckStr} → under currently legislated rules from {ruleStartStr}, an end-of-life mains gas water heater needing replacement switches to an efficient electric system unless a regulatory exemption applies (working units and repairs stay allowed).
+  </figcaption>
+</figure>

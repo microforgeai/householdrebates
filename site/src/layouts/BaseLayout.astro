@@ -7,6 +7,7 @@ import JsonLd from '../components/seo/JsonLd.astro';
 import IndependenceNotice from '../components/IndependenceNotice.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import MobileStickyCta from '../components/MobileStickyCta.astro';
 import {
   buildJsonLdGraph,
   type BreadcrumbItem,
@@ -27,6 +28,8 @@ export interface Props {
   howTo?: HowToSchemaInput;
   ruleStatus?: 'election-watch';
   pageSchema?: PageSchemaInput;
+  mobileStickyCta?: boolean;
+  mainClass?: string;
 }
 
 const {
@@ -40,6 +43,8 @@ const {
   howTo,
   ruleStatus,
   pageSchema,
+  mobileStickyCta = false,
+  mainClass,
 } = Astro.props;
 
 const schemaGraph = buildJsonLdGraph({
@@ -63,13 +68,15 @@ const schemaGraph = buildJsonLdGraph({
     />
     <JsonLd graph={schemaGraph} />
   </head>
-  <body>
+  <body class={mobileStickyCta ? 'has-mobile-sticky-cta' : undefined}>
     <a class="skip-link" href="#main-content">Skip to main content</a>
     <IndependenceNotice />
     <Header />
-    <main id="main-content" data-rule-status={ruleStatus}>
+    <main id="main-content" class={mainClass} data-rule-status={ruleStatus}>
       <slot />
     </main>
     <Footer />
+    {mobileStickyCta && <MobileStickyCta />}
+    <script src="../components/ui-enhance.client.ts"></script>
   </body>
 </html>

@@ -95,6 +95,7 @@ const showRuleStatusNotice =
   faqs={canonicalFaqs}
   howTo={d.howTo}
   ruleStatus={d.ruleStatus}
+  mobileStickyCta={!isCheckerPage}
   pageSchema={{
     kind: schemaKind,
     headline: d.h1 ?? d.title,
@@ -119,6 +120,8 @@ const showRuleStatusNotice =
         pathname={pathname}
       />
       {d.alertSignup && <AlertSignup placement="guide" />}
+
+      {hasToc && <Toc headings={headings} mode="mobile" />}
 
       {d.howTo && (
         <section aria-labelledby="howto-heading">
@@ -157,6 +160,6 @@ const showRuleStatusNotice =
       {variant !== 'hub' && <RelatedLinks pathname={pathname} slugs={d.related} />}
     </article>
 
-    {hasToc && <Toc headings={headings} />}
+    {hasToc && <Toc headings={headings} mode="desktop" />}
   </div>
 </BaseLayout>

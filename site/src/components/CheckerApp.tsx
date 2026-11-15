@@ -889,9 +889,22 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
   return (
     <div class="checker-step-shell" data-checker-hydrated={isHydratedReady} data-checker-step={fieldId}>
       <div ref={stepFocusRef} tabIndex={-1} class="checker-step-header">
-        <p class="checker-progress" data-checker-progress aria-live="polite">
-          Step {safeStepIndex + 1} of {displayTotalSteps}
-        </p>
+        <div class="checker-step-meta">
+          <p class="checker-progress" data-checker-progress aria-live="polite">
+            Step {safeStepIndex + 1} of {displayTotalSteps}
+          </p>
+          {safeStepIndex === 0 && answers.R2 && (
+            <span class="checker-prefill-pill" data-prefilled-postcode={answers.R2}>
+              Postcode {answers.R2}
+            </span>
+          )}
+        </div>
+        <div class="checker-progress-track" aria-hidden="true">
+          <div
+            class="checker-progress-fill"
+            style={{ width: `${Math.round(((safeStepIndex + 1) / displayTotalSteps) * 100)}%` }}
+          />
+        </div>
       </div>
 
       <form data-checker-form noValidate onSubmit={handleNext}>

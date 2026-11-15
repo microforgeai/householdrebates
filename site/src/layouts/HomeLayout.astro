@@ -1,0 +1,323 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from './BaseLayout.astro';
+import AnswerBlock from '../components/AnswerBlock.astro';
+import AnswerText from '../components/AnswerText.astro';
+import Money from '../components/Money.astro';
+import RuleStatusNotice from '../components/RuleStatusNotice.astro';
+import Faq from '../components/Faq.astro';
+import SourceList from '../components/SourceList.astro';
+import SplitSystemIcon from '../components/icons/SplitSystemIcon.astro';
+import HotWaterIcon from '../components/icons/HotWaterIcon.astro';
+import InductionIcon from '../components/icons/InductionIcon.astro';
+import InsulationIcon from '../components/icons/InsulationIcon.astro';
+import DraughtIcon from '../components/icons/DraughtIcon.astro';
+import SolarIcon from '../components/icons/SolarIcon.astro';
+import BatteryIcon from '../components/icons/BatteryIcon.astro';
+import BusinessIcon from '../components/icons/BusinessIcon.astro';
+import GasFlameIcon from '../components/icons/GasFlameIcon.astro';
+import MapPinIcon from '../components/icons/MapPinIcon.astro';
+import CheckIcon from '../components/icons/CheckIcon.astro';
+import { formatAuDate } from '../lib/dates';
+import { resolvePageFaqs } from '../lib/faqs';
+import { isUrlEnabled } from '../lib/rollout';
+import { hasVicElectionFigure, isElectionBannerPending } from '../lib/rule-status';
+
+export interface Props {
+  entry: {
+    data: {
+      title: string;
+      h1?: string;
+      description: string;
+      slug: string;
+      answer: string;
+      author: string;
+      publishedOn: Date;
+      updatedOn: Date;
+      checkedOn: Date;
+      sources: (string | { id: string })[];
+      figures: string[];
+      faq: (string | { id: string })[];
+      noindex: boolean;
+      ruleStatus?: 'election-watch';
+    };
+  };
+}
+
+const { entry } = Astro.props;
+const d = entry.data;
+
+const { canonicalFaqs, linkedFaqs } = await resolvePageFaqs('/', d.faq ?? []);
+
+const figIdSet = new Set(d.figures ?? []);
+const matchedFigs =
+  figIdSet.size > 0 ? await getCollection('figures', (f) => figIdSet.has(f.id)) : [];
+
+let oldestCheckedDate: Date = d.checkedOn;
+for (const f of matchedFigs) {
+  if (f.data.checkedOn.getTime() < oldestCheckedDate.getTime()) {
+    oldestCheckedDate = f.data.checkedOn;
+  }
+}
+const figuresCheckedStr = formatAuDate(oldestCheckedDate);
+
+const showRuleStatusNotice =
+  d.ruleStatus === 'election-watch' ||
+  (isElectionBannerPending() && hasVicElectionFigure(matchedFigs.map((f) => f.data.program)));
+
+const allAreas = await getCollection('areas');
+const homeAreas = allAreas
+  .filter(
+    (a) =>
+      !a.data.noindex &&
+      isUrlEnabled(`/victoria/${a.data.slug}/`) &&
+      (a.data.areaGroup === 'melbourne-hubs' || a.data.areaGroup === 'regional'),
+  )
+  .sort((a, b) => a.data.mapRow - b.data.mapRow);
+
+const upgradeCards = [
+  {
+    href: '/victoria/air-conditioner-rebate/',
+    title: 'Split & ducted heating',
+    icon: 'split' as const,
+    figureId: 'vic-veu-rcac-room-gas',
+    figureLabel: 'Room gas → split system (3–9 kW)',
+  },
+  {
+    href: '/victoria/heat-pump-rebate/',
+    title: 'Heat pump hot water',
+    icon: 'hotwater' as const,
+    figureId: 'vic-veu-hw-gas-to-heatpump',
+    figureLabel: 'Mains gas → heat pump',
+  },
+  {
+    href: '/victoria/gas-cooktop-to-induction/',
+    title: 'Induction cooktop',
+    icon: 'induction' as const,
+    blurb: 'Mains gas to induction cooktop VEU discount.',
+  },
+  {
+    href: '/victoria/ceiling-insulation-rebate/',
+    title: 'Ceiling insulation',
+    icon: 'insulation' as const,
+    blurb: 'VEU ceiling insulation discounts by climate zone.',
+  },
+  {
+    href: '/victoria/draught-proofing-rebate/',
+    title: 'Draught proofing',
+    icon: 'draught' as const,
+    figureId: 'vic-veu-sealing-house-5yr',
+    figureLabel: 'House weather sealing (5-year)',
+  },
+  {
+    href: '/victoria/solar-panel-rebate/',
+    title: 'Solar panels',
+    icon: 'solar' as const,
+    figureId: 'vic-solar-homes-pv-rebate',
+    figureLabel: 'Solar Homes panel rebate',
+  },
+  {
+    href: '/victoria/battery-rebate/',
+    title: 'Home battery',
+    icon: 'battery' as const,
+    figureId: 'fed-battery-discount-pct',
+    figureLabel: 'Federal battery discount',
+  },
+  {
+    href: '/victoria/business-energy-upgrades/',
+    title: 'Business upgrades',
+    icon: 'business' as const,
+    blurb: 'Commercial HVAC, LED lighting, cold rooms & solar.',
+  },
+];
+---
+
+<BaseLayout
+  title={d.title}
+  description={d.description}
+  pathname="/"
+  noindex={d.noindex}
+  ogKind="default"
+  breadcrumbs={[]}
+  faqs={canonicalFaqs}
+  ruleStatus={d.ruleStatus}
+  mainClass="main--home"
+  pageSchema={{
+    kind: 'hub',
+    headline: d.h1 ?? d.title,
+    description: d.description,
+    publishedOn: d.publishedOn,
+    updatedOn: d.updatedOn,
+  }}
+>
+  <div class="home-shell">
+    <!-- 1. Hero -->
+    <section class="home-hero" aria-labelledby="home-hero-heading">
+      <h1 id="home-hero-heading" class="home-hero__title">{d.h1 ?? d.title}</h1>
+      <div class="home-hero__lead">
+        <AnswerBlock>
+          <AnswerText text={d.answer} maxSentences={1} />
+        </AnswerBlock>
+      </div>
+
+      <form
+        class="home-postcode-form"
+        method="get"
+        action="/victoria/eligibility-checker/"
+        data-home-postcode-form
+      >
+        <label class="home-postcode-form__label" for="home-postcode-input">
+          Enter your Victorian postcode
+        </label>
+        <div class="home-postcode-form__controls">
+          <input
+            id="home-postcode-input"
+            type="text"
+            name="pc"
+            inputmode="numeric"
+            pattern="3[0-9]{3}"
+            maxlength="4"
+            autocomplete="postal-code"
+            placeholder="e.g. 3000"
+            required
+          />
+          <button type="submit" class="btn home-postcode-form__btn">Check my postcode</button>
+        </div>
+      </form>
+
+      <p class="home-hero__secondary">
+        <a href="#upgrade-guides">Or browse upgrade guides ↓</a>
+      </p>
+    </section>
+
+    <!-- 2. Trust chips -->
+    <section class="home-trust" aria-label="Editorial and independence summary">
+      <ul class="trust-chips">
+        <li class="trust-chip">
+          <CheckIcon size={16} class="trust-chip__icon" />
+          <span>Figures checked {figuresCheckedStr}</span>
+        </li>
+        <li class="trust-chip">
+          <CheckIcon size={16} class="trust-chip__icon" />
+          <span>Sources shown, estimates labelled</span>
+        </li>
+        <li class="trust-chip">
+          <span>Independent, not a government website</span>
+        </li>
+        <li class="trust-chip trust-chip--link">
+          <a href="/about/#how-we-are-paid">How we're paid →</a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 3. Upgrade cards grid -->
+    <section class="home-section" id="upgrade-guides" aria-labelledby="upgrade-guides-heading">
+      <div class="home-section__head">
+        <h2 id="upgrade-guides-heading">Upgrade guides</h2>
+        <p class="home-section__sub">
+          Eligibility rules, co-payments, and indicative upfront discounts.
+        </p>
+      </div>
+
+      {showRuleStatusNotice && <RuleStatusNotice checkedOn={oldestCheckedDate} />}
+
+      <div class="upgrade-grid" data-upgrade-grid>
+        {upgradeCards.map((card) => (
+          <a class="upgrade-card" href={card.href}>
+            <span class="upgrade-card__head">
+              <span class="upgrade-card__icon">
+                {card.icon === 'split' && <SplitSystemIcon size={20} />}
+                {card.icon === 'hotwater' && <HotWaterIcon size={20} />}
+                {card.icon === 'induction' && <InductionIcon size={20} />}
+                {card.icon === 'insulation' && <InsulationIcon size={20} />}
+                {card.icon === 'draught' && <DraughtIcon size={20} />}
+                {card.icon === 'solar' && <SolarIcon size={20} />}
+                {card.icon === 'battery' && <BatteryIcon size={20} />}
+                {card.icon === 'business' && <BusinessIcon size={20} />}
+              </span>
+              <h3 class="upgrade-card__title">{card.title}</h3>
+              <span class="upgrade-card__arrow" aria-hidden="true">→</span>
+            </span>
+            {card.figureId && card.figureLabel ? (
+              <Money
+                id={card.figureId}
+                variant="block"
+                label={card.figureLabel}
+                linkSource={false}
+              />
+            ) : (
+              <p class="upgrade-card__blurb">{card.blurb}</p>
+            )}
+          </a>
+        ))}
+      </div>
+
+      <p class="home-section__more">
+        <a href="/victoria/">All Victoria guides &amp; calculators →</a>
+      </p>
+    </section>
+
+    <!-- 4. How it works (from home.mdx) -->
+    <section class="home-section page-body" data-body aria-label="How VEU discounts work">
+      <slot />
+    </section>
+
+    <!-- 5. 2027 gas rule card -->
+    <section class="home-section" aria-labelledby="home-gas-rule-heading">
+      <div class="gas-rule-card">
+        <div class="gas-rule-card__head">
+          <span class="gas-rule-card__icon">
+            <GasFlameIcon size={20} />
+          </span>
+          <h2 id="home-gas-rule-heading">1 March 2027 gas hot water rule</h2>
+        </div>
+        <p class="gas-rule-card__text">
+          Under the currently legislated Victorian rule from <strong>1 March 2027</strong>, an end-of-life mains gas water heater needing replacement switches to an efficient electric unit unless an exemption applies. Working gas units, repairs, bottled LPG, and existing gas heaters or cooktops are unaffected under the currently legislated 2027 rule.
+        </p>
+        {showRuleStatusNotice && <RuleStatusNotice checkedOn={d.checkedOn} />}
+        <p class="gas-rule-card__action">
+          <a class="btn btn--secondary" href="/victoria/gas-to-electric-hot-water-2027/">
+            Read the 2027 rule &amp; exemptions →
+          </a>
+        </p>
+      </div>
+    </section>
+
+    <!-- 6. Find your area -->
+    <section class="home-section" aria-labelledby="find-area-heading">
+      <div class="home-section__head">
+        <h2 id="find-area-heading">
+          <MapPinIcon size={22} class="home-section__inline-icon" />
+          <span>Find your area</span>
+        </h2>
+        <p class="home-section__sub">
+          VEU climate zones, reticulated gas postcodes, and council programs.
+        </p>
+      </div>
+      <ul class="area-chips">
+        {homeAreas.map((area) => (
+          <li>
+            <a class="area-chip" href={`/victoria/${area.data.slug}/`}>
+              {area.data.areaName}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a class="area-chip area-chip--search" href="/victoria/postcode/">
+            Search by postcode →
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 7. FAQ -->
+    <div class="home-section">
+      <Faq items={canonicalFaqs} linkedItems={linkedFaqs} pathname="/" />
+    </div>
+
+    <!-- 8. Sources and checked dates -->
+    <div class="home-section">
+      <SourceList ids={d.sources} />
+    </div>
+  </div>
+</BaseLayout>

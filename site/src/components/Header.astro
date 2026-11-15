@@ -1,35 +1,156 @@
 ---
 import { SITE } from '../data/site';
+import { isUrlEnabled } from '../lib/rollout';
 
 const pathname = Astro.url.pathname;
+const showBusiness = isUrlEnabled('/victoria/business-energy-upgrades/');
+const showAreas = isUrlEnabled('/victoria/postcode/');
+
 const navLinks = [
-  { href: '/victoria/air-conditioner-rebate/', label: 'Air Conditioner Rebate' },
-  { href: '/victoria/heat-pump-rebate/', label: 'Heat Pump Rebate' },
-  { href: '/victoria/gas-to-electric-hot-water-2027/', label: '2027 Gas Rule' },
-  { href: '/how-quotes-work/', label: 'How Quotes Work' },
-  { href: '/sources/', label: 'Sources' },
+  {
+    href: '/victoria/air-conditioner-rebate/',
+    shortLabel: 'Air Conditioning',
+    fullLabel: 'Air Conditioner Rebate',
+    wideOnly: false,
+  },
+  {
+    href: '/victoria/heat-pump-rebate/',
+    shortLabel: 'Heat Pumps',
+    fullLabel: 'Heat Pump Rebate',
+    wideOnly: false,
+  },
+  {
+    href: '/victoria/gas-to-electric-hot-water-2027/',
+    shortLabel: '2027 Gas Rule',
+    fullLabel: '2027 Gas Rule',
+    wideOnly: false,
+  },
+  ...(showBusiness
+    ? [
+        {
+          href: '/victoria/business-energy-upgrades/',
+          shortLabel: 'Business',
+          fullLabel: 'Business Upgrades',
+          wideOnly: false,
+        },
+      ]
+    : []),
+  ...(showAreas
+    ? [
+        {
+          href: '/victoria/postcode/',
+          shortLabel: 'Areas',
+          fullLabel: 'Areas & Postcodes',
+          wideOnly: false,
+        },
+      ]
+    : []),
+  {
+    href: '/how-quotes-work/',
+    shortLabel: 'How Quotes Work',
+    fullLabel: 'How Quotes Work',
+    wideOnly: true,
+  },
+  {
+    href: '/sources/',
+    shortLabel: 'Sources',
+    fullLabel: 'Sources',
+    wideOnly: true,
+  },
 ];
 ---
 
 <header class="site-header">
   <div class="site-header__inner">
-    <a class="site-brand" href="/">{SITE.name}</a>
-    <nav class="site-nav" aria-label="Primary navigation">
+    <a class="site-brand" href="/">
+      <svg
+        class="site-brand__mark"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 3C7.5 3 4 6.8 4 11.5c0 3.7 2.4 6.9 5.8 8 .8-3.4 2.7-6.5 5.7-8.7" />
+        <path d="M12 3c4.5 0 8 3.8 8 8.5 0 4.9-3.9 8.5-8.8 8.5H8" />
+      </svg>
+      <span>{SITE.name}</span>
+    </a>
+
+    <nav class="site-nav site-nav--desktop" aria-label="Primary navigation">
       {navLinks.map((link) => (
         <a
           href={link.href}
+          data-nav-wide={link.wideOnly ? 'true' : undefined}
           aria-current={pathname === link.href ? 'page' : undefined}
         >
-          {link.label}
+          {link.shortLabel}
         </a>
       ))}
+    </nav>
+
+    <div class="site-header__actions">
       <a
         href="/victoria/eligibility-checker/"
         class="nav-cta"
         aria-current={pathname === '/victoria/eligibility-checker/' ? 'page' : undefined}
       >
-        Check Eligibility
+        Check eligibility
       </a>
-    </nav>
+
+      <details class="mobile-menu" data-mobile-menu>
+        <summary class="mobile-menu__btn" data-mobile-menu-summary>
+          <svg
+            class="mobile-menu__icon mobile-menu__icon--open"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="4" y1="7" x2="20" y2="7" />
+            <line x1="4" y1="12" x2="20" y2="12" />
+            <line x1="4" y1="17" x2="20" y2="17" />
+          </svg>
+          <svg
+            class="mobile-menu__icon mobile-menu__icon--close"
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            aria-hidden="true"
+          >
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+          <span class="mobile-menu__label">Menu</span>
+        </summary>
+        <nav class="mobile-menu__panel" aria-label="Mobile navigation">
+          <ul class="mobile-menu__list">
+            {navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={pathname === link.href ? 'page' : undefined}
+                >
+                  <span>{link.fullLabel}</span>
+                  <span class="mobile-menu__arrow" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </details>
+    </div>
   </div>
 </header>

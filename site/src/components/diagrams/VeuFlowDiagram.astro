@@ -1,0 +1,121 @@
+---
+export interface Props {
+  idPrefix?: string;
+  caption?: string;
+}
+const {
+  idPrefix = 'veu-flow',
+  caption = 'You engage a VEU accredited provider before buying or disconnecting equipment → the provider confirms an approved product in your quote → certificates (VEECs) are created after installation → the certificate value comes off your upfront invoice.',
+} = Astro.props;
+const titleId = `${idPrefix}-title`;
+const descId = `${idPrefix}-desc`;
+---
+
+<figure class="diagram-card" data-veu-flow-diagram>
+  <svg
+    class="diagram-svg diagram-svg--desktop"
+    viewBox="0 0 760 156"
+    role="img"
+    aria-labelledby={`${titleId}-d ${descId}-d`}
+  >
+    <title id={`${titleId}-d`}>How a VEU discount works</title>
+    <desc id={`${descId}-d`}>
+      Four stages: 1. You speak with an accredited provider before work starts; 2. Approved electric upgrade is installed and old unit decommissioned; 3. Victorian Energy Efficiency Certificates (VEECs) are created; 4. Certificate value comes off your upfront quote.
+    </desc>
+
+    <!-- Stage 1 -->
+    <rect x="8" y="16" width="166" height="124" rx="14" class="diagram-node" />
+    <circle cx="34" cy="42" r="13" class="diagram-badge" />
+    <text x="34" y="46.5" text-anchor="middle" class="diagram-badge-num">1</text>
+    <text x="24" y="76" class="diagram-node-title">You</text>
+    <text x="24" y="97" class="diagram-node-sub">Contact provider</text>
+    <text x="24" y="115" class="diagram-node-sub">before any work</text>
+
+    <!-- Arrow 1->2 -->
+    <path d="M178 78h16m-5-5l6 5-6 5" class="diagram-arrow" />
+
+    <!-- Stage 2 -->
+    <rect x="200" y="16" width="166" height="124" rx="14" class="diagram-node" />
+    <circle cx="226" cy="42" r="13" class="diagram-badge" />
+    <text x="226" y="46.5" text-anchor="middle" class="diagram-badge-num">2</text>
+    <text x="216" y="76" class="diagram-node-title">Accredited provider</text>
+    <text x="216" y="97" class="diagram-node-sub">Confirms product &amp;</text>
+    <text x="216" y="115" class="diagram-node-sub">written quote</text>
+
+    <!-- Arrow 2->3 -->
+    <path d="M370 78h16m-5-5l6 5-6 5" class="diagram-arrow" />
+
+    <!-- Stage 3 -->
+    <rect x="392" y="16" width="166" height="124" rx="14" class="diagram-node" />
+    <circle cx="418" cy="42" r="13" class="diagram-badge" />
+    <text x="418" y="46.5" text-anchor="middle" class="diagram-badge-num">3</text>
+    <text x="408" y="76" class="diagram-node-title">Certificates created</text>
+    <text x="408" y="97" class="diagram-node-sub">1 VEEC per tonne</text>
+    <text x="408" y="115" class="diagram-node-sub">CO₂-e saved</text>
+
+    <!-- Arrow 3->4 -->
+    <path d="M562 78h16m-5-5l6 5-6 5" class="diagram-arrow" />
+
+    <!-- Stage 4 -->
+    <rect x="584" y="16" width="168" height="124" rx="14" class="diagram-node diagram-node--accent" />
+    <circle cx="610" cy="42" r="13" class="diagram-badge" />
+    <text x="610" y="46.5" text-anchor="middle" class="diagram-badge-num">4</text>
+    <text x="600" y="76" class="diagram-node-title">Discount on quote</text>
+    <text x="600" y="97" class="diagram-node-sub">Deducted upfront</text>
+    <text x="600" y="115" class="diagram-node-sub">(min co-pay applies)</text>
+  </svg>
+
+  <svg
+    class="diagram-svg diagram-svg--mobile"
+    viewBox="0 0 340 198"
+    role="img"
+    aria-labelledby={`${titleId}-m ${descId}-m`}
+  >
+    <title id={`${titleId}-m`}>How a VEU discount works</title>
+    <desc id={`${descId}-m`}>
+      Four stages: 1. You contact an accredited provider before work starts; 2. Accredited provider confirms product and quote; 3. Certificates (VEECs) are created; 4. Discount comes off your upfront quote.
+    </desc>
+
+    <!-- 1 -->
+    <rect x="6" y="6" width="152" height="82" rx="12" class="diagram-node" />
+    <circle cx="25" cy="25" r="10" class="diagram-badge" />
+    <text x="25" y="29" text-anchor="middle" class="diagram-badge-num">1</text>
+    <text x="41" y="29" class="diagram-node-title">You</text>
+    <text x="16" y="51" class="diagram-node-sub">Engage provider</text>
+    <text x="16" y="67" class="diagram-node-sub">before work starts</text>
+
+    <path d="M162 47h14m-4-4l5 4-5 4" class="diagram-arrow" />
+
+    <!-- 2 -->
+    <rect x="182" y="6" width="152" height="82" rx="12" class="diagram-node" />
+    <circle cx="201" cy="25" r="10" class="diagram-badge" />
+    <text x="201" y="29" text-anchor="middle" class="diagram-badge-num">2</text>
+    <text x="217" y="29" class="diagram-node-title">Provider</text>
+    <text x="192" y="51" class="diagram-node-sub">Confirms product</text>
+    <text x="192" y="67" class="diagram-node-sub">&amp; written quote</text>
+
+    <path d="M258 92v14m-4-4l4 4 4-4" class="diagram-arrow" />
+
+    <!-- 3 -->
+    <rect x="182" y="110" width="152" height="82" rx="12" class="diagram-node" />
+    <circle cx="201" cy="129" r="10" class="diagram-badge" />
+    <text x="201" y="133" text-anchor="middle" class="diagram-badge-num">3</text>
+    <text x="217" y="133" class="diagram-node-title">Certificates</text>
+    <text x="192" y="155" class="diagram-node-sub">VEECs created</text>
+    <text x="192" y="171" class="diagram-node-sub">from CO₂-e saved</text>
+
+    <path d="M178 151h-14m4-4l-5 4 5 4" class="diagram-arrow" />
+
+    <!-- 4 -->
+    <rect x="6" y="110" width="152" height="82" rx="12" class="diagram-node diagram-node--accent" />
+    <circle cx="25" cy="129" r="10" class="diagram-badge" />
+    <text x="25" y="133" text-anchor="middle" class="diagram-badge-num">4</text>
+    <text x="41" y="133" class="diagram-node-title">Quote discount</text>
+    <text x="16" y="155" class="diagram-node-sub">Off your invoice</text>
+    <text x="16" y="171" class="diagram-node-sub">(min co-pay applies)</text>
+  </svg>
+
+  <figcaption class="diagram-caption">
+    <strong>How a VEU discount works:</strong> {caption}
+  </figcaption>
+</figure>

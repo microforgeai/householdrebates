@@ -3,24 +3,35 @@ import Money from './Money.astro';
 
 export interface Props {
   text: string;
+  maxSentences?: number;
 }
 
-const { text } = Astro.props;
+const { text, maxSentences } = Astro.props;
+
+const effectiveText =
+  typeof maxSentences === 'number' && maxSentences > 0
+    ? text
+        .split(/(?<=[.!?])\s+/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+        .slice(0, maxSentences)
+        .join(' ')
+    : text;
 
 type Token = { kind: 'text'; value: string } | { kind: 'money'; id: string };
 const tokens: Token[] = [];
 const re = /<Money\s+id=["']([^"']+)["']\s*\/>/g;
 let lastIndex = 0;
 let m: RegExpExecArray | null;
-while ((m = re.exec(text)) !== null) {
+while ((m = re.exec(effectiveText)) !== null) {
   if (m.index > lastIndex) {
-    tokens.push({ kind: 'text', value: text.slice(lastIndex, m.index) });
+    tokens.push({ kind: 'text', value: effectiveText.slice(lastIndex, m.index) });
   }
   tokens.push({ kind: 'money', id: m[1] });
   lastIndex = m.index + m[0].length;
 }
-if (lastIndex < text.length) {
-  tokens.push({ kind: 'text', value: text.slice(lastIndex) });
+if (lastIndex < effectiveText.length) {
+  tokens.push({ kind: 'text', value: effectiveText.slice(lastIndex) });
 }
 ---
 

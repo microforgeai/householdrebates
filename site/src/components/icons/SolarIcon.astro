@@ -1,0 +1,14 @@
+---
+export interface Props {
+  size?: number;
+  class?: string;
+}
+const { size = 24, class: className } = Astro.props;
+---
+<svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+  <circle cx="17.5" cy="6.5" r="2.5" />
+  <path d="M17.5 2v1.25M22 6.5h-1.25M20.7 3.3l-.9.9" />
+  <polygon points="3.5 19.5 6.5 10.5 16.5 10.5 19.5 19.5" />
+  <line x1="5" y1="15" x2="18" y2="15" />
+  <line x1="11.5" y1="10.5" x2="11.5" y2="19.5" />
+</svg>

@@ -9,9 +9,10 @@ export interface Props {
   id: string;
   variant?: 'inline' | 'block';
   label?: string;
+  linkSource?: boolean;
 }
 
-const { id, variant = 'inline', label } = Astro.props;
+const { id, variant = 'inline', label, linkSource = true } = Astro.props;
 const entry = await getEntry('figures', id);
 if (!entry) {
   throw new Error(`<Money id="${id}" /> references a figure ID that does not exist in figures collection.`);
@@ -58,7 +59,7 @@ const checkedStr = formatAuDate(fig.checkedOn);
 
 {variant === 'block' ? (
   <figure
-    class="money-block"
+    class={linkSource ? 'money-block' : 'money-block money-block--card'}
     data-money-block
     data-figure={fig.id}
     data-figure-id={fig.id}
@@ -78,10 +79,16 @@ const checkedStr = formatAuDate(fig.checkedOn);
       </span>
     )}
     <span class="money-block__meta">
-      Checked on {checkedStr} ·{' '}
-      <a href={sourceEntry.data.url} target="_blank" rel="noopener noreferrer">
-        {sourceEntry.data.publisher} ↗
-      </a>
+      {linkSource ? (
+        <>
+          Checked on {checkedStr} ·{' '}
+          <a href={sourceEntry.data.url} target="_blank" rel="noopener noreferrer">
+            {sourceEntry.data.publisher} ↗
+          </a>
+        </>
+      ) : (
+        <>Checked {checkedStr} · {sourceEntry.data.publisher}</>
+      )}
     </span>
   </figure>
 ) : (
@@ -92,16 +99,18 @@ const checkedStr = formatAuDate(fig.checkedOn);
     data-figure-basis={fig.basis ?? 'official'}
   >
     {formattedAmount}
-    <sup class="money-inline__sup">
-      <a
-        href={sourceEntry.data.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={`Source: ${sourceEntry.data.publisher}, checked ${checkedStr}`}
-        title={`Source: ${sourceEntry.data.title} (${sourceEntry.data.publisher}, checked ${checkedStr})`}
-      >
-        [source]
-      </a>
-    </sup>
+    {linkSource && (
+      <sup class="money-inline__sup">
+        <a
+          href={sourceEntry.data.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Source: ${sourceEntry.data.publisher}, checked ${checkedStr}`}
+          title={`Source: ${sourceEntry.data.title} (${sourceEntry.data.publisher}, checked ${checkedStr})`}
+        >
+          [source]
+        </a>
+      </sup>
+    )}
   </span>
 )}

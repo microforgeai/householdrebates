@@ -8,21 +8,41 @@ site/data-src/
 data-src/
 api/dist/
 
-# Databases & local state
+# Databases, backups & local state
 *.db
 *.db-shm
 *.db-wal
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+*.sqlite3
+*.sqlite3-shm
+*.sqlite3-wal
+backups/
+*.bak
+*.backup
+*.age
+*.sql
+!api/src/**/migrations/*.sql
 drafts/
 api/drafts/
 
-# Environment & secrets
+# Environment, keys & secrets
 .env
 .env.*
 !.env.example
+*.env
 api.env
+*.key
+*.pem
+*.p12
+*.pfx
+age.txt
+*age-key*
+id_rsa*
+id_ed25519*
+*secret*
+!site/public/.well-known/security.txt
 
 # Logs & test artifacts
 *.log

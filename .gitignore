@@ -50,6 +50,8 @@ playwright-report/
 test-results/
 coverage/
 
-# OS
+# OS & Python bytecode
 .DS_Store
 Thumbs.db
+__pycache__/
+*.py[cod]

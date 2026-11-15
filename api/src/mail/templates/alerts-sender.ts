@@ -7,7 +7,7 @@ export interface AlertsSenderInfo {
 // IMPORTANT (#22): When setting ALERTS_SENDER_ADDRESS, use a PO box or Agenor's registered office
 // (never a private family home address). Details must remain accurate for at least 30 days after each send.
 export const ALERTS_SENDER_TEMPLATE =
-  'Household Rebates is run by Agenor Services Pty Ltd, ABN <<ABN>>, <<postal or contact address>>, <<contact email>>.';
+  'Household Rebates is run by Agenor Services Pty Ltd, ABN {{ABN}}, {{POSTAL_OR_CONTACT_ADDRESS}}, {{CONTACT_EMAIL}}.';
 
 export const ALERTS_INDEPENDENCE_LINE =
   "We're not a government website and we are not affiliated with, endorsed by, or representing the Victorian Government, Energy Victoria, Solar Victoria, the Department of Energy, Environment and Climate Action (DEECA), the Essential Services Commission (ESC), the Australian Government, the Clean Energy Regulator or any council.";
@@ -22,7 +22,12 @@ export function escapeHtml(value: string): string {
 }
 
 export function assertNoUnresolvedPlaceholders(value: string, label: string): void {
-  if (value.includes('<<') || value.includes('>>')) {
+  if (
+    value.includes('\u003c\u003c') ||
+    value.includes('\u003e\u003e') ||
+    value.includes('{{') ||
+    value.includes('}}')
+  ) {
     throw new Error(`Unresolved placeholder in ${label}: "${value}"`);
   }
 }
@@ -46,9 +51,9 @@ export function renderAlertsSenderBlock(sender: AlertsSenderInfo): string {
     );
   }
 
-  const rendered = ALERTS_SENDER_TEMPLATE.replace('<<ABN>>', abn)
-    .replace('<<postal or contact address>>', address)
-    .replace('<<contact email>>', email);
+  const rendered = ALERTS_SENDER_TEMPLATE.replace('{{ABN}}', abn)
+    .replace('{{POSTAL_OR_CONTACT_ADDRESS}}', address)
+    .replace('{{CONTACT_EMAIL}}', email);
 
   assertNoUnresolvedPlaceholders(rendered, 'alerts sender block');
   return rendered;

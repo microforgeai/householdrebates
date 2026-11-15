@@ -20,7 +20,7 @@ export interface AlertsApp5Notice {
 export const ALERT_TOPICS: readonly AlertTopic[] = rawTopics;
 
 const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
-const PLACEHOLDER_RE = /<<|>>/;
+const PLACEHOLDER_RE = /\u003c\u003c|\u003e\u003e/;
 
 export function todayMelbourneIsoDate(now: Date = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', {
@@ -72,27 +72,33 @@ export function resolveAlertsApp5Notice(
   const rawServerCountry = (
     env.PUBLIC_SERVER_COUNTRY ??
     env.SERVER_COUNTRY ??
-    '<<SERVER_COUNTRY>>'
+    'Malaysia'
   ).trim();
-  const rawProvider = (env.PUBLIC_ALERTS_PROVIDER ?? '').trim();
-  const rawOverseas = (env.PUBLIC_ALERTS_OVERSEAS_NOTE ?? '').trim();
+  const rawProvider = (
+    env.PUBLIC_ALERTS_PROVIDER ??
+    'Hostinger Mail (Hostinger International Ltd)'
+  ).trim();
+  const rawOverseas = (
+    env.PUBLIC_ALERTS_OVERSEAS_NOTE ??
+    '; it stores mail in France and Germany'
+  ).trim();
 
   if (!cleanAbn || PLACEHOLDER_RE.test(cleanAbn)) {
     throw new Error('APP 5 collection notice requires a resolved ABN without placeholders.');
   }
   if (!rawServerCountry || PLACEHOLDER_RE.test(rawServerCountry)) {
     throw new Error(
-      'PUBLIC_SERVER_COUNTRY must be set (without <<...>> placeholders) before building or enabling rule-change alerts.',
+      'PUBLIC_SERVER_COUNTRY must be set (without \u003c\u003c...\u003e\u003e placeholders) before building or enabling rule-change alerts.',
     );
   }
   if (!rawProvider || PLACEHOLDER_RE.test(rawProvider)) {
     throw new Error(
-      'PUBLIC_ALERTS_PROVIDER must be set (without <<...>> placeholders) before building or enabling rule-change alerts.',
+      'PUBLIC_ALERTS_PROVIDER must be set (without \u003c\u003c...\u003e\u003e placeholders) before building or enabling rule-change alerts.',
     );
   }
   if (!rawOverseas || PLACEHOLDER_RE.test(rawOverseas)) {
     throw new Error(
-      'PUBLIC_ALERTS_OVERSEAS_NOTE must be set (for example "; it stores data in the United States and Ireland", or "none" when data stays in Australia, without <<...>> placeholders) before building or enabling rule-change alerts.',
+      'PUBLIC_ALERTS_OVERSEAS_NOTE must be set (for example "; it stores mail in France and Germany", or "none" when data stays in Australia, without \u003c\u003c...\u003e\u003e placeholders) before building or enabling rule-change alerts.',
     );
   }
   if (/outside\s+australia/i.test(rawOverseas)) {

@@ -19,6 +19,26 @@ const tempInstallerPath = path.join(
   siteRoot,
   'src/content/installers/_e2e-mock-installer.yaml',
 );
+const buildLockDir = path.join(os.tmpdir(), 'hr-e2e-astro-build.lock');
+
+async function acquireBuildLock(): Promise<() => void> {
+  const deadline = Date.now() + 60_000;
+  while (Date.now() < deadline) {
+    try {
+      fs.mkdirSync(buildLockDir);
+      return () => {
+        try {
+          fs.rmdirSync(buildLockDir);
+        } catch {
+          // ignore
+        }
+      };
+    } catch {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+  }
+  throw new Error('Timed out waiting for e2e astro build lock');
+}
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -76,6 +96,7 @@ test.describe('LeadForm on-screen consent vs stored renderConsentSnapshot() (#6 
       '',
     ].join('\n');
 
+    const releaseLock = await acquireBuildLock();
     fs.writeFileSync(tempInstallerPath, mockYaml, 'utf8');
     try {
       execFileSync(astroBin, ['build', '--outDir', tempOutDir], {
@@ -93,6 +114,7 @@ test.describe('LeadForm on-screen consent vs stored renderConsentSnapshot() (#6 
       if (fs.existsSync(tempInstallerPath)) {
         fs.unlinkSync(tempInstallerPath);
       }
+      releaseLock();
     }
 
     enabledServer = http.createServer((req, res) => {

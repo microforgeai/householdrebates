@@ -8,8 +8,9 @@ export const SITE = {
     abnDigits: '29644447263',
     author: 'Gurinder Singh',
     location: 'Melbourne, Victoria, Australia',
-    email: 'info@householdrebates.com.au',
+    email: 'hello@householdrebates.com.au',
     privacyEmail: 'privacy@householdrebates.com.au',
+    serverCountry: process.env.PUBLIC_SERVER_COUNTRY || process.env.SERVER_COUNTRY || 'Malaysia',
     sameAs: [
       'https://www.agenorit.com.au',
     ],

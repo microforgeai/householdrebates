@@ -1,4 +1,4 @@
-Contact: mailto:security@householdrebates.com.au
+Contact: mailto:hello@householdrebates.com.au
 Expires: 2027-11-13T00:00:00.000Z
 Preferred-Languages: en
 Canonical: https://householdrebates.com.au/.well-known/security.txt

@@ -78,7 +78,18 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
     );
   });
 
-  it('resolves APP 5 collection notice placeholders (#8a/b/c) and rejects missing server country or vague "outside Australia"', () => {
+  it('resolves APP 5 collection notice with confirmed defaults and rejects placeholders, empty values, or vague "outside Australia"', () => {
+    const confirmedDefaults = resolveAlertsApp5Notice({}, '29 644 447 263');
+    expect(confirmedDefaults.markdownText).toBe(
+      "Household Rebates (Agenor Services Pty Ltd, ABN 29 644 447 263, privacy@householdrebates.com.au) collects your email address only to send rule-change alerts you've asked for. " +
+        "If you don't give it, we can't send them. " +
+        'Your email address is stored on our server in Malaysia. ' +
+        "We don't share it with installers or anyone else, except our email service provider, Hostinger Mail (Hostinger International Ltd), which sends the emails for us; it stores mail in France and Germany. " +
+        "Our [privacy policy](/privacy/) explains how to access or correct your details and how to complain. We're not a government website.",
+    );
+    expect(confirmedDefaults.fullText).not.toMatch(/<<|>>/);
+    expect(confirmedDefaults.fullText).not.toContain('$');
+
     const withOverseas = resolveAlertsApp5Notice(
       {
         PUBLIC_SERVER_COUNTRY: 'Malaysia',
@@ -111,9 +122,18 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
     );
     expect(auOnly.fullText).not.toMatch(/<<|>>/);
 
-    // Missing PUBLIC_SERVER_COUNTRY -> fails closed
+    // Empty or placeholder PUBLIC_SERVER_COUNTRY -> fails closed
     expect(() =>
       resolveAlertsApp5Notice({
+        PUBLIC_SERVER_COUNTRY: '',
+        PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
+      }),
+    ).toThrow(/PUBLIC_SERVER_COUNTRY/);
+
+    expect(() =>
+      resolveAlertsApp5Notice({
+        PUBLIC_SERVER_COUNTRY: '<<SERVER_COUNTRY>>',
         PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
         PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
       }),
@@ -131,6 +151,7 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
     expect(() =>
       resolveAlertsApp5Notice({
         PUBLIC_SERVER_COUNTRY: 'Malaysia',
+        PUBLIC_ALERTS_PROVIDER: '',
         PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
       }),
     ).toThrow(/PUBLIC_ALERTS_PROVIDER/);
@@ -139,14 +160,20 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
       resolveAlertsApp5Notice({
         PUBLIC_SERVER_COUNTRY: 'Malaysia',
         PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
+        PUBLIC_ALERTS_OVERSEAS_NOTE: '',
       }),
     ).toThrow(/PUBLIC_ALERTS_OVERSEAS_NOTE/);
   });
 
-  it('check-legal passes with flags off and blocks PUBLIC_LEADS_ENABLED=true, PUBLIC_ALERTS_ENABLED=true, and RELEASE_ID while <<SERVER_COUNTRY>> / <<...>> or pending election status remain', () => {
+  it('check-legal passes info-only production deploy (RELEASE_ID=prod-test with flags off) even while <<ALERTS_SENDER_ADDRESS>> stays in api config, and blocks PUBLIC_ALERTS_ENABLED=true and PUBLIC_LEADS_ENABLED=true', () => {
     const checkLegalScript = path.join(siteRoot, 'scripts/check-legal.mjs');
+    const apiAlertsCfgRaw = fs.readFileSync(
+      path.join(repoRoot, 'api/src/alerts/config.ts'),
+      'utf8',
+    );
+    expect(apiAlertsCfgRaw).toContain('<<ALERTS_SENDER_ADDRESS>>');
 
-    const okOut = execFileSync(process.execPath, [checkLegalScript], {
+    const okDevOut = execFileSync(process.execPath, [checkLegalScript], {
       cwd: siteRoot,
       env: {
         ...process.env,
@@ -156,9 +183,23 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
       },
       encoding: 'utf8',
     });
-    expect(okOut).toContain('check-legal: OK');
+    expect(okDevOut).toContain('check-legal: OK');
 
-    // Alerts enabled -> blocked by lawyer flags, pending election, and <<SERVER_COUNTRY>> / <<...>> placeholders
+    // Info-only production deploy (RELEASE_ID=prod-test, flags off) MUST pass even with <<ALERTS_SENDER_ADDRESS>> in api config
+    const okProdOut = execFileSync(process.execPath, [checkLegalScript], {
+      cwd: siteRoot,
+      env: {
+        ...process.env,
+        PUBLIC_LEADS_ENABLED: 'false',
+        PUBLIC_ALERTS_ENABLED: 'false',
+        RELEASE_ID: 'prod-test',
+      },
+      encoding: 'utf8',
+    });
+    expect(okProdOut).toContain('check-legal: OK');
+    expect(okProdOut).toContain('productionBuild=true');
+
+    // Alerts enabled -> blocked by ALERTS_SENDER_ADDRESS placeholder, lawyer flags, and pending election
     let alertsFailed = false;
     let alertsStderr = '';
     try {
@@ -168,8 +209,6 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
           ...process.env,
           PUBLIC_LEADS_ENABLED: 'false',
           PUBLIC_ALERTS_ENABLED: 'true',
-          PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-          PUBLIC_ALERTS_OVERSEAS_NOTE: 'none',
         },
         encoding: 'utf8',
         stdio: 'pipe',
@@ -179,11 +218,12 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
       alertsStderr = String((err as { stderr?: string }).stderr ?? '');
     }
     expect(alertsFailed).toBe(true);
+    expect(alertsStderr).toContain('<<ALERTS_SENDER_ADDRESS>>');
     expect(alertsStderr).toContain('alertsLegalReviewed=false');
+    expect(alertsStderr).toContain('legalReviewed=false');
     expect(alertsStderr).toContain('electionWatch.status="pending"');
-    expect(alertsStderr).toContain('<<SERVER_COUNTRY>>');
 
-    // Leads enabled -> blocked by lawyer flags, pending election (#11), and <<SERVER_COUNTRY>> / <<...>> placeholders (#1)
+    // Leads enabled -> blocked by lawyer flags and pending election (#11)
     let leadsFailed = false;
     let leadsStderr = '';
     try {
@@ -204,28 +244,5 @@ describe('Rule-change email alerts (Prompt 29b & Prompt 40 legal fixes)', () => 
     expect(leadsFailed).toBe(true);
     expect(leadsStderr).toContain('legalReviewed=false');
     expect(leadsStderr).toContain('electionWatch.status="pending"');
-    expect(leadsStderr).toContain('<<SERVER_COUNTRY>>');
-
-    // Production deploy (RELEASE_ID set) -> blocked while <<SERVER_COUNTRY>> is in privacy.mdx (#1)
-    let prodFailed = false;
-    let prodStderr = '';
-    try {
-      execFileSync(process.execPath, [checkLegalScript], {
-        cwd: siteRoot,
-        env: {
-          ...process.env,
-          PUBLIC_LEADS_ENABLED: 'false',
-          PUBLIC_ALERTS_ENABLED: 'false',
-          RELEASE_ID: '20261115-prod-test',
-        },
-        encoding: 'utf8',
-        stdio: 'pipe',
-      });
-    } catch (err: unknown) {
-      prodFailed = true;
-      prodStderr = String((err as { stderr?: string }).stderr ?? '');
-    }
-    expect(prodFailed).toBe(true);
-    expect(prodStderr).toContain('<<SERVER_COUNTRY>>');
   });
 });

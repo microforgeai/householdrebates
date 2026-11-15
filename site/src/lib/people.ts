@@ -60,7 +60,7 @@ const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 export function hasPlaceholderToken(value: unknown): boolean {
   if (typeof value === 'string') {
-    return /<<|>>/.test(value);
+    return /\u003c\u003c|\u003e\u003e/.test(value);
   }
   if (Array.isArray(value)) {
     return value.some((item) => hasPlaceholderToken(item));
@@ -194,35 +194,35 @@ export function validatePeoplePublishingRules(options: {
   }
 
   if (typeof author.name !== 'string' || !author.name.trim() || hasPlaceholderToken(author.name)) {
-    errors.push('people.json["gurinder-singh"].name is missing or contains a <<...>> placeholder');
+    errors.push('people.json["gurinder-singh"].name is missing or contains a \u003c\u003c...\u003e\u003e placeholder');
   }
   if (typeof author.role !== 'string' || !author.role.trim() || hasPlaceholderToken(author.role)) {
-    errors.push('people.json["gurinder-singh"].role is missing or contains a <<...>> placeholder');
+    errors.push('people.json["gurinder-singh"].role is missing or contains a \u003c\u003c...\u003e\u003e placeholder');
   }
 
   const bioReady = isAuthorBioReady(people);
 
   if (forceAuthorPublish && !bioReady) {
     errors.push(
-      'Cannot publish /about/gurinder-singh/ while people.json["gurinder-singh"].bio is empty or holds a <<...>> placeholder (Guri must supply his bio first)',
+      'Cannot publish /about/gurinder-singh/ while people.json["gurinder-singh"].bio is empty or holds a \u003c\u003c...\u003e\u003e placeholder (Guri must supply his bio first)',
     );
   }
 
-  // Once bio is supplied (publishing the author page), NO other author field may hold a <<...>> placeholder
+  // Once bio is supplied (publishing the author page), NO other author field may hold an angle-bracket placeholder
   if (bioReady) {
     if (author.credentials !== undefined && hasPlaceholderToken(author.credentials)) {
       errors.push(
-        'people.json["gurinder-singh"].credentials still holds a <<...>> placeholder; supply credentials from Guri or remove the field before publishing /about/gurinder-singh/',
+        'people.json["gurinder-singh"].credentials still holds a \u003c\u003c...\u003e\u003e placeholder; supply credentials from Guri or remove the field before publishing /about/gurinder-singh/',
       );
     }
     if (author.image !== undefined && hasPlaceholderToken(author.image)) {
       errors.push(
-        'people.json["gurinder-singh"].image still holds a <<...>> placeholder; supply a photo path from Guri or remove the field before publishing /about/gurinder-singh/',
+        'people.json["gurinder-singh"].image still holds a \u003c\u003c...\u003e\u003e placeholder; supply a photo path from Guri or remove the field before publishing /about/gurinder-singh/',
       );
     }
     if (Array.isArray(author.sameAs) && hasPlaceholderToken(author.sameAs)) {
       errors.push(
-        'people.json["gurinder-singh"].sameAs still holds a <<...>> placeholder; supply Guri\'s profile URLs or set sameAs to [] before publishing /about/gurinder-singh/',
+        'people.json["gurinder-singh"].sameAs still holds a \u003c\u003c...\u003e\u003e placeholder; supply Guri\'s profile URLs or set sameAs to [] before publishing /about/gurinder-singh/',
       );
     }
   }
@@ -233,23 +233,23 @@ export function validatePeoplePublishingRules(options: {
     );
     if (!bioReady && !htmlHasNoindex) {
       errors.push(
-        'dist/about/gurinder-singh/index.html is missing noindex while people.json["gurinder-singh"].bio is still a placeholder',
+        'dist/about/gurinder-singh/index.html is missing noindex while people.json["gurinder-singh"].bio is still empty or a placeholder',
       );
     }
-    if (/<<|>>|&lt;&lt;|&gt;&gt;/.test(authorHtml)) {
-      errors.push('dist/about/gurinder-singh/index.html contains unresolved <<...>> placeholder text');
+    if (/\u003c\u003c|\u003e\u003e|&lt;&lt;|&gt;&gt;/.test(authorHtml)) {
+      errors.push('dist/about/gurinder-singh/index.html contains unresolved \u003c\u003c...\u003e\u003e placeholder text');
     }
   }
 
   if (!bioReady && typeof sitemapXml === 'string' && sitemapXml.includes('/about/gurinder-singh/')) {
     errors.push(
-      'sitemap-0.xml includes /about/gurinder-singh/ while people.json["gurinder-singh"].bio is still a placeholder',
+      'sitemap-0.xml includes /about/gurinder-singh/ while people.json["gurinder-singh"].bio is still empty or a placeholder',
     );
   }
 
   if (!bioReady && typeof llmsTxt === 'string' && llmsTxt.includes('/about/gurinder-singh/')) {
     errors.push(
-      'llms.txt includes /about/gurinder-singh/ while people.json["gurinder-singh"].bio is still a placeholder',
+      'llms.txt includes /about/gurinder-singh/ while people.json["gurinder-singh"].bio is still empty or a placeholder',
     );
   }
 
@@ -259,7 +259,7 @@ export function validatePeoplePublishingRules(options: {
     people.reviewers.forEach((rev, idx) => {
       if (hasPlaceholderToken(rev)) {
         errors.push(
-          `people.json.reviewers[${idx}] contains unresolved <<...>> placeholder values; keep reviewers: [] until a real reviewer signs in writing`,
+          `people.json.reviewers[${idx}] contains unresolved \u003c\u003c...\u003e\u003e placeholder values; keep reviewers: [] until a real reviewer signs in writing`,
         );
       } else if (!isValidSignedReviewer(rev)) {
         errors.push(

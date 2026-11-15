@@ -321,8 +321,8 @@ export function validateSchemaGraph(
   if (/\$[0-9]/.test(serialized) || /\bAUD\b/.test(serialized)) {
     throw new Error('JSON-LD schema must never contain currency amounts or AUD prices.');
   }
-  if (/<<|>>/.test(serialized)) {
-    throw new Error('JSON-LD schema must never contain unresolved <<...>> placeholders.');
+  if (/\u003c\u003c|\u003e\u003e/.test(serialized)) {
+    throw new Error('JSON-LD schema must never contain unresolved \u003c\u003c...\u003e\u003e placeholders.');
   }
 
   const peopleData = context?.people ?? getDefaultPeopleData();

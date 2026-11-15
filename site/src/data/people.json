@@ -2,24 +2,8 @@
   "gurinder-singh": {
     "name": "Gurinder Singh",
     "role": "Editor, Household Rebates; director, Agenor Services Pty Ltd",
-    "bio": "<<GURI_BIO: 2–4 sentences, from Guri>>",
-    "credentials": "<<GURI_CREDENTIALS: from Guri, or remove the field>>",
-    "image": "<<GURI_PHOTO: path, or remove>>",
-    "sameAs": ["<<GURI_PROFILE_URLS: from Guri, e.g. LinkedIn; or empty>>"]
+    "bio": "",
+    "sameAs": []
   },
-  "reviewers": [],
-  "reviewerTemplate": {
-    "id": "<<REVIEWER_ID: kebab-case slug>>",
-    "name": "<<REVIEWER_NAME: real person who signed in writing>>",
-    "licence": {
-      "type": "<<REVIEWER_LICENCE_TYPE: e.g. VBA Licensed Plumber / ESV REC>>",
-      "number": "<<REVIEWER_LICENCE_NUMBER: verifiable on public register>>"
-    },
-    "scope": ["<<REVIEWER_SCOPE: e.g. hot-water, heating-cooling>>"],
-    "paidInstaller": false,
-    "agreementSignedOn": "<<REVIEWER_SIGNED_DATE: YYYY-MM-DD>>",
-    "reviewedPages": [
-      { "url": "<<REVIEWED_PAGE_URL>>", "date": "<<REVIEWED_DATE: YYYY-MM-DD>>" }
-    ]
-  }
+  "reviewers": []
 }

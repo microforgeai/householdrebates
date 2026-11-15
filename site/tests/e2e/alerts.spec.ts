@@ -10,6 +10,26 @@ import { expect, test } from '@playwright/test';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, '../..');
+const buildLockDir = path.join(os.tmpdir(), 'hr-e2e-astro-build.lock');
+
+async function acquireBuildLock(): Promise<() => void> {
+  const deadline = Date.now() + 60_000;
+  while (Date.now() < deadline) {
+    try {
+      fs.mkdirSync(buildLockDir);
+      return () => {
+        try {
+          fs.rmdirSync(buildLockDir);
+        } catch {
+          // ignore
+        }
+      };
+    } catch {
+      await new Promise((r) => setTimeout(r, 100));
+    }
+  }
+  throw new Error('Timed out waiting for e2e astro build lock');
+}
 
 const MIME: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -31,18 +51,23 @@ test.describe('Rule-change email alerts (Prompt 29b)', () => {
     tempOutDir = fs.mkdtempSync(path.join(os.tmpdir(), 'hr-alerts-29b-'));
 
     const astroBin = path.join(siteRoot, 'node_modules/.bin/astro');
-    execFileSync(astroBin, ['build', '--outDir', tempOutDir], {
-      cwd: siteRoot,
-      env: {
-        ...process.env,
-        PUBLIC_LEADS_ENABLED: 'false',
-        PUBLIC_ALERTS_ENABLED: 'true',
-        PUBLIC_SERVER_COUNTRY: 'Malaysia',
-        PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
-        PUBLIC_ALERTS_OVERSEAS_NOTE: '; it stores data in the United States and Ireland',
-      },
-      stdio: 'pipe',
-    });
+    const releaseLock = await acquireBuildLock();
+    try {
+      execFileSync(astroBin, ['build', '--outDir', tempOutDir], {
+        cwd: siteRoot,
+        env: {
+          ...process.env,
+          PUBLIC_LEADS_ENABLED: 'false',
+          PUBLIC_ALERTS_ENABLED: 'true',
+          PUBLIC_SERVER_COUNTRY: 'Malaysia',
+          PUBLIC_ALERTS_PROVIDER: 'Example Mail Pty Ltd',
+          PUBLIC_ALERTS_OVERSEAS_NOTE: '; it stores data in the United States and Ireland',
+        },
+        stdio: 'pipe',
+      });
+    } finally {
+      releaseLock();
+    }
 
     // Enforce the < 3 KB gzipped AlertSignup bundle guard on the enabled build too
     execFileSync(process.execPath, [path.join(siteRoot, 'scripts/check-bundles.mjs')], {

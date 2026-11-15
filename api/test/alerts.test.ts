@@ -28,11 +28,11 @@ function makeBaseApiConfig(overrides: Partial<ApiConfig> = {}): ApiConfig {
     formTokenSecret: 'test-form-token-secret-67890',
     mailTransport: 'memory',
     mailFrom: 'Household Rebates <quotes@householdrebates.com.au>',
-    leadsNotifyTo: 'info@householdrebates.com.au',
+    leadsNotifyTo: 'hello@householdrebates.com.au',
     privacyPolicyVersion: '2026-11-15-v2',
     consentReviewedBy: '',
     serverCountry: 'Malaysia',
-    leadsEmailProviderNote: 'Postmark (United States)',
+    leadsEmailProviderNote: 'Hostinger Mail, which stores mail in France and Germany',
     installersPath: 'installers.json',
     ...overrides,
   };

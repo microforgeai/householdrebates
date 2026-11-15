@@ -5,9 +5,11 @@ import YAML from 'yaml';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const siteRoot = path.resolve(__dirname, '..');
+const repoRoot = path.resolve(siteRoot, '..');
 const pagesDir = path.join(siteRoot, 'src/content/pages');
 const ruleStatusPath = path.join(siteRoot, 'src/data/rule-status.json');
 const peoplePath = path.join(siteRoot, 'src/data/people.json');
+const apiAlertsConfigPath = path.join(repoRoot, 'api/src/alerts/config.ts');
 const distDir = path.join(siteRoot, 'dist');
 
 const leadsEnabled = process.env.PUBLIC_LEADS_ENABLED === 'true';
@@ -141,7 +143,7 @@ if (leadsEnabled) {
   const serverCountry = (
     process.env.PUBLIC_SERVER_COUNTRY ??
     process.env.SERVER_COUNTRY ??
-    ''
+    'Malaysia'
   ).trim();
   if (!serverCountry || /<<|>>/.test(serverCountry)) {
     blockers.push(
@@ -152,7 +154,7 @@ if (leadsEnabled) {
   const leadsEmailNote = (
     process.env.PUBLIC_LEADS_EMAIL_PROVIDER_NOTE ??
     process.env.LEADS_EMAIL_PROVIDER_NOTE ??
-    ''
+    'Hostinger Mail, which stores mail in France and Germany'
   ).trim();
   if (!leadsEmailNote || /<<|>>/.test(leadsEmailNote)) {
     blockers.push(
@@ -194,7 +196,7 @@ if (alertsEnabled) {
   const serverCountry = (
     process.env.PUBLIC_SERVER_COUNTRY ??
     process.env.SERVER_COUNTRY ??
-    ''
+    'Malaysia'
   ).trim();
   if (!serverCountry || /<<|>>/.test(serverCountry)) {
     blockers.push(
@@ -202,18 +204,43 @@ if (alertsEnabled) {
     );
   }
 
-  const provider = (process.env.PUBLIC_ALERTS_PROVIDER ?? '').trim();
-  const overseasNote = (process.env.PUBLIC_ALERTS_OVERSEAS_NOTE ?? '').trim();
+  const provider = (
+    process.env.PUBLIC_ALERTS_PROVIDER ??
+    'Hostinger Mail (Hostinger International Ltd)'
+  ).trim();
+  const overseasNote = (
+    process.env.PUBLIC_ALERTS_OVERSEAS_NOTE ??
+    '; it stores mail in France and Germany'
+  ).trim();
   if (!provider || /<<|>>/.test(provider)) {
     blockers.push('PUBLIC_ALERTS_PROVIDER is unset or contains unresolved <<...>> placeholders');
   }
   if (!overseasNote || /<<|>>/.test(overseasNote)) {
     blockers.push(
-      'PUBLIC_ALERTS_OVERSEAS_NOTE is unset or contains unresolved <<...>> placeholders (set for example "; it stores data in the United States and Ireland", or "none")',
+      'PUBLIC_ALERTS_OVERSEAS_NOTE is unset or contains unresolved <<...>> placeholders (set for example "; it stores mail in France and Germany", or "none")',
     );
   } else if (/outside\s+australia/i.test(overseasNote)) {
     blockers.push(
-      'PUBLIC_ALERTS_OVERSEAS_NOTE must name specific countries (for example "; it stores data in the United States and Ireland", or "none"), not a vague "outside Australia"',
+      'PUBLIC_ALERTS_OVERSEAS_NOTE must name specific countries (for example "; it stores mail in France and Germany", or "none"), not a vague "outside Australia"',
+    );
+  }
+
+  let defaultAlertsSenderAddress = '';
+  if (fs.existsSync(apiAlertsConfigPath)) {
+    const apiAlertsRaw = fs.readFileSync(apiAlertsConfigPath, 'utf8');
+    const addrMatch = apiAlertsRaw.match(
+      /postalOrContactAddress:\s*env\.ALERTS_SENDER_ADDRESS\s*\?\?\s*(['"`])([^'"`]*)\1/,
+    );
+    if (addrMatch) {
+      defaultAlertsSenderAddress = addrMatch[2];
+    }
+  }
+  const alertsSenderAddress = (
+    process.env.ALERTS_SENDER_ADDRESS ?? defaultAlertsSenderAddress
+  ).trim();
+  if (!alertsSenderAddress || /<<|>>/.test(alertsSenderAddress)) {
+    blockers.push(
+      'ALERTS_SENDER_ADDRESS is unset or still holds <<ALERTS_SENDER_ADDRESS>> in api/src/alerts/config.ts (supply a PO box or registered office before enabling PUBLIC_ALERTS_ENABLED=true)',
     );
   }
 

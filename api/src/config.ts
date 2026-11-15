@@ -79,15 +79,15 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): ApiConfig {
     formTokenSecret: env.FORM_TOKEN_SECRET || 'dev-form-token-secret-change-in-prod',
     mailTransport: (env.MAIL_TRANSPORT as 'smtp' | 'graph' | 'memory') || 'memory',
     mailFrom: env.MAIL_FROM || 'Household Rebates <quotes@householdrebates.com.au>',
-    leadsNotifyTo: env.LEADS_NOTIFY_TO || 'info@householdrebates.com.au',
+    leadsNotifyTo: env.LEADS_NOTIFY_TO || 'hello@householdrebates.com.au',
     privacyPolicyVersion: env.PRIVACY_POLICY_VERSION || '',
     consentReviewedBy: env.CONSENT_REVIEWED_BY || '',
     serverCountry:
-      env.SERVER_COUNTRY || env.PUBLIC_SERVER_COUNTRY || '<<SERVER_COUNTRY>>',
+      env.SERVER_COUNTRY || env.PUBLIC_SERVER_COUNTRY || 'Malaysia',
     leadsEmailProviderNote:
       env.LEADS_EMAIL_PROVIDER_NOTE ||
       env.PUBLIC_LEADS_EMAIL_PROVIDER_NOTE ||
-      '<<EMAIL_PROVIDER_AND_COUNTRY>>',
+      'Hostinger Mail, which stores mail in France and Germany',
     installersPath,
   };
 
@@ -142,15 +142,15 @@ export function assertStartupGuards(cfg: ApiConfig, installers: InstallerRecord[
     );
   }
 
-  if (!cfg.serverCountry.trim() || /<<|>>/.test(cfg.serverCountry)) {
+  if (!cfg.serverCountry.trim() || /\u003c\u003c|\u003e\u003e/.test(cfg.serverCountry)) {
     throw new Error(
-      'Refusing to start with LEADS_ENABLED=true: SERVER_COUNTRY must be set without <<...>> placeholders.',
+      'Refusing to start with LEADS_ENABLED=true: SERVER_COUNTRY must be set without \u003c\u003c...\u003e\u003e placeholders.',
     );
   }
 
-  if (!cfg.leadsEmailProviderNote.trim() || /<<|>>/.test(cfg.leadsEmailProviderNote)) {
+  if (!cfg.leadsEmailProviderNote.trim() || /\u003c\u003c|\u003e\u003e/.test(cfg.leadsEmailProviderNote)) {
     throw new Error(
-      'Refusing to start with LEADS_ENABLED=true: LEADS_EMAIL_PROVIDER_NOTE must be set without <<...>> placeholders.',
+      'Refusing to start with LEADS_ENABLED=true: LEADS_EMAIL_PROVIDER_NOTE must be set without \u003c\u003c...\u003e\u003e placeholders.',
     );
   }
 }

@@ -98,12 +98,12 @@ export function resolveLeadConsentEnv(overrides?: {
     overrides?.serverCountry?.trim() ||
     readEnv('SERVER_COUNTRY') ||
     readEnv('PUBLIC_SERVER_COUNTRY') ||
-    '<<SERVER_COUNTRY>>';
+    'Malaysia';
   const emailProviderAndCountry =
     overrides?.emailProviderAndCountry?.trim() ||
     readEnv('LEADS_EMAIL_PROVIDER_NOTE') ||
     readEnv('PUBLIC_LEADS_EMAIL_PROVIDER_NOTE') ||
-    '<<EMAIL_PROVIDER_AND_COUNTRY>>';
+    'Hostinger Mail, which stores mail in France and Germany';
   return { serverCountry, emailProviderAndCountry };
 }
 

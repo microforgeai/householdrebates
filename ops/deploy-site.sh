@@ -17,6 +17,8 @@ fi
 
 REL="$(date +%Y%m%d-%H%M)-$(git rev-parse --short HEAD)"
 export RELEASE_ID="$REL"
+export PUBLIC_SERVER_COUNTRY="${PUBLIC_SERVER_COUNTRY:-Malaysia}"
+export SERVER_COUNTRY="${SERVER_COUNTRY:-Malaysia}"
 
 echo "Building and verifying site release $REL..."
 npm ci

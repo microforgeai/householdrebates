@@ -1,7 +1,7 @@
 # Lawyer Review Addendum — Rule-Change Email Alerts (`alerts-v2`)
 
 **Client:** Agenor Services Pty Ltd (ABN 29 644 447 263), Melbourne VIC  
-**Contact:** Gurinder Singh (`info@householdrebates.com.au` / `privacy@householdrebates.com.au`)  
+**Contact:** Gurinder Singh (`hello@householdrebates.com.au` / `privacy@householdrebates.com.au`, alias of `hello@householdrebates.com.au`)  
 **Status:** Draft for legal review — all runtime and build flags (`ALERTS_ENABLED`, `ALERTS_SEND_ENABLED`, `PUBLIC_ALERTS_ENABLED`) remain **`false`**, and go-live is technically blocked in code until `ALERTS_REVIEWED_BY` is signed and set after legal review. See also `docs/legal/legal-review-2026-11-15.md`.
 
 ---
@@ -27,9 +27,9 @@ Displayed next to an **unticked** checkbox (`required`, never pre-selected). Exa
 
 ## 3. APP 5 Collection Notice Draft (Displayed Directly Above Submit Button)
 
-The sign-up component (`site/src/components/AlertSignupIsland.astro`) displays this APP 5 collection notice immediately above the submit button. Placeholders resolve at build time via `resolveAlertsApp5Notice` (`site/src/lib/alerts.ts`) from `SITE.publisher.abn`, `SITE.publisher.privacyEmail`, `PUBLIC_SERVER_COUNTRY` (`<<SERVER_COUNTRY>>`), `PUBLIC_ALERTS_PROVIDER`, and `PUBLIC_ALERTS_OVERSEAS_NOTE` (use `"none"` if the chosen provider stores all data in Australia, or name the specific countries such as `"; it stores data in the United States and Ireland"` — vague `"outside Australia"` is rejected at build time). All environment variables are required before `PUBLIC_ALERTS_ENABLED=true`, and the build fails if any is unset or contains unresolved `<<...>>` placeholders:
+The sign-up component (`site/src/components/AlertSignupIsland.astro`) displays this APP 5 collection notice immediately above the submit button. Placeholders resolve at build time via `resolveAlertsApp5Notice` (`site/src/lib/alerts.ts`) from `SITE.publisher.abn`, `SITE.publisher.privacyEmail`, `PUBLIC_SERVER_COUNTRY` (default `"Malaysia"`), `PUBLIC_ALERTS_PROVIDER` (default `"Hostinger Mail (Hostinger International Ltd)"`), and `PUBLIC_ALERTS_OVERSEAS_NOTE` (default `"; it stores mail in France and Germany"`; use `"none"` if a chosen provider stores all data in Australia — vague `"outside Australia"` is rejected at build time):
 
-> Household Rebates (Agenor Services Pty Ltd, ABN `29 644 447 263`, `privacy@householdrebates.com.au`) collects your email address only to send rule-change alerts you've asked for. If you don't give it, we can't send them. Your email address is stored on our server in `<<SERVER_COUNTRY>>`. We don't share it with installers or anyone else, except our email service provider, `<<provider>>`, which sends the emails for us`<<; it stores data in the United States and Ireland>>`. Our [privacy policy](/privacy/) explains how to access or correct your details and how to complain. We're not a government website.
+> Household Rebates (Agenor Services Pty Ltd, ABN `29 644 447 263`, `privacy@householdrebates.com.au`) collects your email address only to send rule-change alerts you've asked for. If you don't give it, we can't send them. Your email address is stored on our server in Malaysia. We don't share it with installers or anyone else, except our email service provider, Hostinger Mail (Hostinger International Ltd), which sends the emails for us; it stores mail in France and Germany. Our [privacy policy](/privacy/) explains how to access or correct your details and how to complain. We're not a government website.
 
 On the Eligibility Checker result screen (`/victoria/eligibility-checker/`), the component also displays directly beneath the form:
 

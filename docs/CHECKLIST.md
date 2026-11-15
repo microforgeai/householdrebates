@@ -45,6 +45,7 @@ Last updated: 15 Nov 2026. Tick with [x] as you go.
 - [ ] Decide: opt Agenor in to the Privacy Act (free OAIC form)
 - [ ] Pick email provider for alerts (alerts stay off until then)
 - [ ] Post-election re-check of rules and figures
+- [ ] Create `/opt/householdrebates-api` owned by the deploy user before lead-form / API go-live
 - [ ] Merge branches
 - [ ] Push to GitHub
 - [ ] Deploy to VPS

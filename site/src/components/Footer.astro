@@ -3,6 +3,8 @@ import { getCollection } from 'astro:content';
 import { SITE } from '../data/site';
 import { isUrlEnabled } from '../lib/rollout';
 
+const isHome = Astro.url.pathname === '/';
+
 const businessHubEnabled = isUrlEnabled('/victoria/business-energy-upgrades/');
 const languageHelpEnabled = isUrlEnabled('/victoria/help-in-your-language/');
 
@@ -88,7 +90,7 @@ const areaGroups = [
   )}
   <div class="site-footer__legal">
     <p>
-      Published by <strong>{SITE.publisher.legalName}</strong> (ABN {SITE.publisher.abn}), {SITE.publisher.location}.
+      Published by <a href="https://www.agenorit.com.au" target="_blank" rel={isHome ? 'noopener' : 'nofollow noopener'}><strong>{SITE.publisher.legalName}</strong></a> (ABN {SITE.publisher.abn}), {SITE.publisher.location}.
       {SITE.name} is an independent publication and does not represent or work for the Victorian Energy Upgrades program, the Essential Services Commission (ESC), or the Victorian Government.
       All discount figures are indicative and sourced from official Energy Victoria publications. Eligibility and final discounts are confirmed by a VEU accredited provider before work begins.
     </p>

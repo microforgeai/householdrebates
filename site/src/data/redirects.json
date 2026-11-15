@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "from": "/sitemap.xml",
+    "to": "/sitemap-index.xml",
+    "code": 301,
+    "reason": "Redirect conventional /sitemap.xml requests to Astro's /sitemap-index.xml",
+    "addedOn": "2026-11-15"
+  }
+]

@@ -14,9 +14,22 @@ if (!Array.isArray(redirects)) {
   throw new Error('src/data/redirects.json must be an array');
 }
 
+function isValidRedirectPath(urlPath) {
+  if (typeof urlPath !== 'string' || !urlPath.startsWith('/')) return false;
+  // Allow trailing-slash page paths (/ or /victoria/foo/) and safe static file paths (/sitemap.xml)
+  return (
+    /^\/(?:[a-z0-9][a-z0-9/-]*\/)?$/i.test(urlPath) ||
+    /^\/[a-z0-9][a-z0-9/_-]*\.[a-z0-9]+$/i.test(urlPath)
+  );
+}
+
 function isBuiltUrl(urlPath) {
   if (!fs.existsSync(distDir)) return true;
-  const rel = urlPath === '/' ? 'index.html' : path.join(urlPath.replace(/^\/|\/$/g, ''), 'index.html');
+  const rel = urlPath.endsWith('/')
+    ? urlPath === '/'
+      ? 'index.html'
+      : path.join(urlPath.replace(/^\/|\/$/g, ''), 'index.html')
+    : urlPath.replace(/^\//, '');
   return fs.existsSync(path.join(distDir, rel));
 }
 
@@ -27,7 +40,7 @@ const lines = [
 
 for (const entry of redirects) {
   const { from, to, code, reason, addedOn } = entry;
-  if (!from || !from.startsWith('/') || !from.endsWith('/')) {
+  if (!isValidRedirectPath(from)) {
     throw new Error(`Invalid redirect "from" path: "${from}"`);
   }
   if (code !== 301 && code !== 410) {
@@ -40,8 +53,8 @@ for (const entry of redirects) {
     throw new Error(`Redirect "from" URL "${from}" is still a built page in dist/`);
   }
   if (code === 301) {
-    if (!to || !to.startsWith('/') || !to.endsWith('/')) {
-      throw new Error(`301 redirect "${from}" requires valid trailing-slash "to" path`);
+    if (!isValidRedirectPath(to)) {
+      throw new Error(`301 redirect "${from}" requires a valid "to" path (got "${to}")`);
     }
     if (fs.existsSync(distDir) && !isBuiltUrl(to)) {
       throw new Error(`Redirect "to" URL "${to}" is not a built page in dist/`);

@@ -14,6 +14,9 @@ One entry per day of releases, newest first. Big releases also get a dated chang
 
 **Live release:** `20261115-1706-74a98be` (earlier today: `20261115-1649-5c0c3a3`). Full details: [change record, 15 Nov 2026](docs/change-record-2026-11-15.md).
 
+- **Ops:** Added weekly cookieless GoAccess + AI log reporting (`ops/weekly-report.sh`, `ops/systemd/hr-report.service`, `ops/systemd/hr-report.timer`) writing IP-free (`--ignore-panel=HOSTS --anonymize-ip`) mode-`0750` HTML + text reports to `/var/lib/householdrebates/reports/<YYYY-Www>/` (`root:hr-reports`, 12-week retention), plus a `301` `/sitemap.xml` → `/sitemap-index.xml` redirect in `redirects.json` / `householdrebates-redirects.conf`. (prompt 43)
+- **Changed:** Lazy-loaded checker result evaluation and view (`CheckerResult.tsx`), cutting `Checker+shared` initial JS from `15,278 B` to `8,198 B` gzipped (`7,162 B` headroom under the `15,360 B` cap). (prompt 43 B)
+- **Changed:** Placed the single `VeuFlowDiagram` DOM node into the desktop homepage hero right column via CSS Grid (`>= 1024px`) while keeping it in "How it works" on phones, and updated desktop header short labels to `AC Rebate` and `Heat Pump Rebate`. (prompt 43 C)
 - **Changed:** Clean "Apple-style" UI refresh. Fluid type scale, full dark mode, slim sticky header with a no-JS mobile menu, and a new homepage with a postcode-first hero, trust chips, upgrade cards with icons, and two diagrams. Tool-first layout on the checker and tool pages. FAQs as accordions, and a sticky mobile CTA on guide and area pages. The homepage on a phone went from 22 screens to 7.8. (prompt 42 B–F, `5c0c3a3`)
 - **Fixed:** Missing share image (`og-default.png` 404), replaced with 5 per-section images. (prompt 42 A, `3e0fef6`)
 - **Added:** `check-seo-unchanged` build guard: titles, descriptions, canonicals, H1s and schema types are locked for all 72 URLs. (`3e0fef6`)

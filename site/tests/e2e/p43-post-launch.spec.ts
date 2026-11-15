@@ -106,4 +106,27 @@ test.describe('Prompt 43 post-launch UI polish', () => {
       await context.close();
     }
   });
+
+  test('serves /favicon.ico, /favicon.svg, and /apple-touch-icon.png and links them in <head>', async ({
+    page,
+    request,
+  }) => {
+    await page.goto('/');
+
+    await expect(page.locator('head link[rel="icon"][href="/favicon.ico"]')).toHaveCount(1);
+    await expect(page.locator('head link[rel="icon"][href="/favicon.svg"]')).toHaveCount(1);
+    await expect(
+      page.locator('head link[rel="apple-touch-icon"][href="/apple-touch-icon.png"]'),
+    ).toHaveCount(1);
+
+    const icoRes = await request.get('/favicon.ico');
+    expect(icoRes.status()).toBe(200);
+    const icoBody = await icoRes.body();
+    expect(icoBody.subarray(0, 4).equals(Buffer.from([0x00, 0x00, 0x01, 0x00]))).toBe(true);
+
+    const touchRes = await request.get('/apple-touch-icon.png');
+    expect(touchRes.status()).toBe(200);
+    const touchBody = await touchRes.body();
+    expect(touchBody.subarray(0, 4).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47]))).toBe(true);
+  });
 });

@@ -1,0 +1,9 @@
+[Unit]
+Description=Weekly Household Rebates log analytics report (Monday 07:00 Melbourne)
+
+[Timer]
+OnCalendar=Mon *-*-* 07:00:00 Australia/Melbourne
+Persistent=true
+
+[Install]
+WantedBy=timers.target

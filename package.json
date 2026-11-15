@@ -13,6 +13,7 @@
     "check": "npm --workspace=site run check && npm --workspace=api run typecheck",
     "test": "npm --workspace=site run test && npm --workspace=api run test",
     "preview": "npm --workspace=site run preview",
+    "og": "npm --workspace=site run og",
     "check:sources": "npm --workspace=site run check:sources"
   },
   "engines": {

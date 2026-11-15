@@ -6,6 +6,7 @@ import {
   resolveAuthorProfile,
   type PeopleData,
 } from './people';
+import { resolveOgMeta, type OgKind } from './seo';
 import { canonicalUrl } from './urls';
 
 export interface BreadcrumbItem {
@@ -32,6 +33,7 @@ export interface PageSchemaInput {
   publishedOn?: Date | string;
   updatedOn?: Date | string;
   people?: PeopleData;
+  ogKind?: OgKind;
 }
 
 export interface SchemaGraphOptions {
@@ -250,7 +252,7 @@ export function buildJsonLdGraph(options: SchemaGraphOptions): Record<string, un
           '@id': `${pageUrl}#article`,
           headline: ps.headline,
           description: ps.description,
-          image: `${SITE.origin}/og-default.png`,
+          image: resolveOgMeta(ps.ogKind ?? 'guide').url,
           ...(datePublished ? { datePublished } : {}),
           ...(dateModified ? { dateModified } : {}),
           author: { '@id': articleAuthorId },

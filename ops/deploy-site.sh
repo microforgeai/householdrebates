@@ -42,3 +42,8 @@ if ! grep -Fq "content=\"$REL\"" <<<"$SMOKE_HTML"; then
 fi
 
 echo "Site release $REL deployed and verified."
+
+if [[ "${INDEXNOW:-0}" == "1" ]]; then
+  echo "Submitting sitemap URLs via IndexNow..."
+  ./ops/indexnow-ping.sh
+fi

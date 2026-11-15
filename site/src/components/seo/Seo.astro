@@ -1,6 +1,6 @@
 ---
 import { SITE } from '../../data/site';
-import { formatRenderedTitle } from '../../lib/seo';
+import { formatRenderedTitle, resolveOgMeta, type OgKind } from '../../lib/seo';
 import { canonicalUrl } from '../../lib/urls';
 
 export interface Props {
@@ -8,12 +8,14 @@ export interface Props {
   description: string;
   pathname: string;
   noindex?: boolean;
+  ogKind?: OgKind;
 }
 
-const { title, description, pathname, noindex = false } = Astro.props;
+const { title, description, pathname, noindex = false, ogKind = 'default' } = Astro.props;
 const renderedTitle = formatRenderedTitle(title);
 const canonical = canonicalUrl(pathname);
 const releaseMeta = process.env.RELEASE_ID || 'local-dev';
+const og = resolveOgMeta(ogKind);
 ---
 
 <meta charset="utf-8" />
@@ -32,10 +34,14 @@ const releaseMeta = process.env.RELEASE_ID || 'local-dev';
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:locale" content="en_AU" />
-<meta property="og:image" content={`${SITE.origin}/og-default.png`} />
+<meta property="og:image" content={og.url} />
+<meta property="og:image:width" content={og.width} />
+<meta property="og:image:height" content={og.height} />
+<meta property="og:image:alt" content={og.alt} />
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={renderedTitle} />
 <meta name="twitter:description" content={description} />
-<meta name="twitter:image" content={`${SITE.origin}/og-default.png`} />
+<meta name="twitter:image" content={og.url} />
+<meta name="twitter:image:alt" content={og.alt} />

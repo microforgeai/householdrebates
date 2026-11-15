@@ -14,12 +14,14 @@ import {
   type HowToSchemaInput,
   type PageSchemaInput,
 } from '../lib/schema';
+import type { OgKind } from '../lib/seo';
 
 export interface Props {
   title: string;
   description: string;
   pathname: string;
   noindex?: boolean;
+  ogKind?: OgKind;
   breadcrumbs?: BreadcrumbItem[];
   faqs?: FaqSchemaItem[];
   howTo?: HowToSchemaInput;
@@ -32,6 +34,7 @@ const {
   description,
   pathname,
   noindex = false,
+  ogKind = 'default',
   breadcrumbs = [],
   faqs = [],
   howTo,
@@ -44,7 +47,7 @@ const schemaGraph = buildJsonLdGraph({
   breadcrumbs,
   faqs,
   howTo,
-  pageSchema,
+  pageSchema: pageSchema ? { ...pageSchema, ogKind: pageSchema.ogKind ?? ogKind } : undefined,
 });
 ---
 
@@ -56,6 +59,7 @@ const schemaGraph = buildJsonLdGraph({
       description={description}
       pathname={pathname}
       noindex={noindex}
+      ogKind={ogKind}
     />
     <JsonLd graph={schemaGraph} />
   </head>

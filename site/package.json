@@ -9,7 +9,10 @@
     "preview": "astro preview",
     "astro": "astro",
     "import:urlmap": "node scripts/import-url-map.mjs",
-    "check": "node scripts/check-bundles.mjs && node scripts/check-figures.mjs && node scripts/check-postcodes.mjs && node scripts/check-council-status.mjs && node scripts/check-urlmap.mjs && node scripts/check-copy.mjs && node scripts/check-rule-status.mjs && node scripts/check-schema.mjs && node scripts/check-faqs.mjs && node scripts/check-overlap.mjs && node scripts/check-seo.mjs && node scripts/check-text.mjs && node scripts/check-links.mjs && node scripts/check-consent-hash.mjs && node scripts/check-installers.mjs && node scripts/check-legal.mjs && astro check && vitest run",
+    "og": "node scripts/build-og.mjs",
+    "snapshot:seo": "node scripts/snapshot-seo.mjs",
+    "check:seo-unchanged": "node scripts/check-seo-unchanged.mjs",
+    "check": "node scripts/check-bundles.mjs && node scripts/check-figures.mjs && node scripts/check-postcodes.mjs && node scripts/check-council-status.mjs && node scripts/check-urlmap.mjs && node scripts/check-copy.mjs && node scripts/check-rule-status.mjs && node scripts/check-schema.mjs && node scripts/check-faqs.mjs && node scripts/check-overlap.mjs && node scripts/check-seo.mjs && SKIP_BUILD=1 node scripts/check-seo-unchanged.mjs && node scripts/check-text.mjs && node scripts/check-links.mjs && node scripts/check-consent-hash.mjs && node scripts/check-installers.mjs && node scripts/check-legal.mjs && astro check && vitest run",
     "check:sources": "node scripts/check-sources.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test"

@@ -70,6 +70,12 @@ const schemaKind: PageSchemaKind =
     : cleanPath === '/faq/'
       ? 'trust'
       : 'guide';
+const ogKind =
+  d.navGroup === 'business'
+    ? 'business'
+    : variant === 'hub' || cleanPath === '/' || cleanPath === '/faq/' || cleanPath === '/how-quotes-work/'
+      ? 'default'
+      : 'guide';
 
 const figIdSet = new Set(d.figures ?? []);
 const matchedFigs =
@@ -84,6 +90,7 @@ const showRuleStatusNotice =
   description={d.description}
   pathname={pathname}
   noindex={d.noindex}
+  ogKind={ogKind}
   breadcrumbs={breadcrumbs}
   faqs={canonicalFaqs}
   howTo={d.howTo}

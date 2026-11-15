@@ -137,6 +137,54 @@ for (const htmlFile of htmlFiles) {
   if (/\$\s?\d/.test(renderedDesc)) {
     throw new Error(`${rel}: dollar amount found in meta description`);
   }
+
+  // Prompt 42 A1: every og:image and twitter:image must be absolute and point to a real file in dist/ (<= 200 KB)
+  const ogImgMatch =
+    html.match(/<meta\s+property=["']og:image["']\s+content=["']([^"']+)["']/i) ??
+    html.match(/<meta\s+content=["']([^"']+)["']\s+property=["']og:image["']/i);
+  if (!ogImgMatch) {
+    throw new Error(`${rel}: missing <meta property="og:image">`);
+  }
+  const ogImgUrl = decodeEntities(ogImgMatch[1]).trim();
+  const originPrefix = 'https://householdrebates.com.au/';
+  if (!ogImgUrl.startsWith(originPrefix)) {
+    throw new Error(`${rel}: og:image must start with ${originPrefix} (got "${ogImgUrl}")`);
+  }
+  if (ogImgUrl.includes('og-default')) {
+    throw new Error(`${rel}: og:image still references stale og-default: "${ogImgUrl}"`);
+  }
+  const ogRelPath = ogImgUrl.slice(originPrefix.length);
+  const ogDistFile = path.join(distDir, ogRelPath);
+  if (!fs.existsSync(ogDistFile)) {
+    throw new Error(`${rel}: og:image "${ogImgUrl}" does not exist at ${path.relative(siteRoot, ogDistFile)}`);
+  }
+  const ogSizeBytes = fs.statSync(ogDistFile).size;
+  if (ogSizeBytes > 200 * 1024) {
+    throw new Error(`${rel}: og:image "${ogRelPath}" exceeds 200 KB (${ogSizeBytes} bytes)`);
+  }
+
+  for (const prop of ['og:image:width', 'og:image:height', 'og:image:alt']) {
+    const reA = new RegExp(`<meta\\s+property=["']${prop}["']\\s+content=["']([^"']+)["']`, 'i');
+    const reB = new RegExp(`<meta\\s+content=["']([^"']+)["']\\s+property=["']${prop}["']`, 'i');
+    if (!reA.test(html) && !reB.test(html)) {
+      throw new Error(`${rel}: missing <meta property="${prop}">`);
+    }
+  }
+
+  const twImgMatch =
+    html.match(/<meta\s+name=["']twitter:image["']\s+content=["']([^"']+)["']/i) ??
+    html.match(/<meta\s+content=["']([^"']+)["']\s+name=["']twitter:image["']/i);
+  if (!twImgMatch) {
+    throw new Error(`${rel}: missing <meta name="twitter:image">`);
+  }
+  const twImgUrl = decodeEntities(twImgMatch[1]).trim();
+  if (!twImgUrl.startsWith(originPrefix)) {
+    throw new Error(`${rel}: twitter:image must start with ${originPrefix} (got "${twImgUrl}")`);
+  }
+  const twDistFile = path.join(distDir, twImgUrl.slice(originPrefix.length));
+  if (!fs.existsSync(twDistFile)) {
+    throw new Error(`${rel}: twitter:image "${twImgUrl}" does not exist in dist/`);
+  }
 }
 
 // Prompt 32 Step 4: while bio is unfilled/placeholder, about-gurinder-singh.mdx stays noindex,

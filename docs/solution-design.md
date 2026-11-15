@@ -1137,7 +1137,7 @@ Build locally in Antigravity, ship artefacts, never build on the VPS. Every live
 1. Refuse if the Git tree is dirty or the branch isn't `main`.
 2. `npm ci && npm run check && npm run build` (check = `astro check` + vitest + figure/answer/copy/consent/installer checks).
 3. `REL=$(date +%Y%m%d-%H%M)-$(git rev-parse --short HEAD)`; the build writes `<meta name="release" content="$REL">`.
-4. `rsync -az --delete site/dist/ deploy@72.61.117.132:/var/www/householdrebates/releases/$REL/`
+4. `rsync -az --delete site/dist/ hostinger-vps:/var/www/householdrebates/releases/$REL/` (`VPS_HOST` defaults to the `hostinger-vps` SSH alias; other machines without that alias must set `VPS_HOST=user@72.61.117.132`.)
 5. Remote, atomic: `cd /var/www/householdrebates && ln -sfn releases/$REL current.tmp && mv -Tf current.tmp current`; prune to newest 5.
 6. Smoke: `curl -fsS https://householdrebates.com.au/ | grep -q "content=\"$REL\""`; if it fails, run rollback.
 

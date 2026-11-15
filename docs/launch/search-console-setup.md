@@ -45,7 +45,7 @@ The repository includes an IndexNow key file (`site/public/651d4e162671bce57241a
 - By default, `ops/deploy-site.sh` does **not** ping IndexNow.
 - Once the key file is live on production, you can opt in during any production deploy:
   ```bash
-  INDEXNOW=1 VPS_HOST=hostinger-vps ./ops/deploy-site.sh
+  INDEXNOW=1 ./ops/deploy-site.sh
   ```
 - Or run a one-off ping manually after a deploy:
   ```bash

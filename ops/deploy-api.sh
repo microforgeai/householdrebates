@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-VPS_HOST="${VPS_HOST:-deploy@72.61.117.132}"
+# Default is the "hostinger-vps" alias in ~/.ssh/config (user + key for 72.61.117.132).
+# On a machine without that alias, set VPS_HOST=user@72.61.117.132.
+VPS_HOST="${VPS_HOST:-hostinger-vps}"
 REMOTE_ROOT="/opt/householdrebates-api"
 
 if [[ -n "$(git status --porcelain)" ]]; then
@@ -33,7 +35,7 @@ ssh "$VPS_HOST" "cd $REMOTE_ROOT/releases/$REL && npm ci --omit=dev && cd $REMOT
 echo "Checking API health..."
 if ! ssh "$VPS_HOST" "curl -fsS http://127.0.0.1:8787/health" | grep -q '"ok":true'; then
   echo "API health check failed! Rolling back..." >&2
-  ./ops/rollback.sh api
+  VPS_HOST="$VPS_HOST" ./ops/rollback.sh api
   exit 1
 fi
 

@@ -44,6 +44,8 @@ Full system specification: [`solution-design.md`](./solution-design.md) · Check
 
 ### Deploying & Rolling Back
 
+The deploy and rollback scripts default `VPS_HOST` to the `hostinger-vps` SSH alias; other machines without that alias must set `VPS_HOST=user@72.61.117.132`.
+
 1. **Deploy static site ([`ops/deploy-site.sh`](../ops/deploy-site.sh)):**
    - Must run from a clean working tree on `main`.
    - Sets `RELEASE_ID` (`YYYYMMDD-HHMM-<sha>`), runs `npm ci`, `npm run check`, `npm run test`, and `npm --workspace=site run build`.

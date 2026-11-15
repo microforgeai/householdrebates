@@ -2,7 +2,9 @@
 set -euo pipefail
 
 TARGET="${1:-}"
-VPS_HOST="${VPS_HOST:-deploy@72.61.117.132}"
+# Default is the "hostinger-vps" alias in ~/.ssh/config (user + key for 72.61.117.132).
+# On a machine without that alias, set VPS_HOST=user@72.61.117.132.
+VPS_HOST="${VPS_HOST:-hostinger-vps}"
 
 if [[ "$TARGET" != "site" && "$TARGET" != "api" ]]; then
   echo "Usage: ./ops/rollback.sh site|api" >&2

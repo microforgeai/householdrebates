@@ -11,41 +11,42 @@ const MAX_BYTES = 200 * 1024;
 const require = createRequire(path.join(siteRoot, 'package.json'));
 const { chromium } = require('playwright');
 
+const BRAND_HOUSE_SVG = `<svg viewBox="0 0 64 64" width="64" height="64" aria-hidden="true">
+  <rect width="64" height="64" rx="14" fill="#0d5c4d"/>
+  <path d="M14 31L32 16l18 15v17a2 2 0 0 1-2 2H16a2 2 0 0 1-2-2V31z" fill="none" stroke="#faf8f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M26 50V36h12v14" fill="none" stroke="#faf8f5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`;
+
 const OG_CARDS = [
   {
     kind: 'default',
     eyebrow: 'Victoria · Home & Business',
     headline: 'Victorian energy upgrade guides',
     subline: 'Plain-English rebate rules, upgrade scenarios, and sourced figures.',
-    iconSvg: `<svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#0d5c4d" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M7 22L24 8l17 14"/><path d="M12 19v19a2 2 0 0 0 2 2h20a2 2 0 0 0 2-2V19"/><path d="M24 33c4.5-2 7-5.8 7-10.5-4.7 0-8.5 2.5-10.5 7 1 1.4 2.1 2.5 3.5 3.5Z"/></svg>`,
   },
   {
     kind: 'guide',
     eyebrow: 'Home Upgrade Guide',
     headline: 'Victorian home energy upgrade guides',
     subline: 'Heating and cooling, hot water, solar, batteries, insulation, and gas rules.',
-    iconSvg: `<svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#0d5c4d" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="11" width="34" height="16" rx="4"/><path d="M13 21h22"/><path d="M15 33c0 3-2 4.5-2 6.5M24 33c0 3-2 4.5-2 6.5M33 33c0 3-2 4.5-2 6.5"/></svg>`,
   },
   {
     kind: 'area',
     eyebrow: 'Local Area Guide',
     headline: 'Victorian council & postcode energy guides',
     subline: 'Climate zones, mains gas status, VEU classifications, and local programs.',
-    iconSvg: `<svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#0d5c4d" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M24 41s13-11.4 13-21a13 13 0 1 0-26 0c0 9.6 13 21 13 21Z"/><circle cx="24" cy="20" r="4.5"/></svg>`,
   },
   {
     kind: 'tool',
     eyebrow: 'Interactive Tool',
     headline: 'Victorian rebate & upgrade planning tools',
     subline: 'Check postcode zones, compare upgrade scenarios, and plan gas-to-electric steps.',
-    iconSvg: `<svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#0d5c4d" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><line x1="9" y1="15" x2="39" y2="15"/><circle cx="18" cy="15" r="4" fill="#e6f2ef"/><line x1="9" y1="26" x2="39" y2="26"/><circle cx="31" cy="26" r="4" fill="#e6f2ef"/><line x1="9" y1="37" x2="39" y2="37"/><circle cx="21" cy="37" r="4" fill="#e6f2ef"/></svg>`,
   },
   {
     kind: 'business',
     eyebrow: 'Commercial & Business',
     headline: 'Victorian business energy upgrade guides',
     subline: 'Commercial heating and cooling, LED lighting, cold rooms, hot water, and motors.',
-    iconSvg: `<svg viewBox="0 0 48 48" width="44" height="44" fill="none" stroke="#0d5c4d" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="20" height="31" rx="2"/><path d="M29 19h10a2 2 0 0 1 2 2v19H29"/><path d="M15 16h2M21 16h2M15 23h2M21 23h2M15 30h2M21 30h2M34 26h2M34 32h2"/></svg>`,
   },
 ];
 
@@ -98,11 +99,8 @@ function renderCardHtml(card) {
     gap: 18px;
   }
   .brand-icon {
-    width: 68px;
-    height: 68px;
-    border-radius: 18px;
-    background: #e6f2ef;
-    border: 1.5px solid #8ec2b7;
+    width: 64px;
+    height: 64px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -169,7 +167,7 @@ function renderCardHtml(card) {
     <div class="body">
       <div class="top-row">
         <div class="brand">
-          <div class="brand-icon">${card.iconSvg}</div>
+          <div class="brand-icon">${BRAND_HOUSE_SVG}</div>
           <span class="brand-name">Household Rebates</span>
         </div>
         <span class="pill">${card.eyebrow}</span>

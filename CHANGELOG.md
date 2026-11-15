@@ -12,7 +12,9 @@ One entry per day of releases, newest first. Big releases also get a dated chang
 
 ## 15 Nov 2026
 
-**Live release:** `20261115-1706-74a98be` (earlier today: `20261115-1649-5c0c3a3`). Full details: [change record, 15 Nov 2026](docs/change-record-2026-11-15.md).
+**Live release:** `20261115-1824-9d28847` (earlier today: `20261115-1813-bf48a62`, `20261115-1706-74a98be`, `20261115-1649-5c0c3a3`). Full details: [change record, 15 Nov 2026](docs/change-record-2026-11-15.md).
+
+- **Changed:** Unified the brand mark across `Header.astro` (`.site-brand__mark`) and all five Open Graph share images (`site/public/og/*.png`) to match the house mark in `favicon.svg` (alongside multi-size `favicon.ico` and `apple-touch-icon.png` in `9d28847`), and pruned merged local branches. (prompt 44)
 
 - **Ops:** Added weekly cookieless GoAccess + AI log reporting (`ops/weekly-report.sh`, `ops/systemd/hr-report.service`, `ops/systemd/hr-report.timer`) writing IP-free (`--ignore-panel=HOSTS --anonymize-ip`) mode-`0750` HTML + text reports to `/var/lib/householdrebates/reports/<YYYY-Www>/` (`root:hr-reports`, 12-week retention), plus a `301` `/sitemap.xml` → `/sitemap-index.xml` redirect in `redirects.json` / `householdrebates-redirects.conf`. (prompt 43)
 - **Changed:** Lazy-loaded checker result evaluation and view (`CheckerResult.tsx`), cutting `Checker+shared` initial JS from `15,278 B` to `8,198 B` gzipped (`7,162 B` headroom under the `15,360 B` cap). (prompt 43 B)

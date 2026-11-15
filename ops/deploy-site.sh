@@ -34,9 +34,10 @@ echo "Swapping atomic symlink on $VPS_HOST..."
 ssh "$VPS_HOST" "cd $REMOTE_ROOT && ln -sfn releases/$REL current.tmp && mv -Tf current.tmp current && ls -1dt releases/* | tail -n +6 | xargs -r rm -rf"
 
 echo "Running smoke check..."
-if ! curl -fsS "https://householdrebates.com.au/" | grep -q "content=\"$REL\""; then
+SMOKE_HTML="$(curl -fsS "https://householdrebates.com.au/")" || SMOKE_HTML=""
+if ! grep -Fq "content=\"$REL\"" <<<"$SMOKE_HTML"; then
   echo "Smoke check failed! Rolling back..." >&2
-  ./ops/rollback.sh site
+  VPS_HOST="$VPS_HOST" ./ops/rollback.sh site
   exit 1
 fi
 

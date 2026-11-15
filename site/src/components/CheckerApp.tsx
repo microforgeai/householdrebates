@@ -1,38 +1,25 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
-import { AreaCardView, renderResolvedLink } from './AreaCardView';
-import { formatAuDate } from '../lib/dates';
+import { AreaCardView, InlineLinks } from './AreaCardView';
 import type { FigureData, FigureKind } from '../lib/figures';
+import { buildAreaCardFromData, lookupPostcode } from '../lib/checker/area-runtime';
 import {
-  buildAreaCardFromData,
-  computeOldestCheckerCheckedOnFromRules,
-  evaluateWithCatalog,
   FIELD_HOOKS,
   getVisibleFieldsFromList,
   hydrateFields,
-  hydrateRules,
-  lookupPostcode,
-  pruneHiddenAnswersFromList,
-  renderMessageFromMap,
-  RULE_HOOKS,
-  type CheckerAnswers,
-  type CheckerCatalogRuntime,
-  type CheckerEvaluationContext,
-  type EvaluatedFigure,
-  type EvaluatedLine,
-  type EvaluatedMessage,
   type FieldDefinition,
   type FieldMeta,
-  type LinksCatalogData,
-  type MessageDefinition,
-  type MessageId,
-  type PostcodesDataset,
-  type ResolvedLink,
-  type RuleMeta,
-  type RuleStatus,
-  type SourceMeta,
-} from '../lib/checker/client';
+} from '../lib/checker/fields-hooks';
+import type { LinksCatalogData } from '../lib/checker/links-runtime';
+import type { MessageDefinition } from '../lib/checker/messages-runtime';
 import { fetchCompactPostcodesOnce } from '../lib/checker/postcode-client';
-import { decodeAnswersFromHash, encodeAnswersToHash } from '../lib/checker/share';
+import type { RuleMeta } from '../lib/checker/rules-hooks';
+import { decodeAnswersFromHash } from '../lib/checker/share';
+import type {
+  CheckerAnswers,
+  EvaluatedMessage,
+  PostcodesDataset,
+  SourceMeta,
+} from '../lib/checker/types';
 
 export interface CheckerElectionNoticeBootstrap {
   visible: boolean;
@@ -56,19 +43,24 @@ export interface CheckerBootstrapPayload {
   sources: SourceMeta[];
   enabledUrls: string[];
   solsticePostcodes: string[];
+  x1Message: EvaluatedMessage;
   catalog: CheckerBootstrapCatalog;
   electionNotice: CheckerElectionNoticeBootstrap;
 }
 
+type CheckerResultComponent = (typeof import('./CheckerResult'))['CheckerResult'];
+
+let resultCompPromise: Promise<CheckerResultComponent> | null = null;
+
+function loadResultComponent(): Promise<CheckerResultComponent> {
+  if (!resultCompPromise) {
+    resultCompPromise = import('./CheckerResult').then((m) => m.CheckerResult);
+  }
+  return resultCompPromise;
+}
+
 const SESSION_ANSWERS_KEY = 'hr_checker_v2_answers';
 const SESSION_STEP_KEY = 'hr_checker_v2_step';
-
-const STATUS_LABELS: Readonly<Record<RuleStatus, string>> = {
-  likely: 'Likely',
-  possibly: 'Possibly',
-  'not-eligible': 'Not eligible',
-  info: 'Info',
-};
 
 function readSessionAnswers(): { answers: CheckerAnswers; savedStep: string | null } {
   try {
@@ -97,159 +89,7 @@ function clearSessionState(): void {
   } catch {}
 }
 
-function InlineLinks({ links }: { links: ResolvedLink[] }) {
-  return (
-    <>
-      {links.map((lnk, idx) => (
-        <span key={`${lnk.specHref}|${lnk.href}`}>
-          {idx > 0 ? ' · ' : ''}
-          {renderResolvedLink(lnk)}
-        </span>
-      ))}
-    </>
-  );
-}
-
-function CheckerMoneyBlock({
-  fig,
-  kindTags,
-  sourcesMap,
-}: {
-  fig: EvaluatedFigure;
-  kindTags: Record<FigureKind, string>;
-  sourcesMap: Map<string, SourceMeta>;
-}) {
-  const src = sourcesMap.get(fig.sourceId);
-  const isEstimate = fig.basis === 'estimate';
-  return (
-    <figure
-      class="money-block checker-money-block"
-      data-money-block
-      data-figure={fig.id}
-      data-figure-basis={fig.basis}
-      data-kind={fig.kind}
-    >
-      <figcaption class="money-block__label" data-money-label>
-        {fig.scenario}
-      </figcaption>
-      <span class="money-block__kind" data-money-kind>
-        {kindTags[fig.kind]}
-      </span>
-      <span class="money-block__amount">{fig.formatted}</span>
-      {isEstimate && (
-        <details class="checker-estimate-disclosure" data-estimate-disclosure>
-          <summary>How we estimated this</summary>
-          <p>{fig.method ?? 'Estimated from VEU Specifications v25.0.'}</p>
-        </details>
-      )}
-      <span class="money-block__meta">
-        Checked on {formatAuDate(fig.checkedOn)}
-        {src ? (
-          <>
-            {' '}
-            ·{' '}
-            <a href={src.url} target="_blank" rel="noopener noreferrer">
-              {src.publisher} ↗
-            </a>
-          </>
-        ) : null}
-      </span>
-    </figure>
-  );
-}
-
-function LineCard({
-  line,
-  kindTags,
-  sourcesMap,
-}: {
-  line: EvaluatedLine;
-  kindTags: Record<FigureKind, string>;
-  sourcesMap: Map<string, SourceMeta>;
-}) {
-  return (
-    <article
-      class={`checker-line checker-line--${line.status}`}
-      data-checker-line
-      data-rule-id={line.ruleId}
-      data-status={line.status}
-      data-program={line.programGroup}
-    >
-      <div class="checker-line__header">
-        <span class={`checker-chip checker-chip--${line.status}`} data-status-chip>
-          {STATUS_LABELS[line.status]}
-        </span>
-        <span class="checker-program-tag" data-program-label>
-          {line.programLabel}
-        </span>
-      </div>
-
-      <h4 class="checker-line__title">{line.title}</h4>
-
-      {line.figures.length > 0 && (
-        <div class="checker-line__figures" data-line-figures>
-          {line.figures.map((fig) => (
-            <CheckerMoneyBlock key={fig.id} fig={fig} kindTags={kindTags} sourcesMap={sourcesMap} />
-          ))}
-        </div>
-      )}
-
-      {line.coPayFigures.length > 0 && (
-        <div class="checker-line__copay" data-line-copay>
-          {line.coPayFigures.map((fig) => (
-            <CheckerMoneyBlock key={fig.id} fig={fig} kindTags={kindTags} sourcesMap={sourcesMap} />
-          ))}
-        </div>
-      )}
-
-      {line.message && (
-        <p class="checker-line__message" data-message-id={line.message.id}>
-          {line.message.text}
-        </p>
-      )}
-
-      {(!line.message || line.status !== 'not-eligible') && (
-        <p class="checker-line__why">{line.why}</p>
-      )}
-
-      {line.notes.length > 0 && (
-        <ul class="checker-line__notes">
-          {line.notes.map((note, idx) => (
-            <li key={idx}>{note}</li>
-          ))}
-        </ul>
-      )}
-
-      {line.links.length > 0 && (
-        <ul class="checker-line__links">
-          {line.links.map((lnk) => (
-            <li key={`${lnk.specHref}|${lnk.href}`}>{renderResolvedLink(lnk)}</li>
-          ))}
-        </ul>
-      )}
-
-      {line.sources.length > 0 && (
-        <div class="checker-line__sources">
-          {line.sources.map((src, idx) => (
-            <span key={src.id} class="checker-source-cite">
-              {idx > 0 ? ' · ' : ''}
-              <a href={src.url} target="_blank" rel="noopener noreferrer">
-                {src.publisher}: {src.title} ↗
-              </a>{' '}
-              · Checked {formatAuDate(src.checkedOn)}
-            </span>
-          ))}
-        </div>
-      )}
-    </article>
-  );
-}
-
 export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }) {
-  const figuresMap = useMemo(
-    () => new Map<string, FigureData>(bootstrap.figures.map((f) => [f.id, f])),
-    [bootstrap.figures],
-  );
   const sourcesMap = useMemo(
     () => new Map<string, SourceMeta>(bootstrap.sources.map((s) => [s.id, s])),
     [bootstrap.sources],
@@ -263,18 +103,6 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     () => hydrateFields(bootstrap.catalog.fields, FIELD_HOOKS),
     [bootstrap.catalog.fields],
   );
-  const catalogRuntime = useMemo<CheckerCatalogRuntime>(() => {
-    const rules = hydrateRules(bootstrap.catalog.rules, RULE_HOOKS);
-    const rulesById = new Map(rules.map((r) => [r.id, r]));
-    const messagesById = new Map<MessageId, MessageDefinition>(
-      bootstrap.catalog.messages.map((m) => [m.id, m]),
-    );
-    return { rules, rulesById, messagesById, links: bootstrap.catalog.links };
-  }, [bootstrap.catalog.rules, bootstrap.catalog.messages, bootstrap.catalog.links]);
-  const oldestCheckedIso = useMemo(
-    () => computeOldestCheckerCheckedOnFromRules(catalogRuntime.rules, figuresMap),
-    [catalogRuntime.rules, figuresMap],
-  );
 
   const [answers, setAnswers] = useState<CheckerAnswers>({});
   const [stepIndex, setStepIndex] = useState<number>(0);
@@ -283,11 +111,11 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
   const [pendingHashRestore, setPendingHashRestore] = useState<boolean>(false);
   const [postcodesData, setPostcodesData] = useState<PostcodesDataset | null>(null);
   const [postcodesLoading, setPostcodesLoading] = useState<boolean>(false);
+  const [ResultView, setResultView] = useState<CheckerResultComponent | null>(null);
+  const [resultLoading, setResultLoading] = useState<boolean>(false);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [stepError, setStepError] = useState<string | null>(null);
   const [postcodeError, setPostcodeError] = useState<EvaluatedMessage | null>(null);
-  const [shareUrl, setShareUrl] = useState<string | null>(null);
-  const [shareCopied, setShareCopied] = useState<boolean>(false);
 
   const stepFocusRef = useRef<HTMLDivElement>(null);
   const resultFocusRef = useRef<HTMLHeadingElement>(null);
@@ -296,6 +124,9 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
   answersRef.current = answers;
 
   const prefetchPostcodesSilently = () => {
+    void loadResultComponent()
+      .then((Comp) => setResultView(() => Comp))
+      .catch(() => {});
     if (postcodesData) return;
     void fetchCompactPostcodesOnce(bootstrap.postcodesUrl)
       .then((loaded) => setPostcodesData(loaded))
@@ -316,6 +147,24 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       throw new Error(msg);
     } finally {
       setPostcodesLoading(false);
+    }
+  };
+
+  const ensureResultView = async (): Promise<CheckerResultComponent> => {
+    if (ResultView) return ResultView;
+    setResultLoading(true);
+    setLoadError(null);
+    try {
+      const Comp = await loadResultComponent();
+      setResultView(() => Comp);
+      return Comp;
+    } catch {
+      resultCompPromise = null;
+      const msg = 'Could not load the eligibility results view. Check your connection and try again.';
+      setLoadError(msg);
+      throw new Error(msg);
+    } finally {
+      setResultLoading(false);
     }
   };
 
@@ -367,16 +216,20 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
-  // Fetch postcodes when restoring a saved/shared result
+  // Fetch postcodes and result module when restoring a saved/shared result
   useEffect(() => {
-    if (pendingHashRestore && !postcodesData && !postcodesLoading) {
+    if (!pendingHashRestore) return;
+    if (!postcodesData && !postcodesLoading) {
       void ensurePostcodes().catch(() => {});
+    }
+    if (!ResultView && !resultLoading) {
+      void ensureResultView().catch(() => {});
     }
   }, [pendingHashRestore]);
 
-  // Complete hash/session result restoration once postcodes dataset is ready
+  // Complete hash/session result restoration once postcodes dataset and result view are ready
   useEffect(() => {
-    if (!pendingHashRestore || !postcodesData) return;
+    if (!pendingHashRestore || !postcodesData || !ResultView) return;
     const rawPc = answers.S1 === 'business' ? answers.B2 : answers.R2;
     const check = lookupPostcode(rawPc, postcodesData);
     setPendingHashRestore(false);
@@ -386,7 +239,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       setMode('questions');
       setStepIndex(1);
     }
-  }, [pendingHashRestore, postcodesData, answers]);
+  }, [pendingHashRestore, postcodesData, ResultView, answers]);
 
   const activePostcode = answers.S1 === 'business' ? answers.B2 : answers.R2;
 
@@ -402,9 +255,9 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       currentAreaRecord,
       postcodesData.checkedOn,
       enabledUrlsSet,
-      catalogRuntime.links,
+      bootstrap.catalog.links,
     );
-  }, [postcodesData, currentAreaRecord, enabledUrlsSet, catalogRuntime.links]);
+  }, [postcodesData, currentAreaRecord, enabledUrlsSet, bootstrap.catalog.links]);
 
   const visibleFields = useMemo(
     () => getVisibleFieldsFromList(hydratedFields, answers, currentAreaRecord, solsticeSet),
@@ -480,16 +333,7 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       }
       const lookup = lookupPostcode(rawVal, ds);
       if (!lookup.ok) {
-        setPostcodeError(
-          renderMessageFromMap(
-            'X1',
-            catalogRuntime.messagesById,
-            catalogRuntime.links,
-            figuresMap,
-            enabledUrlsSet,
-            formatAuDate(oldestCheckedIso),
-          ),
-        );
+        setPostcodeError(bootstrap.x1Message);
         return;
       }
       areaForNext = lookup.record;
@@ -543,12 +387,13 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
       setStepIndex(nextIdx);
       writeSessionState(liveAnswers, String(nextIdx));
     } else {
-      if (!postcodesData && currentField.type !== 'postcode') {
-        try {
-          await ensurePostcodes();
-        } catch {
-          return;
-        }
+      try {
+        await Promise.all([
+          !postcodesData && currentField.type !== 'postcode' ? ensurePostcodes() : Promise.resolve(),
+          ensureResultView(),
+        ]);
+      } catch {
+        return;
       }
       setMode('result');
       writeSessionState(liveAnswers, 'result');
@@ -559,8 +404,6 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     hasInteractedRef.current = true;
     setStepError(null);
     setPostcodeError(null);
-    setShareUrl(null);
-    setShareCopied(false);
 
     if (mode === 'result') {
       const lastIdx = Math.max(0, visibleFields.length - 1);
@@ -584,8 +427,6 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     setMode('questions');
     setStepError(null);
     setPostcodeError(null);
-    setShareUrl(null);
-    setShareCopied(false);
     if (window.location.hash) {
       window.history.replaceState(
         null,
@@ -595,279 +436,25 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
     }
   };
 
-  const evaluation = useMemo(() => {
-    if (mode !== 'result' || !postcodesData) return null;
-    const pruned = pruneHiddenAnswersFromList(
-      hydratedFields,
-      answers,
-      currentAreaRecord,
-      solsticeSet,
-    );
-    const ctx: CheckerEvaluationContext = {
-      postcodes: postcodesData,
-      figures: figuresMap,
-      sources: sourcesMap,
-      enabledUrls: enabledUrlsSet,
-      solsticePostcodes: solsticeSet,
-    };
-    return {
-      pruned,
-      result: evaluateWithCatalog(pruned, ctx, catalogRuntime),
-    };
-  }, [
-    mode,
-    postcodesData,
-    hydratedFields,
-    catalogRuntime,
-    answers,
-    currentAreaRecord,
-    solsticeSet,
-    figuresMap,
-    sourcesMap,
-    enabledUrlsSet,
-  ]);
-
-  const handleShareWithLandlord = async () => {
-    if (!evaluation) return;
-    const hash = encodeAnswersToHash(evaluation.pruned);
-    const url = `${window.location.origin}${window.location.pathname}${hash}`;
-    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
-    setShareUrl(url);
-    try {
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(url);
-        setShareCopied(true);
-      } else {
-        setShareCopied(false);
-      }
-    } catch {
-      setShareCopied(false);
-    }
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
-
   const isHydratedReady = hydrated && !pendingHashRestore ? 'true' : undefined;
+  const isBusy = postcodesLoading || resultLoading;
 
-  if (mode === 'result' && evaluation) {
-    const { result, pruned } = evaluation;
-    const topModifiers = result.modifiers.filter((m) => m.placement === 'top');
-    const footerModifiers = result.modifiers.filter((m) => m.placement === 'footer');
-    const isTenant = pruned.S1 === 'residential' && pruned.R3 === 'tenant';
-    const bizSource = sourcesMap.get('energyvic-businesses');
-
+  if (mode === 'result' && postcodesData && ResultView) {
     return (
-      <div class="checker-result" data-checker-hydrated={isHydratedReady} data-checker-result aria-live="polite">
-        <div class="checker-result__topbar">
-          <h3 ref={resultFocusRef} tabIndex={-1} class="checker-result__heading">
-            Your indicative eligibility result
-          </h3>
-          <div class="checker-actions">
-            <button
-              type="button"
-              class="btn btn--secondary"
-              data-checker-back
-              onClick={handleBack}
-            >
-              Back
-            </button>
-            {isTenant && (
-              <button
-                type="button"
-                class="btn btn--secondary"
-                data-checker-share
-                onClick={handleShareWithLandlord}
-              >
-                Share this result with your landlord
-              </button>
-            )}
-            <button
-              type="button"
-              class="btn btn--secondary"
-              data-checker-print
-              onClick={handlePrint}
-            >
-              Print
-            </button>
-            <button
-              type="button"
-              class="checker-reset-btn"
-              data-checker-reset
-              onClick={handleReset}
-            >
-              Start again
-            </button>
-          </div>
-        </div>
-
-        {shareUrl && (
-          <div class="callout callout--info checker-share-box" role="status" data-share-box>
-            <p class="checker-share-box__text">
-              {shareCopied ? 'Link copied. ' : 'Copy this link to share. '}
-              Your answers stay in the URL (#a=…) and nothing is stored on a server.
-            </p>
-            <label class="field-label" for="checker-share-url-input">
-              Shareable result link
-            </label>
-            <input
-              id="checker-share-url-input"
-              type="text"
-              readOnly
-              value={shareUrl}
-              data-share-url-input
-              onFocus={(ev) => ev.currentTarget.select()}
-            />
-          </div>
-        )}
-
-        {bootstrap.electionNotice.visible && (
-          <div class="rule-status-notice" role="note" data-checker-election-notice>
-            <strong class="rule-status-notice__label">Election watch:</strong>{' '}
-            {bootstrap.electionNotice.message}{' '}
-            <span class="rule-status-notice__source">
-              (Source:{' '}
-              <a
-                href={bootstrap.electionNotice.sourceUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {bootstrap.electionNotice.sourcePublisher}
-              </a>
-              , checked {bootstrap.electionNotice.checkedOnFormatted}.)
-            </span>
-          </div>
-        )}
-
-        {result.areaCard && <AreaCardView card={result.areaCard} />}
-
-        {topModifiers.length > 0 && (
-          <div class="checker-modifiers checker-modifiers--top" data-checker-modifiers-top>
-            {topModifiers.map((mod) => (
-              <div
-                key={mod.ruleId}
-                class="checker-modifier-note"
-                data-modifier-id={mod.ruleId}
-              >
-                <p>
-                  {mod.text}
-                  {mod.links.length > 0 ? (
-                    <>
-                      {' '}
-                      <InlineLinks links={mod.links} />
-                    </>
-                  ) : null}
-                </p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {result.banners.length > 0 && (
-          <div class="checker-banners" data-checker-banners>
-            {result.banners.map((banner) => (
-              <LineCard key={banner.ruleId} line={banner} kindTags={bootstrap.kindTags} sourcesMap={sourcesMap} />
-            ))}
-          </div>
-        )}
-
-        {result.allIneligibleMessage && (
-          <div
-            class="callout callout--caution"
-            data-all-ineligible
-            data-message-id={result.allIneligibleMessage.id}
-          >
-            <p>{result.allIneligibleMessage.text}</p>
-            {result.allIneligibleMessage.links.length > 0 && (
-              <p>
-                <InlineLinks links={result.allIneligibleMessage.links} />
-              </p>
-            )}
-          </div>
-        )}
-
-        {(
-          [
-            ['veu', 'VEU (Victoria)', result.veuLines],
-            ['solar-homes', 'Solar Homes (Victoria)', result.solarHomesLines],
-            ['federal', 'FEDERAL', result.federalLines],
-            ['not-eligible', 'Not eligible', result.ineligibleLines],
-          ] as const
-        ).map(([groupId, groupHeading, groupLines]) =>
-          groupLines.length > 0 ? (
-            <section
-              key={groupId}
-              class="checker-program-section"
-              aria-labelledby={`checker-sec-${groupId}`}
-              data-program-group={groupId}
-            >
-              <h3 id={`checker-sec-${groupId}`} class="checker-program-section__heading">
-                {groupHeading}
-              </h3>
-              <div class="checker-line-list">
-                {groupLines.map((line) => (
-                  <LineCard
-                    key={`${line.ruleId}-${line.title}`}
-                    line={line}
-                    kindTags={bootstrap.kindTags}
-                    sourcesMap={sourcesMap}
-                  />
-                ))}
-              </div>
-            </section>
-          ) : null,
-        )}
-
-        <section
-          class="checker-ctas"
-          aria-labelledby="checker-next-steps-heading"
-          data-checker-ctas
-        >
-          <h3 id="checker-next-steps-heading" class="checker-program-section__heading">
-            Next steps
-          </h3>
-          {result.ctas.primary.length > 0 && (
-            <div class="checker-ctas__primary" data-cta-tier="primary">
-              {result.ctas.primary.map((cta, idx) =>
-                renderResolvedLink(cta, idx === 0 ? 'btn' : 'btn btn--secondary'),
-              )}
-            </div>
-          )}
-          {result.ctas.secondary.length > 0 && (
-            <ul class="checker-ctas__secondary" data-cta-tier="secondary">
-              {result.ctas.secondary.map((cta) => (
-                <li key={`${cta.specHref}|${cta.href}`}>{renderResolvedLink(cta)}</li>
-              ))}
-            </ul>
-          )}
-          {result.branch === 'business' && bizSource && result.ctas.primary.every((c) => !c.external) && (
-            <p class="checker-ctas__external-note">
-              Official Victorian business guidance:{' '}
-              <a href={bizSource.url} target="_blank" rel="nofollow noopener">
-                {bizSource.title} ({bizSource.publisher}) ↗
-              </a>
-            </p>
-          )}
-        </section>
-
-        {footerModifiers.length > 0 && (
-          <footer
-            class="checker-modifiers checker-modifiers--footer"
-            data-checker-modifiers-footer
-          >
-            <h3 class="checker-modifiers__heading">Before you book or sign</h3>
-            <ul>
-              {footerModifiers.map((mod) => (
-                <li key={mod.ruleId} data-modifier-id={mod.ruleId}>
-                  {mod.message ? mod.message.text : mod.text}{' '}
-                  <InlineLinks links={mod.links} />
-                </li>
-              ))}
-            </ul>
-          </footer>
-        )}
-      </div>
+      <ResultView
+        bootstrap={bootstrap}
+        hydratedFields={hydratedFields}
+        answers={answers}
+        currentAreaRecord={currentAreaRecord}
+        postcodesData={postcodesData}
+        enabledUrlsSet={enabledUrlsSet}
+        solsticeSet={solsticeSet}
+        sourcesMap={sourcesMap}
+        isHydratedReady={isHydratedReady}
+        resultFocusRef={resultFocusRef}
+        onBack={handleBack}
+        onReset={handleReset}
+      />
     );
   }
 
@@ -1084,10 +671,10 @@ export function CheckerApp({ bootstrap }: { bootstrap: CheckerBootstrapPayload }
           <button
             type="submit"
             class="btn"
-            disabled={postcodesLoading}
+            disabled={isBusy}
             data-checker-next
           >
-            {postcodesLoading ? 'Loading…' : isLastStep ? 'See results' : 'Next'}
+            {isBusy ? 'Loading…' : isLastStep ? 'See results' : 'Next'}
           </button>
 
           {safeStepIndex > 0 && (

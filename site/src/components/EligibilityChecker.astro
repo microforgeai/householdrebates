@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 import AlertSignup from './AlertSignup.astro';
 import Checker from './Checker.astro';
 import type { CheckerBootstrapPayload } from './CheckerApp';
-import { assertFigureNotStale } from '../lib/dates';
+import { assertFigureNotStale, formatAuDate } from '../lib/dates';
 import { formatAud, formatFigureAmount, KIND_TAGS, type FigureData } from '../lib/figures';
 import { getEnabledUrls } from '../lib/rollout';
 import { resolveElectionWatchNotice } from '../lib/rule-status';
@@ -15,8 +15,10 @@ import {
   RULES_META,
   getCheckerReferencedFigureIds,
   loadSolsticePostcodesFromRow53,
+  renderMessage,
   type SourceMeta,
 } from '../lib/checker';
+import { computeOldestCheckerCheckedOnFromRules } from '../lib/checker/evaluate-runtime';
 import { buildCompactPostcodeArtifact } from '../lib/checker/postcode-compact';
 
 export interface Props {
@@ -110,13 +112,23 @@ const serializedFields = FIELDS_META.map((field) => {
   return field;
 });
 
+const enabledUrlsSet = getEnabledUrls();
+const oldestCheckedIso = computeOldestCheckerCheckedOnFromRules(RULES, serializedFiguresMap);
+const x1Message = renderMessage(
+  'X1',
+  serializedFiguresMap,
+  enabledUrlsSet,
+  formatAuDate(oldestCheckedIso),
+);
+
 const bootstrapPayload: CheckerBootstrapPayload = {
   postcodesUrl: postcodesArtifact.url,
   figures: serializedFigures,
   kindTags: KIND_TAGS,
   sources: serializedSources,
-  enabledUrls: [...getEnabledUrls()],
+  enabledUrls: [...enabledUrlsSet],
   solsticePostcodes: loadSolsticePostcodesFromRow53(),
+  x1Message,
   catalog: {
     rules: [...RULES_META],
     fields: serializedFields,

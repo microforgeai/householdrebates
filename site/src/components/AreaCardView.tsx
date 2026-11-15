@@ -22,6 +22,19 @@ export function renderResolvedLink(link: ResolvedLink, className?: string) {
   );
 }
 
+export function InlineLinks({ links }: { links: ResolvedLink[] }) {
+  return (
+    <>
+      {links.map((lnk, idx) => (
+        <span key={`${lnk.specHref}|${lnk.href}`}>
+          {idx > 0 ? ' · ' : ''}
+          {renderResolvedLink(lnk)}
+        </span>
+      ))}
+    </>
+  );
+}
+
 export interface AreaCardViewProps {
   card: AreaCard;
   councilSuffix?: string;

@@ -39,16 +39,17 @@ Last updated: 15 Nov 2026. Tick with [x] as you go.
 
 ## Before go-live (each needs Guri's yes)
 - [ ] Decide: review enough, or short fixed-fee lawyer check
-- [ ] Confirm VPS country in hPanel (review says Kuala Lumpur, not AU): move to AU server or name the country (fills <<SERVER_COUNTRY>>)
-- [ ] Pick mailbox retention period + set auto-delete (suggest 24 months; fills <<MAILBOX_RETENTION_PERIOD>>)
+- [x] VPS country confirmed: Kuala Lumpur, Malaysia, named in privacy policy (07764cc)
+- [x] Mailbox retention picked: 24 months (07764cc)
+- [ ] Set Hostinger Mail auto-delete to 24 months
 - [ ] Alerts sender postal address: PO box or registered office, never home (fills <<ALERTS_SENDER_ADDRESS>>)
-- [ ] Decide: opt Agenor in to the Privacy Act (free OAIC form)
+- [x] Privacy Act: not opted in; voluntary APP sentence used, logged in lawyer-pack.md (07764cc)
 - [ ] Pick email provider for alerts (alerts stay off until then)
 - [ ] Post-election re-check of rules and figures
 - [ ] Create `/opt/householdrebates-api` owned by the deploy user before lead-form / API go-live
-- [ ] Merge branches
-- [ ] Push to GitHub
-- [ ] Deploy to VPS
+- [x] Merge branches (main bb1576b, 15 Nov)
+- [x] Push to GitHub (microforgeai/householdrebates, origin/main = bb1576b)
+- [x] Deploy to VPS: live 15 Nov 2026, prompts 41–44, HTTPS cert to 13 Feb 2027 (renewal via certbot)
 
 ## After go-live
 - [x] Weekly watcher on official source pages (set up, Mondays ~8am)
